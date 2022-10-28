@@ -27,7 +27,7 @@ namespace SPLITTR_Uwp.Core.Models
             set => _walletBalance = value;
         }
 
-        public int CurrencyIndex { get; set; }
+        public  int CurrencyIndex { get; set; }
 
 
 

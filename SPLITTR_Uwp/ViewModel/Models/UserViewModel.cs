@@ -12,7 +12,16 @@ namespace SPLITTR_Uwp.ViewModel.Models
         private readonly UserBobj _user;
 
 
-        
+        public override string UserName
+        {
+            get => _user.UserName;
+        }
+
+        public override double WalletBalance
+        {
+            get => _user.WalletBalance;
+        }
+
         public string CurrentUserWalletBalance
         {
             get => _user.WalletBalance.ExpenseAmount(_user);

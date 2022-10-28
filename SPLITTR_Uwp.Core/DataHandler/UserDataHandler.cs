@@ -39,7 +39,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
         public async Task<bool> IsUserAlreadyExist(string emailId)
         {
             
-            var userObj = await  _userDataServices.SelectUserObjByEmailId(emailId);
+            var userObj = await  _userDataServices.SelectUserObjByEmailId(emailId).ConfigureAwait(false);
 
             return userObj is not null;
 
@@ -53,7 +53,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
 
         public Task UpdateUserBobjAsync(UserBobj user)
-        {
+        {           
             return _userDataServices.UpDateUserAsync(user);
         }
 
@@ -65,7 +65,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
         public async Task<IEnumerable<User>> GetUsersSuggestionAsync(string userName)
         {
-            var usersList =await _userDataServices.SelectUserFormUsers(userName.Trim());
+            var usersList =await _userDataServices.SelectUserFormUsers(userName.Trim()).ConfigureAwait(false);
             var outputList = new List<User>();
             foreach (var user in usersList)
             {
