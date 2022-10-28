@@ -21,7 +21,6 @@ namespace SPLITTR_Uwp.Core.ModelBobj
             set
             {
                 ExpenseStatusindex = (int)value;
-                UpDateExpense();
                 OnValueChanged();
             }
         }
@@ -63,11 +62,6 @@ namespace SPLITTR_Uwp.Core.ModelBobj
             await _expenseDataHandler.InsertExpenseAsync(this).ConfigureAwait(false);
         }
 
-        private async Task UpDateExpense()
-        {
-            await _expenseDataHandler.UpdateExpenseAsync(this).ConfigureAwait(false);
-            OnValueChanged();
-        }
-
+        
     }
 }
