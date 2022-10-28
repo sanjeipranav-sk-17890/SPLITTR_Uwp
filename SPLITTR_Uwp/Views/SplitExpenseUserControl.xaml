@@ -1,0 +1,288 @@
+﻿<UserControl
+    x:Class="SPLITTR_Uwp.Views.SplitExpenseUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sys="using:System"
+    xmlns:model="using:SPLITTR_Uwp.Core.Models"
+    xmlns:modelObjs="using:SPLITTR_Uwp.Core.ModelBobj"
+    xmlns:enum="using:SPLITTR_Uwp.Core.ModelBobj.Enum"
+    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+    mc:Ignorable="d"
+    d:DesignWidth="500"
+    >
+
+    <UserControl.Resources>
+        <Style x:Key="IndicatorTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="DarkRed" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+        <Style x:Key="MenuFlyoutSeparatorStyle" TargetType="MenuFlyoutSeparator">
+            <Setter Property="Margin" Value="0 5 0 5" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+        <ControlTemplate TargetType="Button" x:Key="TextBoxButtonTemplate" >
+            <Border BorderThickness="0.5"
+                    Height="{TemplateBinding Height}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    CornerRadius="4">
+                    <TextBlock 
+                        Margin="5 0 5 0"
+                        VerticalAlignment="Center"
+                        Text="{TemplateBinding Content}"
+                        FontSize="{TemplateBinding FontSize}"/>
+                </Border>
+        </ControlTemplate>
+    </UserControl.Resources>
+    <Grid Background="White">
+     <Grid.RowDefinitions>
+         <RowDefinition  Height="Auto"/>
+         <RowDefinition Height="Auto" />
+         <RowDefinition Height="Auto"/>
+         <RowDefinition Height="Auto"/>
+
+        </Grid.RowDefinitions>
+    <StackPanel Orientation="Vertical" Grid.Row="0">
+        <StackPanel Orientation="Horizontal" Margin="5">
+             <TextBlock FontSize="20">With</TextBlock>
+                <TextBlock FontSize="20"
+                           x:Uid="CurrentUserReference"
+                           Foreground="{ThemeResource ApplicationMainThemeColor}"
+                           Margin="5 0 0 0"
+                           FontWeight="Bold">You</TextBlock>
+                <TextBlock FontSize="20"
+                           Margin="5 0 0 0">and:</TextBlock>
+        </StackPanel>
+        <!--<Button HorizontalAlignment="Stretch" 
+                Template="{StaticResource TextBoxButtonTemplate}"
+                Margin="5 0 5 0"
+                Content="{x:Bind _viewModel.SplittingUsersName,Mode=OneWay}"
+                FontSize="15"
+                Height="25"
+                FontWeight="SemiLight">
+            <Button.Flyout>
+            <Flyout x:Name="NameSuggestionFlyout" LightDismissOverlayMode="On" Placement="BottomEdgeAlignedLeft">
+                <ListView SelectionMode="Single"
+                          ItemsSource="{x:Bind _viewModel.UsersList,Mode=OneWay}"
+                          SelectedIndex="{x:Bind _viewModel.SelectedUserIndex,Mode=TwoWay}"
+                          SelectionChanged="{x:Bind _viewModel.UserListItemSelected}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="model:User">
+                            <TextBlock Text="{x:Bind UserName}" HorizontalAlignment="Center"></TextBlock>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Flyout>
+            </Button.Flyout>
+            </Button>-->
+
+                        <!--IsSuggestionListOpen="{x:Bind _viewModel.IsUserSuggestionListOpen,Mode=TwoWay}"-->
+            <!--<AutoSuggestBox ItemsSource="{x:Bind _viewModel.UsersList,Mode=OneWay}"
+                        CornerRadius="4"
+                        FontSize="18"
+                        IsEnabledChanged="{x:Bind _viewModel.AutoSuggestionBoxIsEnabledChanged}"
+                        IsEnabled="{x:Bind _viewModel.IsUserSuggestionBoxEnabled,Mode=TwoWay}"
+                        LostFocus="{x:Bind _viewModel.AutoSuggestionLostFocus}"
+                        IsSuggestionListOpen="{x:Bind _viewModel.IsUserSuggestionListOpen,Mode=TwoWay}"
+                        
+                        Margin="5 0 5 0"
+                        TextChanged="{x:Bind _viewModel.MyAutoSuggestBox_TextChanged}"
+                        Text="{x:Bind _viewModel.SplittingUsersName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                        SuggestionChosen="{x:Bind _viewModel.AutoSuggestBoxOnSuggestionChossen}"
+                        >
+                <AutoSuggestBox.ItemTemplate>
+                    <DataTemplate x:DataType="model:User">
+                        <TextBlock Text="{x:Bind UserName}" HorizontalAlignment="Center"></TextBlock>
+                    </DataTemplate>
+                </AutoSuggestBox.ItemTemplate>
+            </AutoSuggestBox>-->
+            <TextBox
+                CornerRadius="4"
+                FontSize="18"
+                TextWrapping="Wrap"
+                Name="SplitUserNameTextBlock"
+                IsReadOnly="{x:Bind _viewModel.IsNameTextBoxReadOnly,Mode=TwoWay}"
+                Text="{x:Bind _viewModel.SplittingUsersName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                LostFocus="{x:Bind _viewModel.TextBoxLostFocus}"
+                TextChanged="{x:Bind _viewModel.TextBoxTextChanged}"
+                Margin="5 0 5 0"
+            >
+            </TextBox>
+            <controls:TeachingTip Target="{x:Bind SplitUserNameTextBlock}"
+                                  TailVisibility="Collapsed" 
+                                  PreferredPlacement="BottomLeft"
+                                  IsOpen="{x:Bind _viewModel.IsUserSuggestionListOpen,Mode=TwoWay}">
+                <controls:TeachingTip.Content>
+                    <ListView ItemsSource="{x:Bind _viewModel.UsersList,Mode=OneWay}"
+                              SelectionChanged="{x:Bind _viewModel.ListViewOnSelected}"
+                              SelectionMode="Single"
+                              SelectedIndex="{x:Bind _viewModel.SelectedUserIndex,Mode=TwoWay}"
+                    >
+                       <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="model:User">
+                                <TextBlock Text="{x:Bind UserName}" Width="auto" FontSize="15" HorizontalAlignment="Center"></TextBlock>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                     </ListView>
+                </controls:TeachingTip.Content>
+            </controls:TeachingTip>
+
+            <Button HorizontalAlignment="Stretch" Template="{StaticResource TextBoxButtonTemplate}"
+                Margin="5 10 5 5"
+                Height="37"
+                FontSize="18"
+                Content="{x:Bind _viewModel.SelectedGroupName,Mode=OneWay}"
+                >
+            <Button.Flyout>
+                <Flyout  Placement="BottomEdgeAlignedLeft"  >
+                    <ListView SelectionMode="Single"
+                              ItemsSource="{x:Bind _viewModel.UserParticipatingGroup,Mode=OneWay}"
+                              SelectedIndex="{x:Bind _viewModel.SelectedGroupIndex,Mode=TwoWay}"
+                              SelectionChanged="{x:Bind _viewModel.GroupItemSelectionChanged}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="modelObjs:GroupBobj">
+                                <TextBlock Text="{x:Bind GroupName}" HorizontalAlignment="Center"></TextBlock>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Flyout>
+            </Button.Flyout>
+            </Button>
+    </StackPanel>
+        <StackPanel Grid.Row="1" Visibility="{x:Bind _viewModel.SplitEquallyPanelVisibility,Mode=OneWay}">
+            <MenuFlyoutSeparator Style="{StaticResource MenuFlyoutSeparatorStyle}" />
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Image Grid.Row="0"
+                       Grid.Column="0"
+                       Source="../Assets/icons/invoice.png"
+                       Height="75"
+                       Margin="10 5 0 0"
+                       Stretch="Uniform"
+                       Width="50"></Image>
+                <RelativePanel Grid.Row="0"
+                            Grid.Column="1">
+                   
+                    <TextBlock Text="Enter the expenditure amount"
+                               FontWeight="Light"
+                               Margin="5 0 0 0"
+                               RelativePanel.AlignTopWithPanel="True"
+                               RelativePanel.AlignLeftWithPanel="True"
+                               Name="ExpenditureLabel"
+                    />
+                    <TextBlock Text="Please enter value in correct Format !!"
+                               Name="WrongInputIndiactor"
+                               Visibility="{x:Bind _viewModel.AmountFormatIncorrectIndicatorVisibility,Mode=OneWay}"
+                               RelativePanel.Below="ExpenditureLabel"
+                                Margin="60 10 0 0" Style="{StaticResource IndicatorTextBlockStyle}"/>
+                    <StackPanel Orientation="Horizontal" Name="InputExpenseStackPanel"
+                                RelativePanel.Below="WrongInputIndiactor"
+                                RelativePanel.AlignBottomWithPanel="True"
+                                RelativePanel.AlignLeftWithPanel="True"
+                                Margin="5 0 0 0">
+                        <TextBlock RelativePanel.Below="ExpenditureLabel"
+                                    Margin="0 5 0 0"
+                                   Text="{x:Bind _viewModel.GetUserCurrencyPreference(),Mode=OneWay}"
+                                   FontWeight="Bold"
+                             HorizontalAlignment="Center"
+                                   Name="CurrencyPreferenceLabel"/>
+                    <TextBox Margin="5 0 0 0"
+                             Width="300"
+                             Height="30"
+                             HorizontalAlignment="Center"
+                             TextAlignment="Center"
+                             TextWrapping="Wrap"
+                             BorderBrush="Transparent"
+                             Name="InputExpenseAmountTextBlock"
+                             CornerRadius="4"
+                             TextChanged="{x:Bind _viewModel.ExpenseTextBoxValueChanged}"
+                             Text="{x:Bind _viewModel.SingleUserExpenseShareAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                             PlaceholderText="0.00" 
+                             ></TextBox>        
+                    </StackPanel>
+                </RelativePanel>
+                 <Image Grid.Row="0" Grid.Column="2"
+                        Source="../Assets/AppLogo/../icons/split.png"
+                        Height="50"
+                        Margin=" 0 0 5 0"></Image>
+                <!--<ComboBox Grid.Row="1"
+                          Grid.ColumnSpan="3"
+                          Grid.Column="0"
+                          VerticalAlignment="Center" 
+                          HorizontalAlignment="Stretch"
+                          BorderThickness=".5"
+                          CornerRadius="4"
+                          Margin="7"
+                          FontSize="18"
+                      
+                          ItemsSource="{x:Bind _viewModel.SingleUserSplitComboBoxItems(),Mode=OneWay}"
+                          Visibility="{x:Bind _viewModel.SingleUserSelectionComboBoxVisibility,Mode=OneWay}"
+                          />-->
+
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Row="2">
+            <MenuFlyoutSeparator Style="{StaticResource MenuFlyoutSeparatorStyle}"></MenuFlyoutSeparator>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Paid by   :"
+                           Foreground="{ThemeResource ApplicationMainThemeColor}"
+                           FontSize="18"
+                           VerticalAlignment="Center"
+                           Margin="3 0 0 0"/>
+                <TextBox IsReadOnly="True"
+                         CornerRadius="4"
+                         Width="400"
+                         Text="You"
+                         Margin="5 0 0 0"
+                         BorderThickness=".5"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="and Split :"
+                           FontSize="18"
+                           Foreground="{ThemeResource ApplicationMainThemeColor}"
+                           VerticalAlignment="Center"
+                           Margin="5 0 0 0"/>
+                <ComboBox Width="400"
+                          Margin="0 5 0 0"
+                          FontSize="15" 
+                          CornerRadius="4"
+                          
+                          BorderThickness=".5"
+                          SelectedIndex="{x:Bind _viewModel.SelectedSplitPreferenceIndex,Mode=TwoWay}"
+                          SelectionChanged="{x:Bind _viewModel.SplitPreferenceChanged}"
+                          HorizontalContentAlignment="Center">
+                    <x:String>Equally</x:String>
+                    <x:String>Unequally</x:String>
+                </ComboBox>
+
+            </StackPanel>
+
+            <StackPanel/>
+
+        </StackPanel>
+        <StackPanel Grid.Row="3">
+            <MenuFlyoutSeparator Style="{StaticResource MenuFlyoutSeparatorStyle}"></MenuFlyoutSeparator>
+            <DatePicker HorizontalAlignment="Center"
+                        CornerRadius="4"
+                        Margin="0 5 0 0"/>
+           <TextBlock HorizontalAlignment="Center"
+                      Text="Please Select The Date Of Expense*"
+                      Style="{StaticResource IndicatorTextBlockStyle}"></TextBlock>
+           <TextBox Margin="5"
+                    PlaceholderText="Enter Additional details"
+                    Height="150"
+                    TextWrapping="Wrap"
+                    BorderThickness=".5"
+                    CornerRadius="5"></TextBox>
+        </StackPanel>
+    </Grid>
+</UserControl>
