@@ -11,6 +11,5 @@ namespace SPLITTR_Uwp.Core.Services.SqliteConnection
         Task<int> InsertObj<T>(T obj);
         Task<int> InsertObjects<T>(IEnumerable<T> objs);
         Task<int> UpdateObj<T>(T obj);
-        Task<int> ExecuteQueryAsync<T>(string sql,params object[] parameters);
     }
 }

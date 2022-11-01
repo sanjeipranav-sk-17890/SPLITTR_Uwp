@@ -1,16 +1,13 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Windows.UI.Xaml;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
-using Windows.UI.Core;
 
 namespace SPLITTR_Uwp.ViewModel.Models
 {
-    public class UserViewModel : UserBobj, INotifyPropertyChanged
+    public class UserViewModel : UserBobj ,INotifyPropertyChanged
     {
         private readonly UserBobj _user;
 
@@ -54,7 +51,7 @@ namespace SPLITTR_Uwp.ViewModel.Models
         }
 
 
-        public UserViewModel(UserBobj user) : base(user)
+        public UserViewModel(UserBobj user): base(user)
         {
             _user = user;
             _user.ValueChanged += InnerObjValueChanged;
@@ -70,18 +67,14 @@ namespace SPLITTR_Uwp.ViewModel.Models
             OnPropertyChanged(nameof(UserName));
             OnPropertyChanged(nameof(Expenses));
             OnPropertyChanged(nameof(Groups));
-
+            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected async virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                () =>
-                {
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-                });
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

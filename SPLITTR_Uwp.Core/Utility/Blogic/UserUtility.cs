@@ -22,42 +22,33 @@ public class UserUtility :IUserUtility
 
     public Task UpdateUserObjAsync(UserBobj userBobj, string newUserName, Currency currencyPreference)
     {
-       
-            //no db call db call is made if previous value and current value are same
-            if (userBobj.UserName.Equals(newUserName.Trim()) && userBobj.CurrencyPreference == currencyPreference)
-            {
-                return Task.CompletedTask;
-            }
+        //no db call db call is made if previous value and current value are same
+        if (userBobj.UserName.Equals(newUserName.Trim()) && userBobj.CurrencyPreference == currencyPreference)
+        {
+            return Task.CompletedTask;
+        }
 
-            userBobj.UserName = newUserName;
+        userBobj.UserName=newUserName;
 
-            //based on newly selected currency Preference feching the ICurrency converter
-            ICurrencyConverter currencyConverter = _factory.GetCurrencyCalculator(currencyPreference);
+        //based on newly selected currency Preference feching the ICurrency converter
+        ICurrencyConverter currencyConverter = _factory.GetCurrencyCalculator(currencyPreference);
 
-            //changing each currency converter in Expense so setting and fetching value can be made in corresponing currency formats
-            foreach (var expense in userBobj.Expenses)
-            {
-                expense.CurrencyConverter = currencyConverter;
-                //if the expenseBobj has  obj of Current user changing the object ref to Current UserBobj
-                if (expense.UserEmailId == userBobj.EmailId)
-                {
-                    expense.UserDetails = userBobj;
-                }
-            }
+        //changing each currency converter in Expense so setting and fetching value can be made in corresponing currency formats
+        foreach (var expense in userBobj.Expenses)
+        {
+            expense.CurrencyConverter = currencyConverter;
+        }
 
-            //updating IConverter so fetching wallet  amount will be fetched in requered currency preference 
-            userBobj.CurrencyConverter = currencyConverter;
-            userBobj.CurrencyPreference = currencyPreference;
+        //updating IConverter so fetching wallet  amount will be fetched in requered currency preference 
+        userBobj.CurrencyConverter = currencyConverter;
+        userBobj.CurrencyPreference = currencyPreference;
 
 
-           return _userDataHandler.UpdateUserBobjAsync(userBobj);
-        
+        return _userDataHandler.UpdateUserBobjAsync(userBobj);
     }
     public Task UpdateUserObjAsync(UserBobj userBobj, double walletBalance)
     {
-       
-            userBobj.WalletBalance += walletBalance;
-            return _userDataHandler.UpdateUserBobjAsync(userBobj);
-            
+        userBobj.WalletBalance += walletBalance;
+        return _userDataHandler.UpdateUserBobjAsync(userBobj);
     }
 }
