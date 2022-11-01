@@ -47,6 +47,10 @@ namespace SPLITTR_Uwp.Core.Services.SqliteConnection
             
             return _connection.UpdateAsync(obj, typeof(T));
         }
+        public Task<int> ExecuteQueryAsync<T>(string sql, params object[] parameters)
+        {
+            return _connection.ExecuteAsync(sql, parameters);
+        }
 
         private string GetConnectionString()
         {
