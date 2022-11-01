@@ -30,7 +30,7 @@ namespace SPLITTR_Uwp.Views
             _viewModel = ActivatorUtilities.CreateInstance<SplitExpenseViewModel>(App.Container);
             this.InitializeComponent();
             this.DataContext = _viewModel;
-            
+           
         }
 
         

@@ -229,7 +229,12 @@ namespace SPLITTR_Uwp.ViewModel
             foreach (var user in splitingGroup.GroupParticipants)
             {
                 _isInnerInvokationOfTextChanged = true;
-                SplittingUsersName += (user.UserName + ",");
+                //ingoring current users name in the GROUP MEMBERS SPLITTING NAME
+                if (user.EmailId == User.EmailId) continue;
+
+                //CONCATING REMAINING USERS NAME TO THE USERS NAME TEXT BOX
+                SplittingUsersName += (","+user.UserName);
+
                 _usersToBeSplitted.Add(user);
             }
         }
@@ -330,9 +335,14 @@ namespace SPLITTR_Uwp.ViewModel
         {
             if (SelectedSplitPreferenceIndex == 0)
             {
+                //NOt showing teaching tip if unequal split option is selected
+                UneqaulSplitPopUpVisibility = false;
+
                 SplitEquallyPanelVisibility = true;
                 return;
             }
+            //showing teaching tip if unequal split option is selected
+            UneqaulSplitPopUpVisibility = true;
             SplitEquallyPanelVisibility = false;
 
         }
@@ -343,6 +353,34 @@ namespace SPLITTR_Uwp.ViewModel
         #endregion
 
 
+        #region ExpenseDateSelectionRegion
+
+        private DateTime _expenditureDate = DateTime.Now;
+
+        public DateTimeOffset ExpenditureDate
+        {
+            get => _expenditureDate;
+            set => SetProperty(ref _expenditureDate, value.DateTime);
+        }
+
+        public DateTimeOffset MaxYearDisplayLimit
+        {
+            get=>DateTimeOffset.Now;
+        }
+
+
+        #endregion
+
+        #region UnEqualSplitPopUpLogicRegion
+        private bool _uneqaulSplitPopUpVisibility;
+
+        public bool UneqaulSplitPopUpVisibility
+        {
+            get => _uneqaulSplitPopUpVisibility;
+            set => SetProperty(ref _uneqaulSplitPopUpVisibility, value);
+        }
+
+        #endregion
         public string GetUserCurrencyPreference()
         {
           var preference=  (Currency)User.CurrencyPreference;
