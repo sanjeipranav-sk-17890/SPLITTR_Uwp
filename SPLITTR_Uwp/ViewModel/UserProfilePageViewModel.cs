@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,11 +36,16 @@ namespace SPLITTR_Uwp.ViewModel
 
         }
 
-        private void UserBobj_ValueChanged()
+        private async void UserBobj_ValueChanged()
         {
-           OnPropertyChanged(nameof(UserInitial));
-           OnPropertyChanged(nameof(CurrencyPreference));
-           OnPropertyChanged(nameof(CurrentUserName));
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                () =>
+                {
+                    OnPropertyChanged(nameof(UserInitial));
+                    OnPropertyChanged(nameof(CurrencyPreference));
+                    OnPropertyChanged(nameof(CurrentUserName));
+
+                });
         }
 
 
