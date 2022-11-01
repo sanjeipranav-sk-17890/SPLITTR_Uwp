@@ -38,11 +38,6 @@ public class UserUtility :IUserUtility
             foreach (var expense in userBobj.Expenses)
             {
                 expense.CurrencyConverter = currencyConverter;
-                //if the expenseBobj has  obj of Current user changing the object ref to Current UserBobj
-                if (expense.UserEmailId == userBobj.EmailId)
-                {
-                    expense.UserDetails = userBobj;
-                }
             }
 
             //updating IConverter so fetching wallet  amount will be fetched in requered currency preference 

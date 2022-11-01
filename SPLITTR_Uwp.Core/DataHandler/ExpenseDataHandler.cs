@@ -6,6 +6,7 @@ using SPLITTR_Uwp.Core.CurrencyCoverter.Factory;
 using SPLITTR_Uwp.Core.DataHandler.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.Services.Contracts;
 
 namespace SPLITTR_Uwp.Core.DataHandler
@@ -16,11 +17,13 @@ namespace SPLITTR_Uwp.Core.DataHandler
         private readonly ICurrencyCalcFactory _currencyCalcFactory;
         private readonly IUserDataServices _userDataServices;
 
+
         public ExpenseDataHandler(IExpenseDataServices dataServices,ICurrencyCalcFactory currencyCalcFactory,IUserDataServices userDataServices)
         {
             _dataServices = dataServices;
             _currencyCalcFactory = currencyCalcFactory;
-            this._userDataServices = userDataServices;
+            _userDataServices = userDataServices;
+
         }
 
         public Task InsertExpenseAsync(ExpenseBobj expenseBobj)
@@ -33,22 +36,50 @@ namespace SPLITTR_Uwp.Core.DataHandler
             return _dataServices.UpdateExpenseAsync(expenseBobj);
         }
 
-        public async Task<IEnumerable<ExpenseBobj>> GetUserExpensesAsync(string userEmailId)
+        //public async Task<IEnumerable<ExpenseBobj>> GetUserExpensesAsync(string userEmailId)
+        //{
+        //    //Fetching Current User's Currency Preference
+        //    var userCurrencyPreference =(Currency)( await _userDataHandler.FetchCurrentUserDetails(userEmailId).ConfigureAwait(false)).CurrencyIndex;
+
+        //    //getting ICurrencyConverter Based on Currency PReference
+        //    var currencyCalculator = _currencyCalcFactory.GetCurrencyCalculator(userCurrencyPreference);
+
+        //    //fetching Expense entity obj from db  
+        //    var userExpenses = await _dataServices.SelectUserExpensesAsync(userEmailId).ConfigureAwait(false);
+
+        //    var outputList = new List<ExpenseBobj>();
+        //    Parallel.ForEach(userExpenses, (async expense =>
+        //    {
+        //        var user =await _userDataHandler.FetchCurrentUserDetails(expense.UserEmailId).ConfigureAwait(false);
+        //        outputList.Add(new ExpenseBobj(user,this,currencyConverter: currencyCalculator,expense: expense)); 
+        //    }));
+        //    return outputList;
+        //}
+        public async Task<IEnumerable<ExpenseBobj>> GetUserExpensesAsync(User  user)
         {
             //Fetching Current User's Currency Preference
-            var userCurrencyPreference =(Currency)( await _userDataServices.SelectUserObjByEmailId(userEmailId)).CurrencyIndex;
-
+            var userCurrencyPreference =(Currency)user.CurrencyIndex;
+                /*(Currency)(await _userDataHandler.FetchCurrentUserDetails(userEmailId).ConfigureAwait(false)).CurrencyIndex;*/
             //getting ICurrencyConverter Based on Currency PReference
             var currencyCalculator = _currencyCalcFactory.GetCurrencyCalculator(userCurrencyPreference);
 
             //fetching Expense entity obj from db  
-            var userExpenses = await _dataServices.SelectUserExpensesAsync(userEmailId);
+            var userExpenses = await _dataServices.SelectUserExpensesAsync(user.EmailId).ConfigureAwait(false);
 
             var outputList = new List<ExpenseBobj>();
             Parallel.ForEach(userExpenses, (async expense =>
             {
-                var user =await _userDataServices.SelectUserObjByEmailId(expense.UserEmailId).ConfigureAwait(false);
-                outputList.Add(new ExpenseBobj(user,this,currencyConverter: currencyCalculator,expense: expense)); 
+                User respectiveUserObj;
+
+                if (expense.UserEmailId == user.EmailId)
+                {
+                    respectiveUserObj = user;
+                }
+                else
+                {
+                  respectiveUserObj = await _userDataServices.SelectUserObjByEmailId(expense.UserEmailId).ConfigureAwait(false);
+                }
+                outputList.Add(new ExpenseBobj(respectiveUserObj, this, currencyConverter: currencyCalculator, expense: expense));
             }));
             return outputList;
         }
