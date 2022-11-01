@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.DataHandler.Contracts
 {
@@ -14,7 +15,7 @@ namespace SPLITTR_Uwp.Core.DataHandler.Contracts
         /// </summary>
         /// <param name="emailId"></param>
         /// <returns></returns>
-        Task<ICollection<GroupBobj>> GetUserPartcipatingGroups(string emailId);
+        Task<ICollection<GroupBobj>> GetUserPartcipatingGroups(User currentUser);
 
         Task CreateGroupAsync(GroupBobj groupBobj);
     }

@@ -94,7 +94,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
             var expenses =await _expenseDataHandler.GetUserExpensesAsync(_currentUser).ConfigureAwait(false);
 
-            var groups =await _groupDataHandler.GetUserPartcipatingGroups(emailId).ConfigureAwait(false);
+            var groups =await _groupDataHandler.GetUserPartcipatingGroups(_currentUser).ConfigureAwait(false);
 
             var currencyCal = _currencyCalc.GetCurrencyCalculator((Currency)user.CurrencyIndex);
 
