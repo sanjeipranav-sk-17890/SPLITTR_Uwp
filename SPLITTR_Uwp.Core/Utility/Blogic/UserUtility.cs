@@ -1,28 +1,28 @@
-﻿using System;
-using System.Threading.Tasks;
-using SPLITTR_Uwp.Core.CurrencyCoverter;
+﻿using SPLITTR_Uwp.Core.CurrencyCoverter;
 using SPLITTR_Uwp.Core.CurrencyCoverter.Factory;
 using SPLITTR_Uwp.Core.DataHandler.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using System.Threading.Tasks;
 
 namespace SPLITTR_Uwp.Core.Utility.Blogic;
 
-public class UserUtility :IUserUtility
+public class UserUtility : IUserUtility
 {
 
     readonly IUserDataHandler _userDataHandler;
     private readonly ICurrencyCalcFactory _factory;
-    public UserUtility(IUserDataHandler userDataHandler,ICurrencyCalcFactory factory)
+    public UserUtility(IUserDataHandler userDataHandler, ICurrencyCalcFactory factory)
     {
         _userDataHandler = userDataHandler;
         _factory = factory;
     }
 
 
-    public Task UpdateUserObjAsync(UserBobj userBobj, string newUserName, Currency currencyPreference)
+    public async Task UpdateUserObjAsync(UserBobj userBobj, string newUserName, Currency currencyPreference)
     {
-       
+        await Task.Run((async () =>
+        {
             //no db call db call is made if previous value and current value are same
             if (userBobj.UserName.Equals(newUserName.Trim()) && userBobj.CurrencyPreference == currencyPreference)
             {
@@ -44,15 +44,18 @@ public class UserUtility :IUserUtility
             userBobj.CurrencyConverter = currencyConverter;
             userBobj.CurrencyPreference = currencyPreference;
 
+            //since it is updating on db in background We are waiting until it is completed
+            await _userDataHandler.UpdateUserBobjAsync(userBobj).ConfigureAwait(false);
 
-           return _userDataHandler.UpdateUserBobjAsync(userBobj);
-        
+            return Task.CompletedTask;
+        })).ConfigureAwait(false);
+
     }
     public Task UpdateUserObjAsync(UserBobj userBobj, double walletBalance)
     {
-       
-            userBobj.WalletBalance += walletBalance;
-            return _userDataHandler.UpdateUserBobjAsync(userBobj);
-            
+
+        userBobj.WalletBalance += walletBalance;
+        return _userDataHandler.UpdateUserBobjAsync(userBobj);
+
     }
 }

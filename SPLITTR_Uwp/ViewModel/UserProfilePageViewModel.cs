@@ -1,32 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Utility;
 using SPLITTR_Uwp.Core.Utility.Blogic;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
 
 namespace SPLITTR_Uwp.ViewModel
 {
     public class UserProfilePageViewModel : ObservableObject
     {
-        
+
         private readonly DataStore _dataStore;
         private readonly IStringManipulator _manipulator;
         IUserUtility _userUtility;
         public UserViewModel User { get; }
 
 
-        public UserProfilePageViewModel(DataStore dataStore,IStringManipulator manipulator, IUserUtility userUtility)
+        public UserProfilePageViewModel(DataStore dataStore, IStringManipulator manipulator, IUserUtility userUtility)
         {
             _dataStore = dataStore;
             _manipulator = manipulator;
@@ -58,13 +55,14 @@ namespace SPLITTR_Uwp.ViewModel
             }
         }
 
-        public string CurrencyPreference {
+        public string CurrencyPreference
+        {
             get
             {
                 return _dataStore.UserBobj?.CurrencyPreference.ToString();
             }
 
-         }
+        }
 
         public bool IsEditUserProfileVisible
         {
@@ -80,26 +78,26 @@ namespace SPLITTR_Uwp.ViewModel
             "Yen    ¥"
         };
 
-        private bool _isEditUserProfileVisible =false;
+        private bool _isEditUserProfileVisible = false;
 
         public void EditUserProfileClicked()
         {
-            IsEditUserProfileVisible= true;
+            IsEditUserProfileVisible = true;
         }
 
-        private string _currentUserName=String.Empty;
+        private string _currentUserName = String.Empty;
         public string CurrentUserName
         {
             get
             {
                 _currentUserName = User.UserName;
-              return _currentUserName;
-            } 
-            set => _currentUserName= value;
+                return _currentUserName;
+            }
+            set => _currentUserName = value;
         }
 
         private int _preferedCurrencyIndex;
-        private bool _isUserNameEmptyIndicatorVisible=false;
+        private bool _isUserNameEmptyIndicatorVisible = false;
 
         public int PreferendCurrencyIndex
         {
@@ -130,11 +128,11 @@ namespace SPLITTR_Uwp.ViewModel
             IsUserNameEmptyIndicatorVisible = false;
             //utility classes is updating the UserObj and its related data's
             await _userUtility.UpdateUserObjAsync(_dataStore.UserBobj, _currentUserName, (Currency)_preferedCurrencyIndex);
-           
-            //showing Update successfull messagebox
-               await ShowSignUpSuccessFullMessageBoxAsync();
 
-               IsEditUserProfileVisible = false;
+            //showing Update successfull messagebox
+            await ShowSignUpSuccessFullMessageBoxAsync();
+
+            IsEditUserProfileVisible = false;
 
         }
         private async Task ShowSignUpSuccessFullMessageBoxAsync()
@@ -147,7 +145,7 @@ namespace SPLITTR_Uwp.ViewModel
 
                     msg.Commands.Add(new UICommand("close"));
                     await msg.ShowAsync();
-                    
+
                 });
 
         }
