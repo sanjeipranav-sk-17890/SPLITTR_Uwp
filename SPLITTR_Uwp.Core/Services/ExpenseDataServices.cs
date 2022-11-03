@@ -31,7 +31,7 @@ namespace SPLITTR_Uwp.Core.Services
         public async Task<IEnumerable<Expense>> SelectUserExpensesAsync(string userEmail)
         {
           return await _sqlDbAccess.FetchTable<Expense>()
-                .Where(ex => ex.RequestedOwner.Equals(userEmail) || ex.UserEmailId.Equals(userEmail)).ToListAsync();
+                .Where(ex => ex.RequestedOwner.Equals(userEmail) || ex.UserEmailId.Equals(userEmail)).ToListAsync().ConfigureAwait(false);
         }
     }
 }

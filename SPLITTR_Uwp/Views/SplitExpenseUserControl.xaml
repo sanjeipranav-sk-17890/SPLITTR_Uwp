@@ -268,8 +268,9 @@
                                       Target="{x:Bind SplitingMethodSelectionComboBox}"
                                       PreferredPlacement="Right"
                                       PlacementMargin="50 0 0 0"
-                                      IsOpen="{x:Bind _viewModel.UneqaulSplitPopUpVisibility,Mode=TwoWay}"
-                                      >
+                                      CloseButtonClick="{x:Bind _viewModel.UnEqualSplitTeachingTip_OnCloseButtonClick}"
+                                      Closed="{x:Bind _viewModel.UnequalSplitTeachingSplitClosed}"
+                                      IsOpen="{x:Bind _viewModel.UneqaulSplitPopUpVisibility,Mode=TwoWay}">
                     <Rectangle Height="300"
                                Width="300"
                                Fill="Red"></Rectangle>

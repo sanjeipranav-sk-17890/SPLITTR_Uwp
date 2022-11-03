@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.UI.Xaml.Controls;
 using SPLITTR_Uwp.Core.DataHandler.Contracts;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
@@ -380,6 +381,14 @@ namespace SPLITTR_Uwp.ViewModel
             set => SetProperty(ref _uneqaulSplitPopUpVisibility, value);
         }
 
+        public void UnequalSplitTeachingSplitClosed()
+        {
+            SelectedSplitPreferenceIndex = 0;
+        }
+        public void UnEqualSplitTeachingTip_OnCloseButtonClick(TeachingTip sender, object args)
+        {
+            sender.IsOpen = true;
+        }
         #endregion
         public string GetUserCurrencyPreference()
         {
@@ -400,6 +409,7 @@ namespace SPLITTR_Uwp.ViewModel
         {
             OnPropertyChanged(nameof(GetUserCurrencyPreference));
         }
+
 
        
     }
