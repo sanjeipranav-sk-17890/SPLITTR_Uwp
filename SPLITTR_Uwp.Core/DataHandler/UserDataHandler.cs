@@ -21,6 +21,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
         readonly IExpenseDataHandler _expenseDataHandler;
         private readonly ICurrencyCalcFactory _currencyCalc;
         private string _currentUserEmailId;
+        private User _currentUser;
 
         public UserDataHandler(IUserDataServices userDataServices,IUserBobjBalanceCalculator balanceCalculator, IGroupDataHandler groupDataHandler, IExpenseDataHandler expenseDataHandler,ICurrencyCalcFactory currencyCalc)
         {
@@ -56,6 +57,14 @@ namespace SPLITTR_Uwp.Core.DataHandler
         {           
             return _userDataServices.UpDateUserAsync(user);
         }
+        public async Task<User> FetchUserUsingMailId(string mailId)
+        {
+            if (mailId != null && mailId.Equals(_currentUserEmailId))
+            {
+                return _currentUser ??= await _userDataServices.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
+            }
+            return await _userDataServices.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
+        }
 
 
         /// <summary>
@@ -81,11 +90,11 @@ namespace SPLITTR_Uwp.Core.DataHandler
         {
             _currentUserEmailId = emailId ?? throw new ArgumentNullException(nameof(emailId),"Passed Email Id Must be a Validated Mail Id");
 
-            var user =await _userDataServices.SelectUserObjByEmailId(emailId).ConfigureAwait(false);
+            var user = await FetchUserUsingMailId(emailId).ConfigureAwait(false);
 
-            var expenses =await _expenseDataHandler.GetUserExpensesAsync(emailId).ConfigureAwait(false);
+            var expenses =await _expenseDataHandler.GetUserExpensesAsync(_currentUser).ConfigureAwait(false);
 
-            var groups =await _groupDataHandler.GetUserPartcipatingGroups(emailId).ConfigureAwait(false);
+            var groups =await _groupDataHandler.GetUserPartcipatingGroups(_currentUser).ConfigureAwait(false);
 
             var currencyCal = _currencyCalc.GetCurrencyCalculator((Currency)user.CurrencyIndex);
 

@@ -17,7 +17,7 @@ namespace SPLITTR_Uwp.ViewModel
 {
     public class LoginPageViewModel :ObservableObject
     {
-        private readonly IUserDataHandler _userData;
+        private readonly IUserDataHandler _userDataHandler;
         private readonly DataStore _store;
         private  int _selectedItem = 0;
         private  bool _loginInformationTextBox=false;
@@ -45,9 +45,9 @@ namespace SPLITTR_Uwp.ViewModel
 
         public string UserEmailIdTextBox { get; set; }
 
-        public LoginPageViewModel(IUserDataHandler userData,DataStore store)
+        public LoginPageViewModel(IUserDataHandler userDataHandler,DataStore store)
         {
-            _userData = userData;
+            _userDataHandler = userDataHandler;
             _store = store;
 
 
@@ -90,14 +90,14 @@ namespace SPLITTR_Uwp.ViewModel
             }
             else
             {
-                var isOldUser = await _userData.IsUserAlreadyExist(UserEmailIdTextBox.Trim().ToLower());
+                var isOldUser = await _userDataHandler.IsUserAlreadyExist(UserEmailIdTextBox.Trim().ToLower());
                 if (isOldUser is not true)
                 {
                     WrongUserCreDentialTextBlockVisibility = true;
                     return;
                 }
                 WrongUserCreDentialTextBlockVisibility = false;
-                _store.UserBobj = await _userData.FetchCurrentUserDetails(UserEmailIdTextBox.Trim().ToLower());
+                _store.UserBobj = await _userDataHandler.FetchCurrentUserDetails(UserEmailIdTextBox.Trim().ToLower());
                  NavigationService.Navigate<MainPage>();
             }
 

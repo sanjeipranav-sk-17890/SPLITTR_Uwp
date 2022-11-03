@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.ModelBobj;
+using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.DataHandler.Contracts
 {
@@ -10,6 +11,6 @@ namespace SPLITTR_Uwp.Core.DataHandler.Contracts
     {
         Task InsertExpenseAsync(ExpenseBobj expenseBobj);
         Task UpdateExpenseAsync(ExpenseBobj expenseBobj);
-        Task<IEnumerable<ExpenseBobj>> GetUserExpensesAsync(string userEmailId);
+        Task<IEnumerable<ExpenseBobj>> GetUserExpensesAsync(User user);
     }
 }

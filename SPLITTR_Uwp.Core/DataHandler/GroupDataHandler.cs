@@ -24,16 +24,15 @@ namespace SPLITTR_Uwp.Core.DataHandler
             _groupToUserDataServices = groupToUserDataServices;
             _userDataServices = userDataServices;
         }
-
-        public async Task<ICollection<GroupBobj>> GetUserPartcipatingGroups(string userEmailId)
+        public async Task<ICollection<GroupBobj>> GetUserPartcipatingGroups(User currentUser)
         {
-            if (string.IsNullOrEmpty(userEmailId))
+            if (string.IsNullOrEmpty(currentUser.EmailId))
             {
-                throw new ArgumentNullException(nameof(userEmailId),"UserBobj's value must be initialized first");
+                throw new ArgumentNullException(nameof(currentUser.EmailId),"UserBobj's value must be initialized first");
             }
 
             //fetching groupIds where user is a Participant 
-            var groupIds = await _groupToUserDataServices.SelectGroupIdsWithUserEmail(userEmailId).ConfigureAwait(false);
+            var groupIds = await _groupToUserDataServices.SelectGroupIdsWithUserEmail(currentUser.EmailId).ConfigureAwait(false);
 
 
             var outputList = new List<GroupBobj>();
