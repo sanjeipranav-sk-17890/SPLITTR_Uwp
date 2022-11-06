@@ -39,11 +39,13 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
         public async Task<bool> IsUserAlreadyExist(string emailId)
         {
-            
-            var userObj = await   _userDataServices.SelectUserObjByEmailId(emailId).ConfigureAwait(false);
+           return await Task.Run(async () =>
+           {
+               var userObj = await _userDataServices.SelectUserObjByEmailId(emailId).ConfigureAwait(false);
 
-            return userObj is not null;
-
+               return userObj is not null;
+           }).ConfigureAwait(false);
+           
         }
 
         public Task<int> CreateNewUser(string userName, string emailId, int currencyPreference)
