@@ -15,15 +15,14 @@ namespace SPLITTR_Uwp.Core.DataHandler
     {
         private readonly IExpenseDataServices _dataServices;
         private readonly ICurrencyCalcFactory _currencyCalcFactory;
-        private readonly IUserDataServices _userDataServices;
+        private  IUserDataHandler _userDataHandler;
 
 
-        public ExpenseDataHandler(IExpenseDataServices dataServices,ICurrencyCalcFactory currencyCalcFactory,IUserDataServices userDataServices)
+        public ExpenseDataHandler(IExpenseDataServices dataServices,ICurrencyCalcFactory currencyCalcFactory)
         {
             _dataServices = dataServices;
             _currencyCalcFactory = currencyCalcFactory;
-            _userDataServices = userDataServices;
-
+            
         }
 
         public Task InsertExpenseAsync(ExpenseBobj expenseBobj)
@@ -55,8 +54,11 @@ namespace SPLITTR_Uwp.Core.DataHandler
         //    }));
         //    return outputList;
         //}
-        public async Task<IEnumerable<ExpenseBobj>> GetUserExpensesAsync(User  user)
+        public async Task<IEnumerable<ExpenseBobj>> GetUserExpensesAsync(User  user, IUserDataHandler userDataHandler)
         {
+
+            _userDataHandler = userDataHandler;
+
             //Fetching Current User's Currency Preference
             var userCurrencyPreference =(Currency)user.CurrencyIndex;
                 /*(Currency)(await _userDataHandler.FetchCurrentUserDetails(userEmailId).ConfigureAwait(false)).CurrencyIndex;*/
@@ -77,7 +79,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
                 }
                 else
                 {
-                  respectiveUserObj = await _userDataServices.SelectUserObjByEmailId(expense.UserEmailId).ConfigureAwait(false);
+                  respectiveUserObj = await _userDataHandler.FetchUserUsingMailId(expense.UserEmailId).ConfigureAwait(false);
                 }
                 outputList.Add(new ExpenseBobj(respectiveUserObj, this, currencyConverter: currencyCalculator, expense: expense));
             }));

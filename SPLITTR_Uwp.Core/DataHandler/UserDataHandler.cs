@@ -96,9 +96,10 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
             var user = await FetchUserUsingMailId(emailId).ConfigureAwait(false);
 
-            var expenses =await _expenseDataHandler.GetUserExpensesAsync(_currentUser).ConfigureAwait(false);
+            //Passing In userDataHandler as Method injection to Avoid Circular Dependency in IServiceCollection 
+            var expenses =await _expenseDataHandler.GetUserExpensesAsync(_currentUser,this).ConfigureAwait(false);
 
-            var groups =await _groupDataHandler.GetUserPartcipatingGroups(_currentUser).ConfigureAwait(false);
+            var groups =await _groupDataHandler.GetUserPartcipatingGroups(_currentUser,this).ConfigureAwait(false);
 
             var currencyCal = _currencyCalc.GetCurrencyCalculator((Currency)user.CurrencyIndex);
 
