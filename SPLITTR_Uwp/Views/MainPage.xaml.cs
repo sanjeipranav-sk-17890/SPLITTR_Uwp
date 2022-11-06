@@ -19,18 +19,13 @@ namespace SPLITTR_Uwp.Views
             _viewModel = ActivatorUtilities.CreateInstance<MainPageViewModel>(App.Container,this);
             InitializeComponent();
             InnerFrameobjref = InnerFrame;
-            
+            Loaded += _viewModel.AppLicationStart;
         }
 
 
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-
-            _viewModel.AppLicationStart();
-
-        }
+       
+        
 
         public void ListBoxItemSelected(object sender, SelectionChangedEventArgs e)
         {

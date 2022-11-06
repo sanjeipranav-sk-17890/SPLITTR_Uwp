@@ -40,7 +40,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
         public async Task<bool> IsUserAlreadyExist(string emailId)
         {
             
-            var userObj = await  _userDataServices.SelectUserObjByEmailId(emailId).ConfigureAwait(false);
+            var userObj = await   _userDataServices.SelectUserObjByEmailId(emailId).ConfigureAwait(false);
 
             return userObj is not null;
 
@@ -59,8 +59,12 @@ namespace SPLITTR_Uwp.Core.DataHandler
         }
         public async Task<User> FetchUserUsingMailId(string mailId)
         {
-            if (mailId != null && mailId.Equals(_currentUserEmailId))
+            if (mailId.Equals(_currentUserEmailId))
             {
+                if (_currentUser is not  null && _currentUser.EmailId != mailId)
+                {
+                    _currentUser = await _userDataServices.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
+                }
                 return _currentUser ??= await _userDataServices.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
             }
             return await _userDataServices.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
@@ -92,9 +96,10 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
             var user = await FetchUserUsingMailId(emailId).ConfigureAwait(false);
 
-            var expenses =await _expenseDataHandler.GetUserExpensesAsync(_currentUser).ConfigureAwait(false);
+            //Passing In userDataHandler as Method injection to Avoid Circular Dependency in IServiceCollection 
+            var expenses =await _expenseDataHandler.GetUserExpensesAsync(_currentUser,this).ConfigureAwait(false);
 
-            var groups =await _groupDataHandler.GetUserPartcipatingGroups(_currentUser).ConfigureAwait(false);
+            var groups =await _groupDataHandler.GetUserPartcipatingGroups(_currentUser,this).ConfigureAwait(false);
 
             var currencyCal = _currencyCalc.GetCurrencyCalculator((Currency)user.CurrencyIndex);
 

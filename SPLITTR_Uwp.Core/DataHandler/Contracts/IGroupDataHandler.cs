@@ -15,7 +15,7 @@ namespace SPLITTR_Uwp.Core.DataHandler.Contracts
         /// </summary>
         /// <param name="emailId"></param>
         /// <returns></returns>
-        Task<ICollection<GroupBobj>> GetUserPartcipatingGroups(User currentUser);
+        Task<ICollection<GroupBobj>> GetUserPartcipatingGroups(User user,IUserDataHandler userDataHandler);
 
         Task CreateGroupAsync(GroupBobj groupBobj);
     }

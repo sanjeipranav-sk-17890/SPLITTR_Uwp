@@ -45,6 +45,8 @@ namespace SPLITTR_Uwp.ViewModel
 
         public string UserEmailIdTextBox { get; set; }
 
+        private DispatcherTimer _timer;
+
         public LoginPageViewModel(IUserDataHandler userDataHandler,DataStore store)
         {
             _userDataHandler = userDataHandler;
@@ -52,12 +54,12 @@ namespace SPLITTR_Uwp.ViewModel
 
 
             //Firing a event for every 0.5 seconds
-            var timer = new DispatcherTimer()
+            _timer = new DispatcherTimer()
             {
                 Interval = TimeSpan.FromSeconds(2)
             };
-            timer.Tick += _timer_Tick;
-            timer.Start();
+            _timer.Tick += _timer_Tick;
+            _timer.Start();
             
         }
 
@@ -108,6 +110,11 @@ namespace SPLITTR_Uwp.ViewModel
             NavigationService.Frame.Navigate(typeof(SignUpPage),null, infoOverride:new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
         }
 
-        
+
+        public void PageUnloaded()
+        {
+            //stoping main page animation if the the page is unloaded
+            _timer.Stop();
+        }
     }
 }
