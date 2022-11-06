@@ -101,7 +101,7 @@ namespace SPLITTR_Uwp.ViewModel
             set => SetProperty(ref _isUpdateWalletBalanceTeachingTipOpen, value);
         }
 
-        public void AppLicationStart()
+        public void AppLicationStart(object sender, RoutedEventArgs e)
         {
 
             if (_store.UserBobj == null)
@@ -226,5 +226,6 @@ namespace SPLITTR_Uwp.ViewModel
                 await ShowMessageBoxAsync("Add group Selected", "Group");
             }
         }
+        
     }
 }

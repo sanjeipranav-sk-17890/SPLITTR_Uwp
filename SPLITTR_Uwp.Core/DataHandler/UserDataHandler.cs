@@ -40,7 +40,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
         public async Task<bool> IsUserAlreadyExist(string emailId)
         {
             
-            var userObj = await  _userDataServices.SelectUserObjByEmailId(emailId).ConfigureAwait(false);
+            var userObj = await   _userDataServices.SelectUserObjByEmailId(emailId).ConfigureAwait(false);
 
             return userObj is not null;
 
@@ -59,8 +59,12 @@ namespace SPLITTR_Uwp.Core.DataHandler
         }
         public async Task<User> FetchUserUsingMailId(string mailId)
         {
-            if (mailId != null && mailId.Equals(_currentUserEmailId))
+            if (mailId.Equals(_currentUserEmailId))
             {
+                if (_currentUser is not  null && _currentUser.EmailId != mailId)
+                {
+                    _currentUser = await _userDataServices.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
+                }
                 return _currentUser ??= await _userDataServices.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
             }
             return await _userDataServices.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
