@@ -79,7 +79,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
                 {
                   respectiveUserObj = await _userDataServices.SelectUserObjByEmailId(expense.UserEmailId).ConfigureAwait(false);
                 }
-                outputList.Add(new ExpenseBobj(respectiveUserObj, this, currencyConverter: currencyCalculator, expense: expense));
+                outputList.Add(new ExpenseBobj(respectiveUserObj,  currencyConverter: currencyCalculator, expense: expense));
             }));
             return outputList;
         }
