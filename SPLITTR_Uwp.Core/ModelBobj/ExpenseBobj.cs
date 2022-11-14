@@ -9,7 +9,7 @@ namespace SPLITTR_Uwp.Core.ModelBobj
 {
     public class ExpenseBobj : Expense
     {
-        readonly IExpenseDataHandler _expenseDataHandler;
+        
 
         public ICurrencyConverter CurrencyConverter { get; set; }
 
@@ -47,21 +47,20 @@ namespace SPLITTR_Uwp.Core.ModelBobj
 
         }
 
-        public ExpenseBobj(User user,IExpenseDataHandler expenseDataHandler, ICurrencyConverter currencyConverter, Expense expense) : this(expense)
+        public ExpenseBobj(User user, ICurrencyConverter currencyConverter, Expense expense) : this(expense)
         {
-            _expenseDataHandler = expenseDataHandler;
+            UserDetails = user;
             CurrencyConverter = currencyConverter;
 
         }
-        public ExpenseBobj(ExpenseBobj expenseBobj) : this(expenseBobj.UserDetails,expenseBobj._expenseDataHandler, expenseBobj.CurrencyConverter, expenseBobj)
+        public ExpenseBobj(ExpenseBobj expenseBobj) : this(expenseBobj.UserDetails, expenseBobj.CurrencyConverter, expenseBobj)
         {
 
         }
-        public async Task AddExpense()
+        public ExpenseBobj(ICurrencyConverter currencyConverter)
         {
-            await _expenseDataHandler.InsertExpenseAsync(this).ConfigureAwait(false);
+            CurrencyConverter = currencyConverter;
         }
 
-        
     }
 }
