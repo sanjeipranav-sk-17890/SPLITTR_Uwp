@@ -49,7 +49,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
                 var participants = await GetGroupParticipants(group.GroupUniqueId).ConfigureAwait(false);
 
-                outputList.Add(new GroupBobj(this, group, participants));
+                outputList.Add(new GroupBobj(group, participants));
 
             }
 

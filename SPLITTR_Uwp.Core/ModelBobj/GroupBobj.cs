@@ -13,7 +13,7 @@ namespace SPLITTR_Uwp.Core.ModelBobj
     public class GroupBobj : Group
     {
 
-        IGroupDataHandler _groupDataHandler;
+      
         private readonly IList<User> _groupParticipants = new List<User>();
 
         public virtual IList<User> GroupParticipants
@@ -32,14 +32,14 @@ namespace SPLITTR_Uwp.Core.ModelBobj
 
         }
 
-        public GroupBobj(IGroupDataHandler groupDataHandler,Group group ,IEnumerable<User> groupParticipants):this(group)
+        public GroupBobj(Group group ,IEnumerable<User> groupParticipants):this(group)
         {
-            _groupDataHandler = groupDataHandler;
+            
             _groupParticipants.AddRange(groupParticipants);
         }
 
         
-        protected GroupBobj(GroupBobj groupBobj) : this(groupBobj._groupDataHandler,groupBobj,groupBobj.GroupParticipants)
+        protected GroupBobj(GroupBobj groupBobj) : this(groupBobj,groupBobj.GroupParticipants)
         {
 
         }
