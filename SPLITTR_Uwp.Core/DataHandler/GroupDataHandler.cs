@@ -16,23 +16,24 @@ namespace SPLITTR_Uwp.Core.DataHandler
     {
         private readonly IGroupDataServices _groupDataServices;
         private readonly IGroupToUserDataServices _groupToUserDataServices;
-        private readonly IUserDataServices _userDataServices;
+        private  IUserDataHandler _userDataHandler;
 
-        public GroupDataHandler(IGroupDataServices groupDataServices, IGroupToUserDataServices groupToUserDataServices, IUserDataServices userDataServices)
+        public GroupDataHandler(IGroupDataServices groupDataServices, IGroupToUserDataServices groupToUserDataServices)
         {
             _groupDataServices = groupDataServices;
             _groupToUserDataServices = groupToUserDataServices;
-            _userDataServices = userDataServices;
+            
         }
-        public async Task<ICollection<GroupBobj>> GetUserPartcipatingGroups(User currentUser)
+        public async Task<ICollection<GroupBobj>> GetUserPartcipatingGroups(User user, IUserDataHandler userDataHandler)
         {
-            if (string.IsNullOrEmpty(currentUser.EmailId))
+            _userDataHandler = userDataHandler; 
+            if (string.IsNullOrEmpty(user.EmailId))
             {
-                throw new ArgumentNullException(nameof(currentUser.EmailId),"UserBobj's value must be initialized first");
+                throw new ArgumentNullException(nameof(user.EmailId),"UserBobj's value must be initialized first");
             }
 
             //fetching groupIds where user is a Participant 
-            var groupIds = await _groupToUserDataServices.SelectGroupIdsWithUserEmail(currentUser.EmailId).ConfigureAwait(false);
+            var groupIds = await _groupToUserDataServices.SelectGroupIdsWithUserEmail(user.EmailId).ConfigureAwait(false);
 
 
             var outputList = new List<GroupBobj>();
@@ -91,7 +92,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
             List<Task<User>> userObjs = new List<Task<User>>();
             foreach (var participantsId in groupParticipantsIds)
             {
-                userObjs.Add(_userDataServices.SelectUserObjByEmailId(participantsId));
+                userObjs.Add(_userDataHandler.FetchUserUsingMailId(participantsId));
             }
 
             return  await Task.WhenAll(userObjs).ConfigureAwait(false);
@@ -103,7 +104,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
         //Parallel.ForEach(groupParticipantsIds, (async (string s) =>
         //{
-        //    var userObj = await _userDataServices.SelectUserObjByEmailId(s).ConfigureAwait(false);
+        //    var userObj = await _userDataHandler.SelectUserObjByEmailId(s).ConfigureAwait(false);
         //    participants.Add(userObj);
         //}));
 

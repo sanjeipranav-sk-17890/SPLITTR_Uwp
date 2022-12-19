@@ -39,11 +39,13 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
         public async Task<bool> IsUserAlreadyExist(string emailId)
         {
-            
-            var userObj = await   _userDataServices.SelectUserObjByEmailId(emailId).ConfigureAwait(false);
+           return await Task.Run(async () =>
+           {
+               var userObj = await _userDataServices.SelectUserObjByEmailId(emailId).ConfigureAwait(false);
 
-            return userObj is not null;
-
+               return userObj is not null;
+           }).ConfigureAwait(false);
+           
         }
 
         public Task<int> CreateNewUser(string userName, string emailId, int currencyPreference)
@@ -96,9 +98,10 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
             var user = await FetchUserUsingMailId(emailId).ConfigureAwait(false);
 
-            var expenses =await _expenseDataHandler.GetUserExpensesAsync(_currentUser).ConfigureAwait(false);
+            //Passing In userDataHandler as Method injection to Avoid Circular Dependency in IServiceCollection 
+            var expenses =await _expenseDataHandler.GetUserExpensesAsync(_currentUser,this).ConfigureAwait(false);
 
-            var groups =await _groupDataHandler.GetUserPartcipatingGroups(_currentUser).ConfigureAwait(false);
+            var groups =await _groupDataHandler.GetUserPartcipatingGroups(_currentUser,this).ConfigureAwait(false);
 
             var currencyCal = _currencyCalc.GetCurrencyCalculator((Currency)user.CurrencyIndex);
 

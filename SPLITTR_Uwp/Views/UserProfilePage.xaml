@@ -107,7 +107,8 @@
                 </StackPanel>
                 <HyperlinkButton Margin="0 5 0 0"
                                  FontSize="15"
-                                 Foreground="{ThemeResource ApplicationMainThemeColor}"
+                                 Background="{ThemeResource ApplicationMainThemeColor}"
+                                 Foreground="{ThemeResource TextBoxForegroundThemeBrush}"
                     Content="Edit Profile" Click="{x:Bind _viewModel.EditUserProfileClicked}" ></HyperlinkButton>
             </StackPanel>
         </RelativePanel> 

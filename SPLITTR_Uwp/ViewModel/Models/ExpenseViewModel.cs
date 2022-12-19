@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using SPLITTR_Uwp.Core.CurrencyCoverter;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
@@ -12,7 +13,7 @@ namespace SPLITTR_Uwp.ViewModel.Models
 
         public override  string Note
         {
-            get => base.Note;
+            get => _expense.Note;
             set
             {
                 base.Note = value;
@@ -60,6 +61,10 @@ namespace SPLITTR_Uwp.ViewModel.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
- 
+
+        public ExpenseViewModel(ICurrencyConverter currencyConverter):base(currencyConverter)
+        {
+            _expense = this;
+        }
     }
 }
