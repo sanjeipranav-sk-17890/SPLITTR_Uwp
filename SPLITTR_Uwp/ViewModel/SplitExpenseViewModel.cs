@@ -79,6 +79,8 @@ namespace SPLITTR_Uwp.ViewModel
             //no Recommendation operation Should be done If TextBox is non editable for user interaction
             if (IsNameTextBoxReadOnly || _isInnerInvokationOfTextChanged)
             {
+                //Changing ExpenseViewModels in Unequal Split Taeaching Tip ListView
+                SplittingUserPreferenceChanged();
                 _isInnerInvokationOfTextChanged = false;
                 IsUserSuggestionListOpen = false;
                 return;
@@ -185,18 +187,19 @@ namespace SPLITTR_Uwp.ViewModel
             set => SetProperty(ref _selectedUserIndex, value);
         }
 
+        private GroupBobj _dummyGroup = new GroupBobj()
+        {
+            GroupName = "Non Group Expense"
+        };
+
 
 
         private ObservableCollection<GroupBobj> GetUserParticipatingGroup()
         {
             //dummy GroupBobj to display default value
-            var dummy = new GroupBobj()
-            {
-                GroupName = "Non Group Expense"
-            };
-
+            
             var observableGroupObj = new ObservableCollection<GroupBobj>();
-            observableGroupObj.Add(dummy);
+            observableGroupObj.Add(_dummyGroup);
             foreach (var grp in _store.UserBobj.Groups)
             {
                 observableGroupObj.Add(grp);
@@ -230,13 +233,15 @@ namespace SPLITTR_Uwp.ViewModel
             foreach (var user in splitingGroup.GroupParticipants)
             {
                 _isInnerInvokationOfTextChanged = true;
-                //ingoring current users name in the GROUP MEMBERS SPLITTING NAME
-                if (user.EmailId == User.EmailId) continue;
-
-                //CONCATING REMAINING USERS NAME TO THE USERS NAME TEXT BOX
-                SplittingUsersName += (","+user.UserName);
 
                 _usersToBeSplitted.Add(user);
+
+                //ingoring current users name in the GROUP MEMBERS SPLITTING NAME
+                if (user.EmailId == User.EmailId)
+                    continue;
+
+                //CONCATING REMAINING USERS NAME TO THE USERS NAME TEXT BOX
+                SplittingUsersName += ("," + user.UserName);
             }
         }
 
@@ -374,6 +379,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         #region UnEqualSplitPopUpLogicRegion
         private bool _uneqaulSplitPopUpVisibility;
+        private string _expenseObjectTestTextBox;
 
         public bool UneqaulSplitPopUpVisibility
         {
@@ -381,14 +387,45 @@ namespace SPLITTR_Uwp.ViewModel
             set => SetProperty(ref _uneqaulSplitPopUpVisibility, value);
         }
 
+
         public void UnequalSplitTeachingSplitClosed()
         {
             SelectedSplitPreferenceIndex = 0;
         }
-        public void UnEqualSplitTeachingTip_OnCloseButtonClick(TeachingTip sender, object args)
+
+        public string ExpenseObjectTestTextBox
         {
-            sender.IsOpen = true;
+            get => _expenseObjectTestTextBox;
+            set => SetProperty(ref _expenseObjectTestTextBox, value);
         }
+
+        public ObservableCollection<ExpenseViewModel> ExpensesToBeSplitted = new ObservableCollection<ExpenseViewModel>();
+
+
+        //Manupulates ExpenseViewModels for Unequal Splitting in teaching tip 
+        private void SplittingUserPreferenceChanged()
+        {
+            //cheching whether it is dummy groupobj
+            if (_selectedGroupIndex == 0)
+            {
+                if (_selectedUser != null)
+                {
+                    ExpenseObjectTestTextBox = _selectedUser.UserName;
+                }
+            }
+            else
+            {
+                
+                var group = UserParticipatingGroup[_selectedGroupIndex];
+                ExpenseObjectTestTextBox = group.GroupName;
+            }
+
+        }
+
+
+
+
+
         #endregion
         public string GetUserCurrencyPreference()
         {

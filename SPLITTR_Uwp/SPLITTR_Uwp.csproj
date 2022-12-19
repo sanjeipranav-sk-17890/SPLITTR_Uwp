@@ -158,6 +158,9 @@
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="DataRepository\Converters\TimeConverter.cs" />
     <Compile Include="DataRepository\DataStore.cs" />
+    <Compile Include="DataTemplates\NewExpenseTemplate.xaml.cs">
+      <DependentUpon>NewExpenseTemplate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="ViewModel\LoginPageViewModel.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />
@@ -200,6 +203,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="DataTemplates\NewExpenseTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Page.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -77,6 +77,6 @@ namespace SPLITTR_Uwp.Configuration
 
         }
     }
-    
+
 
 }
