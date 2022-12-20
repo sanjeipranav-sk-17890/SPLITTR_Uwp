@@ -9,7 +9,7 @@ namespace SPLITTR_Uwp.Core.DataHandler.Contracts
 {
     public interface IExpenseDataHandler
     {
-        Task InsertExpenseAsync(ExpenseBobj expenseBobj);
+        Task InsertExpenseAsync(IEnumerable<ExpenseBobj> expenseBobjs);
         Task UpdateExpenseAsync(ExpenseBobj expenseBobj);
         Task<IEnumerable<ExpenseBobj>> GetUserExpensesAsync(User user,IUserDataHandler userDataHandler);
     }

@@ -15,6 +15,14 @@ namespace SPLITTR_Uwp.Core.Services.Contracts
         /// <returns></returns>
         Task<int> InsertExpenseAsync(Expense expense);
 
+
+        /// <summary>
+        /// Inserts Given Expense objects to DataService Provided
+        /// </summary>
+        /// <param name="expenses"></param>
+        /// <returns></returns>
+        Task<int> InsertExpenseAsync(IEnumerable<Expense> expenses);
+
         /// <summary>
         /// updates Given expense object based on expense Unique Id in Corresponding Dataservice Provider
         /// </summary>

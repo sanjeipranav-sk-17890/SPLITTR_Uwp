@@ -25,9 +25,9 @@ namespace SPLITTR_Uwp.Core.DataHandler
             
         }
 
-        public Task InsertExpenseAsync(ExpenseBobj expenseBobj)
+        public Task InsertExpenseAsync(IEnumerable<ExpenseBobj> expenseBobjs)
         {
-           return _dataServices.InsertExpenseAsync(expenseBobj);
+           return _dataServices.InsertExpenseAsync(expenseBobjs);
         }
         
         public Task UpdateExpenseAsync(ExpenseBobj expenseBobj)

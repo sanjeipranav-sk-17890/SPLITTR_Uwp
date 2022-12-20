@@ -22,6 +22,10 @@ namespace SPLITTR_Uwp.Core.Services
         {
            return _sqlDbAccess.InsertObj(expense);
         }
+        public Task<int> InsertExpenseAsync(IEnumerable<Expense> expenses)
+        {
+           return _sqlDbAccess.InsertObjects(expenses);
+        }
 
         public Task<int> UpdateExpenseAsync(Expense expense)
         {
