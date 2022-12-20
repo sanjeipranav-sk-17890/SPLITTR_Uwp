@@ -27,6 +27,23 @@ namespace SPLITTR_Uwp.Core.ExtensionMethod
         }
 
 
+        public static  string GetUserInitial(this string userName)
+        {
+
+            var names = userName.Split(' ');
+            var initials = "";
+            foreach (var name in names)
+            {
+                initials += name[0];
+                if (initials.Length == 2)
+                {
+                    break;
+                }
+            }
+            return initials;
+        }
+
+
 
         public static bool ContainsString(this string text, IEnumerable<string> words)
         {

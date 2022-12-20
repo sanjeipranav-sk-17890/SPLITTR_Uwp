@@ -39,7 +39,7 @@ namespace SPLITTR_Uwp.Core.ModelBobj
             set
             {
                 base.WalletBalance = CurrencyConverter.ConvertToEntityCurrency(value);
-                OnValueChanged();
+                OnValueChanged(); 
             }
 
         }
