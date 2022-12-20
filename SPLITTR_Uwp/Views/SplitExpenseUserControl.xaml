@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="using:System"
+    xmlns:local="using:SPLITTR_Uwp.DataTemplates"
     xmlns:converter="using:SPLITTR_Uwp.DataRepository.Converters"
     xmlns:model="using:SPLITTR_Uwp.Core.Models"
     xmlns:modelObjs="using:SPLITTR_Uwp.Core.ModelBobj"
@@ -273,11 +274,16 @@
                     <!--<Rectangle Height="300"
                                Width="300"
                                Fill="Red"></Rectangle>-->
-                    <StackPanel>
-                        <TextBlock Text="{x:Bind _viewModel.ExpenseObjectTestTextBox,Mode=OneWay}"></TextBlock>
-                        <ListView ItemsSource="{x:Bind _viewModel.ExpensesToBeSplitted,Mode=OneWay}"></ListView>
-                    </StackPanel>
-
+                    
+                        <ListView ItemsSource="{x:Bind _viewModel.ExpensesToBeSplitted,Mode=OneWay}"
+                                  IsItemClickEnabled="False"
+                        >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <local:NewExpenseTemplate HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
 
                 </controls:TeachingTip>
 
@@ -297,6 +303,7 @@
             />-->
            <CalendarDatePicker HorizontalAlignment="Center"
                                Width="200"
+                               PlaceholderText="Date Of Expense"
                                MaxDate="{x:Bind _viewModel.MaxYearDisplayLimit,Mode=OneWay}"
                                 Date="{x:Bind _viewModel.ExpenditureDate,Mode=TwoWay}"
                                Background="{ThemeResource ApplicationMainThemeColor}"

@@ -6,13 +6,40 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-   
-    d:DesignWidth="300">
+    Height="auto"
+>
 
     <Grid>
+        <Grid.Resources>
+            <SolidColorBrush Color="ForestGreen" x:Key="ParsingSuccessColor" />
+            <SolidColorBrush Color="Red" x:Key="ParsingFailedColor"  ></SolidColorBrush>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <PersonPicture Grid.Column="0"
+                       VerticalAlignment="center"
+                       Margin="3 3 0 0"
+                       Width="50"
+                       BorderBrush="{ThemeResource ApplicationMainThemeColor}"
+                       Initials="{x:Bind  UserInitial,Mode=OneWay}"
+        ></PersonPicture>
+        <StackPanel Grid.Column="1">
+            <TextBlock HorizontalAlignment="Center"
+                       Text="{x:Bind ExpenseViewModel.UserDetails.UserName,Mode=OneWay}"
+                       FontSize="15"/>
+            <TextBox BorderBrush="{x:Bind ExpenseTextBoxColor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                     BorderThickness="5"
+                     x:Name="ExpenseAmountTextBox"
+                     Text="0.0"
+                     TextAlignment="Center"
+                     TextChanged="ExpenseAmountTextBox_OnTextChanged"
+                     Margin="10 4 10 0"
+                     FontSize="20"></TextBox>
+        </StackPanel>
     </Grid>
 </UserControl>

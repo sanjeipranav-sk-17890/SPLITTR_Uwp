@@ -379,8 +379,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         #region UnEqualSplitPopUpLogicRegion
         private bool _uneqaulSplitPopUpVisibility;
-        private string _expenseObjectTestTextBox;
-
+        
         public bool UneqaulSplitPopUpVisibility
         {
             get => _uneqaulSplitPopUpVisibility;
@@ -393,38 +392,51 @@ namespace SPLITTR_Uwp.ViewModel
             SelectedSplitPreferenceIndex = 0;
         }
 
-        public string ExpenseObjectTestTextBox
-        {
-            get => _expenseObjectTestTextBox;
-            set => SetProperty(ref _expenseObjectTestTextBox, value);
-        }
 
-        public ObservableCollection<ExpenseViewModel> ExpensesToBeSplitted = new ObservableCollection<ExpenseViewModel>();
+        public readonly ObservableCollection<ExpenseViewModel> ExpensesToBeSplitted = new ObservableCollection<ExpenseViewModel>();
 
 
         //Manupulates ExpenseViewModels for Unequal Splitting in teaching tip 
         private void SplittingUserPreferenceChanged()
         {
+            ExpensesToBeSplitted.Clear();
+
             //cheching whether it is dummy groupobj
             if (_selectedGroupIndex == 0)
             {
-                if (_selectedUser != null)
+                if (_selectedUser != null)//Individual Split
                 {
-                    ExpenseObjectTestTextBox = _selectedUser.UserName;
+
+                    ExpensesToBeSplitted.Add(GenerateExpenseViewModel(_store.UserBobj));//current User
+                    ExpensesToBeSplitted.Add(GenerateExpenseViewModel(_selectedUser));//Spiltting user
+                   
                 }
             }
-            else
+            else//Group Split 
             {
                 
                 var group = UserParticipatingGroup[_selectedGroupIndex];
-                ExpenseObjectTestTextBox = group.GroupName;
+
+                foreach (var participant in group.GroupParticipants)
+                {
+                   ExpensesToBeSplitted.Add(GenerateExpenseViewModel(participant)); 
+                }
             }
 
         }
 
+        private ExpenseViewModel GenerateExpenseViewModel(User user)
+        {
+            return new ExpenseViewModel(new ExpenseBobj(_store.UserBobj.CurrencyConverter)
+            {
+                RequestedOwner = _store.UserBobj.EmailId,
+                UserEmailId = user.EmailId,
+                UserDetails = user, 
+                ExpenseAmount = 0.0
 
-
-
+            });
+            
+        }
 
         #endregion
         public string GetUserCurrencyPreference()
