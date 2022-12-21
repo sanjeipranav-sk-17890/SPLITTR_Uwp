@@ -34,7 +34,7 @@ public class ExpenseUtility : IExpenseUtility
             {
                 throw new ArgumentException("Equal Split Money must be greater than zero");
             }
-            if (expense.ExpenseAmount <= -1)
+            if (expense.StrExpenseAmount <= -1)
             {
                 throw new ArgumentException("Money cannot be  negative");
             }
@@ -66,7 +66,7 @@ public class ExpenseUtility : IExpenseUtility
             {
                 if (expenditureSplitType <= 0)// assinging equal expense amount if equal split option is selected
                 {
-                    expense.ExpenseAmount = expenseAmount / noOfExpenses;
+                    expense.StrExpenseAmount = expenseAmount / noOfExpenses;
                 }
                 if (expense.ExpenseUniqueId.Equals(parentExpenseBobj.ExpenseUniqueId) is not true)//expenseStatus for split raiser is pending for others
                 {

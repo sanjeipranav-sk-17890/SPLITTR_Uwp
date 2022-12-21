@@ -90,7 +90,7 @@
                 <StackPanel Margin="30 10 0 0">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Name="WalletBalanceLabel"
-                               Text="WalletBalance :"
+                               Text="StrWalletBalance :"
                                FontSize="24"
                                Style="{StaticResource DetailsTextBlockStyle}"
                             /> 

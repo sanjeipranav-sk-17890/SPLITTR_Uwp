@@ -20,14 +20,14 @@ namespace SPLITTR_Uwp.ViewModel.Models
             get => _user.UserName;
         }
 
-        public override double WalletBalance
+        public override double StrWalletBalance
         {
-            get => _user.WalletBalance;
+            get => _user.StrWalletBalance;
         }
 
         public string CurrentUserWalletBalance
         {
-            get => _user.WalletBalance.ExpenseAmount(_user);
+            get => _user.StrWalletBalance.ExpenseAmount(_user);
         }
 
         public new string LendedAmount

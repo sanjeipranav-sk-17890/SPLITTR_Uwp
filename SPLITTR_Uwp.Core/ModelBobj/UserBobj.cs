@@ -36,10 +36,7 @@ namespace SPLITTR_Uwp.Core.ModelBobj
         /// <summary>
         /// Gets or Sets the walletBalance in Respective Currency Preference
         /// </summary>
-        // marked as New because when updating this object it is sended to method which takes parent User as parameter so in order to avoid 
-        //reading Wrapper WalletBalance We marked it as new , marked as virtual so WalletBalance property can be overrided by 
-        //userVm and it should Provide info to UI through Composition of UserBobj
-        public new virtual double WalletBalance
+        public virtual double StrWalletBalance
         {
             get => CurrencyConverter.ConvertCurrency(base.WalletBalance);
             set

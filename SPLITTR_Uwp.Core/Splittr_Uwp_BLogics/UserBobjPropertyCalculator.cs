@@ -19,13 +19,13 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics
                 if (expense.ExpenseStatus == ExpenseStatus.Pending &&
                     expense.RequestedOwner == userBobj.EmailId)
                 {
-                    lendedAmount += expense.ExpenseAmount;
+                    lendedAmount += expense.StrExpenseAmount;
                 }
 
                 if (expense.RequestedOwner != userBobj.EmailId &&
                     expense.ExpenseStatus == ExpenseStatus.Pending)
                 {
-                    pendingAmount += expense.ExpenseAmount;
+                    pendingAmount += expense.StrExpenseAmount;
                 }
 
             }

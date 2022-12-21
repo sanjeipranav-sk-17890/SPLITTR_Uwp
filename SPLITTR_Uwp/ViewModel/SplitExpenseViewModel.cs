@@ -446,7 +446,7 @@ namespace SPLITTR_Uwp.ViewModel
                 RequestedOwner = _store.UserBobj.EmailId,
                 UserEmailId = user.EmailId,
                 UserDetails = user,
-                ExpenseAmount = 0.0,
+                StrExpenseAmount = 0.0,
                 GroupUniqueId = groupUid
             };
 

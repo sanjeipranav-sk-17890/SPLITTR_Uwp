@@ -27,11 +27,11 @@ namespace SPLITTR_Uwp.ViewModel.Models
         [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override double ExpenseAmount
         {
-            get => _expense.ExpenseAmount;
+            get => _expense.StrExpenseAmount;
             set
             {
-                base.ExpenseAmount = value;
-                _expense.ExpenseAmount = value;
+                base.StrExpenseAmount = value;
+                _expense.StrExpenseAmount = value;
                 OnPropertyChanged();
             }
         }

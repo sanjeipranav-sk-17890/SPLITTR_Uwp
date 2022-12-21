@@ -46,7 +46,7 @@
             <StackPanel  Grid.Row="1"
                          Margin="0 5 0 0"
                          Orientation="Vertical" >
-                <TextBlock Text="WalletBalance"
+                <TextBlock Text="StrWalletBalance"
                        Foreground="{ThemeResource ResourceKey=ApplicationMainThemeColor}"
                        FontSize="18" 
                        HorizontalAlignment="Center"

@@ -54,7 +54,7 @@ public class UserUtility : IUserUtility
     public Task UpdateUserObjAsync(UserBobj userBobj, double walletBalance)
     {
 
-        userBobj.WalletBalance += walletBalance;
+        userBobj.StrWalletBalance += walletBalance;
         return _userDataHandler.UpdateUserBobjAsync(userBobj);
 
     }

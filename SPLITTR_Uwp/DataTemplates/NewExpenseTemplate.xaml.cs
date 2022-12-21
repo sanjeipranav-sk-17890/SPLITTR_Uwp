@@ -90,7 +90,7 @@ namespace SPLITTR_Uwp.DataTemplates
             if (double.TryParse(expenseAmountText, out var expenseAmount))//if parsing success assign to expense obj
             {
                 ExpenseTextBoxColor = _parsingSuccessColor ;
-                ExpenseObj.ExpenseAmount = expenseAmount;
+                ExpenseObj.StrExpenseAmount = expenseAmount;
             }
             else// if parsing failed default 0.0 will only be assigned
             {

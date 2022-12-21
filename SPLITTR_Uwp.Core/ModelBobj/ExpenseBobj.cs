@@ -31,7 +31,7 @@ namespace SPLITTR_Uwp.Core.ModelBobj
         public event Action ValueChanged;
 
 
-        public override double ExpenseAmount
+        public  double StrExpenseAmount
         {
             get => CurrencyConverter.ConvertCurrency(base.ExpenseAmount);
             set => base.ExpenseAmount = CurrencyConverter.ConvertToEntityCurrency(value);
