@@ -70,10 +70,15 @@ public class ExpenseUtility : UseCaseBase, IExpenseUtility
                  {
                      expense.StrExpenseAmount = expenseAmount / noOfExpenses;
                  }
-                 if (expense.ExpenseUniqueId.Equals(parentExpenseBobj.ExpenseUniqueId) is not true)//expenseStatus for split raiser is pending for others
+                 if (expense.ExpenseUniqueId.Equals(parentExpenseBobj.ExpenseUniqueId) is not true)//expenseStatus for split raiser is pending for others  
                  {
                      expense.ParentExpenseId = parentExpenseBobj.ExpenseUniqueId;
                      expense.ExpenseStatus = ExpenseStatus.Pending;
+
+                     if (expense.StrExpenseAmount == 0) //if split amount is 0 mark it as paid
+                     {
+                         expense.ExpenseStatus = ExpenseStatus.Paid;
+                     }
                  }
 
              }

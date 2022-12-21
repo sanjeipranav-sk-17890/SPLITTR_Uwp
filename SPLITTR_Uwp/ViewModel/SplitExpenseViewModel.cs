@@ -34,7 +34,7 @@ namespace SPLITTR_Uwp.ViewModel
         private readonly IUserDataHandler _userDataHandler;
         private readonly IExpenseUtility _expenseUtility;
         private readonly DataStore _store;
-        private readonly IView _view;
+        
 
         public UserViewModel User { get;}
 
@@ -561,12 +561,11 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
        
-        public SplitExpenseViewModel(IUserDataHandler userDataHandler,IExpenseUtility expenseUtility,DataStore store,IView view)
+        public SplitExpenseViewModel(IUserDataHandler userDataHandler,IExpenseUtility expenseUtility,DataStore store)
         {
             _userDataHandler = userDataHandler;
             _expenseUtility = expenseUtility;
             _store = store;
-            _view = view;
             _store.UserBobj.ValueChanged += OnUserValueChanged;
             User = new UserViewModel(_store.UserBobj);
             ExpensesToBeSplitted.CollectionChanged += ExpensesToBeSplittedOnCollectionChanged;
