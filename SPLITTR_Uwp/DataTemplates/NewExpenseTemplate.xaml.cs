@@ -21,6 +21,7 @@ using System.ServiceModel.Channels;
 using Windows.UI;
 using Microsoft.Toolkit.Uwp.UI;
 using SPLITTR_Uwp.Core.ExtensionMethod;
+using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Utility;
 using Color = Windows.UI.Color;
 
@@ -37,9 +38,9 @@ namespace SPLITTR_Uwp.DataTemplates
 
         private SolidColorBrush _parsingFailedColor = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
 
-        private ExpenseViewModel ExpenseViewModel
+        private ExpenseBobj ExpenseObj
         {
-            get => DataContext as ExpenseViewModel;
+            get => DataContext as ExpenseBobj;
         }
 
         private SolidColorBrush ExpenseTextBoxColor
@@ -52,7 +53,7 @@ namespace SPLITTR_Uwp.DataTemplates
         {
             get
             {
-                var initial = ExpenseViewModel?.UserDetails.UserName.GetUserInitial();
+                var initial = ExpenseObj?.UserDetails.UserName.GetUserInitial();
                 return initial ?? "_";
             }
         }
@@ -89,7 +90,7 @@ namespace SPLITTR_Uwp.DataTemplates
             if (double.TryParse(expenseAmountText, out var expenseAmount))//if parsing success assign to expense obj
             {
                 ExpenseTextBoxColor = _parsingSuccessColor ;
-                ExpenseViewModel.ExpenseAmount = expenseAmount;
+                ExpenseObj.ExpenseAmount = expenseAmount;
             }
             else// if parsing failed default 0.0 will only be assigned
             {

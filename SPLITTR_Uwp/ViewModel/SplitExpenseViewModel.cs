@@ -35,7 +35,7 @@ namespace SPLITTR_Uwp.ViewModel
         /// <summary>
         /// Contains Expenses obj which will be processed and inserted into db
         /// </summary>
-        public readonly ObservableCollection<ExpenseViewModel> ExpensesToBeSplitted = new ObservableCollection<ExpenseViewModel>();
+        public readonly ObservableCollection<ExpenseBobj> ExpensesToBeSplitted = new ObservableCollection<ExpenseBobj>();
 
 
 
@@ -439,17 +439,17 @@ namespace SPLITTR_Uwp.ViewModel
 
         }
 
-        private ExpenseViewModel GenerateExpenseViewModel(User user,string groupUid)
+        private ExpenseBobj GenerateExpenseViewModel(User user,string groupUid)
         {
-            return new ExpenseViewModel(new ExpenseBobj(_store.UserBobj.CurrencyConverter)
+            return new ExpenseBobj(_store.UserBobj.CurrencyConverter)
             {
                 RequestedOwner = _store.UserBobj.EmailId,
                 UserEmailId = user.EmailId,
                 UserDetails = user,
                 ExpenseAmount = 0.0,
                 GroupUniqueId = groupUid
-            });
-            
+            };
+
         }
 
         #endregion
