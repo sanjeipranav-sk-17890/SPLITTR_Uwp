@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.DataHandler.Contracts;
+using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
@@ -83,7 +84,7 @@ public class ExpenseUtility : UseCaseBase, IExpenseUtility
              currentUser.Expenses.AddRange(expenses);
 
              //Calling Process Success Call back
-             PresenterCallBackOnSuccess?.Invoke(EventArgs.Empty);
+             PresenterCallBackOnSuccess?.Invoke(SplittrEventArgs.Empty);
          });
         ;
     }

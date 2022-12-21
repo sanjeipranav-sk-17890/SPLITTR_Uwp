@@ -174,6 +174,7 @@
     <Compile Include="Views\AddExpenseTestPage.xaml.cs">
       <DependentUpon>AddExpenseTestPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\IView.cs" />
     <Compile Include="Views\SplitExpenseUserControl.xaml.cs">
       <DependentUpon>SplitExpenseUserControl.xaml</DependentUpon>
     </Compile>

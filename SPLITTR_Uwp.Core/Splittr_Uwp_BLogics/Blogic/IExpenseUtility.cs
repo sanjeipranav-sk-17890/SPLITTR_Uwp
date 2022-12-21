@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic

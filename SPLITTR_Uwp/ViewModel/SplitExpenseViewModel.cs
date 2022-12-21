@@ -21,6 +21,11 @@ using SPLITTR_Uwp.ViewModel.Models;
 using System.ComponentModel;
 using Windows.UI.Core;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Popups;
+using SPLITTR_Uwp.Core.EventArg;
+using SPLITTR_Uwp.Services;
+using SPLITTR_Uwp.Views;
 
 namespace SPLITTR_Uwp.ViewModel
 {
@@ -29,6 +34,7 @@ namespace SPLITTR_Uwp.ViewModel
         private readonly IUserDataHandler _userDataHandler;
         private readonly IExpenseUtility _expenseUtility;
         private readonly DataStore _store;
+        private readonly IView _view;
 
         public UserViewModel User { get;}
 
@@ -457,6 +463,7 @@ namespace SPLITTR_Uwp.ViewModel
         #region ExpensesSplitFunctionality region
 
         private bool _isSplitButtonEnabled;
+        private string _expenseNote;
 
 
         public bool IsSplitButtonEnabled
@@ -465,7 +472,11 @@ namespace SPLITTR_Uwp.ViewModel
             set => SetProperty(ref _isSplitButtonEnabled, value);
         }
 
-        public string ExpenseNote { get; set; }
+        public string ExpenseNote
+        {
+            get => _expenseNote;
+            set => SetProperty(ref _expenseNote, value);
+        }
 
         //event raises when collection item changes
         private void ExpensesToBeSplittedOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -511,9 +522,33 @@ namespace SPLITTR_Uwp.ViewModel
             
         }
 
-        private void _expenseUtility_PresenterCallBackOnSuccess(EventArgs obj)
+        //if the splitting is successfull showing split completed text box and reset the page 
+        private async void _expenseUtility_PresenterCallBackOnSuccess(EventArgs args)
         {
             
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                    async () =>
+                    {
+                        MessageDialog msg = new MessageDialog("Spliting SuccessFull","Expenses Splitted Successfully");
+
+                        msg.Commands.Add(new UICommand("close"));
+                        await msg.ShowAsync();
+
+                        ResetPage();
+                    });
+                
+            
+        }
+        private void ResetPage()//resets UserControl to initial stage
+        {
+            SplittingUsersName = String.Empty;
+            _isInnerInvokationOfTextChanged = true;
+            ExpenseNote = String.Empty;
+            SelectedGroupIndex = 0;
+            SingleUserExpenseShareAmount = String.Empty;
+            ExpenditureDate = new DateTimeOffset(DateTime.Today);
+            SelectedSplitPreferenceIndex = 0;
+
         }
 
 
@@ -526,11 +561,12 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
        
-        public SplitExpenseViewModel(IUserDataHandler userDataHandler,IExpenseUtility expenseUtility,DataStore store)
+        public SplitExpenseViewModel(IUserDataHandler userDataHandler,IExpenseUtility expenseUtility,DataStore store,IView view)
         {
             _userDataHandler = userDataHandler;
             _expenseUtility = expenseUtility;
             _store = store;
+            _view = view;
             _store.UserBobj.ValueChanged += OnUserValueChanged;
             User = new UserViewModel(_store.UserBobj);
             ExpensesToBeSplitted.CollectionChanged += ExpensesToBeSplittedOnCollectionChanged;
