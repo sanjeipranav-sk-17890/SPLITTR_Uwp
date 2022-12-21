@@ -1,5 +1,4 @@
-﻿using SPLITTR_Uwp.Core.Utility.Blogic;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +9,7 @@ using Windows.UI.Core;
 using Windows.UI.Popups;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel.Models;
+using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 
 namespace SPLITTR_Uwp.ViewModel
 {

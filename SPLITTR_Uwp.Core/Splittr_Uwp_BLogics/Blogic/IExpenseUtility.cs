@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.ModelBobj;
 
-namespace SPLITTR_Uwp.Core.Utility.Blogic
+namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
 {
     public interface IExpenseUtility
     {
@@ -19,8 +19,14 @@ namespace SPLITTR_Uwp.Core.Utility.Blogic
         /// <param name="expenseAmount"></param>
         /// <param name="expenditureSplitType">unequal Spilt: number>0 Equal Split <= 0 </param>
         /// <returns></returns>
-        /// <exception cref="System.ArgumentException">throws exception when equal split option is selected but expense amount is less than or equal to 0,Or expediture amount is negative</exception>
-        public Task SplitNewExpensesAsync(UserBobj currentUser,IEnumerable<ExpenseBobj> expenses,string expenseNote,DateTime dateOfExpense,double expenseAmount,int expenditureSplitType);
+        /// <exception cref="ArgumentException">throws exception when equal split option is selected but expense amount is less than or equal to 0,Or expediture amount is negative</exception>
+        public Task SplitNewExpensesAsync(UserBobj currentUser, IEnumerable<ExpenseBobj> expenses, string expenseNote, DateTime dateOfExpense, double expenseAmount, int expenditureSplitType);
+
+
+        /// <summary>
+        /// Event Raised when Respective Action Completed SuccessFully
+        /// </summary>
+        event Action<EventArgs> PresenterCallBackOnSuccess;
 
     }
 }

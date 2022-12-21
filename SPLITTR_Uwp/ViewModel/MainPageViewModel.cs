@@ -14,7 +14,6 @@ using SPLITTR_Uwp.Views;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using SPLITTR_Uwp.Core.ModelBobj;
-using SPLITTR_Uwp.Core.Utility.Blogic;
 using SPLITTR_Uwp.ViewModel.Models;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Popups;
@@ -28,7 +27,6 @@ namespace SPLITTR_Uwp.ViewModel
         private readonly DataStore _store;
         private readonly MainPage _mainPage;
         private readonly IStringManipulator _manipulator;
-        private readonly IUserUtility _userUtility;
         private bool _backButtonVisibility = false;
         private bool _isPaneOpen = false;
         private string _mainPageTitleBarText;
@@ -40,12 +38,11 @@ namespace SPLITTR_Uwp.ViewModel
         private bool _isUpdateWalletBalanceTeachingTipOpen;
 
 
-        public MainPageViewModel(DataStore store, MainPage mainPage, IStringManipulator manipulator,IUserUtility userUtility)
+        public MainPageViewModel(DataStore store, MainPage mainPage, IStringManipulator manipulator)
         {
             _store = store;
             _mainPage = mainPage;
             _manipulator = manipulator;
-            _userUtility = userUtility;
             UserViewModel = new UserViewModel(_store.UserBobj);
             _store.UserBobj.ValueChanged += UserObjUpdated;
 

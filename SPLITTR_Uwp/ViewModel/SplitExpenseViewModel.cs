@@ -16,11 +16,11 @@ using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.Utility.Blogic;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel.Models;
 using System.ComponentModel;
 using Windows.UI.Core;
+using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 
 namespace SPLITTR_Uwp.ViewModel
 {
@@ -488,21 +488,32 @@ namespace SPLITTR_Uwp.ViewModel
             var expenseNote = ExpenseNote.Trim();
             var dateOfExpense = ExpenditureDate.DateTime;
 
-            try
-            {
+           
                 var splittingType = SelectedSplitPreferenceIndex;// 0 if equal split or >0 for unequal split
 
-                var insertExpenseTask =_expenseUtility.SplitNewExpensesAsync(_store.UserBobj, ExpensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType);
 
-                await insertExpenseTask;
-                
-            }
-            catch (ArgumentException e)
-            {
-                Debugger.Log(1,"Testing",e.Message);
-                
-            }
+                //on expense Splitting success Assigend Callback will be called
+            _expenseUtility.PresenterCallBackOnSuccess += _expenseUtility_PresenterCallBackOnSuccess;
 
+              //on Error Call back 
+              if (_expenseUtility is IUseCase expenseUtility)
+              {
+                expenseUtility.OnError += ExpenseSplitting_OnError;
+              }
+
+
+            await _expenseUtility.SplitNewExpensesAsync(_store.UserBobj, ExpensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType);
+
+        }
+
+        private void ExpenseSplitting_OnError(Exception arg1, string arg2)
+        {
+            
+        }
+
+        private void _expenseUtility_PresenterCallBackOnSuccess(EventArgs obj)
+        {
+            
         }
 
 

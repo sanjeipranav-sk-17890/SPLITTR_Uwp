@@ -5,9 +5,9 @@ using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using System.Threading.Tasks;
 
-namespace SPLITTR_Uwp.Core.Utility.Blogic;
+namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 
-public class UserUtility : IUserUtility
+public class UserUtility : UseCaseBase, IUserUtility
 {
 
     readonly IUserDataHandler _userDataHandler;
@@ -21,12 +21,12 @@ public class UserUtility : IUserUtility
 
     public async Task UpdateUserObjAsync(UserBobj userBobj, string newUserName, Currency currencyPreference)
     {
-        await Task.Run((async () =>
+        await RunAsynchronously(async () =>
         {
             //no db call db call is made if previous value and current value are same
             if (userBobj.UserName.Equals(newUserName.Trim()) && userBobj.CurrencyPreference == currencyPreference)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             userBobj.UserName = newUserName;
@@ -47,15 +47,17 @@ public class UserUtility : IUserUtility
             //since it is updating on db in background We are waiting until it is completed
             await _userDataHandler.UpdateUserBobjAsync(userBobj).ConfigureAwait(false);
 
-            return Task.CompletedTask;
-        })).ConfigureAwait(false);
+        });
 
     }
     public Task UpdateUserObjAsync(UserBobj userBobj, double walletBalance)
     {
+        return RunAsynchronously(async () =>
+         {
+             userBobj.StrWalletBalance += walletBalance;
+             await _userDataHandler.UpdateUserBobjAsync(userBobj).ConfigureAwait(false);
 
-        userBobj.StrWalletBalance += walletBalance;
-        return _userDataHandler.UpdateUserBobjAsync(userBobj);
+         });
 
     }
 }

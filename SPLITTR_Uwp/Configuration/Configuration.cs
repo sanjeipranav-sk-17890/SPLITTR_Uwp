@@ -16,14 +16,14 @@ using SPLITTR_Uwp.Core.Services.Contracts;
 using SPLITTR_Uwp.Core.Services.SqliteConnection;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics;
 using SPLITTR_Uwp.Core.Utility;
-using SPLITTR_Uwp.Core.Utility.Blogic;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.Views;
+using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 
 namespace SPLITTR_Uwp.Configuration
 {
-    
+
     public static class Configuration
     {
         /// <summary>
