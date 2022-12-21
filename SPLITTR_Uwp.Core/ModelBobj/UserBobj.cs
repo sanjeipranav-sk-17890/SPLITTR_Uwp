@@ -1,30 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Transactions;
-using SPLITTR_Uwp.Core.CurrencyCoverter;
-using SPLITTR_Uwp.Core.DataHandler.Contracts;
+﻿using SPLITTR_Uwp.Core.CurrencyCoverter;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace SPLITTR_Uwp.Core.ModelBobj
 {
-    public class UserBobj :User
+    public class UserBobj : User
     {
         private double _lendedAmount = 0.0;
         private double _pendingAmount = 0.0;
-        
+        private ObservableCollection<ExpenseBobj> _expenses = new ObservableCollection<ExpenseBobj>();
+        private ObservableCollection<GroupBobj> _groups = new ObservableCollection<GroupBobj>();
+
         private readonly IUserBobjBalanceCalculator _balanceCalculator;
-        public  ICurrencyConverter CurrencyConverter { get; set; }
+
+        public ICurrencyConverter CurrencyConverter { get; set; }
         public event Action ValueChanged;
 
 
-        public ICollection<ExpenseBobj> Expenses { get; private set; } = new List<ExpenseBobj>();
+        public ICollection<ExpenseBobj> Expenses
+        {
+            get => _expenses;
+        }
 
-        public ICollection<GroupBobj> Groups { get; private set; } = new List<GroupBobj>();
+        public ICollection<GroupBobj> Groups
+        {
+            get => _groups;
+        }
 
 
         /// <summary>
@@ -39,7 +45,7 @@ namespace SPLITTR_Uwp.Core.ModelBobj
             set
             {
                 base.WalletBalance = CurrencyConverter.ConvertToEntityCurrency(value);
-                OnValueChanged(); 
+                OnValueChanged();
             }
 
         }
@@ -49,8 +55,8 @@ namespace SPLITTR_Uwp.Core.ModelBobj
             get => (Currency)CurrencyIndex;
             set
             {
-               CurrencyIndex = (int)value;
-               OnValueChanged();
+                CurrencyIndex = (int)value;
+                OnValueChanged();
             }
         }
 
@@ -62,8 +68,10 @@ namespace SPLITTR_Uwp.Core.ModelBobj
                 return _lendedAmount;
 
             }
-            set => _lendedAmount = value;
-            // OnValueChanged();
+            set
+            {
+                SetField(ref _lendedAmount, value);
+            }
         }
 
         public double PendingAmount
@@ -74,8 +82,10 @@ namespace SPLITTR_Uwp.Core.ModelBobj
                 return _pendingAmount;
 
             }
-            set => _pendingAmount = value;
-            // OnValueChanged();
+            set
+            {
+                SetField(ref _pendingAmount, value);
+            }
         }
 
         protected void OnValueChanged()
@@ -84,18 +94,37 @@ namespace SPLITTR_Uwp.Core.ModelBobj
         }
 
 
-        public UserBobj(User user,ICollection<ExpenseBobj> expenses,ICollection<GroupBobj> groups, IUserBobjBalanceCalculator balanceCalculator,ICurrencyConverter currencyConverter )
-            :base(user.EmailId,user.UserName,user.WalletBalance,user.CurrencyIndex)
+        public UserBobj(User user, ICollection<ExpenseBobj> expenses, ICollection<GroupBobj> groups, IUserBobjBalanceCalculator balanceCalculator, ICurrencyConverter currencyConverter)
+            : base(user.EmailId, user.UserName, user.WalletBalance, user.CurrencyIndex)
         {
             _balanceCalculator = balanceCalculator;
             CurrencyConverter = currencyConverter;
             Expenses.AddRange(expenses);
             Groups.AddRange(groups);
+
+            _groups.CollectionChanged += CollectionChanged;
+            _expenses.CollectionChanged += CollectionChanged;
         }
 
-        protected UserBobj(UserBobj userBobj) : this(userBobj,userBobj.Expenses,userBobj.Groups,userBobj._balanceCalculator,userBobj.CurrencyConverter)
+        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            //calling value changed  event when collection is modified
+            OnValueChanged();
+        }
+
+        protected UserBobj(UserBobj userBobj) : this(userBobj, userBobj.Expenses, userBobj.Groups, userBobj._balanceCalculator, userBobj.CurrencyConverter)
         {
 
+        }
+
+
+        private void SetField<T>(ref T field, T value)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value))
+                return;
+            field = value;
+            OnValueChanged();
+            return;
         }
 
     }

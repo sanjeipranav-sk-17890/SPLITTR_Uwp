@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using SPLITTR_Uwp.Core.CurrencyCoverter;
 using SPLITTR_Uwp.Core.ModelBobj;
@@ -11,26 +12,31 @@ namespace SPLITTR_Uwp.ViewModel.Models
     {
         private readonly ExpenseBobj _expense;
 
+        [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override  string Note
         {
             get => _expense.Note;
             set
             {
                 base.Note = value;
+                _expense.Note = value;
                 OnPropertyChanged();
             }
         }
 
+        [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override double ExpenseAmount
         {
             get => _expense.ExpenseAmount;
             set
             {
+                base.ExpenseAmount = value;
                 _expense.ExpenseAmount = value;
                 OnPropertyChanged();
             }
         }
 
+        [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override  ExpenseStatus ExpenseStatus
         {
             get => _expense.ExpenseStatus;
@@ -62,9 +68,5 @@ namespace SPLITTR_Uwp.ViewModel.Models
         }
 
 
-        public ExpenseViewModel(ICurrencyConverter currencyConverter):base(currencyConverter)
-        {
-            _expense = this;
-        }
     }
 }

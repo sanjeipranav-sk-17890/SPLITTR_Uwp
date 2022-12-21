@@ -11,6 +11,7 @@ using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
+using SPLITTR_Uwp.Core.ExtensionMethod;
 
 namespace SPLITTR_Uwp.ViewModel
 {
@@ -18,15 +19,14 @@ namespace SPLITTR_Uwp.ViewModel
     {
 
         private readonly DataStore _dataStore;
-        private readonly IStringManipulator _manipulator;
+        
         IUserUtility _userUtility;
         public UserViewModel User { get; }
 
 
-        public UserProfilePageViewModel(DataStore dataStore, IStringManipulator manipulator, IUserUtility userUtility)
+        public UserProfilePageViewModel(DataStore dataStore, IUserUtility userUtility)
         {
             _dataStore = dataStore;
-            _manipulator = manipulator;
             _userUtility = userUtility;
             User = new UserViewModel(_dataStore.UserBobj);
             _dataStore.UserBobj.ValueChanged += UserBobj_ValueChanged;
@@ -51,7 +51,7 @@ namespace SPLITTR_Uwp.ViewModel
         {
             get
             {
-                return _manipulator.GetUserInitial(User.UserName);
+                return User.UserName.GetUserInitial();
             }
         }
 

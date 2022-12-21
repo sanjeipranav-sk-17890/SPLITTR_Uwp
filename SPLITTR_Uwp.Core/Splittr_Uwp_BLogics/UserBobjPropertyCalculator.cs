@@ -1,4 +1,7 @@
-﻿using SPLITTR_Uwp.Core.ModelBobj;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics

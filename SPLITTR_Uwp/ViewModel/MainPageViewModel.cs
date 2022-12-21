@@ -105,7 +105,7 @@ namespace SPLITTR_Uwp.ViewModel
         {
 
             if (_store.UserBobj == null)
-            {
+            { 
                 NavigationService.Navigate(typeof(LoginPage), new DrillInNavigationTransitionInfo());
                 return;
             }

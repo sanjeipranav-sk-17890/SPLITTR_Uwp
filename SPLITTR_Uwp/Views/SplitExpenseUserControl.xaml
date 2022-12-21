@@ -11,8 +11,12 @@
     xmlns:modelObjs="using:SPLITTR_Uwp.Core.ModelBobj"
     xmlns:enum="using:SPLITTR_Uwp.Core.ModelBobj.Enum"
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d"
-    d:DesignWidth="500"
+    Height="auto"
+    d:DesignWidth="500" d:DesignHeight="590"
+    
     >
 
     <UserControl.Resources>
@@ -294,6 +298,9 @@
         </StackPanel>
         <StackPanel Grid.Row="3">
             <MenuFlyoutSeparator Style="{StaticResource MenuFlyoutSeparatorStyle}"></MenuFlyoutSeparator>
+            <TextBlock HorizontalAlignment="Center"
+                       Text="Date Of Expense"
+                       Foreground="{ThemeResource ApplicationMainThemeColor}"></TextBlock>
             <!--<DatePicker HorizontalAlignment="Center"
                         CornerRadius="4"
                         Margin="0 5 0 0"
@@ -303,7 +310,7 @@
             />-->
            <CalendarDatePicker HorizontalAlignment="Center"
                                Width="200"
-                               PlaceholderText="Date Of Expense"
+                               PlaceholderText="Date Of Expense :"
                                MaxDate="{x:Bind _viewModel.MaxYearDisplayLimit,Mode=OneWay}"
                                 Date="{x:Bind _viewModel.ExpenditureDate,Mode=TwoWay}"
                                Background="{ThemeResource ApplicationMainThemeColor}"
@@ -312,9 +319,18 @@
            <TextBox Margin="5"
                     PlaceholderText="Enter Additional details"
                     Height="150"
+                    Text="{x:Bind _viewModel.ExpenseNote,Mode=TwoWay}"
                     TextWrapping="Wrap"
                     BorderThickness=".5"
                     CornerRadius="5"></TextBox>
+            <Button HorizontalAlignment="Center"
+                    Margin="10"
+                    Background="{ThemeResource ApplicationMainThemeColor}"
+                    BorderBrush="Transparent"
+                    Content="SPLIT"
+                    IsEnabled="{x:Bind _viewModel.IsSplitButtonEnabled,Mode=OneWay}"
+                    Click="{x:Bind _viewModel.SplitButtonOnClick}">
+            </Button>
         </StackPanel>
     </Grid>
 </UserControl>

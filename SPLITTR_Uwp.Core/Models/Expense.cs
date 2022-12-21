@@ -1,5 +1,6 @@
 ﻿using SQLite;
 using System;
+using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -46,7 +47,7 @@ namespace SPLITTR_Uwp.Core.Models
 
         public Expense()
         {
-            ExpenseUniqueId = new Guid().ToString();
+            ExpenseUniqueId = Guid.NewGuid().ToString();
         }
 
 

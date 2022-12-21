@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -14,17 +16,27 @@ using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.Core.Utility.Blogic;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel.Models;
+using System.ComponentModel;
+using Windows.UI.Core;
 
 namespace SPLITTR_Uwp.ViewModel
 {
     public class SplitExpenseViewModel : ObservableObject
     {
         private readonly IUserDataHandler _userDataHandler;
+        private readonly IExpenseUtility _expenseUtility;
         private readonly DataStore _store;
 
         public UserViewModel User { get;}
+
+        /// <summary>
+        /// Contains Expenses obj which will be processed and inserted into db
+        /// </summary>
+        public readonly ObservableCollection<ExpenseViewModel> ExpensesToBeSplitted = new ObservableCollection<ExpenseViewModel>();
+
 
 
 
@@ -319,24 +331,26 @@ namespace SPLITTR_Uwp.ViewModel
 
                             SingleUserSelectionComboBoxVisibility = false;
                         }*/
-        public void ExpenseTextBoxValueChanged()
-        {
-            if (string.IsNullOrEmpty(SingleUserExpenseShareAmount))
+        private double _equalSplitAmount;
+
+            public void ExpenseTextBoxValueChanged()
             {
-                return;
+                if (string.IsNullOrEmpty(SingleUserExpenseShareAmount))
+                {
+                    return;
+                }
+                if (double.TryParse(SingleUserExpenseShareAmount, out _equalSplitAmount) && _equalSplitAmount > -1)
+                {
+                    //not showing indicator if parsing is Successfull 
+                    AmountFormatIncorrectIndicatorVisibility = false;
+                    
+                }
+                else
+                {
+                    //showing indicator if parsing is Successfull 
+                    AmountFormatIncorrectIndicatorVisibility = true;
+                }
             }
-            if (double.TryParse(SingleUserExpenseShareAmount, out var expenseAmount) && expenseAmount > -1)
-            {
-                //not showing indicator if parsing is Successfull 
-                AmountFormatIncorrectIndicatorVisibility = false;
-                
-            }
-            else
-            {
-                //showing indicator if parsing is Successfull 
-                AmountFormatIncorrectIndicatorVisibility = true;
-            }
-        }
         public void SplitPreferenceChanged()
         {
             if (SelectedSplitPreferenceIndex == 0)
@@ -379,12 +393,14 @@ namespace SPLITTR_Uwp.ViewModel
 
         #region UnEqualSplitPopUpLogicRegion
         private bool _uneqaulSplitPopUpVisibility;
-        
+
         public bool UneqaulSplitPopUpVisibility
         {
             get => _uneqaulSplitPopUpVisibility;
             set => SetProperty(ref _uneqaulSplitPopUpVisibility, value);
         }
+
+        
 
 
         public void UnequalSplitTeachingSplitClosed()
@@ -392,13 +408,11 @@ namespace SPLITTR_Uwp.ViewModel
             SelectedSplitPreferenceIndex = 0;
         }
 
-
-        public readonly ObservableCollection<ExpenseViewModel> ExpensesToBeSplitted = new ObservableCollection<ExpenseViewModel>();
-
+        
 
         //Manupulates ExpenseViewModels for Unequal Splitting in teaching tip 
         private void SplittingUserPreferenceChanged()
-        {
+        { 
             ExpensesToBeSplitted.Clear();
 
             //cheching whether it is dummy groupobj
@@ -407,8 +421,8 @@ namespace SPLITTR_Uwp.ViewModel
                 if (_selectedUser != null)//Individual Split
                 {
 
-                    ExpensesToBeSplitted.Add(GenerateExpenseViewModel(_store.UserBobj));//current User
-                    ExpensesToBeSplitted.Add(GenerateExpenseViewModel(_selectedUser));//Spiltting user
+                    ExpensesToBeSplitted.Add(GenerateExpenseViewModel(_store.UserBobj,null));//current User
+                    ExpensesToBeSplitted.Add(GenerateExpenseViewModel(_selectedUser,null));//Spiltting user
                    
                 }
             }
@@ -419,24 +433,79 @@ namespace SPLITTR_Uwp.ViewModel
 
                 foreach (var participant in group.GroupParticipants)
                 {
-                   ExpensesToBeSplitted.Add(GenerateExpenseViewModel(participant)); 
+                   ExpensesToBeSplitted.Add(GenerateExpenseViewModel(participant,group.GroupUniqueId)); 
                 }
             }
 
         }
 
-        private ExpenseViewModel GenerateExpenseViewModel(User user)
+        private ExpenseViewModel GenerateExpenseViewModel(User user,string groupUid)
         {
             return new ExpenseViewModel(new ExpenseBobj(_store.UserBobj.CurrencyConverter)
             {
                 RequestedOwner = _store.UserBobj.EmailId,
                 UserEmailId = user.EmailId,
-                UserDetails = user, 
-                ExpenseAmount = 0.0
-
+                UserDetails = user,
+                ExpenseAmount = 0.0,
+                GroupUniqueId = groupUid
             });
             
         }
+
+        #endregion
+
+        #region ExpensesSplitFunctionality region
+
+        private bool _isSplitButtonEnabled;
+
+
+        public bool IsSplitButtonEnabled
+        {
+            get => _isSplitButtonEnabled;
+            set => SetProperty(ref _isSplitButtonEnabled, value);
+        }
+
+        public string ExpenseNote { get; set; }
+
+        //event raises when collection item changes
+        private void ExpensesToBeSplittedOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            var expensesBobjCount = ExpensesToBeSplitted.Count;
+
+            if (expensesBobjCount < 1 )
+            {
+                IsSplitButtonEnabled = false;
+                return;
+            }
+
+            //split button works if split is done for more than person 
+            IsSplitButtonEnabled = true;
+
+        }
+
+        public async void SplitButtonOnClick()
+        {
+            var expenseNote = ExpenseNote.Trim();
+            var dateOfExpense = ExpenditureDate.DateTime;
+
+            try
+            {
+                var splittingType = SelectedSplitPreferenceIndex;// 0 if equal split or >0 for unequal split
+
+                var insertExpenseTask =_expenseUtility.SplitNewExpensesAsync(_store.UserBobj, ExpensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType);
+
+                await insertExpenseTask;
+                
+            }
+            catch (ArgumentException e)
+            {
+                Debugger.Log(1,"Testing",e.Message);
+                
+            }
+
+        }
+
+
 
         #endregion
         public string GetUserCurrencyPreference()
@@ -446,21 +515,30 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
        
-        public SplitExpenseViewModel(IUserDataHandler userDataHandler,DataStore store)
+        public SplitExpenseViewModel(IUserDataHandler userDataHandler,IExpenseUtility expenseUtility,DataStore store)
         {
             _userDataHandler = userDataHandler;
+            _expenseUtility = expenseUtility;
             _store = store;
             _store.UserBobj.ValueChanged += OnUserValueChanged;
             User = new UserViewModel(_store.UserBobj);
-        }
+            ExpensesToBeSplitted.CollectionChanged += ExpensesToBeSplittedOnCollectionChanged;
 
-        public void OnUserValueChanged()
+        }
+        
+
+        public async void OnUserValueChanged()
         {
-            OnPropertyChanged(nameof(GetUserCurrencyPreference));
+            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                () =>
+                {
+                    OnPropertyChanged(nameof(GetUserCurrencyPreference));
+                });
         }
 
 
-       
+
+        
     }
 
 
