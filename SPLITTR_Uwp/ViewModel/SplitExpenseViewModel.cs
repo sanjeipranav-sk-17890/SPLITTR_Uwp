@@ -19,6 +19,7 @@ using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel.Models;
 using System.ComponentModel;
+using System.Net;
 using Windows.UI.Core;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 using Windows.ApplicationModel.Core;
@@ -31,7 +32,7 @@ namespace SPLITTR_Uwp.ViewModel
 {
     public class SplitExpenseViewModel : ObservableObject
     {
-        private readonly IUserDataHandler _userDataHandler;
+        private readonly IUserUtility _userUtility;
         private readonly IExpenseUtility _expenseUtility;
         private readonly DataStore _store;
         
@@ -109,20 +110,32 @@ namespace SPLITTR_Uwp.ViewModel
                 IsUserSuggestionListOpen = false;
                 return;
             }
-            UsersList.Clear();
-            var suggestions = await _userDataHandler.GetUsersSuggestionAsync(SplittingUsersName.Trim().ToLower());
-            foreach (var user in suggestions)
-            {
-                UsersList.Add(user);
-            }
-            if (!UsersList.Any())
-            {
-                UsersList.Add(_dummyUser);
-            }
+            UsersList.Clear(); 
+            await _userUtility.GetUsersSuggestionAsync(SplittingUsersName.Trim().ToLower(), async suggestions =>
+            {//remainCode will be run if data fetching from use case is finished
+               await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                    () =>
+                    {
+                        foreach (var user in suggestions)
+                        {
+                            UsersList.Add(user);
+                        }
+                        if (!UsersList.Any())
+                        {
+                            UsersList.Add(_dummyUser);
+                        }
 
-            IsUserSuggestionListOpen = true;
-           
+                        IsUserSuggestionListOpen = true;
+                       
+                    });
+               
+
+            });
+
+            
         }
+
+
 
         private User _dummyUser = new User()
         {
@@ -378,7 +391,6 @@ namespace SPLITTR_Uwp.ViewModel
 
         #endregion
 
-
         #region ExpenseDateSelectionRegion
 
         private DateTime _expenditureDate = DateTime.Now;
@@ -505,7 +517,7 @@ namespace SPLITTR_Uwp.ViewModel
 
                 //on expense Splitting success Assigend Callback will be called
             _expenseUtility.PresenterCallBackOnSuccess += _expenseUtility_PresenterCallBackOnSuccess;
-
+            
               //on Error Call back 
               if (_expenseUtility is IUseCase expenseUtility)
               {
@@ -561,9 +573,9 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
        
-        public SplitExpenseViewModel(IUserDataHandler userDataHandler,IExpenseUtility expenseUtility,DataStore store)
+        public SplitExpenseViewModel(IUserUtility userUtility,IExpenseUtility expenseUtility,DataStore store)
         {
-            _userDataHandler = userDataHandler;
+            _userUtility = userUtility;
             _expenseUtility = expenseUtility;
             _store = store;
             _store.UserBobj.ValueChanged += OnUserValueChanged;

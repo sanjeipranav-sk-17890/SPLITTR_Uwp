@@ -1,9 +1,12 @@
-﻿using SPLITTR_Uwp.Core.CurrencyCoverter;
+﻿using System;
+using System.Collections.Generic;
+using SPLITTR_Uwp.Core.CurrencyCoverter;
 using SPLITTR_Uwp.Core.CurrencyCoverter.Factory;
 using SPLITTR_Uwp.Core.DataHandler.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using System.Threading.Tasks;
+using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 
@@ -60,4 +63,14 @@ public class UserUtility : UseCaseBase, IUserUtility
          });
 
     }
+    public Task GetUsersSuggestionAsync(string userName, Action<IEnumerable<User>> resultCallBack)
+    {
+        return RunAsynchronously(async () =>
+        {
+           var suggestionList = await _userDataHandler.GetUsersSuggestionAsync(userName).ConfigureAwait(false);
+
+          resultCallBack?.Invoke(suggestionList);
+        } );
+    }
+
 }
