@@ -213,14 +213,14 @@ namespace SPLITTR_Uwp.ViewModel
         {
             var selectedItem = sender as MenuFlyoutItem;
             var title=selectedItem.Text;
+            NavigationService.Frame = _mainPage.InnerFrame;
             if (string.Compare(title, "Add Exepense", StringComparison.InvariantCultureIgnoreCase) == 0)
             {
-                NavigationService.Frame = _mainPage.InnerFrameobjref;
-                NavigationService.Navigate(typeof(AddExpenseTestPage));
+                NavigationService.Navigate(typeof(AddExpenseTestPage), new DrillInNavigationTransitionInfo());
             }
             else
             {
-                await ShowMessageBoxAsync("Add group Selected", "Group");
+                NavigationService.Navigate(typeof(GroupCreationPage),new DrillInNavigationTransitionInfo());
             }
         }
         

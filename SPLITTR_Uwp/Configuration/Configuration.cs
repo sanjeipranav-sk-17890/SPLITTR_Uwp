@@ -63,12 +63,13 @@ namespace SPLITTR_Uwp.Configuration
                 .AddTransient<IExpenseUtility,ExpenseUtility>();
 
 
+
         }
 
         /// <summary>
         /// Adding ViewModel's of the Spliiter into the container 
         /// </summary>
-        
+        ///
         private static void AddViewModels(IServiceCollection container)
         {
             container.AddTransient<LoginPageViewModel>();
@@ -76,6 +77,7 @@ namespace SPLITTR_Uwp.Configuration
             container.AddTransient<UserProfilePageViewModel>();
             container.AddTransient<SplitExpenseViewModel>();
             container.AddTransient<WalletBalanceUpdateViewModel>();
+            container.AddTransient<GroupCreationPageViewModel>();
 
         }
     }

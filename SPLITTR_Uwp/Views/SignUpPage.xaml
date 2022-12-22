@@ -97,10 +97,7 @@
 
                             HorizontalAlignment="Left"
                             Margin="0 -100 0 0">
-                <Image Source="../Assets/AppLogo/62e914dea1e1b17f781f57f4.png"
-                   Height="200"
-                   Width="200"
-                   Stretch="Uniform"
+                <Image  Style="{StaticResource ApplicationLogoStyle}"
                    ></Image>
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" Width="400"
                             RelativePanel.AlignTopWithPanel="True">

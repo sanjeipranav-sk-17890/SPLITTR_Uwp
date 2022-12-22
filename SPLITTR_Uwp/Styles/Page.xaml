@@ -5,5 +5,11 @@
     <Style TargetType="Page" x:Key="PageStyle">
         <Setter Property="Background" Value="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
     </Style>
+    <Style x:Key="ApplicationLogoStyle" TargetType="Image">
+        <Setter Property="Source" Value="../Assets/AppLogo/62e914dea1e1b17f781f57f4.png" />
+        <Setter Property="Height" Value="200" />
+        <Setter Property="Width" Value="200" />
+        <Setter Property="Stretch" Value="Uniform" />
+    </Style>
 
 </ResourceDictionary>
