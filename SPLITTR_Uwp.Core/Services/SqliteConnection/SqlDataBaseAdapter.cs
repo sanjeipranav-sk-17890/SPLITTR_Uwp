@@ -9,11 +9,11 @@ using SQLite;
 
 namespace SPLITTR_Uwp.Core.Services.SqliteConnection
 {
-    public class SqlDataServices : ISqlDataServices
+    public class SqlDataBaseAdapter : ISqlDataServices
     {
         private readonly SQLiteAsyncConnection _connection;
 
-        public SqlDataServices()
+        public SqlDataBaseAdapter()
         {
             var connectionString = GetConnectionString();
             _connection = new SQLiteAsyncConnection(connectionString);

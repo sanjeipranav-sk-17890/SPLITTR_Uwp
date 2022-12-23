@@ -43,7 +43,7 @@ namespace SPLITTR_Uwp.Configuration
 
         private static void AddServiceDependencies(IServiceCollection container)
         {
-            container.AddSingleton<ISqlDataServices, SqlDataServices>()
+            container.AddSingleton<ISqlDataServices, SqlDataBaseAdapter>()
                 .AddSingleton<IUserDataServices, UserDataService>()
                 .AddSingleton<IExpenseDataServices, ExpenseDataServices>()
                 .AddSingleton<IGroupDataServices, GroupDataServices>()
