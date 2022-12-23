@@ -32,33 +32,7 @@
                         RelativePanel.AlignVerticalCenterWithPanel="True"
                         Width="auto">
                 <StackPanel.Resources>
-                    <Style x:Key="TextBlockStyle" TargetType="TextBlock">
-                        <Setter Property="HorizontalAlignment" Value="Stretch" />
-                        <Setter Property="FontFamily" Value="Segoe UI Variable" />
-                    </Style>
-                    <Style x:Key="DetailsTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource TextBlockStyle}"  >
-                        <Setter Property="FontWeight" Value="SemiBold"></Setter>
-                            <Setter Property="interactivity:Interaction.Behaviors">
-                                <Setter.Value>
-                                    <interactivity:BehaviorCollection>
-                                        <core:EventTriggerBehavior EventName="PointerEntered">
-                                        <core:ChangePropertyAction PropertyName="Foreground">
-                                            <core:ChangePropertyAction.Value>
-                                                <SolidColorBrush Color="{ThemeResource SystemAccentColor}"/>
-                                            </core:ChangePropertyAction.Value>
-                                        </core:ChangePropertyAction>
-                                    </core:EventTriggerBehavior>
-                                    <core:EventTriggerBehavior EventName="PointerExited">
-                                        <core:ChangePropertyAction PropertyName="Foreground">
-                                            <core:ChangePropertyAction.Value>
-                                                <SolidColorBrush Color="Black" />
-                                            </core:ChangePropertyAction.Value>
-                                        </core:ChangePropertyAction>
-                                    </core:EventTriggerBehavior>
-                                    </interactivity:BehaviorCollection>
-                                </Setter.Value>
-                            </Setter>
-                    </Style>
+                    
                     </StackPanel.Resources>
              
                     <StackPanel Orientation="Horizontal">
@@ -90,10 +64,10 @@
                 <StackPanel Margin="30 10 0 0">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Name="WalletBalanceLabel"
-                               Text="StrWalletBalance :"
-                               FontSize="24"
-                               Style="{StaticResource DetailsTextBlockStyle}"
-                            /> 
+                                       Text="WalletBalance :"
+                                       FontSize="24"
+                                       Style="{StaticResource DetailsTextBlockStyle}"
+                            />
                             <TextBlock RelativePanel.RightOf="WalletBalanceLabel"
                                        Margin="5 0 0 0"
                                        VerticalAlignment="Center"

@@ -30,5 +30,8 @@ namespace SPLITTR_Uwp.Views
             _viewModel = App.Container.GetService<UserProfilePageViewModel>();
             this.InitializeComponent();
         }
+        private void DependencyObjectCollection_OnVectorChanged(IObservableVector<DependencyObject> sender, IVectorChangedEventArgs @event)
+        {
+        }
     }
 }
