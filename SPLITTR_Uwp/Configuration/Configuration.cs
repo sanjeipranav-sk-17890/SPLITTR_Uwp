@@ -60,6 +60,7 @@ namespace SPLITTR_Uwp.Configuration
                 .AddTransient<EuroConverter>()
                 .AddTransient<IStringManipulator, Manipulator>()
                 .AddTransient<IUserUtility, UserUtility>()
+                .AddTransient<IGroupUtility,GroupUtility>()
                 .AddTransient<IExpenseUtility,ExpenseUtility>();
 
 

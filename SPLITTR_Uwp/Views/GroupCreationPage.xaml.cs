@@ -13,6 +13,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.Extensions.DependencyInjection;
+using SPLITTR_Uwp.Core.ExtensionMethod;
+using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.ViewModel;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -44,5 +46,46 @@ namespace SPLITTR_Uwp.Views
             }
 
         }
+        
+        private void RemovePersonButtonOnClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+
+            var objToBeRemoved = button?.DataContext as User;
+
+            _viewModel.GroupParticipants.Remove(objToBeRemoved);
+        }
+
+       
+        private async void AutoSuggestBox_OnTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            //clearing previous suggestions
+            _viewModel.UserSuggestionList.Clear();
+
+            var inputText = sender.Text.Trim();
+            if (inputText.Length <= 1)// no call for suggestion if no text
+            {
+                return;
+            }
+
+            await _viewModel.PopulateSuggestionList(inputText);
+
+            
+
+        }
+        private void AutoSuggestBox_OnSuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        {
+            var selectedPerson = (User)args.SelectedItem;
+            if ( string.IsNullOrEmpty(selectedPerson.EmailId))
+            {
+                UserSearchAutoSuggestbox.Text = string.Empty;//clearing Suggestion box after person selection made
+                return;
+            }
+            _viewModel.GroupParticipants.Add(selectedPerson);
+            UserSearchAutoSuggestbox.Text = string.Empty;//clearing Suggestion box after person selection made
+
+        }
+
+        private string GetUserInitial(string username) => username.GetUserInitial();
     }
 }

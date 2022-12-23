@@ -45,6 +45,17 @@ namespace SPLITTR_Uwp.Core.Models
             CurrencyIndex = currencyIndex;
         }
 
-       
+        public override bool Equals(object obj)
+        {
+            var user = obj as User;
+            if (user == null || string.IsNullOrEmpty(EmailId)) return false;
+            return EmailId.Equals(user.EmailId);
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+
     }
 }
