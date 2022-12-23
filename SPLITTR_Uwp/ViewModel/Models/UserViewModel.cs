@@ -7,6 +7,7 @@ using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
 using Windows.UI.Core;
+using SPLITTR_Uwp.Services;
 
 namespace SPLITTR_Uwp.ViewModel.Models
 {
@@ -77,7 +78,7 @@ namespace SPLITTR_Uwp.ViewModel.Models
 
         protected async virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+            await UiService.RunOnUiThread(
                 () =>
                 {
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

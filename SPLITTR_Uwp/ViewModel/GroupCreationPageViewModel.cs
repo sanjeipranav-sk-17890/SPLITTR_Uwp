@@ -14,6 +14,7 @@ using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 using SPLITTR_Uwp.DataRepository;
+using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Models;
 
 namespace SPLITTR_Uwp.ViewModel
@@ -61,7 +62,7 @@ namespace SPLITTR_Uwp.ViewModel
         {
            return _userUtility.GetUsersSuggestionAsync(userName.ToLower(), async (suggestions) =>
             {
-                await  RunOnUIThread((() =>
+                await  UiService.RunOnUiThread((() =>
                 {
                     foreach (var suggestedUser in suggestions)
                     {
@@ -87,7 +88,7 @@ namespace SPLITTR_Uwp.ViewModel
 
             _groupUtility.CreateSplittrGroup(GroupParticipants,_store.UserBobj,groupName, async () =>
             {
-                await RunOnUIThread(() =>
+                await UiService.RunOnUiThread(() =>
                 {
                     Debug.WriteLine("******************************Group Created Successfully *******************************************************");
                 });
@@ -99,26 +100,14 @@ namespace SPLITTR_Uwp.ViewModel
             throw new NotImplementedException();
         }
 
-        private async Task RunOnUIThread(Action action)
-        {
-            //since this Will be called by Worker thread it needs to invoked by Ui thread so calling dispatcher to user it
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                () =>
-                {
-                    action.Invoke();
-                }
-            );
-
-        }
-
-       
-
+      
+        
 
         private async void UserBobj_ValueChanged()
         {
             //since this Will be called by Worker thread it needs to invoked by Ui thread so calling dispatcher to user it
             
-          await  RunOnUIThread((() =>
+          await UiService.RunOnUiThread((() =>
             {
                         OnPropertyChanged(nameof(GetCurrentUserInitial));
 

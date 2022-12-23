@@ -13,7 +13,7 @@
     d:DesignHeight="400"
     Background="Transparent">
     <RelativePanel VerticalAlignment="Stretch" Name="RelativePanel"
-                   Background="Transparent">
+                   Background="Transparent" >
         <Grid RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" 
     >
             <Grid.RowDefinitions>

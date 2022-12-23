@@ -162,6 +162,7 @@
       <DependentUpon>NewExpenseTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\NavigationService.cs" />
+    <Compile Include="Services\UIService.cs" />
     <Compile Include="ViewModel\GroupCreationPageViewModel.cs" />
     <Compile Include="ViewModel\LoginPageViewModel.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />

@@ -10,6 +10,7 @@ using Windows.UI.Popups;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel.Models;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
+using SPLITTR_Uwp.Services;
 
 namespace SPLITTR_Uwp.ViewModel
 {
@@ -51,7 +52,7 @@ namespace SPLITTR_Uwp.ViewModel
             {
                 InvalidInputTextBlockVisibility = false;
                 await _userUtility.UpdateUserObjAsync(_store.UserBobj, newWalletBalance);
-                await ShowMessageBoxAsync("Amount Added to Wallet SuccessFully", "Payment SuccessFull!!");
+                await UiService.ShowContentAsync("Amount Added to Wallet SuccessFully", "Payment SuccessFull!!");
                 CloseButtonClicked?.Invoke();
             }
             else
@@ -61,20 +62,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         }
 
-        private async Task ShowMessageBoxAsync(string content, string title)
-        {
-
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                async () =>
-                {
-                    MessageDialog msg = new MessageDialog(content, title);
-
-                    msg.Commands.Add(new UICommand("close"));
-                    await msg.ShowAsync();
-
-                });
-
-        }
+  
        
     }
 }

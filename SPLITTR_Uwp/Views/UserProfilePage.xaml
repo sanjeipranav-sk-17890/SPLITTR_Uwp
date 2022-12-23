@@ -8,12 +8,14 @@
     mc:Ignorable="d"
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
-    xmlns:core="using:Microsoft.Xaml.Interactions.Core">
-    <Page.Background>
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:media="using:Microsoft.UI.Xaml.Media"
+    Style="{ThemeResource HomePageBackground}">
+    <!--<Page.Background>
         <ImageBrush ImageSource="../Assets/AppLogo/white-background-with-3d-hexagonal-pattern-design_1017-28443.jpg"
                     Stretch="UniformToFill"
                     ></ImageBrush>
-    </Page.Background>
+    </Page.Background>-->
 
     <Grid>
         <Grid.ColumnDefinitions>

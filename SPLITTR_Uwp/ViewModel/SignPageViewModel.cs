@@ -131,7 +131,7 @@ namespace SPLITTR_Uwp.ViewModel
 
 
 
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+            await UiService.RunOnUiThread(
                 async () =>
                 {
                     MessageDialog msg = new MessageDialog("Account Created SuccessFully", "Signed Up SuccessFully!!");

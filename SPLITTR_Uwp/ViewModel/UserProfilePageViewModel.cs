@@ -12,6 +12,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
+using SPLITTR_Uwp.Services;
 
 namespace SPLITTR_Uwp.ViewModel
 {
@@ -35,14 +36,13 @@ namespace SPLITTR_Uwp.ViewModel
 
         private async void UserBobj_ValueChanged()
         {
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                () =>
-                {
-                    OnPropertyChanged(nameof(UserInitial));
-                    OnPropertyChanged(nameof(CurrencyPreference));
-                    OnPropertyChanged(nameof(CurrentUserName));
+            await UiService.RunOnUiThread((() =>
+            {
+                OnPropertyChanged(nameof(UserInitial));
+                OnPropertyChanged(nameof(CurrencyPreference));
+                OnPropertyChanged(nameof(CurrentUserName));
 
-                });
+            }));
         }
 
 
@@ -138,16 +138,8 @@ namespace SPLITTR_Uwp.ViewModel
         private async Task ShowSignUpSuccessFullMessageBoxAsync()
         {
 
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                async () =>
-                {
-                    MessageDialog msg = new MessageDialog("Account Updated SuccessFully", "SuccessFull!!");
-
-                    msg.Commands.Add(new UICommand("close"));
-                    await msg.ShowAsync();
-
-                });
-
+            await UiService.ShowContentAsync("Account Updated SuccessFully", "SuccessFull!!");
+           
         }
     }
 }

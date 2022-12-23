@@ -112,12 +112,10 @@ namespace SPLITTR_Uwp.ViewModel
         public async void UserObjUpdated()
         {
             //since this Will be called by Worker thread it needs to invoked by Ui thread so calling dispatcher to user it
-            await  Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                () =>
-                {
-                    OnPropertyChanged(nameof(UserInitial));
-                }
-                );
+            await UiService.RunOnUiThread((() =>
+            {
+               OnPropertyChanged(nameof(UserInitial));
+            }));
             
         }
         public void PaneControlButtonOnClick()
@@ -195,20 +193,7 @@ namespace SPLITTR_Uwp.ViewModel
         //    }
 
         //}
-        private async Task ShowMessageBoxAsync(string content,string title)
-        {
-
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                async () =>
-                {
-                    MessageDialog msg = new MessageDialog(content, title);
-
-                    msg.Commands.Add(new UICommand("close"));
-                    await msg.ShowAsync();
-
-                });
-
-        }
+      
         public async void AddButtonItemSelected(object sender, RoutedEventArgs e)
         {
             var selectedItem = sender as MenuFlyoutItem;

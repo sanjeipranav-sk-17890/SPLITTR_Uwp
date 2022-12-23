@@ -113,8 +113,7 @@ namespace SPLITTR_Uwp.ViewModel
             UsersList.Clear(); 
             await _userUtility.GetUsersSuggestionAsync(SplittingUsersName.Trim().ToLower(), async suggestions =>
             {//remainCode will be run if data fetching from use case is finished
-               await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                    () =>
+               await UiService.RunOnUiThread(() =>
                     {
                         foreach (var user in suggestions)
                         {
@@ -538,18 +537,9 @@ namespace SPLITTR_Uwp.ViewModel
         private async void _expenseUtility_PresenterCallBackOnSuccess(EventArgs args)
         {
             
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                    async () =>
-                    {
-                        MessageDialog msg = new MessageDialog("Spliting SuccessFull","Expenses Splitted Successfully");
+                await UiService.ShowContentAsync("Spliting SuccessFull", "Expenses Splitted Successfully");
 
-                        msg.Commands.Add(new UICommand("close"));
-                        await msg.ShowAsync();
 
-                        ResetPage();
-                    });
-                
-            
         }
         private void ResetPage()//resets UserControl to initial stage
         {
@@ -587,7 +577,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         public async void OnUserValueChanged()
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+            await UiService.RunOnUiThread(
                 () =>
                 {
                     OnPropertyChanged(nameof(GetUserCurrencyPreference));

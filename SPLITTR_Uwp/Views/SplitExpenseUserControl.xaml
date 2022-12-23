@@ -41,7 +41,7 @@
                 </Border>
         </ControlTemplate>
     </UserControl.Resources>
-    <Grid Background="White">
+    <Grid Background="White" CornerRadius="10">
         <Grid.RowDefinitions>
          <RowDefinition  Height="Auto"/>
          <RowDefinition Height="Auto" />
