@@ -528,9 +528,12 @@ namespace SPLITTR_Uwp.ViewModel
 
         }
 
-        private void ExpenseSplitting_OnError(Exception arg1, string arg2)
+        private async void ExpenseSplitting_OnError(Exception arg, string message)
         {
-            
+            await UiService.RunOnUiThread((() =>
+            {
+                ExceptionHandlerService.HandleException(arg);
+            }));
         }
 
         //if the splitting is successfull showing split completed text box and reset the page 

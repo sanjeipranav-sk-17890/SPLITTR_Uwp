@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+    xmlns:local="using:SPLITTR_Uwp.Services"
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d"
     >
@@ -319,12 +320,36 @@
                         <RowDefinition Height="Auto"/>
 
                     </Grid.RowDefinitions>
-
-
-
-                    <Frame   Grid.Row="0" Name="InnerFrame" x:FieldModifier="public" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+                    <Grid.Resources>
+                        <local:ExceptionHandlerService x:Key="ExceptionHandlerService"/>
+                    </Grid.Resources>
+                    <!--<RelativePanel  x:Name="FrameContainerRelativePanel" Grid.ColumnSpan="2" Grid.Column="0" Grid.RowSpan="1" Grid.Row="0" >
+                    </RelativePanel>-->
+                        <Frame  Height="{Binding ElementName=FrameContainerRelativePanel ,Path=ActualHeight,Mode=OneWay}"
+                                Width="{Binding ElementName=FrameContainerRelativePanel,Path=ActualWidth,Mode=OneWay}" Name="InnerFrame" Grid.ColumnSpan="2" Grid.Column="0" Grid.RowSpan="1" Grid.Row="0"
+                                x:FieldModifier="public"  
+                                />
+                         
+                    <Border  Grid.Row="0"
+                             Grid.Column="0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Bottom"
+                             Height="40"
+                             x:Name="ErrorShowingContent"
+                             Background="Orange"
+                             CornerRadius="10"
+                             Margin="20 0 0 40">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock DataContext="{StaticResource ExceptionHandlerService}" Text="{Binding ErrorMessage,Mode=OneWay}" VerticalAlignment="Center"/>
+                            <Button Content="❌"
+                                    Foreground="Red"
+                                    VerticalAlignment="Center"
+                                    Background="Transparent" 
+                                    BorderBrush="Transparent"></Button>
+                        </StackPanel>
+                    </Border>
                     <RelativePanel Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0"
-                                   Background="{StaticResource ApplicationMainThemeColor}"
+                                   Background="{ThemeResource ApplicationMainThemeColor}"
                                Name="BottomPanel">
                         <StackPanel RelativePanel.AlignRightWithPanel="True" Orientation="Horizontal">
 
