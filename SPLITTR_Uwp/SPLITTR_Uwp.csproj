@@ -166,7 +166,7 @@
     <Compile Include="Services\UIService.cs" />
     <Compile Include="ViewModel\GroupCreationPageViewModel.cs" />
     <Compile Include="ViewModel\LoginPageViewModel.cs" />
-    <Compile Include="ViewModel\MainPageViewModel.cs" />
+    <Compile Include="ViewModel\MainPageViewModelV2.cs" />
     <Compile Include="ViewModel\Models\ExpenseViewModel.cs" />
     <Compile Include="ViewModel\Models\GroupViewModel.cs" />
     <Compile Include="ViewModel\Models\UserViewModel.cs" />
@@ -180,6 +180,9 @@
     <Compile Include="Views\GroupCreationPage.xaml.cs">
       <DependentUpon>GroupCreationPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainPageVersion2.xaml.cs">
+      <DependentUpon>MainPageVersion2.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SplitExpenseUserControl.xaml.cs">
       <DependentUpon>SplitExpenseUserControl.xaml</DependentUpon>
     </Compile>
@@ -188,9 +191,6 @@
     </Compile>
     <Compile Include="Views\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SignUpPage.xaml.cs">
       <DependentUpon>SignUpPage.xaml</DependentUpon>
@@ -241,6 +241,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MainPageVersion2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SplitExpenseUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -252,10 +256,6 @@
     <Page Include="Views\LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SignUpPage.xaml">
       <SubType>Designer</SubType>

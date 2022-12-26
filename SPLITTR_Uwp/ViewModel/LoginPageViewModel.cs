@@ -100,7 +100,7 @@ namespace SPLITTR_Uwp.ViewModel
                 }
                 WrongUserCreDentialTextBlockVisibility = false;
                 _store.UserBobj = await _userDataHandler.FetchCurrentUserDetails(UserEmailIdTextBox.Trim().ToLower());
-                 NavigationService.Navigate<MainPage>();
+                 NavigationService.Navigate<MainPageVersion2>();
             }
 
 

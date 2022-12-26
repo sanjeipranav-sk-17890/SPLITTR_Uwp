@@ -1,0 +1,296 @@
+﻿<Page
+    x:Class="SPLITTR_Uwp.Views.MainPageVersion2"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SPLITTR_Uwp.Views"
+    xmlns:view="using:SPLITTR_Uwp.Views"
+
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+    xmlns:services="using:SPLITTR_Uwp.Services"
+
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <Style x:Key="AddWalletButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <Style x:Key="IconStyle" TargetType="Image">
+            <Setter Property="Stretch" Value="Uniform" />
+            <Setter Property="Height" Value="25" />
+        </Style>
+            <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="{ThemeResource SystemAccentColor}" />
+       
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="NarrowLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="NavigationViewFooter.Visibility" Value="Collapsed"/>
+                        <Setter Target="BottomPanel.Visibility" Value="Visible"/>
+                        <Setter Target="TitleBarAddExpenseButton.Visibility" Value="Collapsed"></Setter>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="WideLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1000"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="TitleBarAddExpenseButton.Visibility" Value="Visible"></Setter>
+                        <Setter Target="BottomPanel.Visibility" Value="Collapsed"></Setter>
+                        <Setter Target="NavigationViewFooter.Visibility" Value="Visible"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <Grid Grid.Row="0" Background="{ThemeResource ApplicationMainThemeColor}" >
+            <Grid.Resources>
+                <Style x:Key="ButtonStyle" TargetType="Button">
+                    <Setter Property="Background" Value="{ThemeResource ApplicationMainThemeColor}" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+
+                </Style>
+
+            </Grid.Resources>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+
+                <Button Style="{StaticResource AddWalletButtonStyle}"
+                        RelativePanel.LeftOf="TitleBarAddExpenseButton"  >
+                    <Button.Content>
+                        <Image Source="/Assets/icons/more.png" Style="{StaticResource IconStyle}" />
+                    </Button.Content>
+                    <Button.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="Add Exepense" Click="{x:Bind _viewModel.AddButtonItemSelected}" />
+                            <MenuFlyoutItem Text="Create Group" Click="{x:Bind _viewModel.AddButtonItemSelected}" />
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+                <Button Style="{StaticResource AddWalletButtonStyle}"
+                        ToolTipService.ToolTip="Add Wallet Amount"  
+                        Margin="0 0 10 0"
+                        Click="{x:Bind _viewModel.AddWalletBalanceButtonClicked}"
+                        Name="TitleBarAddExpenseButton"
+                        RelativePanel.AlignRightWithPanel="True">
+                    <Button.Content>
+                        <Image Source="/Assets/icons/wallet.png"
+                               Style="{StaticResource IconStyle}"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+
+
+        </Grid>
+
+        <controls:NavigationView
+            Name="NavigationViewss"
+            Grid.Row="1"
+            IsSettingsVisible="False"
+            PaneDisplayMode="Left"
+            OpenPaneLength="200"
+            IsBackButtonVisible="Collapsed"
+            IsPaneToggleButtonVisible="False" Loaded="NavigationViewss_OnLoaded" >
+
+            <controls:NavigationView.PaneCustomContent>
+                <RelativePanel >
+                <Grid    RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" >
+
+                   </Grid>
+                </RelativePanel>
+            </controls:NavigationView.PaneCustomContent>
+           
+            <controls:NavigationView.Content>
+                <Grid>
+
+                    <Grid.Resources>
+                        <services:ExceptionHandlerService x:Key="ExceptionHandlerService" NotifyErrorMessage="ExceptionHandlerService_OnNotifyErrorMessage"/>
+                    </Grid.Resources>
+                    <!--inner frame where other pages load-->
+                    <Frame  Height="{Binding ElementName=FrameContainerRelativePanel ,Path=ActualHeight,Mode=OneWay}"
+                                Width="{Binding ElementName=FrameContainerRelativePanel,Path=ActualWidth,Mode=OneWay}" Name="InnerFrame"  Grid.Column="0"  Grid.Row="0"
+                                x:FieldModifier="public"  
+                                />
+                    <!--Error showing LAyout-->
+                    <Border  Grid.Row="0"
+                             Grid.Column="0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Bottom"
+                             Height="40"
+                             Visibility="Collapsed"
+                             x:Name="ErrorShowingContent"
+                             Background="Black"
+                             CornerRadius="10"
+                             Margin="20 0 0 40">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Foreground="White"
+                                       DataContext="{StaticResource ExceptionHandlerService}"
+                                       Margin="5 0 0 0" 
+                                       VerticalAlignment="Center"
+                                       Background="Black"
+                                       x:Name="ErrorMEssageTExtBox"
+                                       IsEnabled="False"
+                                       TextChanged="ErrorMEssageTextBox_OnTextChanged"
+                                       >
+                                <TextBox.Template>
+                                    <ControlTemplate TargetType="TextBox">
+                                        <TextBlock Foreground="{TemplateBinding Foreground}"
+                                                   Text="{TemplateBinding Text}"
+                                                   VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                                   Margin="{TemplateBinding Margin}"></TextBlock>
+                                    </ControlTemplate>
+                                </TextBox.Template>
+                            </TextBox>
+                            <Button Content="❌"
+                                    Foreground="Red"
+                                    VerticalAlignment="Center"
+                                    Background="Transparent" 
+                                    BorderBrush="Transparent"
+                                    Click="ErrorCloseButton_OnClick"></Button>
+                        </StackPanel>
+                    </Border>
+
+                </Grid>
+
+            </controls:NavigationView.Content>
+            <controls:NavigationView.PaneFooter>
+                <StackPanel x:Name="NavigationViewFooter" >
+                    <StackPanel >
+                        <MenuFlyoutSeparator HorizontalAlignment="left" Width="230"
+
+                                             Margin="-20 0 0 5"></MenuFlyoutSeparator>
+                        <StackPanel Orientation="Horizontal">
+
+                            <Button Height="auto" Width="auto"
+                                    Background="Transparent"
+                                    Margin="-4 0 0 0"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="Stretch"
+                                    Click="{x:Bind _viewModel.PersonProfileClicked}"
+                                    BorderBrush="Transparent">
+
+                                <StackPanel Orientation="Horizontal">
+                                    <PersonPicture Width="41"
+                                                   Height="30"
+                                                   Background="Transparent"
+                                                   HorizontalAlignment="Left"
+                                                   ToolTipService.ToolTip="{x:Bind _viewModel.UserViewModel.UserName,Mode=OneWay }"
+                                                   Initials="{x:Bind _viewModel.UserInitial,Mode=OneWay}"
+                                    />
+                                    <TextBlock Text="{x:Bind _viewModel.UserViewModel.UserName,Mode=OneWay}"
+                                               Margin="10,3,0,0"
+                                               Foreground="{StaticResource ApplicationPageBackgroundThemeBrush}"
+                                               TextWrapping="Wrap"></TextBlock>
+                                </StackPanel>
+
+                            </Button>
+
+
+                        </StackPanel>
+
+
+                        <Button Background="Transparent"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Left"
+                                BorderBrush="Transparent"
+                                Click="{x:Bind _viewModel.LogOutButtonClicked}">
+                            <Button.Content>
+
+                                <StackPanel Grid.Row="1"  Orientation="Horizontal">
+                                    <Image Source="/Assets/icons/logout.png" Width="22"
+                                           Height="25"
+                                    ></Image>
+                                    <TextBlock Text="Logout"
+                                               FontSize="18"
+                                               Margin="20 0 0 0"
+                                               Foreground="{ThemeResource ApplicationPageBackgroundThemeBrush}"/>
+
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+
+                    </StackPanel>
+
+                </StackPanel>
+            </controls:NavigationView.PaneFooter>
+        </controls:NavigationView>
+        <RelativePanel Grid.Row="2"  Grid.Column="0"
+                       Background="{ThemeResource ApplicationMainThemeColor}"
+                       Name="BottomPanel" Visibility="Collapsed"
+                                   HorizontalAlignment="Stretch">
+            <StackPanel RelativePanel.AlignRightWithPanel="True"  Orientation="Horizontal">
+
+                <Button Height="auto" Width="auto"
+                                    Background="Transparent"
+                                    HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="Stretch"
+                                    BorderBrush="Transparent"
+                                    Click="{x:Bind _viewModel.PersonProfileClicked}">
+
+                    <PersonPicture Width="41"
+                                           Height="30"
+                                           Background="Transparent"
+                                           HorizontalAlignment="Left"
+                                           ToolTipService.ToolTip="{x:Bind _viewModel.UserViewModel.UserName ,Mode=OneWay}"
+                                           Initials="{x:Bind _viewModel.UserInitial,Mode=OneWay}"
+                            />
+                </Button>
+
+
+                <Button
+                                Name="AddMoneyToWalletButton"
+                                Margin="0 0 10 0"
+                                   ToolTipService.ToolTip="Add Money to Wallet"
+                                Click="{x:Bind _viewModel.AddWalletBalanceButtonClicked}" Style="{StaticResource AddWalletButtonStyle}">
+                    <Button.Content>
+                        <Image Source="/Assets/icons/wallet.png"
+                                           Height="25"
+                                           Stretch="Uniform"/>
+                    </Button.Content>
+                </Button>
+                <controls:TeachingTip IsOpen="{x:Bind _viewModel.IsUpdateWalletBalanceTeachingTipOpen,Mode=TwoWay}"
+                                                  PreferredPlacement="RightTop"
+                                                  PlacementMargin="20" 
+                                                  IsLightDismissEnabled="True">
+                    <controls:TeachingTip.Content>
+                        <view:WalletBalanceUpdatePopUp CloseButtonClicked="{x:Bind _viewModel.AddWalletBalanceButtonClicked}"/>
+                        <!--MakePaymentClicked="{x:Bind _viewModel.AddMoneyToWalletButtonClicked}"-->
+
+                    </controls:TeachingTip.Content>
+                </controls:TeachingTip>
+                <Button Background="Transparent"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left"
+                                    BorderBrush="Transparent"
+                                    ToolTipService.ToolTip="Logout"
+                                    Margin="0 0 20 0"
+                                    Click="{x:Bind _viewModel.LogOutButtonClicked}">
+                    <Button.Content>
+                        <StackPanel Grid.Row="1"  Orientation="Horizontal">
+                            <Image Source="/Assets/icons/logout.png" Width="25"
+                                               Height="30"
+                                        ></Image>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
+            </StackPanel>
+
+        </RelativePanel>
+
+    </Grid>
+</Page>

@@ -507,7 +507,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         public async void SplitButtonOnClick()
         {
-            var expenseNote = ExpenseNote.Trim()??String.Empty;
+            var expenseNote = ExpenseNote != null ? ExpenseNote.Trim() : String.Empty;
             var dateOfExpense = ExpenditureDate.DateTime;
 
            
