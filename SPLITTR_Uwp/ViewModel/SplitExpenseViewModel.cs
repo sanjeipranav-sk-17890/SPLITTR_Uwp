@@ -507,7 +507,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         public async void SplitButtonOnClick()
         {
-            var expenseNote = ExpenseNote.Trim();
+            var expenseNote = ExpenseNote.Trim()??String.Empty;
             var dateOfExpense = ExpenditureDate.DateTime;
 
            
@@ -517,14 +517,8 @@ namespace SPLITTR_Uwp.ViewModel
                 //on expense Splitting success Assigend Callback will be called
             _expenseUtility.PresenterCallBackOnSuccess += _expenseUtility_PresenterCallBackOnSuccess;
             
-              //on Error Call back 
-              if (_expenseUtility is IUseCase expenseUtility)
-              {
-                expenseUtility.OnError += ExpenseSplitting_OnError;
-              }
 
-
-            await _expenseUtility.SplitNewExpensesAsync(_store.UserBobj, ExpensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType);
+              await _expenseUtility.SplitNewExpensesAsync(_store.UserBobj, ExpensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType);
 
         }
 
@@ -575,8 +569,15 @@ namespace SPLITTR_Uwp.ViewModel
             User = new UserViewModel(_store.UserBobj);
             ExpensesToBeSplitted.CollectionChanged += ExpensesToBeSplittedOnCollectionChanged;
 
+            //on Error Call back 
+            if (_expenseUtility is IUseCase expenseUseCase)
+            {
+                expenseUseCase.OnError += ExpenseSplitting_OnError;
+            }
+
+
         }
-        
+
 
         public async void OnUserValueChanged()
         {

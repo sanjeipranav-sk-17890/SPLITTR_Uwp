@@ -25,7 +25,7 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
             {
                 if (!particiapants.Any())
                 {
-                    throw new ArgumentException($"number of {nameof(particiapants)} atleast  must be 1 To form a group");
+                    throw new ArgumentException($"number of {nameof(particiapants)} atleast  must be 2 To form a group");
                 }
 
                 var groupParticipants = new List<User>()

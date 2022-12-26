@@ -88,16 +88,17 @@ namespace SPLITTR_Uwp.ViewModel
 
             _groupUtility.CreateSplittrGroup(GroupParticipants,_store.UserBobj,groupName, async () =>
             {
-                await UiService.RunOnUiThread(() =>
-                {
-                    Debug.WriteLine("******************************Group Created Successfully *******************************************************");
+                await UiService.RunOnUiThread(async () =>
+                { 
+                    await UiService.ShowContentAsync($"{_groupName} Group Created SuccessFull", "SuccessFully Created !! ");
                 });
+                Debug.WriteLine("******************************Group Created Successfully *******************************************************");
             });
         }
 
         private void UseCase_OnError(Exception arg1, string arg2)
         {
-            throw new NotImplementedException();
+            ExceptionHandlerService.HandleException(arg1);
         }
 
       

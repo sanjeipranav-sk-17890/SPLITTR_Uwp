@@ -321,7 +321,7 @@
 
                     </Grid.RowDefinitions>
                     <Grid.Resources>
-                        <local:ExceptionHandlerService x:Key="ExceptionHandlerService"/>
+                        <local:ExceptionHandlerService x:Key="ExceptionHandlerService" NotifyErrorMessage="ExceptionHandlerService_OnNotifyErrorMessage"/>
                     </Grid.Resources>
                     <!--<RelativePanel  x:Name="FrameContainerRelativePanel" Grid.ColumnSpan="2" Grid.Column="0" Grid.RowSpan="1" Grid.Row="0" >
                     </RelativePanel>-->
@@ -335,17 +335,36 @@
                              HorizontalAlignment="Left"
                              VerticalAlignment="Bottom"
                              Height="40"
+                             Visibility="Collapsed"
                              x:Name="ErrorShowingContent"
-                             Background="Orange"
+                             Background="Black"
                              CornerRadius="10"
                              Margin="20 0 0 40">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock DataContext="{StaticResource ExceptionHandlerService}" Text="{Binding ErrorMessage,Mode=OneWay}" VerticalAlignment="Center"/>
+                            <TextBox Foreground="White"
+                                       DataContext="{StaticResource ExceptionHandlerService}"
+                                       Margin="5 0 0 0" 
+                                       VerticalAlignment="Center"
+                                       Background="Black"
+                                       x:Name="ErrorMEssageTExtBox"
+                                       IsEnabled="False"
+                                       TextChanged="ErrorMEssageTextBox_OnTextChanged"
+                                       >
+                                <TextBox.Template>
+                                    <ControlTemplate TargetType="TextBox">
+                                        <TextBlock Foreground="{TemplateBinding Foreground}"
+                                                   Text="{TemplateBinding Text}"
+                                                   VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                                   Margin="{TemplateBinding Margin}"></TextBlock>
+                                    </ControlTemplate>
+                                </TextBox.Template>
+                            </TextBox>
                             <Button Content="❌"
                                     Foreground="Red"
                                     VerticalAlignment="Center"
                                     Background="Transparent" 
-                                    BorderBrush="Transparent"></Button>
+                                    BorderBrush="Transparent"
+                                    Click="ErrorCloseButton_OnClick"></Button>
                         </StackPanel>
                     </Border>
                     <RelativePanel Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0"

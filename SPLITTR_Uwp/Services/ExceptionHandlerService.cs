@@ -8,16 +8,15 @@ using System.Threading.Tasks;
 
 namespace SPLITTR_Uwp.Services
 {
-    internal class ExceptionHandlerService : INotifyPropertyChanged
+    internal class ExceptionHandlerService 
     {
-        public string ErrorMessage
-        {
-            get => _errorMessage;
-            set => SetField(ref _errorMessage, value);
-        }
+ 
+        public event Action<string> NotifyErrorMessage;
+
 
         private static ExceptionHandlerService _instance;
-        private string _errorMessage;
+
+
         public ExceptionHandlerService()
         {
             _instance ??= this;
@@ -27,23 +26,18 @@ namespace SPLITTR_Uwp.Services
         {
             if (_instance != null)
             {
-             _instance.ErrorMessage = exception?.Message;
+             _instance?.OnErrorNotifyMessage(exception?.Message);
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected async virtual Task OnErrorNotifyMessage(string obj)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value))
-                return false;
-            field = value;
-            OnPropertyChanged(propertyName);
-            return true;
+            await UiService.RunOnUiThread((() =>
+            {
+
+                NotifyErrorMessage?.Invoke(obj);
+            }));
         }
     }
 }
