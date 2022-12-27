@@ -67,10 +67,25 @@
                 <Style x:Key="ButtonStyle" TargetType="Button">
                     <Setter Property="Background" Value="{ThemeResource ApplicationMainThemeColor}" />
                     <Setter Property="BorderBrush" Value="Transparent" />
-
                 </Style>
 
             </Grid.Resources>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        Name="LogoStactPanel" Margin="0 0 0 0">
+                <Image Source="../Assets/AppLogo/62e914dea1e1b17f781f57f4.png" 
+                       Stretch="Uniform"
+                       Height="40"
+
+                       Width="80" Tapped="AppIcon_OnClick"></Image>
+                <TextBlock Text="SPLITTR"
+                           VerticalAlignment="Center"
+                           FontWeight="SemiBold"
+                           FontSize="20" 
+                           Margin="-20 0 0 0"
+                           FontFamily="Segoe UI Variable"/>
+
+            </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
 
                 <Button Style="{StaticResource AddWalletButtonStyle}"
@@ -103,10 +118,12 @@
         </Grid>
 
         <controls:NavigationView
-            Name="NavigationViewss"
+            x:Name="MainPageNavigationView"
             Grid.Row="1"
             IsSettingsVisible="False"
             PaneDisplayMode="Left"
+            CompactPaneLength="0"
+            IsPaneOpen="{x:Bind _viewModel.PaneVisibility,Mode=TwoWay}"
             IsBackButtonVisible="Collapsed"
             IsPaneToggleButtonVisible="False" Loaded="NavigationViewss_OnLoaded" >
                  <controls:NavigationView.MenuItems>
@@ -129,8 +146,7 @@
                                     Margin="5 0 0 0"
                                     VerticalAlignment="Center"></TextBlock>
                      </StackPanel>
-                        
-         
+
                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="ItemStackpanel">
                          <Image Source="../Assets/icons/IncomingArrowV2.png"  Width="20" Stretch="UniformToFill" />
                          <TextBlock Text="Request To Me"
@@ -145,8 +161,9 @@
                                                       Margin="15 0 0 0"/>
                      <controls:NavigationViewItemHeader  Content="Groups" VerticalContentAlignment="Top" FontSize="15" Foreground="DarkGray">
                      </controls:NavigationViewItemHeader>
+                         <!--User Groups List-->
                      <controls:NavigationViewItem>
-                    <ListView ItemsSource="{x:Bind _viewModel.UserGroups,Mode=OneWay}" >
+                         <ListView ItemsSource="{x:Bind _viewModel.UserGroups,Mode=OneWay}" >
                         <ListView.ItemTemplate>
                                  <DataTemplate x:DataType="model:GroupBobj">
                                      <component:MainPageButtonControl UserListSource="{x:Bind  GroupParticipants,Mode=OneWay}"
@@ -188,7 +205,7 @@
                                        Background="Black"
                                        x:Name="ErrorMEssageTExtBox"
                                        IsEnabled="False"
-                                       TextChanged="ErrorMEssageTextBox_OnTextChanged"
+                                     
                                        >
                                 <TextBox.Template>
                                     <ControlTemplate TargetType="TextBox">

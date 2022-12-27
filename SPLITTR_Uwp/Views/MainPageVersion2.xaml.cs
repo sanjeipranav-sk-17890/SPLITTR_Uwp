@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Navigation;
 using SPLITTR_Uwp.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.Services;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -39,9 +40,7 @@ namespace SPLITTR_Uwp.Views
         {
             Interval = TimeSpan.FromSeconds(1)
         };
-        private void ErrorMEssageTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-        }
+       
         private void ErrorCloseButton_OnClick(object sender, RoutedEventArgs e)
         {
             //force stoping the timer if Cross button is clicked on error message
@@ -78,7 +77,7 @@ namespace SPLITTR_Uwp.Views
 
         private void NavigationViewss_OnLoaded(object sender, RoutedEventArgs e)
         {
-            var navView = NavigationViewss;
+            var navView = MainPageNavigationView;
             var rootGrid = VisualTreeHelper.GetChild(navView, 0) as Grid;
             //finding root split view and setting background
             var grid = VisualTreeHelper.GetChild(rootGrid, 1) as Grid;
@@ -89,8 +88,13 @@ namespace SPLITTR_Uwp.Views
         }
 
 
-      
 
+
+        private void AppIcon_OnClick(object sender, TappedRoutedEventArgs e)
+        {
+            MainPageNavigationView.IsPaneOpen = true;
+
+        }
     }
 
 

@@ -53,7 +53,7 @@ namespace SPLITTR_Uwp.ViewModel
             }
 
             public ObservableCollection<GroupBobj> UserGroups = new ObservableCollection<GroupBobj>();
-            #region RelatedUserLogicRegion
+
             public ObservableCollection<User> RelatedUsers { get; } = new ObservableCollection<User>()
             {
                 new User()
@@ -69,7 +69,11 @@ namespace SPLITTR_Uwp.ViewModel
                 UserName = "Test User 3"
             }
             };
-              public void ViewLoaded()
+            #region RelatedUserLogicRegion
+
+           
+
+            public void ViewLoaded()
               {
 
                   if (_store.UserBobj == null)
@@ -82,7 +86,7 @@ namespace SPLITTR_Uwp.ViewModel
               }
 
 
-        #endregion
+           #endregion
 
 
             public async void UserObjUpdated()
@@ -97,7 +101,17 @@ namespace SPLITTR_Uwp.ViewModel
             }
 
 
-            #region NavigationLogicRegion
+           #region NavigationLogicRegion
+
+
+            private bool _paneVisibility = true;
+
+            public bool PaneVisibility
+            {
+                get => _paneVisibility;
+                set => SetProperty(ref _paneVisibility, value);
+            }
+
             public void LogOutButtonClicked()
             {
                 _store.UserBobj = null;
@@ -108,13 +122,17 @@ namespace SPLITTR_Uwp.ViewModel
 
             public void PersonProfileClicked()
             {
-                
+                PaneVisibility=false;
                 NavigationService.Frame = _mainPage.InnerFrame;
                 NavigationService.Navigate<UserProfilePage>();
             }
             
             public void AddButtonItemSelected(object sender, RoutedEventArgs e)
             {
+
+                //closing main Page pane
+                PaneVisibility = false;
+
                 var selectedItem = sender as MenuFlyoutItem;
                 var title = selectedItem.Text;
                 NavigationService.Frame = _mainPage.InnerFrame;
@@ -132,7 +150,6 @@ namespace SPLITTR_Uwp.ViewModel
 
 
 
-        
             public void AddWalletBalanceButtonClicked()
             {
                 IsUpdateWalletBalanceTeachingTipOpen = !IsUpdateWalletBalanceTeachingTipOpen;

@@ -13,7 +13,7 @@
         <Setter Property="Stretch" Value="Uniform" />
     </Style>
     <media:AcrylicBrush x:Key="bgAcrylicBrushHome"
-            BackgroundSource="HostBackdrop"  TintOpacity="0" TintLuminosityOpacity=".3" TintColor="{ThemeResource SystemAccentColor}" FallbackColor="White"  
+            BackgroundSource="HostBackdrop"  TintOpacity="0" TintLuminosityOpacity="0" TintColor="{ThemeResource SystemAccentColor}" FallbackColor="White"  
             />
 
     <Style x:Key="HeaderTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource HeaderTextBlockStyle}">

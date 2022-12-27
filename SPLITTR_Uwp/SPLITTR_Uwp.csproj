@@ -185,7 +185,7 @@
     <Compile Include="Views\MainPageVersion2.xaml.cs">
       <DependentUpon>MainPageVersion2.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainPagePanelButton.xaml.cs">
+    <Compile Include="DataTemplates\MainPagePanelButton.xaml.cs">
       <DependentUpon>MainPagePanelButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SplitExpenseUserControl.xaml.cs">
@@ -254,7 +254,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainPagePanelButton.xaml">
+    <Page Include="DataTemplates\MainPagePanelButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

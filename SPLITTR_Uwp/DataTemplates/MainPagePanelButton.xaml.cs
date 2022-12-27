@@ -28,7 +28,7 @@ namespace SPLITTR_Uwp.Views
 {
     public sealed partial class MainPageButtonControl : UserControl
     {
-        private UserBobj _currentUser;
+        private readonly UserBobj _currentUser;
 
         public MainPageButtonControl()
         {
@@ -36,10 +36,25 @@ namespace SPLITTR_Uwp.Views
             // fetching current user details to avoid showing user as participants in each and every group
             var store = ActivatorUtilities.GetServiceOrCreateInstance<DataStore>(App.Container);
             _currentUser = store?.UserBobj;
+            OnArrowButtonClicked += MainPageButtonControl_OnArrowButtonClicked;
         }
 
+        #region SingularityOPenLogic
+        private static event Action<MainPageButtonControl> OnArrowButtonClicked;
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        private void MainPageButtonControl_OnArrowButtonClicked(MainPageButtonControl obj)
+        {
+            if (this == obj)
+            {
+                PerformOpenListview();// shows or hides listview if passed obj is matched
+            }
+            else
+            {
+                PerformCloseListView();//hides listview if passed obj is not matched
+            }
+
+        }
+        private void PerformOpenListview()
         {
             if (UserListView.Visibility == Visibility.Collapsed)
             {
@@ -51,9 +66,23 @@ namespace SPLITTR_Uwp.Views
             {
                 UserListView.Visibility = Visibility.Collapsed;
                 ArrowImage.Rotation = 0;
-            }
 
+            }
         }
+        private void PerformCloseListView()
+        {
+            UserListView.Visibility = Visibility.Collapsed;
+            ArrowImage.Rotation = 0;
+        }
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            //For internal Single open Behaviour
+            OnArrowButtonClicked?.Invoke(this);
+        }
+
+
+        #endregion
+
 
         public readonly static DependencyProperty TitleNameProperty = DependencyProperty.Register(
             nameof(TitleName), typeof(string), typeof(MainPageButtonControl), new PropertyMetadata(default(string)));
