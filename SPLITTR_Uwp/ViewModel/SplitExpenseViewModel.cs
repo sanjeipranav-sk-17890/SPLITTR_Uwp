@@ -461,8 +461,9 @@ namespace SPLITTR_Uwp.ViewModel
             return new ExpenseBobj(_store.UserBobj.CurrencyConverter)
             {
                 RequestedOwner = _store.UserBobj.EmailId,
+                SplitRaisedOwner = _store.UserBobj, //Currently by default current user is splitRaiseOwner , 
                 UserEmailId = user.EmailId,
-                UserDetails = user,
+                CorrespondingUserObj = user,
                 StrExpenseAmount = 0.0,
                 GroupUniqueId = groupUid
             };
@@ -534,7 +535,11 @@ namespace SPLITTR_Uwp.ViewModel
         private async void _expenseUtility_PresenterCallBackOnSuccess(EventArgs args)
         {
             
-                await UiService.ShowContentAsync("Spliting SuccessFull", "Expenses Splitted Successfully");
+           await UiService.ShowContentAsync("Spliting SuccessFull", "Expenses Splitted Successfully");
+           await     UiService.RunOnUiThread((() =>
+                {
+                 ResetPage();
+                }));
 
 
         }

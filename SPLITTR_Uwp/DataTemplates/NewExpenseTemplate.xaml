@@ -30,7 +30,7 @@
         ></PersonPicture>
         <StackPanel Grid.Column="1">
             <TextBlock HorizontalAlignment="Center"
-                       Text="{x:Bind ExpenseObj.UserDetails.UserName,Mode=OneWay}"
+                       Text="{x:Bind ExpenseObj.CorrespondingUserObj.UserName,Mode=OneWay}"
                        FontSize="15"/>
             <TextBox BorderBrush="{x:Bind ExpenseTextBoxColor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                      BorderThickness="5"

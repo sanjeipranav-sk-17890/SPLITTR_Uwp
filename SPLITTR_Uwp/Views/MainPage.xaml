@@ -158,6 +158,7 @@
                      <component:MainPageButtonControl HorizontalAlignment="Left" UserListSource="{x:Bind _viewModel.RelatedUsers,Mode=OneWay}"
                                                       TitleName="Related Users"
                                                       SelectionMode="Single"
+                                                      UserSelectedFromTheList="UserSelectedFromIndividualSplitList"
                                                       Margin="15 0 0 0"/>
                      <controls:NavigationViewItemHeader  Content="Groups" VerticalContentAlignment="Top" FontSize="15" Foreground="DarkGray">
                      </controls:NavigationViewItemHeader>

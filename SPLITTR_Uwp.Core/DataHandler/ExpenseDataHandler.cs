@@ -71,17 +71,26 @@ namespace SPLITTR_Uwp.Core.DataHandler
             var outputList = new List<ExpenseBobj>();
             Parallel.ForEach(userExpenses, (async expense =>
             {
-                User respectiveUserObj;
+                User respectiveUserObj = null;
+                User requestedOwnerUserObj = null;
 
                 if (expense.UserEmailId == user.EmailId)
                 {
                     respectiveUserObj = user;
-                }
-                else
+                } 
+                if (expense.RequestedOwner == user.EmailId)
                 {
-                  respectiveUserObj = await _userDataHandler.FetchUserUsingMailId(expense.UserEmailId).ConfigureAwait(false);
+                    requestedOwnerUserObj = user;
                 }
-                outputList.Add(new ExpenseBobj(respectiveUserObj,  currencyConverter: currencyCalculator, expense: expense));
+               
+                
+                requestedOwnerUserObj ??= await _userDataHandler.FetchUserUsingMailId(expense.UserEmailId).ConfigureAwait(false); 
+
+                respectiveUserObj ??= await _userDataHandler.FetchUserUsingMailId(expense.UserEmailId).ConfigureAwait(false);
+                
+
+
+                outputList.Add(new ExpenseBobj(respectiveUserObj, requestedOwnerUserObj, currencyConverter: currencyCalculator, expense: expense));
             }));
             return outputList;
         }

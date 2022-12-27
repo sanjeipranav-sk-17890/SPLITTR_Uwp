@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -156,7 +157,9 @@ namespace SPLITTR_Uwp.ViewModel
             }
 
 
-
-            
+            public void PopulateUserRealtedExpenses(User selectedUser)
+            {
+               Debug.WriteLine("============================================================"+selectedUser.UserName+"==================================================================================");
+            }
     }
 }

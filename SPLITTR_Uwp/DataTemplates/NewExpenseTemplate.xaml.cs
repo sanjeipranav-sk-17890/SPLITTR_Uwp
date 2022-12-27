@@ -53,7 +53,7 @@ namespace SPLITTR_Uwp.DataTemplates
         {
             get
             {
-                var initial = ExpenseObj?.UserDetails.UserName.GetUserInitial();
+                var initial = ExpenseObj?.CorrespondingUserObj.UserName.GetUserInitial();
                 return initial ?? "_";
             }
         }

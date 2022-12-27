@@ -62,7 +62,6 @@ namespace SPLITTR_Uwp.Views
             ErrorShowingContent.Opacity = 5;
             ErrorShowingContent.Visibility = Visibility.Visible;
 
-            _timer.Start();
             _timer.Tick += (sender, e) =>
             {
                 //using dispatch timer to slowly fading the error box
@@ -73,6 +72,7 @@ namespace SPLITTR_Uwp.Views
                     ErrorShowingContent.Visibility = Visibility.Collapsed;
                 }
             };
+            _timer.Start();
         }
 
         private void NavigationViewss_OnLoaded(object sender, RoutedEventArgs e)
@@ -94,6 +94,10 @@ namespace SPLITTR_Uwp.Views
         {
             MainPageNavigationView.IsPaneOpen = true;
 
+        }
+        private void UserSelectedFromIndividualSplitList(User obj)
+        {
+            _viewModel.PopulateUserRealtedExpenses(obj);
         }
     }
 

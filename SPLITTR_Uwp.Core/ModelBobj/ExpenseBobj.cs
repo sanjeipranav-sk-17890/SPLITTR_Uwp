@@ -13,7 +13,7 @@ namespace SPLITTR_Uwp.Core.ModelBobj
 
         public ICurrencyConverter CurrencyConverter { get; set; }
 
-        public User UserDetails { get; set; }
+        public User CorrespondingUserObj { get; set; }
 
         public virtual ExpenseStatus ExpenseStatus
         {
@@ -25,7 +25,7 @@ namespace SPLITTR_Uwp.Core.ModelBobj
             }
         }
 
-
+        public User SplitRaisedOwner { get; set; }
 
 
         public event Action ValueChanged;
@@ -47,13 +47,14 @@ namespace SPLITTR_Uwp.Core.ModelBobj
 
         }
 
-        public ExpenseBobj(User user, ICurrencyConverter currencyConverter, Expense expense) : this(expense)
+        public ExpenseBobj(User correspondingUser,User splitRaisedOwner,ICurrencyConverter currencyConverter, Expense expense) : this(expense)
         {
-            UserDetails = user;
+            CorrespondingUserObj = correspondingUser;
+            SplitRaisedOwner = splitRaisedOwner;
             CurrencyConverter = currencyConverter;
 
         }
-        public ExpenseBobj(ExpenseBobj expenseBobj) : this(expenseBobj.UserDetails, expenseBobj.CurrencyConverter, expenseBobj)
+        public ExpenseBobj(ExpenseBobj expenseBobj) : this(expenseBobj.CorrespondingUserObj,expenseBobj.SplitRaisedOwner ,expenseBobj.CurrencyConverter, expenseBobj)
         {
 
         }

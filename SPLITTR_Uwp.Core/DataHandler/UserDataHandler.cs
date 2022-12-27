@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +25,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
         private readonly ICurrencyCalcFactory _currencyCalc;
         private string _currentUserEmailId;
         private User _currentUser;
+        private readonly ConcurrentDictionary<string, User> _localUserCache = new ConcurrentDictionary<string, User>();
 
         public UserDataHandler(IUserDataServices userDataServices,IUserBobjBalanceCalculator balanceCalculator, IGroupDataHandler groupDataHandler, IExpenseDataHandler expenseDataHandler,ICurrencyCalcFactory currencyCalc)
         {
@@ -63,13 +67,18 @@ namespace SPLITTR_Uwp.Core.DataHandler
         {
             if (mailId.Equals(_currentUserEmailId))
             {
-                if (_currentUser is not  null && _currentUser.EmailId != mailId)
-                {
-                    _currentUser = await _userDataServices.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
-                }
-                return _currentUser ??= await _userDataServices.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
+                _currentUser ??= await _userDataServices.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
+                return _currentUser;
             }
-            return await _userDataServices.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
+            
+            if (!_localUserCache.ContainsKey(mailId)) 
+            {
+                var user =await _userDataServices.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
+                return  _localUserCache.GetOrAdd(mailId, user);
+            } 
+            
+            return _localUserCache[mailId];
+            
         }
 
 
