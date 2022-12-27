@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Windows.UI.Xaml;
@@ -54,6 +56,7 @@ namespace SPLITTR_Uwp.ViewModel.Models
             }
         }
 
+        
 
         public UserViewModel(UserBobj user) : base(user)
         {

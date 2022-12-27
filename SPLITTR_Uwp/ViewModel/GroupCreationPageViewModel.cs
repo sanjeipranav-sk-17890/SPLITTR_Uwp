@@ -91,6 +91,10 @@ namespace SPLITTR_Uwp.ViewModel
                 await UiService.RunOnUiThread(async () =>
                 { 
                     await UiService.ShowContentAsync($"{_groupName} Group Created SuccessFull", "SuccessFully Created !! ");
+
+                    //clearing groupAdding PAge controls 
+                    GroupParticipants.Clear();
+                    GroupName = String.Empty;
                 });
                 Debug.WriteLine("******************************Group Created Successfully *******************************************************");
             });

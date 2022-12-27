@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml;
 using SPLITTR_Uwp.Core.ExtensionMethod;
+using SPLITTR_Uwp.Core.ModelBobj;
+using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.ViewModel
 {
@@ -34,34 +37,53 @@ namespace SPLITTR_Uwp.ViewModel
 
             }
 
-  
-  
-
 
             public string UserInitial
             {
                 get => UserViewModel.UserName.GetUserInitial();
                 set => SetProperty(ref _userInitial, value);
             }
+  
             public UserViewModel UserViewModel { get; }
-
-
+  
             public bool IsUpdateWalletBalanceTeachingTipOpen
             {
                 get => _isUpdateWalletBalanceTeachingTipOpen;
                 set => SetProperty(ref _isUpdateWalletBalanceTeachingTipOpen, value);
             }
 
-            public void AppLicationStart(object sender, RoutedEventArgs e)
+            public ObservableCollection<GroupBobj> UserGroups = new ObservableCollection<GroupBobj>();
+            #region RelatedUserLogicRegion
+            public ObservableCollection<User> RelatedUsers { get; } = new ObservableCollection<User>()
             {
-
-                if (_store.UserBobj == null)
+                new User()
                 {
-                    NavigationService.Navigate(typeof(LoginPage), new DrillInNavigationTransitionInfo());
-                    return;
-                }
-
+                    UserName = "Test User 1"
+                },
+                new User()
+                {
+                UserName = "Test User 2"
+                 },
+                new User()
+                {
+                UserName = "Test User 3"
             }
+            };
+              public void ViewLoaded()
+              {
+
+                  if (_store.UserBobj == null)
+                  {
+                      NavigationService.Navigate(typeof(LoginPage), new DrillInNavigationTransitionInfo());
+                      return;
+                  }
+                  UserGroups.ClearAndAdd(UserViewModel.Groups);
+
+              }
+
+
+        #endregion
+
 
             public async void UserObjUpdated()
             {
@@ -69,10 +91,13 @@ namespace SPLITTR_Uwp.ViewModel
                 await UiService.RunOnUiThread((() =>
                 {
                     OnPropertyChanged(nameof(UserInitial));
+                    UserGroups.ClearAndAdd(_store.UserBobj.Groups);
                 }));
 
             }
 
+
+            #region NavigationLogicRegion
             public void LogOutButtonClicked()
             {
                 _store.UserBobj = null;
@@ -80,19 +105,14 @@ namespace SPLITTR_Uwp.ViewModel
                 NavigationService.Navigate(typeof(LoginPage), new DrillInNavigationTransitionInfo());
 
             }
+
             public void PersonProfileClicked()
             {
                 
                 NavigationService.Frame = _mainPage.InnerFrame;
                 NavigationService.Navigate<UserProfilePage>();
             }
-
-        
-            public void AddWalletBalanceButtonClicked()
-            {
-                IsUpdateWalletBalanceTeachingTipOpen = !IsUpdateWalletBalanceTeachingTipOpen;
-            }
-
+            
             public void AddButtonItemSelected(object sender, RoutedEventArgs e)
             {
                 var selectedItem = sender as MenuFlyoutItem;
@@ -108,6 +128,18 @@ namespace SPLITTR_Uwp.ViewModel
                 }
             }
 
+            #endregion
+
+
+
         
-}
+            public void AddWalletBalanceButtonClicked()
+            {
+                IsUpdateWalletBalanceTeachingTipOpen = !IsUpdateWalletBalanceTeachingTipOpen;
+            }
+
+
+
+            
+    }
 }
