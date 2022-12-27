@@ -38,6 +38,7 @@
         <ListView ItemsSource="{x:Bind  UserListSource,Mode=OneWay}"
                   SelectionMode="{x:Bind SelectionMode,Mode=OneWay}"
                   Visibility="Collapsed"
+                  SelectionChanged="UserListView_OnSelectionChanged"
                   Margin="30 2 0 0" 
                   x:Name="UserListView">
             <ListView.ItemTemplate>

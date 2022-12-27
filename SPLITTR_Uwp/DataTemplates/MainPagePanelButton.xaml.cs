@@ -131,6 +131,14 @@ namespace SPLITTR_Uwp.Views
             }
         }
 
-        
+        public event Action<User> UserSelectedFromTheList;
+        private void UserListView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+             if(e.AddedItems.Any())
+             {
+                 var selectedUser = (User)e.AddedItems[0];
+                 UserSelectedFromTheList?.Invoke(selectedUser);
+             }
+        }
     }
 }

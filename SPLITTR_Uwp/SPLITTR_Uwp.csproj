@@ -182,8 +182,8 @@
     <Compile Include="Views\GroupCreationPage.xaml.cs">
       <DependentUpon>GroupCreationPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainPageVersion2.xaml.cs">
-      <DependentUpon>MainPageVersion2.xaml</DependentUpon>
+    <Compile Include="Views\MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataTemplates\MainPagePanelButton.xaml.cs">
       <DependentUpon>MainPagePanelButton.xaml</DependentUpon>
@@ -250,7 +250,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainPageVersion2.xaml">
+    <Page Include="Views\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
