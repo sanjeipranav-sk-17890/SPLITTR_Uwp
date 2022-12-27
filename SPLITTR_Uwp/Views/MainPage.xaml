@@ -156,7 +156,7 @@
                                     VerticalAlignment="Center"></TextBlock>
                      </StackPanel>
                      <component:MainPageButtonControl HorizontalAlignment="Left" UserListSource="{x:Bind _viewModel.RelatedUsers,Mode=OneWay}"
-                                                      TitleName="Related Users"
+                                                      TitleName="Individaul Split"
                                                       SelectionMode="Single"
                                                       UserSelectedFromTheList="UserSelectedFromIndividualSplitList"
                                                       Margin="15 0 0 0"/>

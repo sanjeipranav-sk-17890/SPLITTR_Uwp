@@ -84,7 +84,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
                 }
                
                 
-                requestedOwnerUserObj ??= await _userDataHandler.FetchUserUsingMailId(expense.UserEmailId).ConfigureAwait(false); 
+                requestedOwnerUserObj ??= await _userDataHandler.FetchUserUsingMailId(expense.RequestedOwner).ConfigureAwait(false); 
 
                 respectiveUserObj ??= await _userDataHandler.FetchUserUsingMailId(expense.UserEmailId).ConfigureAwait(false);
                 

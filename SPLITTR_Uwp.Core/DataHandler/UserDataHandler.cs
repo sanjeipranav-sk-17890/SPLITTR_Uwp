@@ -67,7 +67,10 @@ namespace SPLITTR_Uwp.Core.DataHandler
         {
             if (mailId.Equals(_currentUserEmailId))
             {
-                _currentUser ??= await _userDataServices.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
+                if (_currentUser is null || !_currentUser.EmailId.Equals(_currentUserEmailId))
+                {
+                    _currentUser = await _userDataServices.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
+                }
                 return _currentUser;
             }
             
