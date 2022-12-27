@@ -35,7 +35,7 @@
                        Foreground="White"></TextBlock>
 
         </StackPanel>
-        <ListView ItemsSource="{x:Bind  UserListSource,Mode=OneWay}"
+        <ListView ItemsSource="{x:Bind  ItemsSource,Mode=OneWay}"
                   SelectionMode="{x:Bind SelectionMode,Mode=OneWay}"
                   Visibility="Collapsed"
                   SelectionChanged="UserListView_OnSelectionChanged"

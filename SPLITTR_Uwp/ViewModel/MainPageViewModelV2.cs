@@ -55,24 +55,11 @@ namespace SPLITTR_Uwp.ViewModel
 
             public ObservableCollection<GroupBobj> UserGroups = new ObservableCollection<GroupBobj>();
 
-            public ObservableCollection<User> RelatedUsers { get; } = new ObservableCollection<User>()
-            {
-                new User()
-                {
-                    UserName = "Test User 1"
-                },
-                new User()
-                {
-                UserName = "Test User 2"
-                 },
-                new User()
-                {
-                UserName = "Test User 3"
-            }
-            };
-            #region RelatedUserLogicRegion
-
+            public ObservableCollection<User> RelatedUsers { get; } = new ObservableCollection<User>();
            
+
+
+            #region RelatedUserLogicRegion
 
             public void ViewLoaded()
               {
@@ -82,12 +69,32 @@ namespace SPLITTR_Uwp.ViewModel
                       NavigationService.Navigate(typeof(LoginPage), new DrillInNavigationTransitionInfo());
                       return;
                   }
-                  UserGroups.ClearAndAdd(UserViewModel.Groups);
-
+                  UserGroups.ClearAndAdd(_store.UserBobj.Groups);
+                  PopulateIndividualSplitUsers();
               }
+            private void PopulateIndividualSplitUsers()
+            {
+                RelatedUsers.Clear();
+                foreach (var expense in _store.UserBobj.Expenses)
+                {
+                    // Adds user object to Individual Split users  list Excluding Current User 
+                    if (expense.GroupUniqueId is not null)
+                    {
+                        continue;
+                    }
+                    if (!expense.SplitRaisedOwner.Equals(_store.UserBobj) && !RelatedUsers.Contains(expense.SplitRaisedOwner))
+                    {
+                        RelatedUsers.Add(expense.SplitRaisedOwner);
+                    }
+                    if (!expense.CorrespondingUserObj.Equals(_store.UserBobj) && !RelatedUsers.Contains(expense.CorrespondingUserObj))
+                    {
+                        RelatedUsers.Add(expense.CorrespondingUserObj);
+                    }
+                }
+                
+            }
 
-
-           #endregion
+            #endregion
 
 
             public async void UserObjUpdated()
@@ -96,7 +103,7 @@ namespace SPLITTR_Uwp.ViewModel
                 await UiService.RunOnUiThread((() =>
                 {
                     OnPropertyChanged(nameof(UserInitial));
-                    UserGroups.ClearAndAdd(_store.UserBobj.Groups);
+                    ViewLoaded();//refreshing value assigning
                 }));
 
             }

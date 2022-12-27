@@ -155,7 +155,7 @@
                                     FontSize="15"
                                     VerticalAlignment="Center"></TextBlock>
                      </StackPanel>
-                     <component:MainPageButtonControl HorizontalAlignment="Left" UserListSource="{x:Bind _viewModel.RelatedUsers,Mode=OneWay}"
+                     <component:MainPageButtonControl HorizontalAlignment="Left" ItemsSource="{x:Bind _viewModel.RelatedUsers,Mode=OneWay}"
                                                       TitleName="Individaul Split"
                                                       SelectionMode="Single"
                                                       UserSelectedFromTheList="UserSelectedFromIndividualSplitList"
@@ -167,7 +167,7 @@
                          <ListView ItemsSource="{x:Bind _viewModel.UserGroups,Mode=OneWay}" >
                         <ListView.ItemTemplate>
                                  <DataTemplate x:DataType="model:GroupBobj">
-                                     <component:MainPageButtonControl UserListSource="{x:Bind  GroupParticipants,Mode=OneWay}"
+                                     <component:MainPageButtonControl ItemsSource="{x:Bind  GroupParticipants,Mode=OneWay}"
                                                                       TitleName="{x:Bind GroupName,Mode=OneWay}" 
                                                                       SelectionMode="None"
                                                                       HorizontalAlignment="Left"
