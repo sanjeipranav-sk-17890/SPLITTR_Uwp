@@ -161,7 +161,9 @@
     <Compile Include="DataTemplates\NewExpenseTemplate.xaml.cs">
       <DependentUpon>NewExpenseTemplate.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\GrpObjListCoverter.cs" />
     <Compile Include="Services\ExceptionHandlerService.cs" />
+    <Compile Include="Services\ExtensionHelper.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\UIService.cs" />
     <Compile Include="ViewModel\GroupCreationPageViewModel.cs" />
@@ -182,6 +184,9 @@
     </Compile>
     <Compile Include="Views\MainPageVersion2.xaml.cs">
       <DependentUpon>MainPageVersion2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainPagePanelButton.xaml.cs">
+      <DependentUpon>MainPagePanelButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SplitExpenseUserControl.xaml.cs">
       <DependentUpon>SplitExpenseUserControl.xaml</DependentUpon>
@@ -233,6 +238,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\AddExpenseTestPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -242,6 +251,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainPageVersion2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainPagePanelButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -280,32 +293,77 @@
     <Content Include="Assets\icons\all-inclusive.png" />
     <Content Include="Assets\icons\AppIdolIMage.png" />
     <Content Include="Assets\icons\credit-cards-payment.png" />
+    <Content Include="Assets\icons\Downarrow.png" />
     <Content Include="Assets\icons\google-logo-9826-16x16.ico" />
     <Content Include="Assets\icons\home.png" />
+    <Content Include="Assets\icons\IncomingArrowV2.png" />
+    <Content Include="Assets\icons\OutgoingIcon.png" />
+    <Content Include="Assets\icons\Request TO Me.png" />
     <Content Include="Assets\icons\invoice.png" />
     <Content Include="Assets\icons\logout.png" />
     <Content Include="Assets\icons\mobile-banking.png" />
     <Content Include="Assets\icons\more.png" />
     <Content Include="Assets\icons\people.png" />
+    <Content Include="Assets\icons\right-arrow.png" />
     <Content Include="Assets\icons\smartphone.png" />
     <Content Include="Assets\icons\split.png" />
     <Content Include="Assets\icons\wallet.png" />
     <Content Include="Assets\AppLogo\white-background-with-3d-hexagonal-pattern-design_1017-28443.jpg" />
+    <Content Include="Assets\LargeTile.scale-100.png" />
+    <Content Include="Assets\LargeTile.scale-125.png" />
+    <Content Include="Assets\LargeTile.scale-150.png" />
+    <Content Include="Assets\LargeTile.scale-200.png" />
+    <Content Include="Assets\LargeTile.scale-400.png" />
     <Content Include="Assets\LoginPageFlipViewItems\imageedit_1_6012202156.png" />
     <Content Include="Assets\LoginPageFlipViewItems\imageedit_3_4639561983.png" />
     <Content Include="Assets\LoginPageFlipViewItems\imageedit_5_2730752383.png" />
     <Content Include="Assets\LoginPageFlipViewItems\imageedit_7_2815236106.png" />
+    <Content Include="Assets\SmallTile.scale-100.png" />
+    <Content Include="Assets\SmallTile.scale-125.png" />
+    <Content Include="Assets\SmallTile.scale-150.png" />
+    <Content Include="Assets\SmallTile.scale-200.png" />
+    <Content Include="Assets\SmallTile.scale-400.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-125.png" />
     <Content Include="Assets\SplashScreen.scale-150.png" />
     <Content Include="Assets\SplashScreen.scale-400.png" />
+    <Content Include="Assets\Square150x150Logo.scale-100.png" />
+    <Content Include="Assets\Square150x150Logo.scale-125.png" />
+    <Content Include="Assets\Square150x150Logo.scale-150.png" />
+    <Content Include="Assets\Square150x150Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-16.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-24.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-32.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-48.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-16.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-32.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-48.png" />
+    <Content Include="Assets\Square44x44Logo.scale-100.png" />
+    <Content Include="Assets\Square44x44Logo.scale-125.png" />
+    <Content Include="Assets\Square44x44Logo.scale-150.png" />
+    <Content Include="Assets\Square44x44Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-16.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-32.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-48.png" />
+    <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\StoreLogo.scale-125.png" />
+    <Content Include="Assets\StoreLogo.scale-150.png" />
+    <Content Include="Assets\StoreLogo.scale-200.png" />
+    <Content Include="Assets\StoreLogo.scale-400.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-100.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-125.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-150.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="UWP-Cheat-Sheet.txt" />
   </ItemGroup>

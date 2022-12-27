@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -14,6 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using SPLITTR_Uwp.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
+using SPLITTR_Uwp.Core.Models;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -25,8 +27,6 @@ namespace SPLITTR_Uwp.Views
     public sealed partial class MainPageVersion2 : Page
     {
         MainPageViewModelV2 _viewModel;
-
-
 
         public MainPageVersion2()
         {
@@ -87,6 +87,10 @@ namespace SPLITTR_Uwp.Views
             var color = (SolidColorBrush)Application.Current.Resources["ApplicationMainThemeColor"];
             rootinnerGrid.Background = color;
         }
+
+
+      
+
     }
 
 

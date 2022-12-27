@@ -4,12 +4,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:SPLITTR_Uwp.Views"
     xmlns:view="using:SPLITTR_Uwp.Views"
-
+    xmlns:model="using:SPLITTR_Uwp.Core.ModelBobj"
+    xmlns:component="using:SPLITTR_Uwp.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     xmlns:services="using:SPLITTR_Uwp.Services"
+    xmlns:objectModel="using:System.Collections.ObjectModel"
+    xmlns:models="using:SPLITTR_Uwp.Core.Models" Loaded="{x:Bind _viewModel.ViewLoaded}"
 
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
@@ -21,8 +24,11 @@
             <Setter Property="Stretch" Value="Uniform" />
             <Setter Property="Height" Value="25" />
         </Style>
+        <Style TargetType="TextBlock" >
+            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
+        </Style>
             <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="{ThemeResource SystemAccentColor}" />
-       
+            <services:GrpObjListCoverter x:Key="Converter"></services:GrpObjListCoverter>
     </Page.Resources>
 
     <Grid>
@@ -101,22 +107,61 @@
             Grid.Row="1"
             IsSettingsVisible="False"
             PaneDisplayMode="Left"
-            OpenPaneLength="200"
             IsBackButtonVisible="Collapsed"
             IsPaneToggleButtonVisible="False" Loaded="NavigationViewss_OnLoaded" >
+                 <controls:NavigationView.MenuItems>
+                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <TextBlock Text ="☵"  Foreground="White"
+                                               FontSize="20"
+                                               ></TextBlock>
+                                <TextBlock Text="All Expenses"
+                                                     VerticalAlignment="Center"
+                                                     Margin="10 0 0 0" Foreground="White"
+                                                     FontSize="15"></TextBlock>
+                     </StackPanel>
+                       
+               
+                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                         <Image Source="../Assets/icons/OutgoingIcon.png"   Stretch="UniformToFill" Width="20" />
+                         <TextBlock Text="Request By Me"
+                                    Foreground="White"
+                                    FontSize="15"
+                                    Margin="5 0 0 0"
+                                    VerticalAlignment="Center"></TextBlock>
+                     </StackPanel>
+                        
+         
+                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="ItemStackpanel">
+                         <Image Source="../Assets/icons/IncomingArrowV2.png"  Width="20" Stretch="UniformToFill" />
+                         <TextBlock Text="Request To Me"
+                                    Margin="05 0 0 0" 
+                                    Foreground="White"
+                                    FontSize="15"
+                                    VerticalAlignment="Center"></TextBlock>
+                     </StackPanel>
+                     <component:MainPageButtonControl HorizontalAlignment="Left" UserListSource="{x:Bind _viewModel.RelatedUsers,Mode=OneWay}"
+                                                      TitleName="Related Users"
+                                                      SelectionMode="Single"
+                                                      Margin="15 0 0 0"/>
+                     <controls:NavigationViewItemHeader  Content="Groups" VerticalContentAlignment="Top" FontSize="15" Foreground="DarkGray">
+                     </controls:NavigationViewItemHeader>
+                     <controls:NavigationViewItem>
+                    <ListView ItemsSource="{x:Bind _viewModel.UserGroups,Mode=OneWay}" >
+                        <ListView.ItemTemplate>
+                                 <DataTemplate x:DataType="model:GroupBobj">
+                                     <component:MainPageButtonControl UserListSource="{x:Bind  GroupParticipants,Mode=OneWay}"
+                                                                      TitleName="{x:Bind GroupName,Mode=OneWay}" 
+                                                                      SelectionMode="None"
+                                                                      HorizontalAlignment="Left"
+                                     />
+                            </DataTemplate>
+                             </ListView.ItemTemplate>
+                         </ListView>
+                     </controls:NavigationViewItem>
 
-            <controls:NavigationView.PaneCustomContent>
-                <RelativePanel >
-                <Grid    RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" >
-
-                   </Grid>
-                </RelativePanel>
-            </controls:NavigationView.PaneCustomContent>
-           
-            <controls:NavigationView.Content>
+                     </controls:NavigationView.MenuItems>
                 <Grid>
-
-                    <Grid.Resources>
+                        <Grid.Resources>
                         <services:ExceptionHandlerService x:Key="ExceptionHandlerService" NotifyErrorMessage="ExceptionHandlerService_OnNotifyErrorMessage"/>
                     </Grid.Resources>
                     <!--inner frame where other pages load-->
@@ -165,7 +210,7 @@
 
                 </Grid>
 
-            </controls:NavigationView.Content>
+            
             <controls:NavigationView.PaneFooter>
                 <StackPanel x:Name="NavigationViewFooter" >
                     <StackPanel >

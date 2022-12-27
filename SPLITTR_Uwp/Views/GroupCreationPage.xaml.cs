@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -31,8 +32,16 @@ namespace SPLITTR_Uwp.Views
         {
             _viewModel = ActivatorUtilities.CreateInstance<GroupCreationPageViewModel>(App.Container);
             this.InitializeComponent();
+            _viewModel.GroupParticipants.CollectionChanged += GroupParticipants_CollectionChanged;
 
         }
+
+        private void GroupParticipants_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            var groupParticipants = sender as ObservableCollection<User>;
+            GroupCreateButton.IsEnabled = !(groupParticipants?.Count < 1); // allowing group creation when participant count is atleat 2
+        }
+
         private void GroupNameTextBlock_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             var groupNameTextBlock = sender as TextBox;

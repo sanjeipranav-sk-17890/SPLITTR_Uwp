@@ -135,6 +135,7 @@
                             Foreground="White"
                             Margin="10"
                             x:Name="GroupCreateButton"
+                            IsEnabled="False"
                             Click="{x:Bind _viewModel.GroupCreateButtonClicked}"
                             HorizontalAlignment="Center"></Button>
                 </StackPanel>
