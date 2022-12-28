@@ -17,6 +17,8 @@ using Windows.UI.Xaml;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.ViewModel.Models.ExpenseListObject;
+using SPLITTR_Uwp.ViewModel.VmLogic;
 
 namespace SPLITTR_Uwp.ViewModel
 {
@@ -25,14 +27,16 @@ namespace SPLITTR_Uwp.ViewModel
         
             private readonly DataStore _store;
             private readonly MainPageVersion2 _mainPage;
+            private readonly IExpenseGrouper _expenseGrouper;
             private string _userInitial;
             private bool _isUpdateWalletBalanceTeachingTipOpen;
 
 
-            public MainPageViewModelV2(DataStore store, MainPageVersion2 mainPage)
+            public MainPageViewModelV2(DataStore store, MainPageVersion2 mainPage,IExpenseGrouper expenseGrouper)
             {
                 _store = store;
                 _mainPage = mainPage;
+                _expenseGrouper = expenseGrouper;
                 UserViewModel = new UserViewModel(_store.UserBobj);
                 _store.UserBobj.ValueChanged += UserObjUpdated;
 
@@ -56,12 +60,27 @@ namespace SPLITTR_Uwp.ViewModel
             public ObservableCollection<GroupBobj> UserGroups = new ObservableCollection<GroupBobj>();
 
             public ObservableCollection<User> RelatedUsers { get; } = new ObservableCollection<User>();
-           
+
+            public ObservableCollection<ExpenseGroupingList> ExpensesList = new ObservableCollection<ExpenseGroupingList>();
+            #region GroupingLogicRegion
+
+            public void PopulateGroupingList()
+            {
+                var groups = _expenseGrouper.CreateExpenseGroupList(_store.UserBobj.Expenses);
+
+               ExpensesList.Clear();
+                foreach (var group in groups)
+                {
+                   ExpensesList.Add(group);
+                }
+            }
+            #endregion
 
 
-            #region RelatedUserLogicRegion
 
-            public void ViewLoaded()
+        #region RelatedUserLogicRegion
+
+        public void ViewLoaded()
               {
 
                   if (_store.UserBobj == null)
@@ -71,6 +90,8 @@ namespace SPLITTR_Uwp.ViewModel
                   }
                   UserGroups.ClearAndAdd(_store.UserBobj.Groups);
                   PopulateIndividualSplitUsers();
+
+                  PopulateGroupingList();
               }
             private void PopulateIndividualSplitUsers()
             {

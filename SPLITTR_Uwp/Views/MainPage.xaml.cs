@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -15,8 +16,11 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using SPLITTR_Uwp.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
+using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Services;
+using NavigationView = Microsoft.UI.Xaml.Controls.NavigationView;
+using NavigationViewSelectionChangedEventArgs = Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -75,17 +79,17 @@ namespace SPLITTR_Uwp.Views
             _timer.Start();
         }
 
-        private void NavigationViewss_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            var navView = MainPageNavigationView;
-            var rootGrid = VisualTreeHelper.GetChild(navView, 0) as Grid;
-            //finding root split view and setting background
-            var grid = VisualTreeHelper.GetChild(rootGrid, 1) as Grid;
-            var rootSplitView = VisualTreeHelper.GetChild(grid, 1) as SplitView;
-            var rootinnerGrid = VisualTreeHelper.GetChild(rootSplitView, 0) as Grid;
-            var color = (SolidColorBrush)Application.Current.Resources["ApplicationMainThemeColor"];
-            rootinnerGrid.Background = color;
-        }
+        //private void NavigationViewss_OnLoaded(object sender, RoutedEventArgs e)
+        //{
+        //    var navView = MainPageNavigationView;
+        //    var rootGrid = VisualTreeHelper.GetChild(navView, 0) as Grid;
+        //    //finding root split view and setting background
+        //    var grid = VisualTreeHelper.GetChild(rootGrid, 1) as Grid;
+        //    var rootSplitView = VisualTreeHelper.GetChild(grid, 1) as SplitView;
+        //    var rootinnerGrid = VisualTreeHelper.GetChild(rootSplitView, 0) as Grid;
+        //    var color = (SolidColorBrush)Application.Current.Resources["ApplicationMainThemeColor"];
+        //    rootinnerGrid.Background = color;
+        //}
 
 
 
@@ -93,11 +97,29 @@ namespace SPLITTR_Uwp.Views
         private void AppIcon_OnClick(object sender, TappedRoutedEventArgs e)
         {
             MainPageNavigationView.IsPaneOpen = true;
-
+            NavigationService.Frame = InnerFrame;
+            NavigationService.Navigate(typeof(ExpensesListAndDetailViewPage),_viewModel.ExpensesList);
         }
         private void UserSelectedFromIndividualSplitList(User obj)
         {
             _viewModel.PopulateUserRealtedExpenses(obj);
+        }
+        private void MainPageNavigationView_OnSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        {
+            var stackpanel = args .SelectedItem as StackPanel;
+            if (stackpanel is null)
+            {
+                return;
+            }
+            Debug.WriteLine($"{stackpanel.Name}");
+        }
+        private void GroupList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0)
+            {
+                var groupObject = e.AddedItems[0] as GroupBobj;
+                Debug.WriteLine("================================================="+groupObject?.GroupName+"======================================");
+            }
         }
     }
 

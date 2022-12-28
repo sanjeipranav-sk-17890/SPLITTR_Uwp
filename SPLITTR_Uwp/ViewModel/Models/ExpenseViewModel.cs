@@ -18,7 +18,6 @@ namespace SPLITTR_Uwp.ViewModel.Models
             get => _expense.Note;
             set
             {
-                base.Note = value;
                 _expense.Note = value;
                 OnPropertyChanged();
             }
@@ -30,7 +29,6 @@ namespace SPLITTR_Uwp.ViewModel.Models
             get => _expense.StrExpenseAmount;
             set
             {
-                base.StrExpenseAmount = value;
                 _expense.StrExpenseAmount = value;
                 OnPropertyChanged();
             }

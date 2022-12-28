@@ -25,9 +25,10 @@
             <Setter Property="Height" Value="25" />
         </Style>
         <Style TargetType="TextBlock" >
-            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
+            <Setter Property="FontFamily" Value="Segoe UI Variable"></Setter>
         </Style>
-            <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="{ThemeResource SystemAccentColor}" />
+
+        <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="{ThemeResource SystemAccentColor}" />
             <services:GrpObjListCoverter x:Key="Converter"></services:GrpObjListCoverter>
     </Page.Resources>
 
@@ -82,6 +83,7 @@
                            VerticalAlignment="Center"
                            FontWeight="SemiBold"
                            FontSize="20" 
+                           Foreground="White"
                            Margin="-20 0 0 0"
                            FontFamily="Segoe UI Variable"/>
 
@@ -125,9 +127,9 @@
             CompactPaneLength="0"
             IsPaneOpen="{x:Bind _viewModel.PaneVisibility,Mode=TwoWay}"
             IsBackButtonVisible="Collapsed"
-            IsPaneToggleButtonVisible="False" Loaded="NavigationViewss_OnLoaded" >
+            IsPaneToggleButtonVisible="False"   SelectionChanged="MainPageNavigationView_OnSelectionChanged" >
                  <controls:NavigationView.MenuItems>
-                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="AllExpense">
                                 <TextBlock Text ="☵"  Foreground="White"
                                                FontSize="20"
                                                ></TextBlock>
@@ -138,7 +140,7 @@
                      </StackPanel>
                        
                
-                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="RequestedByMe">
                          <Image Source="../Assets/icons/OutgoingIcon.png"   Stretch="UniformToFill" Width="20" />
                          <TextBlock Text="Request By Me"
                                     Foreground="White"
@@ -147,7 +149,7 @@
                                     VerticalAlignment="Center"></TextBlock>
                      </StackPanel>
 
-                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="ItemStackpanel">
+                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="RequestToMe">
                          <Image Source="../Assets/icons/IncomingArrowV2.png"  Width="20" Stretch="UniformToFill" />
                          <TextBlock Text="Request To Me"
                                     Margin="05 0 0 0" 
@@ -164,7 +166,7 @@
                      </controls:NavigationViewItemHeader>
                          <!--User Groups List-->
                      <controls:NavigationViewItem>
-                         <ListView ItemsSource="{x:Bind _viewModel.UserGroups,Mode=OneWay}" >
+                         <ListView ItemsSource="{x:Bind _viewModel.UserGroups,Mode=OneWay}" x:Name="GroupList" SelectionChanged="GroupList_OnSelectionChanged">
                         <ListView.ItemTemplate>
                                  <DataTemplate x:DataType="model:GroupBobj">
                                      <component:MainPageButtonControl ItemsSource="{x:Bind  GroupParticipants,Mode=OneWay}"
@@ -183,10 +185,12 @@
                         <services:ExceptionHandlerService x:Key="ExceptionHandlerService" NotifyErrorMessage="ExceptionHandlerService_OnNotifyErrorMessage"/>
                     </Grid.Resources>
                     <!--inner frame where other pages load-->
-                    <Frame  Height="{Binding ElementName=FrameContainerRelativePanel ,Path=ActualHeight,Mode=OneWay}"
+                <Frame  Height="{Binding ElementName=FrameContainerRelativePanel ,Path=ActualHeight,Mode=OneWay}"
                                 Width="{Binding ElementName=FrameContainerRelativePanel,Path=ActualWidth,Mode=OneWay}" Name="InnerFrame"  Grid.Column="0"  Grid.Row="0"
-                                x:FieldModifier="public"  
-                                />
+                                x:FieldModifier="public"  >
+                       <component:ExpensesListAndDetailViewPage ItemsSource="{x:Bind _viewModel.ExpensesList,Mode=OneWay}"/>
+                    
+                </Frame>
                     <!--Error showing LAyout-->
                     <Border  Grid.Row="0"
                              Grid.Column="0"

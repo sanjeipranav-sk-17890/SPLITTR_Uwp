@@ -24,6 +24,6 @@
             <ResourceDictionary Source="/Styles/TextBlock.xaml" />
             <ResourceDictionary Source="/Styles/Page.xaml"/>
         </controls:XamlControlsResources.MergedDictionaries>
-    </controls:XamlControlsResources>
+        </controls:XamlControlsResources>
     </Application.Resources>
 </Application>
