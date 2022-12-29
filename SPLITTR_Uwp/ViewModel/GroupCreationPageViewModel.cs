@@ -39,9 +39,9 @@ namespace SPLITTR_Uwp.ViewModel
             get => User.UserName.GetUserInitial();
         }
 
-        public ObservableCollection<User> UserSuggestionList = new ObservableCollection<User>();
+        public ObservableCollection<User> UserSuggestionList { get; } = new ObservableCollection<User>();
 
-        public ObservableCollection<User> GroupParticipants = new ObservableCollection<User>();
+        public ObservableCollection<User> GroupParticipants { get; } = new ObservableCollection<User>();
 
         public GroupCreationPageViewModel(DataStore store,IUserUtility userUtility,IGroupUtility groupUtility)
         {
@@ -61,21 +61,21 @@ namespace SPLITTR_Uwp.ViewModel
         public Task PopulateSuggestionList(string userName)
         {
            return _userUtility.GetUsersSuggestionAsync(userName.ToLower(), async (suggestions) =>
-            {
-                await  UiService.RunOnUiThread((() =>
-                {
-                    foreach (var suggestedUser in suggestions)
-                    {
-                        if(GroupParticipants.Contains(suggestedUser)) continue; //suggestion is not showed if the user is already added to group participants
-                        UserSuggestionList.Add(suggestedUser);
-                    }
-                    if (!UserSuggestionList.Any())
-                    {
-                        UserSuggestionList.Add(_dummyUser);
-                    }
+           {
+               await UiService.RunOnUiThread((() =>
+               {
+                   foreach (var suggestedUser in suggestions)
+                   {
+                       if(GroupParticipants.Contains(suggestedUser)) continue; //suggestion is not showed if the user is already added to group participants
+                       UserSuggestionList.Add(suggestedUser);
+                   }
+                   if (!UserSuggestionList.Any())
+                   {
+                       UserSuggestionList.Add(_dummyUser);
+                   }
 
-                }));
-            });
+               }));
+           });
         }
         public void GroupCreateButtonClicked(object sender, RoutedEventArgs e)
         {

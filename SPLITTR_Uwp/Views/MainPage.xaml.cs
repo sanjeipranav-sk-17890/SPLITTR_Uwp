@@ -62,7 +62,7 @@ namespace SPLITTR_Uwp.Views
             //assigning value to error showing pop up box 
             ErrorMEssageTExtBox.Text = message ?? string.Empty;
 
-            //Enbling visibility of the error box
+            //Enabling visibility of the error box
             ErrorShowingContent.Opacity = 5;
             ErrorShowingContent.Visibility = Visibility.Visible;
 
@@ -100,25 +100,41 @@ namespace SPLITTR_Uwp.Views
             NavigationService.Frame = InnerFrame;
             NavigationService.Navigate(typeof(ExpensesListAndDetailViewPage),_viewModel.ExpensesList);
         }
-        private void UserSelectedFromIndividualSplitList(User obj)
+        private void UserSelectedFromIndividualSplitList(User selectedUser)
         {
-            _viewModel.PopulateUserRealtedExpenses(obj);
-        }
-        private void MainPageNavigationView_OnSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
-        {
-            var stackpanel = args .SelectedItem as StackPanel;
-            if (stackpanel is null)
+            if (selectedUser is null)
             {
                 return;
             }
-            Debug.WriteLine($"{stackpanel.Name}");
+            _viewModel.PopulateUserRelatedExpenses(selectedUser);
+        }
+        private void MainPageNavigationView_OnSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        {
+            if (args .SelectedItem is not StackPanel stackpanel)
+            {
+                return;
+            }
+            switch (stackpanel.Name)
+            {
+                case nameof(AllExpense)  :
+                    _viewModel.PopulateAllExpense();
+                    break;
+                case nameof(RequestToMe) :
+                    _viewModel.PopulateUserRecievedExpenses();
+                    break;
+                case nameof(RequestedByMe):
+                    _viewModel.PopulateUserRaisedExpenses();
+                    break;
+
+            }
+            
         }
         private void GroupList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0)
             {
                 var groupObject = e.AddedItems[0] as GroupBobj;
-                Debug.WriteLine("================================================="+groupObject?.GroupName+"======================================");
+                _viewModel.PopulateSpecificGroupExpenses(groupObject);
             }
         }
     }

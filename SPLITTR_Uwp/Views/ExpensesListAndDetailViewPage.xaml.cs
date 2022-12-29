@@ -52,15 +52,14 @@ namespace SPLITTR_Uwp.Views
 
         private void OnItemsSourceChanged(IEnumerable newValue)
         {
-           
-            // Add Csv Source for newValue.CollectionChanged (if possible)
-            if (newValue is ObservableCollection<ExpenseGroupingList> newSource)
-            {
-                CollectionViewSource.Source = newSource;
-                ExpensesLIstView.ItemsSource = CollectionViewSource.View;
-                
 
+            // Add Csv Source for newValue.CollectionChanged (if possible)
+            if (newValue is not ObservableCollection<ExpenseGroupingList> newSource)
+            {
+                return;
             }
+            CollectionViewSource.Source = newSource;
+            ExpensesLIstView.ItemsSource = CollectionViewSource.View;
 
         }
 

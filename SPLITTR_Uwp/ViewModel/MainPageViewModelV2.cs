@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
@@ -64,9 +65,13 @@ namespace SPLITTR_Uwp.ViewModel
             public ObservableCollection<ExpenseGroupingList> ExpensesList = new ObservableCollection<ExpenseGroupingList>();
             #region GroupingLogicRegion
 
-            public void PopulateGroupingList()
+            public void GroupingAndPopulateExpensesList(IEnumerable<ExpenseBobj> filteredExpenses)
             {
-                var groups = _expenseGrouper.CreateExpenseGroupList(_store.UserBobj.Expenses);
+                if (filteredExpenses == null)
+                {
+                    return;
+                }
+                var groups = _expenseGrouper.CreateExpenseGroupList(filteredExpenses);
 
                ExpensesList.Clear();
                 foreach (var group in groups)
@@ -80,20 +85,74 @@ namespace SPLITTR_Uwp.ViewModel
 
         #region RelatedUserLogicRegion
 
-        public void ViewLoaded()
-              {
+            public void ViewLoaded() 
+            {
 
                   if (_store.UserBobj == null)
                   {
+                      //Setting frame reference to Default windows Frame
+                      NavigationService.Frame = null;
                       NavigationService.Navigate(typeof(LoginPage), new DrillInNavigationTransitionInfo());
                       return;
                   }
                   UserGroups.ClearAndAdd(_store.UserBobj.Groups);
                   PopulateIndividualSplitUsers();
+                  
+            }
+            public void PopulateAllExpense()
+            {
+                ExpensesList.Clear();
+                
+                GroupingAndPopulateExpensesList(_store.UserBobj.Expenses);
+            }
 
-                  PopulateGroupingList();
-              }
-            private void PopulateIndividualSplitUsers()
+
+            public void PopulateSpecificGroupExpenses(Group selectedGroup)
+            {
+                if (selectedGroup is null)
+                {
+                    return;
+                }
+                ExpensesList.Clear();
+                //filter expenses based on particular group 
+                var groupSpecificExpenses = _store.UserBobj?.Expenses.Where(e => e.GroupUniqueId is not null && e.GroupUniqueId.Equals(selectedGroup.GroupUniqueId));
+                
+                GroupingAndPopulateExpensesList(groupSpecificExpenses);
+            }
+            public void PopulateUserRelatedExpenses(User selectedUser)
+            {
+                if (selectedUser is null)
+                {
+                    return;
+                }
+                ExpensesList.Clear();
+                //filter expenses based on Related User
+                var userSpecificExpenses = _store.UserBobj?.Expenses.Where(e => e.SplitRaisedOwner.Equals(selectedUser) || e.CorrespondingUserObj.Equals(selectedUser));
+
+                GroupingAndPopulateExpensesList(userSpecificExpenses);
+            }
+            public void PopulateUserRecievedExpenses()
+            {
+                ExpensesList.Clear();
+
+                var userRecievedExpenses = _store.UserBobj?.Expenses.Where(e => !e.SplitRaisedOwner.Equals(UserViewModel));
+
+                GroupingAndPopulateExpensesList(userRecievedExpenses);
+            }
+            public void PopulateUserRaisedExpenses()
+            {
+                ExpensesList.Clear();
+
+                var userRaisedExpenses = _store.UserBobj?.Expenses.Where(e => e.SplitRaisedOwner.Equals(UserViewModel));
+
+                GroupingAndPopulateExpensesList(userRaisedExpenses);
+            }
+
+
+
+
+
+        private void PopulateIndividualSplitUsers()
             {
                 RelatedUsers.Clear();
                 foreach (var expense in _store.UserBobj.Expenses)
@@ -185,9 +244,8 @@ namespace SPLITTR_Uwp.ViewModel
             }
 
 
-            public void PopulateUserRealtedExpenses(User selectedUser)
-            {
-               Debug.WriteLine("============================================================"+selectedUser.UserName+"==================================================================================");
-            }
+
+
+            
     }
 }

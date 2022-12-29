@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Windows.ApplicationModel.Core;
-using Windows.UI.Core;
-using Windows.UI.Popups;
-using SPLITTR_Uwp.DataRepository;
-using SPLITTR_Uwp.ViewModel.Models;
+﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
+using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
+using SPLITTR_Uwp.ViewModel.Models;
+using System;
 
 namespace SPLITTR_Uwp.ViewModel
 {
@@ -25,7 +18,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         public UserViewModel UserViewModel { get; }
 
-        public WalletBalanceUpdateViewModel(IUserUtility userUtility,DataStore store)
+        public WalletBalanceUpdateViewModel(IUserUtility userUtility, DataStore store)
         {
             _userUtility = userUtility;
             _store = store;
@@ -62,7 +55,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         }
 
-  
-       
+
+
     }
 }
