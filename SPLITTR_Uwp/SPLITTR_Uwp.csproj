@@ -166,9 +166,11 @@
     <Compile Include="Services\ExtensionHelper.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\UIService.cs" />
+    <Compile Include="ViewModel\Contracts\IMainView.cs" />
     <Compile Include="ViewModel\GroupCreationPageViewModel.cs" />
+    <Compile Include="ViewModel\Contracts\IMainPageViewModel.cs" />
     <Compile Include="ViewModel\LoginPageViewModel.cs" />
-    <Compile Include="ViewModel\MainPageViewModelV2.cs" />
+    <Compile Include="ViewModel\MainPageViewModel.cs" />
     <Compile Include="ViewModel\Models\ExpenseListObject\ExpenseGroupingList.cs" />
     <Compile Include="ViewModel\Models\ExpenseViewModel.cs" />
     <Compile Include="ViewModel\Models\UserViewModel.cs" />

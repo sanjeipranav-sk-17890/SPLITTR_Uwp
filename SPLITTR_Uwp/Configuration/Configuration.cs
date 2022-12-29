@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Configuration;
 using System.Threading.Tasks;
+using Windows.Media.Streaming.Adaptive;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SPLITTR_Uwp.Core.CurrencyCoverter;
@@ -20,6 +21,7 @@ using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.Views;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
+using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.VmLogic;
 
 namespace SPLITTR_Uwp.Configuration
@@ -79,11 +81,13 @@ namespace SPLITTR_Uwp.Configuration
             container.AddTransient<SignPageViewModel>();
             container.AddTransient<UserProfilePageViewModel>();
             container.AddTransient<SplitExpenseViewModel>();
-            container.AddTransient<MainPageViewModelV2>();
+            container.AddTransient<IMainPageViewModel,MainPageViewModel>();
+            container.AddTransient<MainPageViewModel>();
             container.AddTransient<WalletBalanceUpdateViewModel>();
             container.AddTransient<GroupCreationPageViewModel>();
 
         }
+
     }
 
 

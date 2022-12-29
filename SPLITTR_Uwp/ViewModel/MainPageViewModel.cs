@@ -15,25 +15,27 @@ using SPLITTR_Uwp.Views;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml;
+using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.Models.ExpenseListObject;
 using SPLITTR_Uwp.ViewModel.VmLogic;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    internal class MainPageViewModelV2 :ObservableObject
+    internal class MainPageViewModel :ObservableObject, IMainPageViewModel
     {
         
             private readonly DataStore _store;
-            private readonly MainPageVersion2 _mainPage;
+            private readonly IMainView _mainPage;
             private readonly IExpenseGrouper _expenseGrouper;
             private string _userInitial;
             private bool _isUpdateWalletBalanceTeachingTipOpen;
 
 
-            public MainPageViewModelV2(DataStore store, MainPageVersion2 mainPage,IExpenseGrouper expenseGrouper)
+            public MainPageViewModel(DataStore store, IMainView mainPage,IExpenseGrouper expenseGrouper)
             {
                 _store = store;
                 _mainPage = mainPage;
@@ -58,14 +60,15 @@ namespace SPLITTR_Uwp.ViewModel
                 set => SetProperty(ref _isUpdateWalletBalanceTeachingTipOpen, value);
             }
 
-            public ObservableCollection<GroupBobj> UserGroups = new ObservableCollection<GroupBobj>();
+            public ObservableCollection<GroupBobj> UserGroups { get; } = new ObservableCollection<GroupBobj>();
 
             public ObservableCollection<User> RelatedUsers { get; } = new ObservableCollection<User>();
 
-            public ObservableCollection<ExpenseGroupingList> ExpensesList = new ObservableCollection<ExpenseGroupingList>();
+            public ObservableCollection<ExpenseGroupingList> ExpensesList { get; } = new ObservableCollection<ExpenseGroupingList>();
+
             #region GroupingLogicRegion
 
-            public void GroupingAndPopulateExpensesList(IEnumerable<ExpenseBobj> filteredExpenses)
+            private void GroupingAndPopulateExpensesList(IEnumerable<ExpenseBobj> filteredExpenses)
             {
                 if (filteredExpenses == null)
                 {
@@ -97,6 +100,7 @@ namespace SPLITTR_Uwp.ViewModel
                   }
                   UserGroups.ClearAndAdd(_store.UserBobj.Groups);
                   PopulateIndividualSplitUsers();
+                  PopulateAllExpense();
                   
             }
             public void PopulateAllExpense()
@@ -211,7 +215,7 @@ namespace SPLITTR_Uwp.ViewModel
             public void PersonProfileClicked()
             {
                 PaneVisibility=false;
-                NavigationService.Frame = _mainPage.InnerFrame;
+                NavigationService.Frame = _mainPage.ChildFrame;
                 NavigationService.Navigate<UserProfilePage>();
             }
             
@@ -223,7 +227,7 @@ namespace SPLITTR_Uwp.ViewModel
 
                 var selectedItem = sender as MenuFlyoutItem;
                 var title = selectedItem.Text;
-                NavigationService.Frame = _mainPage.InnerFrame;
+                NavigationService.Frame = _mainPage.ChildFrame;
                 if (string.Compare(title, "Add Exepense", StringComparison.InvariantCultureIgnoreCase) == 0)
                 {
                     NavigationService.Navigate(typeof(AddExpenseTestPage), new DrillInNavigationTransitionInfo());

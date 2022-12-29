@@ -31,6 +31,8 @@ namespace SPLITTR_Uwp.Core.Models
 
         public DateTime DateOfExpense { get; set; }
 
+        public DateTime CreatedDate { get; set; }
+
         public virtual string Note
         {
             get => _note;
@@ -48,17 +50,19 @@ namespace SPLITTR_Uwp.Core.Models
         public Expense()
         {
             ExpenseUniqueId = Guid.NewGuid().ToString();
+            CreatedDate = DateTime.Now;
         }
 
 
 
 
-        public Expense(double expenseAmount, string requestedOwner, DateTime dateOfExpense, string note, string groupUniqueId, int expenseStatus, string expenseUniqueId, string userEmailId, string parentExpenseId)
+        public Expense(double expenseAmount, string requestedOwner, DateTime dateOfExpense,DateTime createdDate,string note, string groupUniqueId, int expenseStatus, string expenseUniqueId, string userEmailId, string parentExpenseId)
         {
             _expenseAmount = expenseAmount;
             RequestedOwner = requestedOwner;
             DateOfExpense = dateOfExpense;
             _note = note;
+            CreatedDate = createdDate;
             GroupUniqueId = groupUniqueId;
             UserEmailId = userEmailId;
             ExpenseStatusindex = expenseStatus;

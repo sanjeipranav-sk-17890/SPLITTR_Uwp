@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -18,7 +19,10 @@ using SPLITTR_Uwp.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
+using SPLITTR_Uwp.ViewModel.Contracts;
+using SPLITTR_Uwp.ViewModel.VmLogic;
 using NavigationView = Microsoft.UI.Xaml.Controls.NavigationView;
 using NavigationViewSelectionChangedEventArgs = Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs;
 
@@ -29,13 +33,14 @@ namespace SPLITTR_Uwp.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPageVersion2 : Page
+    public sealed partial class MainPage : Page, IMainView
     {
-        MainPageViewModelV2 _viewModel;
+        IMainPageViewModel _viewModel;
 
-        public MainPageVersion2()
+        public MainPage()
         {
-            _viewModel = ActivatorUtilities.CreateInstance<MainPageViewModelV2>(App.Container, this); ;
+            _viewModel = ActivatorUtilities.CreateInstance<MainPageViewModel>(App.Container, this);
+            ;
             this.InitializeComponent();
         }
 
@@ -44,7 +49,7 @@ namespace SPLITTR_Uwp.Views
         {
             Interval = TimeSpan.FromSeconds(1)
         };
-       
+
         private void ErrorCloseButton_OnClick(object sender, RoutedEventArgs e)
         {
             //force stoping the timer if Cross button is clicked on error message
@@ -98,7 +103,7 @@ namespace SPLITTR_Uwp.Views
         {
             MainPageNavigationView.IsPaneOpen = true;
             NavigationService.Frame = InnerFrame;
-            NavigationService.Navigate(typeof(ExpensesListAndDetailViewPage),_viewModel.ExpensesList);
+            NavigationService.Navigate(typeof(ExpensesListAndDetailViewPage), _viewModel.ExpensesList);
         }
         private void UserSelectedFromIndividualSplitList(User selectedUser)
         {
@@ -110,16 +115,16 @@ namespace SPLITTR_Uwp.Views
         }
         private void MainPageNavigationView_OnSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            if (args .SelectedItem is not StackPanel stackpanel)
+            if (args.SelectedItem is not StackPanel stackpanel)
             {
                 return;
             }
             switch (stackpanel.Name)
             {
-                case nameof(AllExpense)  :
+                case nameof(AllExpense):
                     _viewModel.PopulateAllExpense();
                     break;
-                case nameof(RequestToMe) :
+                case nameof(RequestToMe):
                     _viewModel.PopulateUserRecievedExpenses();
                     break;
                 case nameof(RequestedByMe):
@@ -127,7 +132,7 @@ namespace SPLITTR_Uwp.Views
                     break;
 
             }
-            
+
         }
         private void GroupList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -137,7 +142,13 @@ namespace SPLITTR_Uwp.Views
                 _viewModel.PopulateSpecificGroupExpenses(groupObject);
             }
         }
+
+
+        public Frame ChildFrame
+        {
+            get => InnerFrame;
+        }
+
+
     }
-
-
 }

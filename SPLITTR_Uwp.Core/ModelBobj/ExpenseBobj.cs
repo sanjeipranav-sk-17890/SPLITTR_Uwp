@@ -42,7 +42,7 @@ namespace SPLITTR_Uwp.Core.ModelBobj
             ValueChanged?.Invoke();
         }
 
-        private ExpenseBobj(Expense expense) : base(expense.ExpenseAmount, expense.RequestedOwner, expense.DateOfExpense, expense.Note, expense.GroupUniqueId, expense.ExpenseStatusindex, expense.ExpenseUniqueId, expense.UserEmailId, expense.ParentExpenseId)
+        private ExpenseBobj(Expense expense) : base(expense.ExpenseAmount ,expense.RequestedOwner,dateOfExpense: expense.DateOfExpense,createdDate:expense.CreatedDate ,expense.Note, expense.GroupUniqueId, expense.ExpenseStatusindex, expense.ExpenseUniqueId, expense.UserEmailId, expense.ParentExpenseId)
         {
 
         }
