@@ -9,7 +9,7 @@ using SPLITTR_Uwp.ViewModel.Models.ExpenseListObject;
 
 namespace SPLITTR_Uwp.ViewModel.Contracts;
 
-internal interface IMainPageViewModel
+internal interface IMainPageViewModel : INotifyPropertyChanged
 {
     string UserInitial { get; set; }
 

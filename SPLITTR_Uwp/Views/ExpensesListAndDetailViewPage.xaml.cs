@@ -85,6 +85,50 @@ namespace SPLITTR_Uwp.Views
             ExpensesLIstView.ItemsSource = CollectionViewSource.View;
 
         }
-       
+
+        private void ExpenseShowButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            //if button rotation is 90 set it to 0 and vice versa
+            if (sender is not Button sideButton)
+            {
+                return;
+            }
+            
+            if (sideButton.DataContext is not ExpenseGroupingList expenseGroup)
+            {
+                return;
+            }
+            bool expenseVisibility = false;
+
+            foreach (var expense in expenseGroup)
+            {
+                if (expense is ExpenseViewModel expenseVm)
+                {
+                    expenseVm.Visibility= ! expenseVm.Visibility;
+                    expenseVisibility = expenseVm.Visibility;
+                }
+            }
+            AssignButtonStyleBasedOnVisibility(expenseVisibility,sideButton);
+           
+
+        }
+        private void AssignButtonStyleBasedOnVisibility(bool expenseVisibility,Button sideButton)
+        {
+            if (expenseVisibility)
+            {
+
+                var style = ShowExpenseButtonStyle;
+                sideButton.Style = style;
+            }
+            else
+            {
+                var style = HideExpenseButtonStyle;
+                sideButton.Style = style;
+            };
+        }
+        private void NavigationPaneName_OnClick(object sender, RoutedEventArgs e)
+        {
+           
+        }
     }
 }

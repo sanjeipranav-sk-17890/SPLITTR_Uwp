@@ -149,6 +149,5 @@ namespace SPLITTR_Uwp.Views
             get => InnerFrame;
         }
 
-
     }
 }

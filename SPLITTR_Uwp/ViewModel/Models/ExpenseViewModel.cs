@@ -11,6 +11,7 @@ namespace SPLITTR_Uwp.ViewModel.Models
     public class ExpenseViewModel : ExpenseBobj,INotifyPropertyChanged
     {
         private readonly ExpenseBobj _expense;
+        private bool _visibility = true;
 
         [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override  string Note
@@ -40,6 +41,17 @@ namespace SPLITTR_Uwp.ViewModel.Models
             get => _expense.ExpenseStatus;
         }
 
+        public bool Visibility
+        {
+            get => _visibility ;
+            set
+            {
+                if (value == _visibility)
+                    return;
+                _visibility = value;
+                OnPropertyChanged();
+            }
+        }
 
 
         public ExpenseViewModel(ExpenseBobj expense) : base(expense)

@@ -7,15 +7,43 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:vm="using:SPLITTR_Uwp.ViewModel.Models"
+    xmlns:header="using:SPLITTR_Uwp.ViewModel.Models.ExpenseListObject"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     Style="{ThemeResource HomePageBackground}"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="ExpensesListAndDetailViewPage_OnLoaded">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="ExpensesListAndDetailViewPage_OnLoaded">
     <Page.Resources>
         <CollectionViewSource  x:Name="CollectionViewSource" x:Key="GroupedSource" IsSourceGrouped="True"/>
+        <Style x:Key="HideExpensesButtonStyle" x:FieldModifier="public" x:Name="HideExpenseButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{ThemeResource SystemAccentColorDark1}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" VerticalAlignment="{TemplateBinding VerticalAlignment}"  Glyph="&#xE761;" Margin="2 2 4 0" FontSize="20"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ShowExpensesButtonStyle" x:Name="ShowExpenseButtonStyle" x:FieldModifier="public" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{ThemeResource SystemAccentColorDark1}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" VerticalAlignment="{TemplateBinding VerticalAlignment}"  Glyph="&#xE7B3;" Margin="2 2 4 0" FontSize="20"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
     <!--Binding Source={StaticResource GroupedSource}-->
     <Grid>
-       
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition MinWidth="400"></ColumnDefinition>
             <ColumnDefinition Width="10"></ColumnDefinition>
@@ -23,31 +51,70 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" CornerRadius="15">
-            <ListView x:Name="ExpensesLIstView"  ItemsSource="{x:Bind CollectionViewSource.View , Mode=OneWay}" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0">
+                <Button  x:Name="NavigationPaneName" Click="NavigationPaneName_OnClick">
+                    <Button.Content>
+                        <FontIcon FontFamily="Segoe MDL2 Assets"  Glyph="&#xE89F;" FontSize="20" Width="46"/>
+                    </Button.Content>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter/>
+                        </ControlTemplate>
+                    </Button.Template>
+
+                </Button>
+            </StackPanel>
+            <ListView Grid.Row="1" x:Name="ExpensesLIstView"  ItemsSource="{x:Bind CollectionViewSource.View , Mode=OneWay}">
                 <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemExpanded}">
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="MinHeight" Value="0"></Setter>
                         <Setter Property="HorizontalAlignment" Value="Stretch"/>
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="vm:ExpenseViewModel">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition Width="50" />
-                            </Grid.ColumnDefinitions>
+                        <StackPanel Visibility="{x:Bind Visibility,Mode=OneWay}" x:Name="ExpenseItemGrid" >
                             <TextBlock Text="{x:Bind Note}" />
-                            <TextBlock Grid.Column="1" Text="{x:Bind ExpenseStatus}"/>
-                        </Grid>
+                            <TextBlock Text="Item TemplateComing Soon" />
+                            <TextBlock  Text="{x:Bind ExpenseStatus}"/>
+                        </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.GroupStyle>
                     <GroupStyle>
                         <GroupStyle.HeaderTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding ExpenseGroupHeader,Mode=OneWay}"  Margin="10,0" 
-                                       Foreground="Black" FontWeight="Bold" />
+                            <DataTemplate x:DataType="header:ExpenseGroupingList" >
+                                <Grid HorizontalAlignment="Stretch" Width="{Binding ElementName=ExpensesLIstView,Path=ActualWidth,Mode=OneWay}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Orientation="Horizontal"  Grid.Column="0" Margin="10,0">
+                                        <StackPanel.Resources>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{ThemeResource SystemAccentColorDark1}"></Setter>
+                                            </Style>
+                                        </StackPanel.Resources>
+                                        <Button Click="ExpenseShowButton_OnClick" Style="{ThemeResource ShowExpensesButtonStyle}">
+                                        </Button>
+                                        <TextBlock Text="{x:Bind GroupHeader.GroupName, Mode=OneWay}"   
+                                                   FontWeight="Bold" />
+                                        <TextBlock Text="(" Margin="5 0 0 0"/>
+                                        <TextBlock Text="{x:Bind GroupHeader.NoOfExpenses,Mode=OneWay}" Margin="0"></TextBlock>
+                                        <TextBlock Text=")"/>
+                                    </StackPanel>
+                                    <MenuFlyoutSeparator Grid.Row="1" HorizontalAlignment="Stretch" Margin="10 0 30 0"></MenuFlyoutSeparator>
+
+                                </Grid>
+
+                                <!---->
+
                             </DataTemplate>
                         </GroupStyle.HeaderTemplate>
                         <GroupStyle.HeaderContainerStyle>
@@ -78,14 +145,14 @@
                     </GroupStyle>
                 </ListView.GroupStyle>
             </ListView>
-             
+
         </Grid>
         <!--Column Grid Splitter-->
         <controls:GridSplitter Grid.Column="1" Width="10" ResizeBehavior="BasedOnAlignment"
                                ResizeDirection="Auto" Background="White"  CornerRadius="5"  >
             <controls:GridSplitter.Element>
                 <Grid Background="White" >
-                   
+
                 </Grid>
             </controls:GridSplitter.Element>
         </controls:GridSplitter>

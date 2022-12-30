@@ -76,6 +76,12 @@ namespace SPLITTR_Uwp.ViewModel
 
         public async void LoginButtonPressed()
         {
+            //===============================================/
+                        //By PAss To Be Deleted
+
+                        UserEmailIdTextBox = "Sanjei.pranav@gmail.com";
+            //===============================================//
+
             if (string.IsNullOrWhiteSpace(UserEmailIdTextBox))
             {
                 LoginInformationTextBox = true;

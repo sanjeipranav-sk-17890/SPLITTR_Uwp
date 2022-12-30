@@ -37,6 +37,12 @@ namespace SPLITTR_Uwp.Views
             base.OnNavigatedFrom(e);
             _viewModel.PageUnloaded();
         }
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            //=================Bypass Login========================//
+             //To be Deleted
+             _viewModel.LoginButtonPressed();
+        }
 
     }
 }

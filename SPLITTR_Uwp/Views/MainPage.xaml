@@ -25,10 +25,13 @@
             <Setter Property="Height" Value="25" />
         </Style>
         <Style TargetType="TextBlock" >
-            <Setter Property="FontFamily" Value="Segoe UI Variable"></Setter>
+            <Setter Property="FontFamily" Value="Segoe UI Variable" />
+            <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"></Setter>
         </Style>
+        <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="{ThemeResource SystemAccentColorLight2}"/>
+        <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="{ThemeResource SystemAccentColorLight2}" />
 
-        <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="{ThemeResource SystemAccentColor}" />
+        <!--<SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="{ThemeResource SystemAccentColor}" />-->
             <services:GrpObjListCoverter x:Key="Converter"></services:GrpObjListCoverter>
     </Page.Resources>
 
@@ -83,7 +86,6 @@
                            VerticalAlignment="Center"
                            FontWeight="SemiBold"
                            FontSize="20" 
-                           Foreground="White"
                            Margin="-20 0 0 0"
                            FontFamily="Segoe UI Variable"/>
 
@@ -130,12 +132,12 @@
             IsPaneToggleButtonVisible="False"   SelectionChanged="MainPageNavigationView_OnSelectionChanged" >
                  <controls:NavigationView.MenuItems>
                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="AllExpense">
-                                <TextBlock Text ="☵"  Foreground="White"
+                                <TextBlock Text ="☵"  
                                                FontSize="20"
                                                ></TextBlock>
                                 <TextBlock Text="All Expenses"
                                                      VerticalAlignment="Center"
-                                                     Margin="10 0 0 0" Foreground="White"
+                                                     Margin="10 0 0 0"
                                                      FontSize="15"></TextBlock>
                      </StackPanel>
                        
@@ -143,7 +145,6 @@
                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="RequestedByMe">
                          <Image Source="../Assets/icons/OutgoingIcon.png"   Stretch="UniformToFill" Width="20" />
                          <TextBlock Text="Request By Me"
-                                    Foreground="White"
                                     FontSize="15"
                                     Margin="5 0 0 0"
                                     VerticalAlignment="Center"></TextBlock>
@@ -153,7 +154,6 @@
                          <Image Source="../Assets/icons/IncomingArrowV2.png"  Width="20" Stretch="UniformToFill" />
                          <TextBlock Text="Request To Me"
                                     Margin="05 0 0 0" 
-                                    Foreground="White"
                                     FontSize="15"
                                     VerticalAlignment="Center"></TextBlock>
                      </StackPanel>
@@ -260,7 +260,8 @@
                                     />
                                     <TextBlock Text="{x:Bind _viewModel.UserViewModel.UserName,Mode=OneWay}"
                                                Margin="10,3,0,0"
-                                               Foreground="{StaticResource ApplicationPageBackgroundThemeBrush}"
+                                               FontSize="20"
+                                               VerticalAlignment="Center"
                                                TextWrapping="Wrap"></TextBlock>
                                 </StackPanel>
 
@@ -284,7 +285,7 @@
                                     <TextBlock Text="Logout"
                                                FontSize="18"
                                                Margin="20 0 0 0"
-                                               Foreground="{ThemeResource ApplicationPageBackgroundThemeBrush}"/>
+                                               />
 
                                 </StackPanel>
                             </Button.Content>
@@ -332,6 +333,7 @@
                 <controls:TeachingTip IsOpen="{x:Bind _viewModel.IsUpdateWalletBalanceTeachingTipOpen,Mode=TwoWay}"
                                                   PreferredPlacement="RightTop"
                                                   PlacementMargin="20" 
+                                                  x:Name="WalletBalanceUpdateTeachingTip"
                                                   IsLightDismissEnabled="True">
                     <controls:TeachingTip.Content>
                         <view:WalletBalanceUpdatePopUp CloseButtonClicked="{x:Bind _viewModel.AddWalletBalanceButtonClicked}"/>
