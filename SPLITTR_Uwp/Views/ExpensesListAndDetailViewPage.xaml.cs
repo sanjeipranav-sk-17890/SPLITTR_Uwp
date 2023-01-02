@@ -35,7 +35,7 @@ namespace SPLITTR_Uwp.Views
         }
 
 
-
+        public event Action PaneButtonOnClick;
 
         public readonly static DependencyProperty ItemsSourceProperty =
             DependencyProperty.Register(nameof(ItemsSource), typeof(IEnumerable),
@@ -46,6 +46,15 @@ namespace SPLITTR_Uwp.Views
         {
             if (sender is ExpensesListAndDetailViewPage control)
                 control.OnItemsSourceChanged((IEnumerable)e.NewValue);
+        }
+
+        public readonly static DependencyProperty TitleTextProperty = DependencyProperty.Register(
+            nameof(TitleText), typeof(string), typeof(ExpensesListAndDetailViewPage), new PropertyMetadata(default(string)));
+
+        public string TitleText
+        {
+            get => (string)GetValue(TitleTextProperty);
+            set => SetValue(TitleTextProperty, value);
         }
 
 
@@ -69,15 +78,34 @@ namespace SPLITTR_Uwp.Views
             set => SetValue(ItemsSourceProperty, value);
         }
 
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.Parameter is ObservableCollection<ExpenseGroupingList> collection)
-            {
-                ItemsSource = collection;
-            }
-
-            base.OnNavigatedFrom(e);
+            //if (ItemsSource is ObservableCollection<ExpenseGroupingList> groupedExpenses)
+            //{
+            //    groupedExpenses.CollectionChanged += GroupedExpenses_CollectionChanged;
+            //}
         }
+
+        //private void GroupedExpenses_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        //{
+        //   if(sender is not ObservableCollection<ExpenseGroupingList> groupedExpense)
+        //   {
+        //        return;
+        //   }
+
+        //   foreach (var group in groupedExpense)//from each group setting visibility to default  
+        //   {
+        //       foreach (var expense in group)
+        //       {
+        //           if(expense is ExpenseViewModel expenseVm)
+        //           {
+        //               expenseVm.Visibility = true;
+
+        //           }
+        //       }
+        //   }
+        //}
 
         private void ExpensesListAndDetailViewPage_OnLoaded(object sender, RoutedEventArgs args)
         {
@@ -98,7 +126,7 @@ namespace SPLITTR_Uwp.Views
             {
                 return;
             }
-            bool expenseVisibility = false;
+            var expenseVisibility = true;
 
             foreach (var expense in expenseGroup)
             {
@@ -124,11 +152,12 @@ namespace SPLITTR_Uwp.Views
             {
                 var style = HideExpenseButtonStyle;
                 sideButton.Style = style;
-            };
+            }
         }
         private void NavigationPaneName_OnClick(object sender, RoutedEventArgs e)
         {
-           
+            NavigationPaneControlButton.Style = NavigationPaneControlButton.Style == OpenPaneButtonStyle ? ClosePaneButtonStyle : OpenPaneButtonStyle;
+            PaneButtonOnClick?.Invoke();
         }
     }
 }

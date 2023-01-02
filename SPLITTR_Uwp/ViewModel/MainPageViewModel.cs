@@ -86,7 +86,7 @@ namespace SPLITTR_Uwp.ViewModel
 
 
 
-        #region RelatedUserLogicRegion
+            #region RelatedUserLogicRegion
 
             public void ViewLoaded() 
             {

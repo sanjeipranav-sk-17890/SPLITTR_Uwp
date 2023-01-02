@@ -120,7 +120,7 @@
 
 
         </Grid>
-
+            <!-- Main Navigation View-->
         <controls:NavigationView
             x:Name="MainPageNavigationView"
             Grid.Row="1"
@@ -188,7 +188,7 @@
                 <Frame  Height="{Binding ElementName=FrameContainerRelativePanel ,Path=ActualHeight,Mode=OneWay}"
                                 Width="{Binding ElementName=FrameContainerRelativePanel,Path=ActualWidth,Mode=OneWay}" Name="InnerFrame"  Grid.Column="0"  Grid.Row="0"
                                 x:FieldModifier="public"  >
-                       <component:ExpensesListAndDetailViewPage ItemsSource="{x:Bind _viewModel.ExpensesList,Mode=OneWay}"/>
+                       <component:ExpensesListAndDetailViewPage PaneButtonOnClick="{x:Bind PageOnPaneButtonOnClick}" TitleText="{x:Bind InnerPageTitle,Mode=OneWay}"  ItemsSource="{x:Bind _viewModel.ExpensesList,Mode=OneWay}"/>
                     
                 </Frame>
                     <!--Error showing LAyout-->

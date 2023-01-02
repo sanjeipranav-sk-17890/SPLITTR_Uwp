@@ -111,24 +111,20 @@ namespace SPLITTR_Uwp.Views
 
         public ListViewSelectionMode SelectionMode
         {
-            get
-            {
-                return (ListViewSelectionMode)GetValue(SelectionModeProperty);
-            }
-            set
-            { 
-                SetValue(SelectionModeProperty, value);
-            }
+            get => (ListViewSelectionMode)GetValue(SelectionModeProperty);
+            set => SetValue(SelectionModeProperty, value);
         }
         public IEnumerable ItemsSource
         {
-            get { return (IEnumerable)GetValue(ItemsSourceProperty); }
+            get => (IEnumerable)GetValue(ItemsSourceProperty);
             set
             {   
                 var listWithCurrentUserBsObject = AlterInputListWithCurrentUserBobj(value);
                 SetValue(ItemsSourceProperty, listWithCurrentUserBsObject);
             }
         }
+
+      
 
         //replacing ordinary current  user obj with userVm so Support Change 
         private IEnumerable AlterInputListWithCurrentUserBobj(IEnumerable value)
@@ -152,8 +148,8 @@ namespace SPLITTR_Uwp.Views
             return value;
         }
 
-        public static readonly DependencyProperty ItemsSourceProperty =
-            DependencyProperty.Register("ItemsSource", typeof(IEnumerable),
+        public readonly static DependencyProperty ItemsSourceProperty =
+            DependencyProperty.Register(nameof(ItemsSource), typeof(IEnumerable),
                 typeof(MainPageButtonControl), new PropertyMetadata(null));
 
         public event Action<User> UserSelectedFromTheList;
@@ -163,6 +159,7 @@ namespace SPLITTR_Uwp.Views
              {
                  var selectedUser = (User)e.AddedItems[0];
                  UserSelectedFromTheList?.Invoke(selectedUser);
+                UserListView.SelectedIndex = -1;// reseting sellection index , selection the same user may raise Selection changed again 
              }
         }
     }

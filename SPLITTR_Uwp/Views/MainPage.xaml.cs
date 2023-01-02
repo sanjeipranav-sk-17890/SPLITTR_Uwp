@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace SPLITTR_Uwp.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page, IMainView
+    public sealed partial class MainPage : Page, IMainView,INotifyPropertyChanged
     {
         IMainPageViewModel _viewModel;
 
@@ -45,11 +46,12 @@ namespace SPLITTR_Uwp.Views
         }
 
 
+        #region Error Handling MEchanisam
+
         DispatcherTimer _timer = new DispatcherTimer()
         {
             Interval = TimeSpan.FromSeconds(1)
         };
-
         private void ErrorCloseButton_OnClick(object sender, RoutedEventArgs e)
         {
             //force stoping the timer if Cross button is clicked on error message
@@ -84,33 +86,60 @@ namespace SPLITTR_Uwp.Views
             _timer.Start();
         }
 
-        //private void NavigationViewss_OnLoaded(object sender, RoutedEventArgs e)
-        //{
-        //    var navView = MainPageNavigationView;
-        //    var rootGrid = VisualTreeHelper.GetChild(navView, 0) as Grid;
-        //    //finding root split view and setting background
-        //    var grid = VisualTreeHelper.GetChild(rootGrid, 1) as Grid;
-        //    var rootSplitView = VisualTreeHelper.GetChild(grid, 1) as SplitView;
-        //    var rootinnerGrid = VisualTreeHelper.GetChild(rootSplitView, 0) as Grid;
-        //    var color = (SolidColorBrush)Application.Current.Resources["ApplicationMainThemeColor"];
-        //    rootinnerGrid.Background = color;
-        //}
 
 
+        #endregion
 
 
+        private string _innerPageTitle = nameof(AllExpense);
+
+       
+        
         private void AppIcon_OnClick(object sender, TappedRoutedEventArgs e)
         {
             MainPageNavigationView.IsPaneOpen = true;
             NavigationService.Frame = InnerFrame;
+            NavigationService.Navigated += NavigationService_Navigated;
             NavigationService.Navigate(typeof(ExpensesListAndDetailViewPage), _viewModel.ExpensesList);
         }
+
+        private void NavigationService_Navigated(object sender, NavigationEventArgs e)
+        {
+            
+            if (InnerFrame.Content is not ExpensesListAndDetailViewPage page)
+            {
+                return;
+            }
+            page.ItemsSource = _viewModel.ExpensesList;
+            page.PaneButtonOnClick += (PageOnPaneButtonOnClick);
+
+            //setting binding manually  for title in that Page 
+            Binding binding = new Binding()
+            {
+                Source = this,
+                Path = new PropertyPath(nameof(InnerPageTitle)),
+                Mode = BindingMode.OneWay
+            };
+            BindingOperations.SetBinding(page,ExpensesListAndDetailViewPage.TitleTextProperty,binding);
+        }
+
+
+        private void PageOnPaneButtonOnClick()
+        {
+            var isMainPaneOpen = MainPageNavigationView.IsPaneOpen;
+            MainPageNavigationView.IsPaneOpen = !isMainPaneOpen;
+        }
+
         private void UserSelectedFromIndividualSplitList(User selectedUser)
         {
             if (selectedUser is null)
             {
                 return;
             }
+            //Setting Title
+            InnerPageTitle = "Individual Split"+$" : {selectedUser.UserName}" ;
+
+
             _viewModel.PopulateUserRelatedExpenses(selectedUser);
         }
         private void MainPageNavigationView_OnSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -119,15 +148,19 @@ namespace SPLITTR_Uwp.Views
             {
                 return;
             }
+            //setting Title and Calling respective viewModel To Polulate the Respective Expenses
             switch (stackpanel.Name)
             {
                 case nameof(AllExpense):
+                    InnerPageTitle = nameof(AllExpense);
                     _viewModel.PopulateAllExpense();
                     break;
                 case nameof(RequestToMe):
+                    InnerPageTitle = nameof(RequestToMe);
                     _viewModel.PopulateUserRecievedExpenses();
                     break;
                 case nameof(RequestedByMe):
+                    InnerPageTitle = nameof(RequestedByMe);
                     _viewModel.PopulateUserRaisedExpenses();
                     break;
 
@@ -139,6 +172,11 @@ namespace SPLITTR_Uwp.Views
             if (e.AddedItems.Count > 0)
             {
                 var groupObject = e.AddedItems[0] as GroupBobj;
+                //setting title with Group Name
+                InnerPageTitle = groupObject.GroupName + " Expense";
+
+
+                //Calling ViewModel to Populate Group objects
                 _viewModel.PopulateSpecificGroupExpenses(groupObject);
             }
         }
@@ -149,5 +187,25 @@ namespace SPLITTR_Uwp.Views
             get => InnerFrame;
         }
 
+        public string InnerPageTitle
+        {
+            get => _innerPageTitle;
+            set => SetField(ref _innerPageTitle, value);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value))
+                return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
     }
 }

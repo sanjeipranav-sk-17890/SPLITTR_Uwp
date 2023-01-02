@@ -27,6 +27,24 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="OpenPaneButtonStyle" x:FieldModifier="public" x:Name="OpenPaneButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" VerticalAlignment="{TemplateBinding VerticalAlignment}"  Glyph="&#xEA5B;" Margin="2 2 4 0" FontSize="20"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ClosePaneButtonStyle" x:FieldModifier="public" x:Name="ClosePaneButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" VerticalAlignment="{TemplateBinding VerticalAlignment}"  Glyph="&#xEA49;" Margin="2 2 4 0" FontSize="20"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="ShowExpensesButtonStyle" x:Name="ShowExpenseButtonStyle" x:FieldModifier="public" TargetType="Button">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderBrush" Value="Transparent" />
@@ -41,7 +59,7 @@
             </Setter>
         </Style>
     </Page.Resources>
-    <!--Binding Source={StaticResource GroupedSource}-->
+   
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -54,20 +72,14 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
-
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0">
-                <Button  x:Name="NavigationPaneName" Click="NavigationPaneName_OnClick">
-                    <Button.Content>
-                        <FontIcon FontFamily="Segoe MDL2 Assets"  Glyph="&#xE89F;" FontSize="20" Width="46"/>
-                    </Button.Content>
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <ContentPresenter/>
-                        </ControlTemplate>
-                    </Button.Template>
-
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                
+                <Button  x:Name="NavigationPaneControlButton" Click="NavigationPaneName_OnClick" Style="{StaticResource OpenPaneButtonStyle}">
+                    
                 </Button>
+
+                <TextBlock Text="{x:Bind TitleText,Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold" Margin="4 0 0 0" FontSize="18"></TextBlock>
             </StackPanel>
             <ListView Grid.Row="1" x:Name="ExpensesLIstView"  ItemsSource="{x:Bind CollectionViewSource.View , Mode=OneWay}">
                 <ListView.ItemContainerStyle>
