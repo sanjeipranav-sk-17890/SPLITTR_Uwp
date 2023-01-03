@@ -1,44 +1,135 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.ViewModel.Models;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace SPLITTR_Uwp.DataTemplates
 {
-    public sealed partial class ExpenseDataTemplate : UserControl,INotifyPropertyChanged
+    public sealed partial class ExpenseDataTemplate : UserControl, INotifyPropertyChanged
     {
         private string _expenseItemTitle;
         private Brush _expenseStatusForeground;
         private string _expenseStatus;
-        private string _currencySymbol;
-        private string _formatedExpenseAmount;
-
-        private static  ExpenseItemViewModel ExpenseItemVm { get; set; }
+        
+        private static ExpenseItemViewModel ViewModel { get; set; }
         private static DataStore Store { get; set; }
 
         public ExpenseViewModel ExpenseObj
         {
             get => this.DataContext as ExpenseViewModel;
+        }
+
+
+        #region UiBehaviuorLogic
+        //if Converted expense amount more than 7 decimals it concat it and
+        //Color the text Block green if the Owner is Current user Else text block is Red
+        private string GetFormatedExpenseAmount()
+        {
+            if (ExpenseObj is null)
+            {
+                return string.Empty;
+            }
+
+            if (ExpenseObj.SplitRaisedOwner.Equals(Store.UserBobj))
+            {
+                ExpenseAmountTextBlock.Foreground = PaidColorBrush;
+                return ViewModel.FormatExpenseAmount(ExpenseObj);
+            }
+            ExpenseAmountTextBlock.Foreground = PendingColorBrush;
+            return ViewModel.FormatExpenseAmount(ExpenseObj);
+        }
+
+        private string FormatExpenseObjNote()
+        {
+            if (ExpenseObj is null)
+            {
+                return string.Empty;
+            }
+
+            if (ExpenseObj.Note?.Length > 10)
+            {
+                return ExpenseObj.Note?.Substring(0, 10) + " ....";
+            }
+            return ExpenseObj.Note ?? String.Empty;
+        }
+
+        public void LoadValuesInUi()
+        {
+            ExpenseItemTitle = GetFormatedTitle(ExpenseObj);
+            ExpensePersonProfileInnerGrid.Background = GetRespectiveLogo(ExpenseObj);
+            AssignExpenseStatus(ExpenseObj);
+        }
+
+        private void AssignExpenseStatus(ExpenseViewModel expenseObj)
+        {
+            if (expenseObj is null)
+            {
+                return;
+            }
+            ExpenseStatus = ExpenseObj.ExpenseStatus.ToString();
+            ExpenseStatusForeground = ExpenseObj.ExpenseStatus switch
+            {
+                Core.ModelBobj.Enum.ExpenseStatus.Cancelled => CancelledColorBrush,
+                Core.ModelBobj.Enum.ExpenseStatus.Paid => PaidColorBrush,
+                _ => PendingColorBrush
+            };
+
+        }
+
+        private Brush GetRespectiveLogo(ExpenseViewModel expenseObj)
+        {
+            if (expenseObj is null)
+            {
+                return IndividaulExpenseLogo;
+            }
+            //assinging respective image brush based on type of expense
+            Brush brush = expenseObj.GroupUniqueId switch
+            {
+                not null => GroupExpenseLogo,
+                _ => IndividaulExpenseLogo
+            };
+            return brush;
+        }
+
+        //Assigning Item title based on Expense type
+        private string GetFormatedTitle(ExpenseViewModel expenseObj)
+        {
+            if (expenseObj is null)
+            {
+                return String.Empty;
+            }
+            if (expenseObj.GroupUniqueId is not null)
+            {
+                ExpenseHeadingTypeTextBox.Text = "Group :";
+            }
+            ExpenseHeadingTypeTextBox.Text = "Owner :";
+
+            return ViewModel.FormatExpenseTitle(expenseObj);
+
+        }
+
+
+
+
+
+        #endregion
+
+        #region UI Binding & Dependency Property
+        public Brush ExpenseStatusForeground
+        {
+            get => _expenseStatusForeground;
+            set => SetField(ref _expenseStatusForeground, value);
         }
 
         public string ExpenseItemTitle
@@ -47,11 +138,6 @@ namespace SPLITTR_Uwp.DataTemplates
             set => SetField(ref _expenseItemTitle, value);
         }
 
-        public Brush ExpenseStatusForeground
-        {
-            get => _expenseStatusForeground;
-            set => SetField(ref _expenseStatusForeground, value);
-        }
 
         public string ExpenseStatus
         {
@@ -95,47 +181,13 @@ namespace SPLITTR_Uwp.DataTemplates
 
 
 
-
-        //if Converted expense amount more than 7 decimals it concat it and Color the text Block green if the Owner is Current user Else text block is Red
-        private string GetFormatedExpenseAmount()
-        {
-            if (ExpenseObj is null)
-            {
-                return string.Empty;
-            }
-            string expenseAmount = ExpenseObj.ExpenseAmount.ToString();
-            if (expenseAmount.Length > 7)
-            {
-                expenseAmount = expenseAmount.Substring(0, 7);
-            }
-            if (ExpenseObj.SplitRaisedOwner.Equals(Store.UserBobj))
-            {
-                ExpenseAmountTextBlock.Foreground = PaidColorBrush;
-                return "+ "+expenseAmount;
-            }
-            ExpenseAmountTextBlock.Foreground = PendingColorBrush;
-            return "- " + expenseAmount;
-        }
-
-        private string FormatExpenseObjNote()
-        {
-            if (ExpenseObj is null)
-            {
-                return string.Empty;
-            }
-
-            if (ExpenseObj.Note?.Length > 10)
-            {
-                return ExpenseObj.Note?.Substring(0, 10) + " ....";
-            }
-            return ExpenseObj.Note?? String.Empty;
-        }
+        #endregion
 
         public ExpenseDataTemplate()
         {
             this.InitializeComponent();
             this.DataContextChanged += ExpenseDataTemplate_DataContextChanged;
-            ExpenseItemVm ??= ActivatorUtilities.CreateInstance<ExpenseItemViewModel>(App.Container);
+            ViewModel ??= ActivatorUtilities.CreateInstance<ExpenseItemViewModel>(App.Container);
             Store ??= ActivatorUtilities.GetServiceOrCreateInstance<DataStore>(App.Container);
         }
 
@@ -160,70 +212,6 @@ namespace SPLITTR_Uwp.DataTemplates
             OnPropertyChanged(nameof(FormatedExpenseAmount));
         }
 
-        public void LoadValuesInUi()
-        {
-            ExpenseItemTitle = GetFormatedTitle(ExpenseObj);
-            ExpensePersonProfileInnerGrid.Background = GetRespectiveLogo(ExpenseObj);
-            AssignExpenseStatus(ExpenseObj);
-        }
-
-        private void AssignExpenseStatus(ExpenseViewModel expenseObj)
-        {
-            if (expenseObj is null)
-            {
-                return;
-            }
-            ExpenseStatus = ExpenseObj.ExpenseStatus.ToString();
-            ExpenseStatusForeground = ExpenseObj.ExpenseStatus switch
-            {
-                Core.ModelBobj.Enum.ExpenseStatus.Cancelled => CancelledColorBrush,
-                Core.ModelBobj.Enum.ExpenseStatus.Paid => PaidColorBrush,
-                _=> PendingColorBrush
-            };
-            
-        }
-
-    
-
-
-
-
-
-        private Brush GetRespectiveLogo(ExpenseViewModel expenseObj)
-        {
-            if (expenseObj is null)
-            {
-                return IndividaulExpenseLogo;
-            }
-            //assinging respective image brush based on type of expense
-            Brush brush = expenseObj.GroupUniqueId switch
-            {
-                not null => GroupExpenseLogo,
-                _ => IndividaulExpenseLogo
-            };
-            return brush;
-        }
-
-        //Assigning Item title based on Expense type
-        private string GetFormatedTitle(ExpenseViewModel expenseObj)
-        {
-            if (expenseObj is null)
-            {
-                return  String.Empty;
-            }
-            if (expenseObj.GroupUniqueId is not null )
-            {
-                ExpenseHeadingTypeTextBox.Text = "Group :";
-                return ExpenseItemVm.GetGroupNameByGroupId(expenseObj.GroupUniqueId);
-            }
-            ExpenseHeadingTypeTextBox.Text = "Owner :";
-            //If Current user is Owner Showing the Name as You instead of Name
-            if (ExpenseObj.SplitRaisedOwner.Equals(Store.UserBobj))
-            {
-                return "You";
-            }
-            return ExpenseObj.SplitRaisedOwner?.UserName ?? string.Empty;
-        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
