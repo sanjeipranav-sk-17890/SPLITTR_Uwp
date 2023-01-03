@@ -7,18 +7,22 @@ using Windows.UI.Xaml.Data;
 
 namespace SPLITTR_Uwp.DataRepository.Converters
 {
-    public class TimeConverter : IValueConverter
+    public class StringFormatConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return new DateTimeOffset(((DateTime)value).ToUniversalTime());
+            if (value == null)
+                return null;
 
+            if (parameter == null)
+                return value;
+
+            return string.Format((string)parameter, value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            return ((DateTimeOffset)value).DateTime;
+            throw new NotImplementedException();
         }
-
     }
 }

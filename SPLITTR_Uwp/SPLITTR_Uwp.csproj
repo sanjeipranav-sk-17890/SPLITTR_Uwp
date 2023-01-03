@@ -158,15 +158,18 @@
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="DataRepository\Converters\TimeConverter.cs" />
     <Compile Include="DataRepository\DataStore.cs" />
+    <Compile Include="DataTemplates\ExpenseDataTemplate.xaml.cs">
+      <DependentUpon>ExpenseDataTemplate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataTemplates\NewExpenseTemplate.xaml.cs">
       <DependentUpon>NewExpenseTemplate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\GrpObjListCoverter.cs" />
     <Compile Include="Services\ExceptionHandlerService.cs" />
     <Compile Include="Services\ExtensionHelper.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\UIService.cs" />
     <Compile Include="ViewModel\Contracts\IMainView.cs" />
+    <Compile Include="ViewModel\ExpenseItemViewModel.cs" />
     <Compile Include="ViewModel\GroupCreationPageViewModel.cs" />
     <Compile Include="ViewModel\Contracts\IMainPageViewModel.cs" />
     <Compile Include="ViewModel\LoginPageViewModel.cs" />
@@ -221,6 +224,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="DataTemplates\ExpenseDataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DataTemplates\NewExpenseTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -306,8 +313,10 @@
     <Content Include="Assets\icons\credit-cards-payment.png" />
     <Content Include="Assets\icons\Downarrow.png" />
     <Content Include="Assets\icons\google-logo-9826-16x16.ico" />
+    <Content Include="Assets\icons\GroupExpenseLogo.png" />
     <Content Include="Assets\icons\home.png" />
     <Content Include="Assets\icons\IncomingArrowV2.png" />
+    <Content Include="Assets\icons\IndividualExpenseIcon.png" />
     <Content Include="Assets\icons\OutgoingIcon.png" />
     <Content Include="Assets\icons\Request TO Me.png" />
     <Content Include="Assets\icons\invoice.png" />

@@ -17,6 +17,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using ColorCode.Common;
+using SPLITTR_Uwp.Core.ExtensionMethod;
+using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.ViewModel.Models;
 using SPLITTR_Uwp.ViewModel.Models.ExpenseListObject;
 
@@ -78,40 +81,31 @@ namespace SPLITTR_Uwp.Views
             set => SetValue(ItemsSourceProperty, value);
         }
 
+        public ObservableCollection<ExpenseBobj> DateSortedExpenseList { get; } = new ObservableCollection<ExpenseBobj>();
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            //if (ItemsSource is ObservableCollection<ExpenseGroupingList> groupedExpenses)
-            //{
-            //    groupedExpenses.CollectionChanged += GroupedExpenses_CollectionChanged;
-            //}
-        }
 
-        //private void GroupedExpenses_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        //{
-        //   if(sender is not ObservableCollection<ExpenseGroupingList> groupedExpense)
-        //   {
-        //        return;
-        //   }
-
-        //   foreach (var group in groupedExpense)//from each group setting visibility to default  
-        //   {
-        //       foreach (var expense in group)
-        //       {
-        //           if(expense is ExpenseViewModel expenseVm)
-        //           {
-        //               expenseVm.Visibility = true;
-
-        //           }
-        //       }
-        //   }
-        //}
 
         private void ExpensesListAndDetailViewPage_OnLoaded(object sender, RoutedEventArgs args)
         {
             CollectionViewSource.Source = ItemsSource;
             ExpensesLIstView.ItemsSource = CollectionViewSource.View;
 
+            //Subsribing To Collection Changed So DateTime Sorting ExpenseList Will Update AccordingLy
+            if (ItemsSource is ObservableCollection<ExpenseGroupingList> groupedExpenseList)
+            {
+                groupedExpenseList.CollectionChanged += GroupedExpenseList_CollectionChanged;
+            }
+
+        }
+
+
+        //Update Ui 
+        private void GroupedExpenseList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (sender is ObservableCollection<ExpenseGroupingList> groupedExpenseList)
+            {
+                SortExpenseBasedOnDate(groupedExpenseList);
+            }
         }
 
         private void ExpenseShowButton_OnClick(object sender, RoutedEventArgs e)
@@ -159,5 +153,58 @@ namespace SPLITTR_Uwp.Views
             NavigationPaneControlButton.Style = NavigationPaneControlButton.Style == OpenPaneButtonStyle ? ClosePaneButtonStyle : OpenPaneButtonStyle;
             PaneButtonOnClick?.Invoke();
         }
+
+        private void SortingFlyoutButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if(sender is not MenuFlyoutItem selectedItem)
+            {
+                return; 
+            }
+            //if Showing list view is Date Time sorted then No Need to change list view 
+            if (selectedItem == DateMenuItem && (DateSortedList.Visibility != Visibility.Visible))
+            {
+                
+                if (ItemsSource is ObservableCollection<ExpenseGroupingList> groupedExpenses)
+                {
+                    //Sorts Expenses Bases On Date and Add it to Observable Collection
+                    SortExpenseBasedOnDate(groupedExpenses);
+                }
+
+                //Setting visibility of dateListview and Hiding Grouped Listview
+                ExpensesLIstView.Visibility = Visibility.Collapsed;
+                DateSortedList.Visibility = Visibility.Visible;
+
+            }
+            if (selectedItem == StatusMenuItem && (ExpensesLIstView.Visibility != Visibility.Visible))
+            {
+
+                ExpensesLIstView.Visibility = Visibility.Visible;
+                DateSortedList.Visibility= Visibility.Collapsed;
+
+            }
+
+        }
+
+        private void SortExpenseBasedOnDate(ObservableCollection<ExpenseGroupingList> groupedExpenses)
+        {
+            DateSortedExpenseList.Clear();
+            var expensesToBeSorted = new List<ExpenseBobj>();
+            foreach (var expenses in groupedExpenses)
+            {
+                expensesToBeSorted.AddRange<ExpenseBobj>(expenses);
+            }
+            var expenseArray = expensesToBeSorted.ToArray();
+            Array.Sort(expenseArray, new ExpenseDateSorter());
+
+            foreach (var expense in expenseArray)
+            {
+                DateSortedExpenseList.Add(expense);
+            }
+
+        }
+
+
     }
+
+ 
 }

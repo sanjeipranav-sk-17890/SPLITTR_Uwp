@@ -1,0 +1,127 @@
+﻿<UserControl
+    x:Class="SPLITTR_Uwp.DataTemplates.ExpenseDataTemplate"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SPLITTR_Uwp.DataTemplates"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="100"
+    d:DesignWidth="500"
+    xmlns:converter="using:SPLITTR_Uwp.DataRepository.Converters"
+    BorderBrush="Black"
+    BorderThickness="20"
+    Visibility="{x:Bind ExpenseObj.Visibility,Mode=OneWay}"
+    PointerEntered="ExpenseDataTemplate_OnPointerEntered"
+    PointerExited="ExpenseDataTemplate_OnPointerExited"
+>
+    <UserControl.Resources>
+        <ImageBrush  ImageSource="../Assets/icons/GroupExpenseLogo.png" x:Key="GroupExpenseLogo" x:Name="GroupExpenseLogo" Opacity="0.5" Stretch="Uniform"></ImageBrush>
+        <ImageBrush  ImageSource="../Assets/icons/IndividualExpenseIcon.png" x:Key="IndividualExpenseLogo" x:Name="IndividaulExpenseLogo" Opacity="0.5" Stretch="Uniform"></ImageBrush>
+        <SolidColorBrush Color="IndianRed" x:Key="PendingColorBrush" x:Name="PendingColorBrush"/>
+        <SolidColorBrush Color="ForestGreen" x:Key="PaidColorBrush" x:Name="PaidColorBrush"/>
+        <SolidColorBrush Color="DarkOrange" x:Key="CancelledColorBrush" x:Name="CancelledColorBrush"/>
+        <converter:StringFormatConverter x:Key="StringFormater" />
+
+    </UserControl.Resources>
+
+    <Grid CornerRadius="10" Background="{ThemeResource SystemAccentColorLight3}">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="0" Grid.Row="0" x:Name="ExpensePersonProfileInnerGrid" Background ="{StaticResource IndividualExpenseLogo}">
+        </Grid>
+        <Grid Grid.Column="1"  Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <TextBlock x:Name="ExpenseHeadingTypeTextBox"
+                           Foreground="{ThemeResource SystemAccentColorDark2}"
+                           FontSize="12"
+                           Text="Test"
+                           Margin="0 5 0 0 "
+                           VerticalAlignment="Center"></TextBlock>
+                <TextBlock   x:Name="ExpenseTitleOwnerTitle" Text="{x:Bind ExpenseItemTitle,Mode=OneWay}"
+                             FontSize="20" 
+                             VerticalAlignment="Center"
+                             Margin="10 5 0 0" 
+                />
+            </StackPanel>
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="35 0 0 0">
+                <TextBlock Foreground="{x:Bind ExpenseStatusForeground,Mode=OneWay}"
+                           Text="" FontFamily="Segoe MDL2 Assets"
+                           FontSize="10" 
+                           VerticalAlignment="Center"
+                           Visibility="{x:Bind ExpenseStatusVisibility,Mode=OneWay}"
+                           Margin="10 0 0 0"></TextBlock>
+
+                <TextBlock  
+                           x:Name="ExpenseStatusTextBlock"
+                           Text="{x:Bind ExpenseStatus,Mode=OneWay}"
+                           FontSize="15"
+                           Visibility="{x:Bind ExpenseStatusVisibility,Mode=OneWay}"
+                           Foreground="{x:Bind ExpenseStatusForeground,Mode=OneWay}"
+                           />
+                <TextBlock Foreground="{ThemeResource SystemAccentColorDark2}"
+                           Text="Date Of Expense :"
+                           FontSize="10"
+                           Margin="15 0 0 0"
+                           Visibility="{x:Bind DateOfExpenseTextBlockVisibility,Mode=OneWay}"
+                           VerticalAlignment="Center"/>
+                <TextBlock Text="{x:Bind ExpenseObj.DateOfExpense,Converter={StaticResource StringFormater},ConverterParameter='{}{0:dd/MM/yyy (ddd)}',Mode=OneWay}"
+                           Visibility="{x:Bind DateOfExpenseTextBlockVisibility,Mode=OneWay}"
+                           VerticalAlignment="Center"
+                           ></TextBlock>
+            </StackPanel>
+           
+        </Grid>
+       
+        <Grid Grid.Row="1" Grid.ColumnSpan="3" x:Name="AdditionalDataGrid" Visibility="Collapsed" >
+             <Grid.ColumnDefinitions>
+                 <ColumnDefinition/>
+                 <ColumnDefinition/>
+             </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Note :" 
+                       Foreground="{ThemeResource SystemAccentColorLight1}"
+                       Margin="5 0 4 0"
+                       />
+                <TextBlock Text="{x:Bind FormatedExpenseNote,Mode=OneWay}"></TextBlock>
+       
+
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <TextBlock Text="Created Date :" 
+                           Foreground="{ThemeResource SystemAccentColorLight1}"
+                           Margin="5 0 4 0"
+                />
+                <TextBlock Text="{x:Bind ExpenseObj.CreatedDate,Converter={StaticResource StringFormater},ConverterParameter='{}{0:dd/MM/yyy (ddd)}',Mode=OneWay}"/>
+            </StackPanel>
+        </Grid>
+         <StackPanel Grid.Column="2" Grid.Row="0"
+                     Orientation="Horizontal"
+                     VerticalAlignment="Center">
+             <TextBlock Text="{x:Bind CurrencySymbol,Mode=OneWay}"
+                        Foreground="{ThemeResource SystemAccentColorDark2}"
+                        FontWeight="SemiBold"
+                        FontSize="20"/>
+             <TextBlock  Margin="5 0 0 0"
+                         VerticalAlignment="Center"
+                         x:Name="ExpenseAmountTextBlock"
+                         Text="{x:Bind FormatedExpenseAmount,Mode=OneWay}"
+                        />
+
+         </StackPanel>
+
+    </Grid>
+</UserControl>

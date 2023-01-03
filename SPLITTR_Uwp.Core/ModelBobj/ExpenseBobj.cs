@@ -4,6 +4,7 @@ using SPLITTR_Uwp.Core.DataHandler.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace SPLITTR_Uwp.Core.ModelBobj
 {
@@ -61,6 +62,20 @@ namespace SPLITTR_Uwp.Core.ModelBobj
         public ExpenseBobj(ICurrencyConverter currencyConverter)
         {
             CurrencyConverter = currencyConverter;
+        }
+
+    }
+    public class ExpenseDateSorter : IComparer<ExpenseBobj>
+    {
+
+        public int Compare(ExpenseBobj x, ExpenseBobj y)
+        {
+            if (x is null || y is null)
+            {
+                return 0;
+            }
+
+            return DateTime.Compare(x.CreatedDate, y.CreatedDate);
         }
 
     }

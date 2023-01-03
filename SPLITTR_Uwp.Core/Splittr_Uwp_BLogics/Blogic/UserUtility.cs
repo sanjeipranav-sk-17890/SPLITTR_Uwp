@@ -50,7 +50,7 @@ public class UserUtility : UseCaseBase, IUserUtility
             //since it is updating on db in background We are waiting until it is completed
             await _userDataHandler.UpdateUserBobjAsync(userBobj).ConfigureAwait(false);
 
-        });
+        }).ConfigureAwait(false);
 
     }
     public Task UpdateUserObjAsync(UserBobj userBobj, double walletBalance)

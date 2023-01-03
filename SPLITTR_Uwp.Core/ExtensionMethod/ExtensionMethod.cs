@@ -72,6 +72,20 @@ namespace SPLITTR_Uwp.Core.ExtensionMethod
             return resultString+symbol;
 
         }
+        public static string ExpenseSymbol(this double amount, UserBobj user)
+        {
+            string symbol = user.CurrencyPreference switch
+            {
+                Currency.Rupee => " ₹",
+                Currency.Dollar => " $",
+                Currency.Euro => " €",
+                Currency.Yen => " ¥",
+                _ => throw new Exception("Data Handling problem by Db")
+            };
+            return symbol;
+
+        }
+
 
     }
 }

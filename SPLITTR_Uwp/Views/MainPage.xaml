@@ -32,7 +32,6 @@
         <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="{ThemeResource SystemAccentColorLight2}" />
 
         <!--<SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="{ThemeResource SystemAccentColor}" />-->
-            <services:GrpObjListCoverter x:Key="Converter"></services:GrpObjListCoverter>
     </Page.Resources>
 
     <Grid>

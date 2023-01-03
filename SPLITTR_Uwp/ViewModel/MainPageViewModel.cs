@@ -130,10 +130,19 @@ namespace SPLITTR_Uwp.ViewModel
                     return;
                 }
                 ExpensesList.Clear();
-                //filter expenses based on Related User
-                var userSpecificExpenses = _store.UserBobj?.Expenses.Where(e => e.SplitRaisedOwner.Equals(selectedUser) || e.CorrespondingUserObj.Equals(selectedUser));
+                var userSpecificExpenses = _store.UserBobj?.Expenses.Where(CheckExpenseMatchesUser);
 
                 GroupingAndPopulateExpensesList(userSpecificExpenses);
+
+
+                //filter expenses based on Related User
+                bool CheckExpenseMatchesUser(ExpenseBobj e)
+                {
+                    if (e.SplitRaisedOwner.Equals(selectedUser) || e.CorrespondingUserObj.Equals(selectedUser) && e.GroupUniqueId is null)
+                        return true;
+                    return false;
+                }
+
             }
             public void PopulateUserRecievedExpenses()
             {
