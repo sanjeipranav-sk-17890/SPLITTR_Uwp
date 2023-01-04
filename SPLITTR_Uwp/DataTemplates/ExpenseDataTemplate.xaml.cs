@@ -50,18 +50,18 @@ namespace SPLITTR_Uwp.DataTemplates
             return ViewModel.FormatExpenseAmount(ExpenseObj);
         }
 
-        private string FormatExpenseObjNote()
+        private string FormatExpenseObjDescription()
         {
             if (ExpenseObj is null)
             {
                 return string.Empty;
             }
 
-            if (ExpenseObj.Note?.Length > 10)
+            if (ExpenseObj.Description?.Length > 10)
             {
-                return ExpenseObj.Note?.Substring(0, 10) + " ....";
+                return ExpenseObj.Description?.Substring(0, 10) + " ....";
             }
-            return ExpenseObj.Note ?? String.Empty;
+            return ExpenseObj.Description ?? String.Empty;
         }
 
         public void LoadValuesInUi()
@@ -145,9 +145,9 @@ namespace SPLITTR_Uwp.DataTemplates
             set => SetField(ref _expenseStatus, value);
         }
 
-        public string FormatedExpenseNote
+        public string FormatedExpenseDescription
         {
-            get => FormatExpenseObjNote();
+            get => FormatExpenseObjDescription();
         }
 
         public string CurrencySymbol
@@ -207,7 +207,7 @@ namespace SPLITTR_Uwp.DataTemplates
         private void ExpenseObj_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             LoadValuesInUi();
-            OnPropertyChanged(nameof(FormatedExpenseNote));
+            OnPropertyChanged(nameof(FormatedExpenseDescription));
             OnPropertyChanged(nameof(CurrencySymbol));
             OnPropertyChanged(nameof(FormatedExpenseAmount));
         }

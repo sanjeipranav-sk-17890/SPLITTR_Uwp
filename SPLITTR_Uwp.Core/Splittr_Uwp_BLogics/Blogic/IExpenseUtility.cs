@@ -13,6 +13,7 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
         /// <summary>
         /// Splits Expenses and populates remaining feilds in ExpenseBobjs ,and saves data to corresponding data services
         /// </summary>
+        /// <param name="expenseDescription"></param>
         /// <param name="currentUser"></param>
         /// <param name="expenses"></param>
         /// <param name="expenseNote"></param>
@@ -21,7 +22,7 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
         /// <param name="expenditureSplitType">unequal Spilt: number>0 Equal Split <= 0 </param>
         /// <returns></returns>
         /// <exception cref="ArgumentException">throws exception when equal split option is selected but expense amount is less than or equal to 0,Or expediture amount is negative</exception>
-        public Task SplitNewExpensesAsync(UserBobj currentUser, IEnumerable<ExpenseBobj> expenses, string expenseNote, DateTime dateOfExpense, double expenseAmount, int expenditureSplitType);
+        public Task SplitNewExpensesAsync(string expenseDescription,UserBobj currentUser, IEnumerable<ExpenseBobj> expenses, string expenseNote, DateTime dateOfExpense, double expenseAmount, int expenditureSplitType);
 
 
         /// <summary>

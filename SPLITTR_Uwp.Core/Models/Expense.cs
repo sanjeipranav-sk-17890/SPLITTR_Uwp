@@ -18,6 +18,8 @@ namespace SPLITTR_Uwp.Core.Models
         public int ExpenseStatusindex { get; set; }
 
 
+        public string Description { get; set; }
+
         /// <summary>
         /// with Backing feild because it should not call Bobjs or ViewModel's Overrided feilds
         /// </summary>
@@ -56,8 +58,9 @@ namespace SPLITTR_Uwp.Core.Models
 
 
 
-        public Expense(double expenseAmount, string requestedOwner, DateTime dateOfExpense,DateTime createdDate,string note, string groupUniqueId, int expenseStatus, string expenseUniqueId, string userEmailId, string parentExpenseId)
+        public Expense(string description,double expenseAmount, string requestedOwner, DateTime dateOfExpense,DateTime createdDate,string note, string groupUniqueId, int expenseStatus, string expenseUniqueId, string userEmailId, string parentExpenseId)
         {
+            Description = description;
             _expenseAmount = expenseAmount;
             RequestedOwner = requestedOwner;
             DateOfExpense = dateOfExpense;

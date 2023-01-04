@@ -74,12 +74,13 @@
                            Foreground="{x:Bind ExpenseStatusForeground,Mode=OneWay}"
                            />
                 <TextBlock Foreground="{ThemeResource SystemAccentColorDark2}"
-                           Text="Date Of Expense :"
+                           Text=""
                            FontSize="10"
-                           Margin="15 0 0 0"
+                           Margin="15 0 5 0"
+                           FontFamily="Segoe MDL2 Assets"
                            Visibility="{x:Bind DateOfExpenseTextBlockVisibility,Mode=OneWay}"
                            VerticalAlignment="Center"/>
-                <TextBlock Text="{x:Bind ExpenseObj.DateOfExpense,Converter={StaticResource StringFormater},ConverterParameter='{}{0:dd/MM/yyy (ddd)}',Mode=OneWay}"
+                <TextBlock Text="{x:Bind ExpenseObj.DateOfExpense,Converter={StaticResource StringFormater},ConverterParameter='{}{0:MMM dd (ddd)}',Mode=OneWay}"
                            Visibility="{x:Bind DateOfExpenseTextBlockVisibility,Mode=OneWay}"
                            VerticalAlignment="Center"
                            ></TextBlock>
@@ -93,11 +94,11 @@
                  <ColumnDefinition/>
              </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Note :" 
+            <TextBlock Text="Description :" 
                        Foreground="{ThemeResource SystemAccentColorLight1}"
                        Margin="5 0 4 0"
                        />
-                <TextBlock Text="{x:Bind FormatedExpenseNote,Mode=OneWay}"></TextBlock>
+                <TextBlock Text="{x:Bind FormatedExpenseDescription,Mode=OneWay}"></TextBlock>
        
 
             </StackPanel>

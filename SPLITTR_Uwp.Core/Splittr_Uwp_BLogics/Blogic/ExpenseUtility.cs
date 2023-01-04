@@ -24,9 +24,13 @@ public class ExpenseUtility : UseCaseBase, IExpenseUtility
 
     }
 
-    private ExpenseBobj ValidateExpenseBobjs(IEnumerable<ExpenseBobj> expenses, string expenseNote, double expenseAmount, DateTime dateOfExpense, int expenditureSplitType)
+    private ExpenseBobj ValidateExpenseBobjs(string expenseDescription, IEnumerable<ExpenseBobj> expenses, string expenseNote, double expenseAmount, DateTime dateOfExpense, int expenditureSplitType)
     {
-
+        //verify description
+        if (string.IsNullOrEmpty(expenseDescription))
+        {
+            throw new ArgumentException("Expense Description Cannot be Empty");
+        }
         ExpenseBobj parentExpenseBobj = null;
         foreach (var expense in expenses)
         {
@@ -42,6 +46,7 @@ public class ExpenseUtility : UseCaseBase, IExpenseUtility
             }
 
             expense.Note = expenseNote;
+            expense.Description=expenseDescription;
             expense.DateOfExpense = dateOfExpense;
             if (expense.RequestedOwner.Equals(expense.UserEmailId) && parentExpenseBobj is null)//expenseStatus for split raiser is always paid
             {
@@ -56,11 +61,11 @@ public class ExpenseUtility : UseCaseBase, IExpenseUtility
 
 
 
-    public async Task SplitNewExpensesAsync(UserBobj currentUser, IEnumerable<ExpenseBobj> expenses, string expenseNote, DateTime dateOfExpense, double expenseAmount, int expenditureSplitType)
+    public async Task SplitNewExpensesAsync(string expenseDescription,UserBobj currentUser, IEnumerable<ExpenseBobj> expenses, string expenseNote, DateTime dateOfExpense, double expenseAmount, int expenditureSplitType)
     {
         await RunAsynchronously(() =>
          {
-             ExpenseBobj parentExpenseBobj = ValidateExpenseBobjs(expenses, expenseNote, expenseAmount, dateOfExpense, expenditureSplitType);
+             ExpenseBobj parentExpenseBobj = ValidateExpenseBobjs(expenseDescription,expenses, expenseNote, expenseAmount, dateOfExpense, expenditureSplitType);
 
              var noOfExpenses = expenses.Count();
              //assiging parentExpenditure Id to remaining Expenses except parent Expenses

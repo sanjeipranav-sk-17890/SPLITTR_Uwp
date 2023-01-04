@@ -476,6 +476,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         private bool _isSplitButtonEnabled;
         private string _expenseNote;
+        private string _expenseDescription;
 
 
         public bool IsSplitButtonEnabled
@@ -488,6 +489,12 @@ namespace SPLITTR_Uwp.ViewModel
         {
             get => _expenseNote;
             set => SetProperty(ref _expenseNote, value);
+        }
+
+        public string ExpenseDescription
+        {
+            get => _expenseDescription;
+            set => SetProperty(ref _expenseDescription, value);
         }
 
         //event raises when collection item changes
@@ -510,7 +517,7 @@ namespace SPLITTR_Uwp.ViewModel
         {
             var expenseNote = ExpenseNote != null ? ExpenseNote.Trim() : String.Empty;
             var dateOfExpense = ExpenditureDate.DateTime;
-
+            var expenseDescription = ExpenseDescription?.Trim() ?? string.Empty;
            
                 var splittingType = SelectedSplitPreferenceIndex;// 0 if equal split or >0 for unequal split
 
@@ -519,7 +526,7 @@ namespace SPLITTR_Uwp.ViewModel
             _expenseUtility.PresenterCallBackOnSuccess += _expenseUtility_PresenterCallBackOnSuccess;
             
 
-              await _expenseUtility.SplitNewExpensesAsync(_store.UserBobj, ExpensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType);
+              await _expenseUtility.SplitNewExpensesAsync(expenseDescription,_store.UserBobj, ExpensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType);
 
         }
 
