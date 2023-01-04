@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.CurrencyCoverter.Factory;
@@ -11,14 +12,14 @@ using SPLITTR_Uwp.Core.Services.Contracts;
 
 namespace SPLITTR_Uwp.Core.DataHandler
 {
-    public class ExpenseDataHandler : IExpenseDataHandler
+    public class ExpenseDataManager : IExpenseDataHandler
     {
         private readonly IExpenseDataServices _dataServices;
         private readonly ICurrencyCalcFactory _currencyCalcFactory;
         private  IUserDataHandler _userDataHandler;
 
 
-        public ExpenseDataHandler(IExpenseDataServices dataServices,ICurrencyCalcFactory currencyCalcFactory)
+        public ExpenseDataManager(IExpenseDataServices dataServices,ICurrencyCalcFactory currencyCalcFactory)
         {
             _dataServices = dataServices;
             _currencyCalcFactory = currencyCalcFactory;
@@ -61,7 +62,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
             //Fetching Current User's Currency Preference
             var userCurrencyPreference =(Currency)user.CurrencyIndex;
-                /*(Currency)(await _userDataHandler.FetchCurrentUserDetails(userEmailId).ConfigureAwait(false)).CurrencyIndex;*/
+                
             //getting ICurrencyConverter Based on Currency PReference
             var currencyCalculator = _currencyCalcFactory.GetCurrencyCalculator(userCurrencyPreference);
 
@@ -69,30 +70,67 @@ namespace SPLITTR_Uwp.Core.DataHandler
             var userExpenses = await _dataServices.SelectUserExpensesAsync(user.EmailId).ConfigureAwait(false);
 
             var outputList = new List<ExpenseBobj>();
-            Parallel.ForEach(userExpenses, (async expense =>
+
+            //For Each Expense Constructs ExpenseBobj in Worker Thread 
+            var tasksOfExpense = userExpenses.Select(expense => Task.Run((() => ConstructExpenseBobj(expense))));
+
+            var userExpenseBobjs =await Task.WhenAll(tasksOfExpense).ConfigureAwait(false);
+
+            return userExpenseBobjs;
+
+
+            //Local Function Which Builds ExpenseBobj 
+            async Task<ExpenseBobj> ConstructExpenseBobj(Expense expense)
             {
+
                 User respectiveUserObj = null;
                 User requestedOwnerUserObj = null;
 
                 if (expense.UserEmailId == user.EmailId)
                 {
                     respectiveUserObj = user;
-                } 
+                }
                 if (expense.RequestedOwner == user.EmailId)
                 {
                     requestedOwnerUserObj = user;
                 }
-               
-                
-                requestedOwnerUserObj ??= await _userDataHandler.FetchUserUsingMailId(expense.RequestedOwner).ConfigureAwait(false); 
+
+
+                requestedOwnerUserObj ??= await _userDataHandler.FetchUserUsingMailId(expense.RequestedOwner).ConfigureAwait(false);
 
                 respectiveUserObj ??= await _userDataHandler.FetchUserUsingMailId(expense.UserEmailId).ConfigureAwait(false);
-                
 
 
-                outputList.Add(new ExpenseBobj(respectiveUserObj, requestedOwnerUserObj, currencyConverter: currencyCalculator, expense: expense));
-            }));
-            return outputList;
+
+              return  new ExpenseBobj(respectiveUserObj, requestedOwnerUserObj, currencyConverter: currencyCalculator, expense: expense);
+            }
         }
+
+        //Parallel.ForEach(userExpenses, (async expense =>
+        //{
+        //    User respectiveUserObj = null;
+        //    User requestedOwnerUserObj = null;
+
+        //    if (expense.UserEmailId == user.EmailId)
+        //    {
+        //        respectiveUserObj = user;
+        //    } 
+        //    if (expense.RequestedOwner == user.EmailId)
+        //    {
+        //        requestedOwnerUserObj = user;
+        //    }
+
+
+        //    requestedOwnerUserObj ??= await _userDataHandler.FetchUserUsingMailId(expense.RequestedOwner).ConfigureAwait(false); 
+
+        //    respectiveUserObj ??= await _userDataHandler.FetchUserUsingMailId(expense.UserEmailId).ConfigureAwait(false);
+
+
+
+        //    outputList.Add(new ExpenseBobj(respectiveUserObj, requestedOwnerUserObj, currencyConverter: currencyCalculator, expense: expense));
+        //}));
+        // return outputList;
+
+
     }
 }
