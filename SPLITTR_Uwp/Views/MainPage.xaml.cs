@@ -55,7 +55,7 @@ namespace SPLITTR_Uwp.Views
         private void ErrorCloseButton_OnClick(object sender, RoutedEventArgs e)
         {
             //force stoping the timer if Cross button is clicked on error message
-            if (_timer?.IsEnabled ?? false)
+            if (_timer.IsEnabled)
             {
 
                 _timer?.Stop();

@@ -16,8 +16,8 @@
     PointerExited="ExpenseDataTemplate_OnPointerExited"
 >
     <UserControl.Resources>
-        <ImageBrush  ImageSource="../Assets/icons/GroupExpenseLogo.png" x:Key="GroupExpenseLogo" x:Name="GroupExpenseLogo" Opacity="0.5" Stretch="Uniform"></ImageBrush>
-        <ImageBrush  ImageSource="../Assets/icons/IndividualExpenseIcon.png" x:Key="IndividualExpenseLogo" x:Name="IndividaulExpenseLogo" Opacity="0.5" Stretch="Uniform"></ImageBrush>
+        <ImageBrush  ImageSource="../Assets/icons/GroupExpenseLogo.png" x:Key="GroupExpenseLogo" x:Name="GroupExpenseLogo" Opacity="0.8"   Stretch="Uniform"></ImageBrush>
+        <ImageBrush  ImageSource="../Assets/icons/IndividualExpenseIcon.png" x:Key="IndividualExpenseLogo" x:Name="IndividaulExpenseLogo" Opacity="0.7" Stretch="Uniform"></ImageBrush>
         <SolidColorBrush Color="IndianRed" x:Key="PendingColorBrush" x:Name="PendingColorBrush"/>
         <SolidColorBrush Color="ForestGreen" x:Key="PaidColorBrush" x:Name="PaidColorBrush"/>
         <SolidColorBrush Color="DarkOrange" x:Key="CancelledColorBrush" x:Name="CancelledColorBrush"/>
@@ -36,7 +36,7 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Column="0" Grid.Row="0" x:Name="ExpensePersonProfileInnerGrid" Background ="{StaticResource IndividualExpenseLogo}">
+        <Grid Grid.Column="0"  Grid.Row="0" x:Name="ExpensePersonProfileInnerGrid" Background ="{StaticResource IndividualExpenseLogo}">
         </Grid>
         <Grid Grid.Column="1"  Grid.Row="0">
             <Grid.RowDefinitions>
