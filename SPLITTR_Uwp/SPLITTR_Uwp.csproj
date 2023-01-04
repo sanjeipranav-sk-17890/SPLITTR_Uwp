@@ -317,6 +317,7 @@
     <Content Include="Assets\icons\home.png" />
     <Content Include="Assets\icons\IncomingArrowV2.png" />
     <Content Include="Assets\icons\IndividualExpenseIcon.png" />
+    <Content Include="Assets\icons\IndividualSplitIcon.png" />
     <Content Include="Assets\icons\OutgoingIcon.png" />
     <Content Include="Assets\icons\Request TO Me.png" />
     <Content Include="Assets\icons\invoice.png" />

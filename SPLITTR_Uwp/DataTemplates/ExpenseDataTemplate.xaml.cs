@@ -67,7 +67,7 @@ namespace SPLITTR_Uwp.DataTemplates
         public void LoadValuesInUi()
         {
             ExpenseItemTitle = GetFormatedTitle(ExpenseObj);
-            ExpensePersonProfileInnerGrid.Background = GetRespectiveLogo(ExpenseObj);
+             ExpensePersonProfileInnerRectangle.Fill = GetRespectiveLogo(ExpenseObj);
             AssignExpenseStatus(ExpenseObj);
         }
 
