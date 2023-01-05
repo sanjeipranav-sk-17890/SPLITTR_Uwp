@@ -111,7 +111,11 @@
                     </DropDownButton.Flyout>
                 </DropDownButton>
             </RelativePanel>
-            <ListView Grid.Row="1" x:Name="ExpensesLIstView"  ItemsSource="{x:Bind CollectionViewSource.View , Mode=OneWay}">
+            <ListView Grid.Row="1" x:Name="ExpensesLIstView" 
+                      ItemsSource="{x:Bind CollectionViewSource.View , Mode=OneWay}"
+                      SelectionChanged="ExpensesLIstView_OnSelectionChanged"
+                      SelectedIndex="-1"
+                      SelectedItem="{x:Bind SelectedExpenseObj,Mode=TwoWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="vm:ExpenseViewModel">
                         <template:ExpenseDataTemplate HorizontalAlignment="Stretch" DateOfExpenseTextBlockVisibility="Visible"
@@ -177,7 +181,10 @@
                     </GroupStyle>
                 </ListView.GroupStyle>
             </ListView>
-            <ListView Visibility="Collapsed" Grid.Row="1" x:Name="DateSortedList" ItemsSource="{x:Bind DateSortedExpenseList,Mode=OneWay}">
+            <ListView Visibility="Collapsed" Grid.Row="1" x:Name="DateSortedList" ItemsSource="{x:Bind DateSortedExpenseList,Mode=OneWay}"
+                      SelectionChanged="ExpensesLIstView_OnSelectionChanged"
+                      SelectedIndex="-1"
+                      SelectedItem="{x:Bind SelectedExpenseObj,Mode=TwoWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="vm:ExpenseViewModel">
                         <template:ExpenseDataTemplate HorizontalAlignment="Stretch" DateOfExpenseTextBlockVisibility="Collapsed"  ExpenseStatusVisibility="Visible" CornerRadius="5"/>
@@ -196,8 +203,11 @@
             </controls:GridSplitter.Element>
         </controls:GridSplitter>
         <!-- ================================= -->
-        <Grid Grid.Column="2" Background="{ThemeResource SystemAccentColorLight1}"  CornerRadius="15">
-            <TextBlock FontSize="56" HorizontalAlignment="Center"  VerticalAlignment="Center"> coming soon</TextBlock>
+        <Grid Grid.Column="2"  CornerRadius="15">
+           <local:ExpenseDetailedViewUserControl HorizontalAlignment="Stretch"
+                                                 VerticalAlignment="Stretch"
+                                                 x:Name="DetailedExpenseTemplate"
+                                                 />
         </Grid>
 
     </Grid>

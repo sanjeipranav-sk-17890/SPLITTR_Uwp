@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -82,6 +83,7 @@ namespace SPLITTR_Uwp.Views
         }
 
         public ObservableCollection<ExpenseBobj> DateSortedExpenseList { get; } = new ObservableCollection<ExpenseBobj>();
+
 
 
 
@@ -203,7 +205,17 @@ namespace SPLITTR_Uwp.Views
 
         }
 
+        public ExpenseViewModel SelectedExpenseObj { get; set; }
 
+        private void ExpensesLIstView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (SelectedExpenseObj is null)
+            {
+                return;
+            }
+            DetailedExpenseTemplate.DataContext = SelectedExpenseObj;
+            Debug.WriteLine(SelectedExpenseObj.Description);
+        }
     }
 
  

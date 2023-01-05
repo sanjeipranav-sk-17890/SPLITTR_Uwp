@@ -7,6 +7,7 @@ using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using SPLITTR_Uwp.Core.Models;
 using SQLite;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
@@ -17,6 +18,25 @@ public class ExpenseUtility : UseCaseBase, IExpenseUtility
 
     public event Action<EventArgs> PresenterCallBackOnSuccess;
 
+    /// <exception cref="ArgumentException">Expense passed cannot be null</exception>
+    public void GetRelatedExpenses(ExpenseBobj referenceExpense,UserBobj currentUser, Action<IEnumerable<ExpenseBobj>> resultCallBack)
+    {
+        RunAsynchronously((async () =>
+        {
+            if (referenceExpense is null)
+            {
+                throw new ArgumentException("Expense passed cannot be null");
+            }
+
+
+            var filteredExpense =await _expenseDataHandler.GetRelatedExpenses(referenceExpense,currentUser).ConfigureAwait(false);
+
+
+            resultCallBack?.Invoke(filteredExpense);
+        }));
+    }
+
+    
 
     public ExpenseUtility(IExpenseDataHandler expenseDataHandler)
     {

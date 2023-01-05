@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
+using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
 {
@@ -29,6 +30,9 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
         /// Event Raised when Respective Action Completed SuccessFully
         /// </summary>
         event Action<EventArgs> PresenterCallBackOnSuccess;
+
+
+        void GetRelatedExpenses(ExpenseBobj referenceExpense, UserBobj currentUser, Action<IEnumerable<ExpenseBobj>> resultCallBack);
 
     }
 }

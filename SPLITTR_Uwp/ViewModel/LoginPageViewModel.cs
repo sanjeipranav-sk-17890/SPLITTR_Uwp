@@ -79,7 +79,7 @@ namespace SPLITTR_Uwp.ViewModel
             //===============================================/
                         //By PAss To Be Deleted
 
-                        UserEmailIdTextBox = "saran@gmail.com";
+                       // UserEmailIdTextBox = "saran@gmail.com";
             //===============================================//
 
             if (string.IsNullOrWhiteSpace(UserEmailIdTextBox))

@@ -169,6 +169,10 @@
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\UIService.cs" />
     <Compile Include="ViewModel\Contracts\IMainView.cs" />
+    <Compile Include="ViewModel\ExpenseDetailedViewUserControlViewModel.cs" />
+    <Compile Include="Views\ExpenseDetailedViewUserControl.xaml.cs">
+      <DependentUpon>ExpenseDetailedViewUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\ExpenseItemViewModel.cs" />
     <Compile Include="ViewModel\GroupCreationPageViewModel.cs" />
     <Compile Include="ViewModel\Contracts\IMainPageViewModel.cs" />
@@ -255,6 +259,10 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ExpenseDetailedViewUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddExpenseTestPage.xaml">
       <SubType>Designer</SubType>

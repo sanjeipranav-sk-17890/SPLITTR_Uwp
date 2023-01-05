@@ -12,5 +12,6 @@ namespace SPLITTR_Uwp.Core.DataHandler.Contracts
         Task InsertExpenseAsync(IEnumerable<ExpenseBobj> expenseBobjs);
         Task UpdateExpenseAsync(ExpenseBobj expenseBobj);
         Task<IEnumerable<ExpenseBobj>> GetUserExpensesAsync(User user,IUserDataHandler userDataHandler);
+        Task<IEnumerable<ExpenseBobj>> GetRelatedExpenses(ExpenseBobj expenseBobj,User currentUser);
     }
 }

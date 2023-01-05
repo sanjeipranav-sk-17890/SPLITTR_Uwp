@@ -37,5 +37,13 @@ namespace SPLITTR_Uwp.Core.Services.Contracts
         /// <returns></returns>
         Task<IEnumerable<Expense>> SelectUserExpensesAsync(string userEmail);
 
+
+        /// <summary>
+        /// returns List of Expenses Matched Based on Key provided
+        /// </summary>
+        /// <param name="expenseUniqueId"></param>
+        /// <returns></returns>
+        Task<IEnumerable<Expense>> SelectRelatedExpenses(string expenseUniqueId);
+
     }
 }

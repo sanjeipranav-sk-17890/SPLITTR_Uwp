@@ -180,7 +180,7 @@
                             Grid.Column="1">
                    
                     <TextBox TextWrapping="Wrap"
-                             PlaceholderText="Enter the Description"
+                             PlaceholderText="Enter the Title"
                              FontWeight="SemiBold"
                              
                              Text="{x:Bind _viewModel.ExpenseDescription,Mode=TwoWay}"
