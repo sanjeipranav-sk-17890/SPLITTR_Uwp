@@ -19,6 +19,7 @@ public class ExpenseUtility : UseCaseBase, IExpenseUtility
     public event Action<EventArgs> PresenterCallBackOnSuccess;
 
     /// <exception cref="ArgumentException">Expense passed cannot be null</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source">source</paramref> or <paramref name="predicate">predicate</paramref> is null.</exception>
     public void GetRelatedExpenses(ExpenseBobj referenceExpense,UserBobj currentUser, Action<IEnumerable<ExpenseBobj>> resultCallBack)
     {
         RunAsynchronously((async () =>
@@ -29,8 +30,9 @@ public class ExpenseUtility : UseCaseBase, IExpenseUtility
             }
 
 
-            var filteredExpense =await _expenseDataHandler.GetRelatedExpenses(referenceExpense,currentUser).ConfigureAwait(false);
+            var relatedExpenses =await _expenseDataHandler.GetRelatedExpenses(referenceExpense,currentUser).ConfigureAwait(false);
 
+            var filteredExpense = relatedExpenses.Where(ex => !ex.ExpenseUniqueId.Equals(referenceExpense.ExpenseUniqueId));
 
             resultCallBack?.Invoke(filteredExpense);
         }));
@@ -81,6 +83,7 @@ public class ExpenseUtility : UseCaseBase, IExpenseUtility
 
 
 
+    /// <exception cref="Exception">A delegate callback throws an exception.</exception>
     public async Task SplitNewExpensesAsync(string expenseDescription,UserBobj currentUser, IEnumerable<ExpenseBobj> expenses, string expenseNote, DateTime dateOfExpense, double expenseAmount, int expenditureSplitType)
     {
         await RunAsynchronously(() =>

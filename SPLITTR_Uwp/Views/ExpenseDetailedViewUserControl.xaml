@@ -6,13 +6,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:dataTemplates="using:SPLITTR_Uwp.DataTemplates"
     xmlns:converter="using:SPLITTR_Uwp.DataRepository.Converters"
     d:DesignHeight="700"
     d:DesignWidth="450">
     <UserControl.Resources>
         <SolidColorBrush x:Key="ExpenseStatusBrush" Color="DarkGreen" x:Name="ExpenseStatusBrush"></SolidColorBrush>
         <converter:StringFormatConverter x:Key="StringFormater"/>
-
     </UserControl.Resources>
     <Grid Padding="10">
         <Grid.RowDefinitions>
@@ -45,7 +45,10 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
            <Grid.ColumnDefinitions>
                <ColumnDefinition Width="2*"/>
@@ -77,7 +80,55 @@
                        Text="{x:Bind ExpenseObj.Description,Mode=OneWay}" 
                        TextWrapping="Wrap"
                        ></TextBlock>
-        </Grid>
+            <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="5">
+                <TextBox   IsReadOnly="True" Text="Individual Expense" Visibility="{x:Bind IndividualSplitIconVisibility,Mode=OneWay}"/>
+                <TextBox IsReadOnly="True" Text="{x:Bind GroupName,Mode=OneWay}" Visibility="{x:Bind GroupNameVisibility,Mode=OneWay}"></TextBox>
+            </StackPanel>
+            <ListView Grid.Row="3"
+                      Grid.ColumnSpan="2"
+                      Grid.Column="0"
+                      SelectionMode="None"
+                      ItemsSource="{x:Bind _viewModel.RelatedExpenses,Mode=OneWay}">
+                <ListView.ItemTemplate>
+                    <DataTemplate  >
+                        <dataTemplates:RelatedExpenseTemplate HorizontalAlignment="Stretch"
+                                                              VerticalAlignment="Stretch"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal" Margin="20 20 0 0">
+                <TextBlock  
+                        FontFamily="Segoe MDL2 Assets" 
+                        Text="" 
+                        ToolTipService.ToolTip="Date Of Expense "
+                        Foreground="{ThemeResource SystemAccentColorDark1}"
+                        
+                        VerticalAlignment="Top"/>
+            <TextBlock Margin="5 0 0 0">Date Of Expense :</TextBlock>
+            </StackPanel>
+            <TextBlock Grid.Row="4" 
+                       Grid.Column="1"
+                       Margin="20 20 0 0"
+                       VerticalAlignment="Center"
+                       Text="{x:Bind ExpenseObj.DateOfExpense,Converter={StaticResource StringFormater},ConverterParameter='{}{0:dd/MM/yyyy   dddd}',Mode=OneWay}"></TextBlock>
+            <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" Margin="20 20 0 0">
+                <TextBlock  
+                    FontFamily="Segoe MDL2 Assets" 
+                    Text="" 
+                    ToolTipService.ToolTip="Additional Details "
+                    Foreground="{ThemeResource SystemAccentColorDark1}"
+                    VerticalAlignment="Top"/>
+                <TextBlock Margin="5 0 0 0">Note :</TextBlock>
+
+            </StackPanel>
+            <TextBlock Grid.Row="5" 
+                       Grid.Column="1"
+                       Margin="20 20 0 0"
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Center"
+                       Text="{x:Bind ExpenseObj.Note,Mode=OneWay}"></TextBlock>
+
+</Grid>
 
     </Grid>
 </UserControl>

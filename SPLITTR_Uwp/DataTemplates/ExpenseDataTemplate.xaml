@@ -46,14 +46,9 @@
                 <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal">
-                <TextBlock x:Name="ExpenseHeadingTypeTextBox"
-                           Foreground="{ThemeResource SystemAccentColorDark2}"
-                           FontSize="12"
-                           Text="Test"
-                           Margin="0 5 0 0 "
-                           VerticalAlignment="Center"></TextBlock>
-                <TextBlock   x:Name="ExpenseTitleOwnerTitle" Text="{x:Bind ExpenseItemTitle,Mode=OneWay}"
+                <TextBlock   x:Name="ExpenseTitleOwnerTitle" Text="{x:Bind ExpenseObj.Description,Mode=OneWay}"
                              FontSize="20" 
+                             
                              VerticalAlignment="Center"
                              Margin="10 5 0 0" 
                 />
@@ -76,7 +71,8 @@
                 <TextBlock Foreground="{ThemeResource SystemAccentColorDark2}"
                            Text=""
                            FontSize="10"
-                           Margin="15 0 5 0"
+                           Margin="0 0 5 0"
+                           ToolTipService.ToolTip="Expense Date"
                            FontFamily="Segoe MDL2 Assets"
                            Visibility="{x:Bind DateOfExpenseTextBlockVisibility,Mode=OneWay}"
                            VerticalAlignment="Center"/>
@@ -94,11 +90,12 @@
                  <ColumnDefinition/>
              </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Description :" 
+            <TextBlock x:Name="ExpenseHeadingTypeTextBox"
                        Foreground="{ThemeResource SystemAccentColorLight1}"
                        Margin="5 0 4 0"
+                       Text=""
                        />
-                <TextBlock Text="{x:Bind FormatedExpenseDescription,Mode=OneWay}"></TextBlock>
+                <TextBlock Text="{x:Bind ExpenseItemTitle,Mode=OneWay}"></TextBlock>
        
 
             </StackPanel>
