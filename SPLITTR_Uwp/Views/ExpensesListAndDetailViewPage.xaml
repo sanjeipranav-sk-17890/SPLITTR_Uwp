@@ -204,7 +204,7 @@
         </controls:GridSplitter>
         <!-- ================================= -->
         <Grid Grid.Column="2"  CornerRadius="15">
-           <local:ExpenseDetailedViewUserControl HorizontalAlignment="Stretch"
+           <template:OwnerExpenseUserControl     HorizontalAlignment="Stretch"
                                                  VerticalAlignment="Stretch"
                                                  x:Name="DetailedExpenseTemplate"
                                                  />

@@ -164,6 +164,9 @@
     <Compile Include="DataTemplates\NewExpenseTemplate.xaml.cs">
       <DependentUpon>NewExpenseTemplate.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataTemplates\OwnerExpenseUserControl.xaml.cs">
+      <DependentUpon>OwnerExpenseUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataTemplates\RelatedExpenseTemplate.xaml.cs">
       <DependentUpon>RelatedExpenseTemplate.xaml</DependentUpon>
     </Compile>
@@ -236,6 +239,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataTemplates\NewExpenseTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataTemplates\OwnerExpenseUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
