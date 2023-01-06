@@ -1,4 +1,7 @@
-﻿using Windows.UI;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Windows.UI;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
@@ -9,11 +12,35 @@ using SPLITTR_Uwp.ViewModel.Models;
 
 namespace SPLITTR_Uwp.Views
 {
-    public sealed partial class ExpenseDetailedViewUserControl : UserControl
+    public sealed partial class ExpenseDetailedViewUserControl : UserControl,INotifyPropertyChanged
     {
         public ExpenseViewModel ExpenseObj
         {
             get => DataContext as ExpenseViewModel;
+        }
+
+        public string GroupName
+        {
+            get => GetGroupName();
+        }
+
+        private string GetGroupName()
+        {
+            if (ExpenseObj is null)
+            {
+                return string.Empty;
+            }
+            return _viewModel.FetchGroupName(ExpenseObj.GroupUniqueId);
+        }
+
+        private bool GroupNameVisibility
+        {
+            get => !string.IsNullOrEmpty(GroupName);
+        }
+
+        private bool IndividualSplitIconVisibility
+        {
+            get => !GroupNameVisibility;
         }
 
         private readonly ExpenseDetailedViewUserControlViewModel _viewModel;
@@ -34,13 +61,26 @@ namespace SPLITTR_Uwp.Views
             {
                 return;
             }
+            ExpenseObj.ValueChanged += ExpenseObj_ValueChanged;
+
+
             ManipulateUiBasedOnDataContext();
+        }
+
+        private void ExpenseObj_ValueChanged()
+        {
+            ManipulateUiBasedOnDataContext();
+        }
+
+        private void ManipulateUiBasedOnDataContext()
+        {
 
             //UnderGoing VM logic to Fetch Related Expenses 
             _viewModel.ExpenseObjLoaded(ExpenseObj);
-        }
-        private void ManipulateUiBasedOnDataContext()
-        {
+
+            OnPropertyChanged(nameof(GroupName));
+            OnPropertyChanged(nameof(GroupNameVisibility));
+            OnPropertyChanged(nameof(IndividualSplitIconVisibility));
             AssignExpenseStatusForeGround();
 
         }
@@ -53,6 +93,24 @@ namespace SPLITTR_Uwp.Views
                 _ =>Windows.UI.Colors.DarkGreen
             };
 
+        }
+
+
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value))
+                return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
         }
     }
 }
