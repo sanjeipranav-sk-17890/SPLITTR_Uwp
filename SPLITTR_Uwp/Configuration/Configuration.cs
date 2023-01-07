@@ -83,6 +83,7 @@ namespace SPLITTR_Uwp.Configuration
             container.AddTransient<SplitExpenseViewModel>();
             container.AddTransient<IMainPageViewModel,MainPageViewModel>();
             container.AddTransient<MainPageViewModel>();
+            container.AddTransient<OwnerExpenseControlViewModel>();
             container.AddTransient<WalletBalanceUpdateViewModel>();
             container.AddTransient<GroupCreationPageViewModel>();
             container.AddTransient<ExpenseDetailedViewUserControlViewModel>();

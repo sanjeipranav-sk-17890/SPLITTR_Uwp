@@ -5,6 +5,7 @@ using SPLITTR_Uwp.Core.CurrencyCoverter;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.Services;
 
 namespace SPLITTR_Uwp.ViewModel.Models
 {
@@ -72,9 +73,12 @@ namespace SPLITTR_Uwp.ViewModel.Models
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected async virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+          await UiService.RunOnUiThread((() =>
+            {
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }));
         }
 
 

@@ -42,7 +42,7 @@ namespace SPLITTR_Uwp.Services
             public async static Task RunOnUiThread(Action function)
             {
             await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,()=>
-                {
+                { 
                    function?.Invoke();
                 });
             }

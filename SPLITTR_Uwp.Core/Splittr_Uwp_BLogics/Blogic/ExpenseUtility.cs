@@ -38,7 +38,41 @@ public class ExpenseUtility : UseCaseBase, IExpenseUtility
         }));
     }
 
-    
+
+    public void CancelExpense(string expenseToBeCancelledId, UserBobj currentUser)
+    {
+        RunAsynchronously(async () =>
+        {
+            await ChangeExpenseStatus(expenseToBeCancelledId, currentUser, ExpenseStatus.Cancelled).ConfigureAwait(false);
+        });
+    }
+
+
+
+    public void MarkExpenseAsPaid(string expenseToBeMarkedAsPaid, UserBobj currentUser)
+    {
+        RunAsynchronously((async () =>
+        {
+            await  ChangeExpenseStatus(expenseToBeMarkedAsPaid, currentUser, ExpenseStatus.Paid).ConfigureAwait(false);
+        }));
+    }
+
+    private async Task ChangeExpenseStatus(string expenseId, UserBobj currentUser, ExpenseStatus status)
+    {
+        //Fetching expense obj with matching id
+        var expenseStatusChangeBobj = currentUser.Expenses.First(ex => ex.ExpenseUniqueId.Equals(expenseId));
+
+        expenseStatusChangeBobj.ExpenseStatus = status;
+
+        await _expenseDataHandler.UpdateExpenseAsync(expenseStatusChangeBobj).ConfigureAwait(false);
+
+        //Invoking Valued changed on UserObj so  Calculation based on that expense will update
+        currentUser.Expenses.RemoveAndAdd(expenseStatusChangeBobj);
+
+        PresenterCallBackOnSuccess?.Invoke(EventArgs.Empty);
+    }
+
+
 
     public ExpenseUtility(IExpenseDataHandler expenseDataHandler)
     {

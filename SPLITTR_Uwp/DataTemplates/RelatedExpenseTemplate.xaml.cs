@@ -61,8 +61,15 @@ namespace SPLITTR_Uwp.DataTemplates
             {
                 return;
             }
+            ExpenseObj.ValueChanged += ExpenseObj_ValueChanged;
             InitializeControlsWithValues();
         }
+
+        private void ExpenseObj_ValueChanged()
+        {
+            InitializeControlsWithValues();
+        }
+
         private void InitializeControlsWithValues()
         {
                PersonPicture.Initials = _stringManipulator.GetUserInitial(ExpenseObj.CorrespondingUserObj.UserName);

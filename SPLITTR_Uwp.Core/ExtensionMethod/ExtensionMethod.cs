@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 
@@ -84,6 +85,18 @@ namespace SPLITTR_Uwp.Core.ExtensionMethod
             };
             return symbol;
 
+        }
+
+        public static void RemoveAndAdd<T>(this ICollection<T> target, T obj)
+        {
+            var removedAndAddedObj = target.FirstOrDefault(e => e.Equals(obj));
+
+            if (removedAndAddedObj is null)
+            {
+                return;
+            }
+            target.Remove(removedAndAddedObj);
+            target.Add(obj);
         }
 
 
