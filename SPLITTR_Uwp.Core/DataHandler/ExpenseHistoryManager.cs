@@ -12,7 +12,7 @@ using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 
 namespace SPLITTR_Uwp.Core.DataHandler
 {
-    public class ExpenseHistoryManager :UseCaseBase, IExpenseHistoryManager
+    public class ExpenseHistoryManager :UseCaseBase, IExpenseHistoryManager,IExpenseHistoryUsecase
     {
         private readonly ISqlDataServices _sqlDataServices;
 
@@ -34,18 +34,35 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
             });
         }
-        public async Task<bool> IsExpenseMarkedAsPaid(string expenseId)
+        public async void IsExpenseMarkedAsPaid(string expenseId, Action<bool> ResultCallBack)
         {
-            var isExpenseMarkedAsPaid = _expenseHistory.ContainsKey(expenseId);
-
-            if (isExpenseMarkedAsPaid)
+          await  RunAsynchronously(async () =>
             {
-                return true;
-            }
-            var expenseHistory =await _sqlDataServices.FetchTable<ExpenseHistory>().FirstOrDefaultAsync(h => h.ExpenseUniqueId.Equals(expenseId)).ConfigureAwait(false);
+                var isExpenseMarkedAsPaid = _expenseHistory.ContainsKey(expenseId);
 
-            //if null(no history record) then that expense is not marked as Paid 
-            return  _expenseHistory.GetOrAdd(expenseId,expenseHistory) is null;
+                if (isExpenseMarkedAsPaid)
+                {
+                    ResultCallBack?.Invoke(true);
+                    return;
+                }
+                var expenseHistory = await _sqlDataServices.FetchTable<ExpenseHistory>().FirstOrDefaultAsync(h => h.ExpenseUniqueId.Equals(expenseId)).ConfigureAwait(false);
+
+                switch (expenseHistory)
+                {
+                    //if null(no history record) then that expense is not marked as Paid 
+                    case null:
+                        ResultCallBack?.Invoke(false);
+                        return;
+                      
+                     default:
+                        var result= _expenseHistory.GetOrAdd(expenseId, expenseHistory) is null;
+                        ResultCallBack?.Invoke(result);
+                        break;
+
+                }
+                
+            });
+            
         }
 
     }

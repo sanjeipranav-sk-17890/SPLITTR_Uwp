@@ -19,7 +19,8 @@
             <ColumnDefinition Width="*"/>
             
         </Grid.ColumnDefinitions>
-        <PersonPicture x:Name="PersonPicture" Grid.Column="0" Height="40"/>
+        <PersonPicture x:Name="PersonPicture" Grid.Column="0" Height="40" 
+                       Initials="{x:Bind _viewModel.UserInitial,Mode=OneWay}"/>
         <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
 
         <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal">
@@ -28,6 +29,7 @@
                    HorizontalAlignment="Center"
                    x:Name="UserNameTextBlock"
                    FontSize="17"
+                   Text="{x:Bind _viewModel.FormatedUserName,Mode=OneWay}"
                    FontWeight="SemiLight"
                    VerticalAlignment="Center"></TextBlock>
             
@@ -48,16 +50,23 @@
                        FontSize="10"
                        Foreground="Gray"
                        Margin="5 0 0 0"
-                       Visibility="{x:Bind IsParentComment,Mode=OneWay}"> sent this Request</TextBlock>
+                       Visibility="{x:Bind _viewModel.IsParentComment,Mode=OneWay}"> sent this Request</TextBlock>
+            <TextBlock FontWeight="Light"
+                       FontSize="10"
+                       Foreground="Gray"
+                       Visibility="{x:Bind _viewModel.IsExpenseMarkedAsPaid,Mode=OneWay}"
+                       Margin="5 0 0 0" >marked as paid</TextBlock>
         </StackPanel>
         <StackPanel Grid.Column="2" Orientation="Horizontal"
                     VerticalAlignment="Center">
             <TextBlock x:Name="CurrencySymbolTextBlock" 
                        Margin="4 0 0 0"
                        FontSize="20"
+                       Text="{x:Bind _viewModel.CurrencySymbol,Mode=OneWay}"
                        Foreground="{ThemeResource SystemAccentColorDark1}"/>
             <TextBlock x:Name="CurrencyAmountTextBlock"
                        VerticalAlignment="Center"
+                       Text="{x:Bind _viewModel.ExpenditureAmount,Mode=OneWay}"
                        FontWeight="SemiBold"
                        Margin="4 0 0 0"/>
         </StackPanel>

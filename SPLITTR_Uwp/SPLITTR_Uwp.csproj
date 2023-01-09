@@ -177,6 +177,7 @@
     <Compile Include="ViewModel\Contracts\IMainView.cs" />
     <Compile Include="ViewModel\ExpenseDetailedViewUserControlViewModel.cs" />
     <Compile Include="ViewModel\OwnerExpenseControlViewModel.cs" />
+    <Compile Include="ViewModel\RelatedExpenseTemplateViewModel.cs" />
     <Compile Include="Views\ExpenseDetailedViewUserControl.xaml.cs">
       <DependentUpon>ExpenseDetailedViewUserControl.xaml</DependentUpon>
     </Compile>

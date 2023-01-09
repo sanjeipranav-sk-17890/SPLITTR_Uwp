@@ -21,84 +21,46 @@ using SPLITTR_Uwp.Core.Utility;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel.Models;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using SPLITTR_Uwp.ViewModel;
+using System.ServiceModel.Channels;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace SPLITTR_Uwp.DataTemplates
 {
-    public sealed partial class RelatedExpenseTemplate : UserControl,INotifyPropertyChanged
+    public sealed partial class RelatedExpenseTemplate : UserControl
     {
-        private  static IStringManipulator _stringManipulator;
-        private static DataStore _store;
+
+        private readonly RelatedExpenseTemplateViewModel _viewModel;
 
         private ExpenseViewModel ExpenseObj
         {
             get => DataContext as ExpenseViewModel;
         }
 
-        public bool IsParentComment
-        {
-            get => ExpenseObj?.ParentExpenseId is  null;
-        }
-
-
-
-
         public RelatedExpenseTemplate()
         {
-            _stringManipulator ??= ActivatorUtilities.GetServiceOrCreateInstance<IStringManipulator>(App.Container);
-            _store ??= ActivatorUtilities.GetServiceOrCreateInstance<DataStore>(App.Container);
-            
+            _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<RelatedExpenseTemplateViewModel>(App.Container);
             this.InitializeComponent();
-
             DataContextChanged += RelatedExpenseTemplate_DataContextChanged;
         }
 
         private void RelatedExpenseTemplate_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            Bindings.Update();
             if (ExpenseObj is null)
             {
                 return;
             }
             ExpenseObj.PropertyChanged += ExpenseObj_PropertyChanged;
-            InitializeControlsWithValues();
+            _viewModel.DataContextLoaded(ExpenseObj);
+            Bindings.Update();
+            AssignExpenseStatusForeGround();
         }
 
         private void ExpenseObj_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            InitializeControlsWithValues();
-        }
-
-
-        private void InitializeControlsWithValues()
-        {
-               PersonPicture.Initials = _stringManipulator.GetUserInitial(ExpenseObj.CorrespondingUserObj.UserName);
-               CurrencySymbolTextBlock.Text = _store.UserBobj.StrWalletBalance.ExpenseSymbol(_store.UserBobj); // Fetching Currency symbol Corresponding to user preference
-               CurrencyAmountTextBlock.Text = ExpenseObj.StrExpenseAmount.ToString("##.0000");
-               UserNameTextBlock.Text = FormatUserName();
-               AssignExpenseStatusForeGround();
-        }
-
-
-        private string FormatUserName()
-        {
-            return ExpenseObj.CorrespondingUserObj.Equals(_store.UserBobj) ? "you" : ExpenseObj.CorrespondingUserObj.UserName;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        private bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value))
-                return false;
-            field = value;
-            OnPropertyChanged(propertyName);
-            return true;
+            AssignExpenseStatusForeGround();
+            Bindings.Update();
         }
 
         private void AssignExpenseStatusForeGround()

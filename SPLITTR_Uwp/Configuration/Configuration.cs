@@ -55,6 +55,7 @@ namespace SPLITTR_Uwp.Configuration
                 .AddSingleton<IGroupDataHandler, GroupDataHandler>()
                 .AddSingleton<IExpenseDataHandler, ExpenseDataManager>()
                 .AddSingleton<DataStore>()
+                .AddSingleton<IExpenseHistoryUsecase,ExpenseHistoryManager>()
                 .AddTransient<IUserBobjBalanceCalculator, UserBobjPropertyCalculator>()
                 .AddSingleton<ICurrencyCalcFactory, CalculatorFactory>()
                 .AddSingleton<IExpenseHistoryManager,ExpenseHistoryManager>()
@@ -87,6 +88,7 @@ namespace SPLITTR_Uwp.Configuration
             container.AddTransient<OwnerExpenseControlViewModel>();
             container.AddTransient<WalletBalanceUpdateViewModel>();
             container.AddTransient<GroupCreationPageViewModel>();
+            container.AddTransient<RelatedExpenseTemplateViewModel>();
             container.AddTransient<ExpenseDetailedViewUserControlViewModel>();
 
         }

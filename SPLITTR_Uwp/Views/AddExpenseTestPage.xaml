@@ -9,7 +9,7 @@
     Style="{StaticResource HomePageBackground}" x:Name="ExpenseSplitPage">
 
     <Grid>
-            <local:SplitExpenseUserControl HorizontalAlignment="Center"
+            <local:SplitExpenseUserControl HorizontalAlignment="Center" 
             ></local:SplitExpenseUserControl>
     </Grid>
 </Page>

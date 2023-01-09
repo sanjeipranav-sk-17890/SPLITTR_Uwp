@@ -61,14 +61,14 @@ namespace SPLITTR_Uwp.DataTemplates
             {
                 return ExpenseObj.Description?.Substring(0, 10) + " ....";
             }
-            return ExpenseObj.Description ?? String.Empty;
+            return ExpenseObj.Description ?? string.Empty;
         }
 
         public void LoadValuesInUi()
         {
-            ExpenseItemTitle = GetFormatedTitle(ExpenseObj);
+             ExpenseItemTitle = GetFormatedTitle(ExpenseObj);
              ExpensePersonProfileInnerRectangle.Fill = GetRespectiveLogo(ExpenseObj);
-            AssignExpenseStatus(ExpenseObj);
+             AssignExpenseStatus(ExpenseObj);
         }
 
         private void AssignExpenseStatus(ExpenseViewModel expenseObj)

@@ -8,7 +8,7 @@ using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 
 namespace SPLITTR_Uwp.Core.DataHandler.Contracts
 {
-    public interface IExpenseHistoryManager : IUseCase
+    public interface IExpenseHistoryManager : IUseCase, IExpenseHistoryUsecase
     {
         /// <summary>
         /// stores History of expenses whether it is marked as Paid in Respective DataService
@@ -17,6 +17,5 @@ namespace SPLITTR_Uwp.Core.DataHandler.Contracts
         /// <returns></returns>
         Task RecordExpenseMarkedAsPaid(string expenseId);
 
-        Task<bool> IsExpenseMarkedAsPaid(string expenseId);
     }
 }
