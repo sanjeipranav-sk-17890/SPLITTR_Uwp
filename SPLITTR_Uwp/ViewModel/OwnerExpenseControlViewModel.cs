@@ -57,28 +57,47 @@ namespace SPLITTR_Uwp.ViewModel
    
         public void OnExpenseCancellation(ExpenseBobj expense)
         {
-            _expenseUtility.PresenterCallBackOnSuccess += async args =>
-            {
-               await UiService.ShowContentAsync($"{expense.Description} Cancelled", "Split Cancelled");
-            };
+            _expenseUtility.PresenterCallBackOnSuccess += ExpenseUtilityPresenterCallBackOnSuccess;
             _expenseUtility.OnError += (exception, s) => ExceptionHandlerService.HandleException(exception); 
 
             _expenseUtility.CancelExpense(expense.ExpenseUniqueId,_store.UserBobj);
+
+
+            async void ExpenseUtilityPresenterCallBackOnSuccess(EventArgs obj)
+            {
+                await UiService.ShowContentAsync($"{expense.Description} Cancelled", "Split Cancelled").ConfigureAwait(false);
+                _expenseUtility.PresenterCallBackOnSuccess -= ExpenseUtilityPresenterCallBackOnSuccess;
+
+                
+               await UiService.RunOnUiThread(() =>
+                {
+                    ExpenseCancelButtonVisibility = false;
+                });
+            }
         }
 
+       
 
         public void OnExpenseMarkedAsPaid(ExpenseBobj expense)
         {
-            _expenseUtility.PresenterCallBackOnSuccess += async args =>
-            {
-                await UiService.ShowContentAsync($"{expense.Description} Marked as Paid", "Split Completed");
-            };
+            _expenseUtility.PresenterCallBackOnSuccess += ExpenseUtilityPresenterCallBackOnSuccess;
             _expenseUtility.OnError += (exception, s) => ExceptionHandlerService.HandleException(exception);
 
             _expenseUtility.MarkExpenseAsPaid(expense.ExpenseUniqueId, _store.UserBobj);
 
+
+            async void ExpenseUtilityPresenterCallBackOnSuccess(EventArgs obj)
+            {
+                await UiService.ShowContentAsync($"{expense.Description} Cancelled", "Split Cancelled").ConfigureAwait(false);
+                _expenseUtility.PresenterCallBackOnSuccess -= ExpenseUtilityPresenterCallBackOnSuccess;
+                await UiService.RunOnUiThread(() =>
+                {
+                    ExpenseCancelButtonVisibility = false;
+                });
+            }
+
         }
 
-
+        
     }
 }

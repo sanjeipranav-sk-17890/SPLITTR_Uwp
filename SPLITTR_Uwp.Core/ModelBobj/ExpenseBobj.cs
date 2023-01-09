@@ -29,7 +29,7 @@ namespace SPLITTR_Uwp.Core.ModelBobj
         public User SplitRaisedOwner { get; set; }
 
 
-        public event Action ValueChanged;
+        public virtual event Action ValueChanged;
 
 
         public  double StrExpenseAmount

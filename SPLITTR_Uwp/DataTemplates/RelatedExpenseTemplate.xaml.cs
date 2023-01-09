@@ -61,14 +61,15 @@ namespace SPLITTR_Uwp.DataTemplates
             {
                 return;
             }
-            ExpenseObj.ValueChanged += ExpenseObj_ValueChanged;
+            ExpenseObj.PropertyChanged += ExpenseObj_PropertyChanged;
             InitializeControlsWithValues();
         }
 
-        private void ExpenseObj_ValueChanged()
+        private void ExpenseObj_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             InitializeControlsWithValues();
         }
+
 
         private void InitializeControlsWithValues()
         {

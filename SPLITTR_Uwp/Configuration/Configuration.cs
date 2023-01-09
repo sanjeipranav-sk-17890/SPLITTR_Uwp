@@ -57,6 +57,7 @@ namespace SPLITTR_Uwp.Configuration
                 .AddSingleton<DataStore>()
                 .AddTransient<IUserBobjBalanceCalculator, UserBobjPropertyCalculator>()
                 .AddSingleton<ICurrencyCalcFactory, CalculatorFactory>()
+                .AddSingleton<IExpenseHistoryManager,ExpenseHistoryManager>()
                 .AddTransient<RupessConverter>()
                 .AddTransient<DollarConverter>()
                 .AddTransient<YenConverter>()

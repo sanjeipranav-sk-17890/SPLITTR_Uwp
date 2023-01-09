@@ -15,6 +15,7 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 public class ExpenseUtility : UseCaseBase, IExpenseUtility
 {
     private readonly IExpenseDataHandler _expenseDataHandler;
+    private readonly IExpenseHistoryManager _expenseHistoryManager;
 
     public event Action<EventArgs> PresenterCallBackOnSuccess;
 
@@ -51,10 +52,12 @@ public class ExpenseUtility : UseCaseBase, IExpenseUtility
 
     public void MarkExpenseAsPaid(string expenseToBeMarkedAsPaid, UserBobj currentUser)
     {
-        RunAsynchronously((async () =>
+        RunAsynchronously(async () =>
         {
             await  ChangeExpenseStatus(expenseToBeMarkedAsPaid, currentUser, ExpenseStatus.Paid).ConfigureAwait(false);
-        }));
+            //storing record about that expense in dataService
+            await _expenseHistoryManager.RecordExpenseMarkedAsPaid(expenseToBeMarkedAsPaid).ConfigureAwait(false);
+        });
     }
 
     private async Task ChangeExpenseStatus(string expenseId, UserBobj currentUser, ExpenseStatus status)
@@ -74,9 +77,10 @@ public class ExpenseUtility : UseCaseBase, IExpenseUtility
 
 
 
-    public ExpenseUtility(IExpenseDataHandler expenseDataHandler)
+    public ExpenseUtility(IExpenseDataHandler expenseDataHandler,IExpenseHistoryManager expenseHistoryManager)
     {
         _expenseDataHandler = expenseDataHandler;
+        _expenseHistoryManager = expenseHistoryManager;
 
     }
 
