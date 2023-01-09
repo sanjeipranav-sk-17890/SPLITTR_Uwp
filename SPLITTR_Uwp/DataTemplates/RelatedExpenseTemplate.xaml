@@ -48,7 +48,7 @@
                        FontSize="10"
                        Foreground="Gray"
                        Margin="5 0 0 0"
-                       Visibility="{x:Bind IsParentComment,Mode=OneWay}"> send this Request</TextBlock>
+                       Visibility="{x:Bind IsParentComment,Mode=OneWay}"> sent this Request</TextBlock>
         </StackPanel>
         <StackPanel Grid.Column="2" Orientation="Horizontal"
                     VerticalAlignment="Center">

@@ -8,7 +8,7 @@ using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
 {
-    public interface IExpenseUtility
+    public interface IExpenseUtility : IUseCase
     {
 
         /// <summary>
@@ -33,6 +33,12 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
 
 
         void GetRelatedExpenses(ExpenseBobj referenceExpense, UserBobj currentUser, Action<IEnumerable<ExpenseBobj>> resultCallBack);
+
+
+        /// <exception cref="ArgumentException">Exception thrown if Owner of Passed Expense Did'nt match Current User</exception>
+        void CancelExpense(string expenseToBeCancelledId,UserBobj currentUser);
+
+        void MarkExpenseAsPaid(string expenseToBeMarkedAsPaid, UserBobj currentUser);
 
     }
 }

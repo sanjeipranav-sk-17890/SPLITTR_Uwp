@@ -5,6 +5,7 @@ using Windows.UI;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.ViewModel.Models;
 
@@ -26,11 +27,7 @@ namespace SPLITTR_Uwp.Views
 
         private string GetGroupName()
         {
-            if (ExpenseObj is null)
-            {
-                return string.Empty;
-            }
-            return _viewModel.FetchGroupName(ExpenseObj.GroupUniqueId);
+            return ExpenseObj is null ? string.Empty : _viewModel.FetchGroupName(ExpenseObj.GroupUniqueId);
         }
 
         private bool GroupNameVisibility
@@ -61,15 +58,16 @@ namespace SPLITTR_Uwp.Views
             {
                 return;
             }
-            ExpenseObj.ValueChanged += ExpenseObj_ValueChanged;
+            ExpenseObj.PropertyChanged += ExpenseObj_PropertyChanged;
 
 
             ManipulateUiBasedOnDataContext();
         }
 
-        private void ExpenseObj_ValueChanged()
+        private void ExpenseObj_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             ManipulateUiBasedOnDataContext();
+
         }
 
         private void ManipulateUiBasedOnDataContext()
@@ -100,9 +98,12 @@ namespace SPLITTR_Uwp.Views
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private async void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            await UiService.RunOnUiThread(() =>
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            });
         }
         private bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
