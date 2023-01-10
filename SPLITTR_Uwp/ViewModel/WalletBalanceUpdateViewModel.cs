@@ -38,15 +38,22 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
 
-        public async void AddMoneyToWalletButtonClicked()
+        public  void AddMoneyToWalletButtonClicked()
         {
             //Wallet adding money should be non negative and a number
             if (double.TryParse(MoneyTextBoxText, out var newWalletBalance) && newWalletBalance > -1)
             {
                 InvalidInputTextBlockVisibility = false;
-                await _userUtility.UpdateUserObjAsync(_store.UserBobj, newWalletBalance);
-                await UiService.ShowContentAsync("Amount Added to Wallet SuccessFully", "Payment SuccessFull!!");
-                CloseButtonClicked?.Invoke();
+                _userUtility.UpdateUserObjAsync(_store.UserBobj, newWalletBalance,(async () =>
+                {
+                  await  UiService.RunOnUiThread(async () =>
+                    {
+                        await UiService.ShowContentAsync("Amount Added to Wallet SuccessFully", "Payment SuccessFull!!");
+                      CloseButtonClicked?.Invoke();
+                    });
+
+                }));
+                
             }
             else
             {

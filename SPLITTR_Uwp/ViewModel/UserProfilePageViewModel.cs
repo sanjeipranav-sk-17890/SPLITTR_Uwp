@@ -118,7 +118,7 @@ namespace SPLITTR_Uwp.ViewModel
             IsEditUserProfileVisible = false;
             IsUserNameEmptyIndicatorVisible = false;
         }
-        public async void SaveButtonClicked(object sender, RoutedEventArgs e)
+        public  void SaveButtonClicked(object sender, RoutedEventArgs e)
         {
             if (String.IsNullOrEmpty(_currentUserName.Trim()))
             {
@@ -127,19 +127,22 @@ namespace SPLITTR_Uwp.ViewModel
             }
             IsUserNameEmptyIndicatorVisible = false;
             //utility classes is updating the UserObj and its related data's
-            await _userUtility.UpdateUserObjAsync(_dataStore.UserBobj, _currentUserName, (Currency)_preferedCurrencyIndex);
+             _userUtility.UpdateUserObjAsync(_dataStore.UserBobj, _currentUserName, (Currency)_preferedCurrencyIndex,(async () =>
+            {
+                await ShowSignUpSuccessFullMessageBoxAsync();
+
+            }));
 
             //showing Update successfull messagebox
-            await ShowSignUpSuccessFullMessageBoxAsync();
 
             IsEditUserProfileVisible = false;
 
         }
-        private async Task ShowSignUpSuccessFullMessageBoxAsync()
+        private Task ShowSignUpSuccessFullMessageBoxAsync()
         {
 
-            await UiService.ShowContentAsync("Account Updated SuccessFully", "SuccessFull!!");
-           
+            return UiService.ShowContentAsync("Account Updated SuccessFully", "SuccessFull!!");
+
         }
     }
 }

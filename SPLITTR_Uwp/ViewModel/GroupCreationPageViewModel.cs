@@ -58,9 +58,9 @@ namespace SPLITTR_Uwp.ViewModel
         {
             UserName = "No results Found"
         };
-        public Task PopulateSuggestionList(string userName)
-        {
-           return _userUtility.GetUsersSuggestionAsync(userName.ToLower(), async (suggestions) =>
+        public void PopulateSuggestionList(string userName)
+        { 
+            _userUtility.GetUsersSuggestionAsync(userName.ToLower(), async (suggestions) =>
            {
                await UiService.RunOnUiThread((() =>
                {

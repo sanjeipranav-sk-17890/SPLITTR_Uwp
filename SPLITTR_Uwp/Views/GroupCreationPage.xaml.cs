@@ -66,7 +66,7 @@ namespace SPLITTR_Uwp.Views
         }
 
        
-        private async void AutoSuggestBox_OnTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        private  void AutoSuggestBox_OnTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             //clearing previous suggestions
             _viewModel.UserSuggestionList.Clear();
@@ -76,8 +76,7 @@ namespace SPLITTR_Uwp.Views
             {
                 return;
             }
-
-            await _viewModel.PopulateSuggestionList(inputText);
+            _viewModel.PopulateSuggestionList(inputText);
 
             
 

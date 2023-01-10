@@ -93,7 +93,7 @@ namespace SPLITTR_Uwp.ViewModel
         private bool _isInnerInvokationOfTextChanged = false;
         
 
-        public async void TextBoxTextChanged()
+        public  void TextBoxTextChanged()
         {
             //no Recommendation operation Should be done If TextBox is non editable for user interaction
             if (IsNameTextBoxReadOnly || _isInnerInvokationOfTextChanged)
@@ -111,7 +111,7 @@ namespace SPLITTR_Uwp.ViewModel
                 return;
             }
             UsersList.Clear(); 
-            await _userUtility.GetUsersSuggestionAsync(SplittingUsersName.Trim().ToLower(), async suggestions =>
+             _userUtility.GetUsersSuggestionAsync(SplittingUsersName.Trim().ToLower(), async suggestions =>
             {//remainCode will be run if data fetching from use case is finished
                await UiService.RunOnUiThread(() =>
                     {
@@ -128,7 +128,6 @@ namespace SPLITTR_Uwp.ViewModel
                        
                     });
                
-
             });
 
             
@@ -513,7 +512,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         }
 
-        public async void SplitButtonOnClick()
+        public  void SplitButtonOnClick()
         {
             var expenseNote = ExpenseNote != null ? ExpenseNote.Trim() : String.Empty;
             var dateOfExpense = ExpenditureDate.DateTime;
@@ -526,7 +525,7 @@ namespace SPLITTR_Uwp.ViewModel
             _expenseUtility.PresenterCallBackOnSuccess += _expenseUtility_PresenterCallBackOnSuccess;
             
 
-              await _expenseUtility.SplitNewExpensesAsync(expenseDescription,_store.UserBobj, ExpensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType);
+               _expenseUtility.SplitNewExpensesAsync(expenseDescription,_store.UserBobj, ExpensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType);
 
         }
 
@@ -546,17 +545,20 @@ namespace SPLITTR_Uwp.ViewModel
            await     UiService.RunOnUiThread((() =>
                 {
                  ResetPage();
+
                 }));
+           _expenseUtility.PresenterCallBackOnSuccess-= _expenseUtility_PresenterCallBackOnSuccess;
 
 
         }
         private void ResetPage()//resets UserControl to initial stage
         {
-            SplittingUsersName = String.Empty;
+            SplittingUsersName = string.Empty;
             _isInnerInvokationOfTextChanged = true;
-            ExpenseNote = String.Empty;
+            ExpenseNote = string.Empty;
             SelectedGroupIndex = 0;
-            SingleUserExpenseShareAmount = String.Empty;
+            ExpenseDescription= string.Empty;
+            SingleUserExpenseShareAmount = string.Empty;
             ExpenditureDate = new DateTimeOffset(DateTime.Today);
             SelectedSplitPreferenceIndex = 0;
 

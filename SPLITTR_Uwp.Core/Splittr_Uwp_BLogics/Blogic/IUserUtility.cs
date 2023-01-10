@@ -10,10 +10,10 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
 {
     public interface IUserUtility : IUseCase
     {
-        public Task UpdateUserObjAsync(UserBobj userBobj, string newUserName, Currency currencyPreference);
-        public Task UpdateUserObjAsync(UserBobj userBobj, double walletBalance);
+        public void UpdateUserObjAsync(UserBobj userBobj, string newUserName, Currency currencyPreference,Action onSuccessCallBack);
+        public void UpdateUserObjAsync(UserBobj userBobj, double walletBalance, Action onSuccessCallBack);
 
         //Provides Suggestions Based on User name
-        public Task GetUsersSuggestionAsync(string userName,Action<IEnumerable<User>> resultCallBack);
+        public void GetUsersSuggestionAsync(string userName,Action<IEnumerable<User>> resultCallBack);
     }
 }

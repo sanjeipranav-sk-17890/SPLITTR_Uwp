@@ -22,9 +22,9 @@ public class UserUtility : UseCaseBase, IUserUtility
     }
 
 
-    public async Task UpdateUserObjAsync(UserBobj userBobj, string newUserName, Currency currencyPreference)
+    public  void UpdateUserObjAsync(UserBobj userBobj, string newUserName, Currency currencyPreference, Action onSuccessCallBack)
     {
-        await RunAsynchronously(async () =>
+        RunAsynchronously(async () =>
         {
             //no db call db call is made if previous value and current value are same
             if (userBobj.UserName.Equals(newUserName.Trim()) && userBobj.CurrencyPreference == currencyPreference)
@@ -50,22 +50,23 @@ public class UserUtility : UseCaseBase, IUserUtility
             //since it is updating on db in background We are waiting until it is completed
             await _userDataHandler.UpdateUserBobjAsync(userBobj).ConfigureAwait(false);
 
-        }).ConfigureAwait(false);
+            onSuccessCallBack?.Invoke();
+        });
 
     }
-    public Task UpdateUserObjAsync(UserBobj userBobj, double walletBalance)
+    public void UpdateUserObjAsync(UserBobj userBobj, double walletBalance, Action onSuccessCallBack)
     {
-        return RunAsynchronously(async () =>
+         RunAsynchronously(async () =>
          {
              userBobj.StrWalletBalance += walletBalance;
              await _userDataHandler.UpdateUserBobjAsync(userBobj).ConfigureAwait(false);
-
+             onSuccessCallBack?.Invoke();
          });
 
     }
-    public Task GetUsersSuggestionAsync(string userName, Action<IEnumerable<User>> resultCallBack)
+    public void GetUsersSuggestionAsync(string userName, Action<IEnumerable<User>> resultCallBack)
     {
-        return RunAsynchronously(async () =>
+        RunAsynchronously(async () =>
         {
            var suggestionList = await _userDataHandler.GetUsersSuggestionAsync(userName).ConfigureAwait(false);
 

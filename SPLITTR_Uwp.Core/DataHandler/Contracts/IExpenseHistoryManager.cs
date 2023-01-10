@@ -15,7 +15,7 @@ namespace SPLITTR_Uwp.Core.DataHandler.Contracts
         /// </summary>
         /// <param name="expense"></param>
         /// <returns></returns>
-        Task RecordExpenseMarkedAsPaid(string expenseId);
+        void RecordExpenseMarkedAsPaid(string expenseId);
 
     }
 }

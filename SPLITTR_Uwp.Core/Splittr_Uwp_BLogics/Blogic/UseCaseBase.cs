@@ -20,9 +20,9 @@ public abstract class UseCaseBase : IUseCase
         _token = Source.Token;
     }
 
-    protected Task RunAsynchronously(Action action)
+    protected void RunAsynchronously(Action action)
     {
-        return Task.Run(() =>
+        Task.Run(() =>
         {
             try
             {

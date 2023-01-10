@@ -56,7 +56,7 @@ public class ExpenseUtility : UseCaseBase, IExpenseUtility
         {
             await  ChangeExpenseStatus(expenseToBeMarkedAsPaid, currentUser, ExpenseStatus.Paid).ConfigureAwait(false);
             //storing record about that expense in dataService
-            await _expenseHistoryManager.RecordExpenseMarkedAsPaid(expenseToBeMarkedAsPaid).ConfigureAwait(false);
+             _expenseHistoryManager.RecordExpenseMarkedAsPaid(expenseToBeMarkedAsPaid);
         });
     }
 
@@ -122,9 +122,9 @@ public class ExpenseUtility : UseCaseBase, IExpenseUtility
 
 
     /// <exception cref="Exception">A delegate callback throws an exception.</exception>
-    public async Task SplitNewExpensesAsync(string expenseDescription,UserBobj currentUser, IEnumerable<ExpenseBobj> expenses, string expenseNote, DateTime dateOfExpense, double expenseAmount, int expenditureSplitType)
+    public  void SplitNewExpensesAsync(string expenseDescription,UserBobj currentUser, IEnumerable<ExpenseBobj> expenses, string expenseNote, DateTime dateOfExpense, double expenseAmount, int expenditureSplitType)
     {
-        await RunAsynchronously(() =>
+        RunAsynchronously(() =>
          {
              ExpenseBobj parentExpenseBobj = ValidateExpenseBobjs(expenseDescription,expenses, expenseNote, expenseAmount, dateOfExpense, expenditureSplitType);
 

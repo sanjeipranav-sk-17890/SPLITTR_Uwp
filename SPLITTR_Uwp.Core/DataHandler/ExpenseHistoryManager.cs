@@ -24,9 +24,9 @@ namespace SPLITTR_Uwp.Core.DataHandler
             _sqlDataServices.CreateTable<ExpenseHistory>();
 
         }
-        public Task RecordExpenseMarkedAsPaid(string expenseId)
+        public void RecordExpenseMarkedAsPaid(string expenseId)
         {
-            return RunAsynchronously(() =>
+             RunAsynchronously(() =>
             {
                 var recordExpenseHistory = new ExpenseHistory(expenseId);
 
@@ -34,9 +34,9 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
             });
         }
-        public async void IsExpenseMarkedAsPaid(string expenseId, Action<bool> ResultCallBack)
+        public  void IsExpenseMarkedAsPaid(string expenseId, Action<bool> ResultCallBack)
         {
-          await  RunAsynchronously(async () =>
+            RunAsynchronously(async () =>
             {
                 var isExpenseMarkedAsPaid = _expenseHistory.ContainsKey(expenseId);
 
