@@ -21,6 +21,7 @@ using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.Views;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
+using SPLITTR_Uwp.DataTemplates;
 using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.VmLogic;
 
@@ -85,11 +86,13 @@ namespace SPLITTR_Uwp.Configuration
             container.AddTransient<SplitExpenseViewModel>();
             container.AddTransient<IMainPageViewModel,MainPageViewModel>();
             container.AddTransient<MainPageViewModel>();
+            container.AddTransient<ExpenseListAndDetailedPageViewModel>();
             container.AddTransient<OwnerExpenseControlViewModel>();
             container.AddTransient<WalletBalanceUpdateViewModel>();
             container.AddTransient<GroupCreationPageViewModel>();
             container.AddTransient<RelatedExpenseTemplateViewModel>();
             container.AddTransient<ExpenseDetailedViewUserControlViewModel>();
+            container.AddTransient<OwingMoneyPaymentExpenseViewModel>();
 
         }
 

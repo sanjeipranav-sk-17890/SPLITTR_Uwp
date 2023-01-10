@@ -164,6 +164,10 @@
     <Compile Include="DataTemplates\NewExpenseTemplate.xaml.cs">
       <DependentUpon>NewExpenseTemplate.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataTemplates\OwingMoneyPayemtExpenseTemplate.xaml.cs">
+      <DependentUpon>OwingMoneyPayemtExpenseTemplate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\OwingMoneyPaymentExpenseViewModel.cs" />
     <Compile Include="DataTemplates\OwnerExpenseUserControl.xaml.cs">
       <DependentUpon>OwnerExpenseUserControl.xaml</DependentUpon>
     </Compile>
@@ -176,6 +180,7 @@
     <Compile Include="Services\UIService.cs" />
     <Compile Include="ViewModel\Contracts\IMainView.cs" />
     <Compile Include="ViewModel\ExpenseDetailedViewUserControlViewModel.cs" />
+    <Compile Include="ViewModel\ExpenseListAndDetailedPageViewModel.cs" />
     <Compile Include="ViewModel\OwnerExpenseControlViewModel.cs" />
     <Compile Include="ViewModel\RelatedExpenseTemplateViewModel.cs" />
     <Compile Include="Views\ExpenseDetailedViewUserControl.xaml.cs">
@@ -241,6 +246,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataTemplates\NewExpenseTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataTemplates\OwingMoneyPayemtExpenseTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

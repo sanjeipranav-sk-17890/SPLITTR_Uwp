@@ -111,11 +111,12 @@
                     </DropDownButton.Flyout>
                 </DropDownButton>
             </RelativePanel>
+            <!-- Grouped Expense List View   -->
             <ListView Grid.Row="1" x:Name="ExpensesLIstView" 
                       ItemsSource="{x:Bind CollectionViewSource.View , Mode=OneWay}"
                       SelectionChanged="ExpensesLIstView_OnSelectionChanged"
                       SelectedIndex="-1"
-                      SelectedItem="{x:Bind SelectedExpenseObj,Mode=TwoWay}">
+                      SelectedItem="{x:Bind _viewModel.SelectedExpenseObj,Mode=TwoWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="vm:ExpenseViewModel">
                         <template:ExpenseDataTemplate HorizontalAlignment="Stretch" DateOfExpenseTextBlockVisibility="Visible"
@@ -181,10 +182,11 @@
                     </GroupStyle>
                 </ListView.GroupStyle>
             </ListView>
-            <ListView Visibility="Collapsed" Grid.Row="1" x:Name="DateSortedList" ItemsSource="{x:Bind DateSortedExpenseList,Mode=OneWay}"
+            <ListView Visibility="Collapsed" Grid.Row="1" x:Name="DateSortedList"
+                      ItemsSource="{x:Bind DateSortedExpenseList,Mode=OneWay}"
                       SelectionChanged="ExpensesLIstView_OnSelectionChanged"
                       SelectedIndex="-1"
-                      SelectedItem="{x:Bind SelectedExpenseObj,Mode=TwoWay}">
+                      SelectedItem="{x:Bind _viewModel.SelectedExpenseObj,Mode=TwoWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="vm:ExpenseViewModel">
                         <template:ExpenseDataTemplate HorizontalAlignment="Stretch" DateOfExpenseTextBlockVisibility="Collapsed"  ExpenseStatusVisibility="Visible" CornerRadius="5"/>
@@ -207,7 +209,14 @@
            <template:OwnerExpenseUserControl     HorizontalAlignment="Stretch"
                                                  VerticalAlignment="Stretch"
                                                  x:Name="DetailedExpenseTemplate"
+                                                 DataContext="{x:Bind _viewModel.ControlDataContext,Mode=OneWay}"
+                                                 Visibility="{x:Bind _viewModel.OwnerExpenseUserControlVisibility,Mode=OneWay}"
                                                  />
+           <template:OwingMoneyPayemtExpenseTemplate HorizontalAlignment="Stretch"
+                                                     VerticalAlignment="Stretch"
+                                                     DataContext="{x:Bind _viewModel.ControlDataContext,Mode=OneWay}"
+                                                     Visibility="{x:Bind _viewModel.OwingMoneyPaymentControlVisibility,Mode=OneWay}"
+                                                     x:Name="PendingPaymentTemplate"/>
         </Grid>
 
     </Grid>

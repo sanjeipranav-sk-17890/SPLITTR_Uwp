@@ -19,8 +19,12 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using ColorCode.Common;
+using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
+using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using SPLITTR_Uwp.DataRepository;
+using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.ViewModel.Models;
 using SPLITTR_Uwp.ViewModel.Models.ExpenseListObject;
 
@@ -33,9 +37,13 @@ namespace SPLITTR_Uwp.Views
     /// </summary>
     public sealed partial class ExpensesListAndDetailViewPage : Page
     {
+        private DataStore _store;
+        private ExpenseListAndDetailedPageViewModel _viewModel;
         public ExpensesListAndDetailViewPage()
         {
             this.InitializeComponent();
+            _store = ActivatorUtilities.GetServiceOrCreateInstance<DataStore>(App.Container);
+            _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<ExpenseListAndDetailedPageViewModel>(App.Container);
         }
 
 
@@ -205,16 +213,11 @@ namespace SPLITTR_Uwp.Views
 
         }
 
-        public ExpenseViewModel SelectedExpenseObj { get; set; }
+       
 
         private void ExpensesLIstView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (SelectedExpenseObj is null)
-            {
-                return;
-            }
-            DetailedExpenseTemplate.DataContext = SelectedExpenseObj;
-            Debug.WriteLine(SelectedExpenseObj.Description);
+            _viewModel.ExpenseSelectionMade();
         }
     }
 

@@ -34,9 +34,7 @@ namespace SPLITTR_Uwp
         {
             get
             {
-                if (_container == null)
-                    _container =  GetServiceProvider();
-                return _container;
+                return _container ??= GetServiceProvider();
             }
 
         }

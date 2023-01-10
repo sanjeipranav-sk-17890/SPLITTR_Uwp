@@ -329,6 +329,7 @@
                     Height="150"
                     Text="{x:Bind _viewModel.ExpenseNote,Mode=TwoWay}"
                     TextWrapping="Wrap"
+                    AcceptsReturn="True"
                     BorderThickness=".5"
                     CornerRadius="5"></TextBox>
             <Button HorizontalAlignment="Center"
