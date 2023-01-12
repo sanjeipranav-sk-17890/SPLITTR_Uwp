@@ -206,17 +206,23 @@
         </controls:GridSplitter>
         <!-- ================================= -->
         <Grid Grid.Column="2"  CornerRadius="15">
-           <template:OwnerExpenseUserControl     HorizontalAlignment="Stretch"
-                                                 VerticalAlignment="Stretch"
-                                                 x:Name="DetailedExpenseTemplate"
-                                                 DataContext="{x:Bind _viewModel.ControlDataContext,Mode=OneWay}"
-                                                 Visibility="{x:Bind _viewModel.OwnerExpenseUserControlVisibility,Mode=OneWay}"
-                                                 />
-           <template:OwingMoneyPayemtExpenseTemplate HorizontalAlignment="Stretch"
-                                                     VerticalAlignment="Stretch"
-                                                     DataContext="{x:Bind _viewModel.ControlDataContext,Mode=OneWay}"
-                                                     Visibility="{x:Bind _viewModel.OwingMoneyPaymentControlVisibility,Mode=OneWay}"
-                                                     x:Name="PendingPaymentTemplate"/>
+            <ScrollViewer HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch">
+                <StackPanel Orientation="Vertical">
+                    <template:OwnerExpenseUserControl     HorizontalAlignment="Stretch"
+                                                          VerticalAlignment="Stretch"
+                                                          x:Name="DetailedExpenseTemplate"
+                                                          DataContext="{x:Bind _viewModel.ControlDataContext,Mode=OneWay}"
+                                                          Visibility="{x:Bind _viewModel.OwnerExpenseUserControlVisibility,Mode=OneWay}"
+                    />
+                    <template:OwingMoneyPayemtExpenseTemplate HorizontalAlignment="Stretch"
+                                                              VerticalAlignment="Stretch"
+                                                              DataContext="{x:Bind _viewModel.ControlDataContext,Mode=OneWay}"
+                                                              Visibility="{x:Bind _viewModel.OwingMoneyPaymentControlVisibility,Mode=OneWay}"
+                                                              x:Name="PendingPaymentTemplate"/>
+                </StackPanel>
+            </ScrollViewer>
+          
         </Grid>
 
     </Grid>

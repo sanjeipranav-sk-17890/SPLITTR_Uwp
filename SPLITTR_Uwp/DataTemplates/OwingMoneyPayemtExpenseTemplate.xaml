@@ -15,7 +15,9 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+
         </Grid.RowDefinitions>
         <views:ExpenseDetailedViewUserControl Grid.Row="0" 
                                               DataContext="{x:Bind DataContext,Mode=OneWay}"
@@ -25,8 +27,14 @@
                  CornerRadius="5"
                  Background="{ThemeResource SystemAccentColorLight2}"
                  Click="ButtonBase_OnClick"
+                 x:Name="SettleUpButton"
                  FontWeight="SemiBold">Settle Up</Button>
-
+        <local:PaymentWindowExpenseView x:Name="PaymentControl"
+                                        DataContext="{x:Bind DataContext,Mode=OneWay}"
+                                        HorizontalAlignment="Stretch" Grid.Row="2" 
+                                        VerticalAlignment="Stretch"
+                                        SettleUpButtonClicked="{x:Bind _viewModel.PaymentWindowXamlRoot_SettleUpButtonClicked}"
+                                        Visibility="Collapsed"/>
 
     </Grid>
 </UserControl>

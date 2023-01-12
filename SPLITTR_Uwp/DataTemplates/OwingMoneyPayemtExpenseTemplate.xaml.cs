@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.ViewModel.Models;
 
@@ -26,9 +27,21 @@ namespace SPLITTR_Uwp.DataTemplates
         
         public OwingMoneyPayemtExpenseTemplate()
         {
+            _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<OwingMoneyPaymentExpenseViewModel>(App.Container);
             this.InitializeComponent();
+            DataContextChanged += OwingMoneyPayemtExpenseTemplate_DataContextChanged;
         }
-        
+
+        private void OwingMoneyPayemtExpenseTemplate_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        {
+            if (DataContext is not ExpenseViewModel expense)
+            {
+                return;
+            }
+
+            InvertPaymentControlVisibility(false);
+        }
+
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
 
@@ -36,8 +49,25 @@ namespace SPLITTR_Uwp.DataTemplates
             {
                 return;
             }
+          
+            InvertPaymentControlVisibility(true);
+
             _viewModel.PaymetForExpenseButtonClicked(expenseObj);
-            Debug.WriteLine(expenseObj.Description);
+           
+        }
+
+
+        private void InvertPaymentControlVisibility(bool isVisible)
+        {
+            if (isVisible)
+            {
+                SettleUpButton.Visibility = Visibility.Collapsed;
+                PaymentControl.Visibility = Visibility.Visible;
+                return;
+            }
+            SettleUpButton.Visibility = Visibility.Visible;
+            PaymentControl.Visibility = Visibility.Collapsed;
+
         }
     }
 }

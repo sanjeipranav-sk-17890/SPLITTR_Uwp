@@ -48,6 +48,10 @@ namespace SPLITTR_Uwp.Core.ExtensionMethod
 
         public static bool ContainsString(this string text, IEnumerable<string> words)
         {
+            if (text == null)
+            {
+                return false;
+            }
             text = text.ToLower();
             foreach (var word in words)
             {
@@ -61,6 +65,11 @@ namespace SPLITTR_Uwp.Core.ExtensionMethod
         }
         public static string ExpenseAmount(this double amount, UserBobj user)
         {
+            if (user is null)
+            {
+                return string.Empty;
+            }
+
             var resultString = amount.ToString("##,###.000");
             string symbol = user.CurrencyPreference switch
             {
@@ -75,6 +84,11 @@ namespace SPLITTR_Uwp.Core.ExtensionMethod
         }
         public static string ExpenseSymbol(this double amount, UserBobj user)
         {
+            if (user is null)
+            {
+                return string.Empty;
+            }
+
             string symbol = user.CurrencyPreference switch
             {
                 Currency.Rupee => " ₹",

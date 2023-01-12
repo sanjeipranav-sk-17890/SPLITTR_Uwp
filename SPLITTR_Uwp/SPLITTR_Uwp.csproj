@@ -167,6 +167,9 @@
     <Compile Include="DataTemplates\OwingMoneyPayemtExpenseTemplate.xaml.cs">
       <DependentUpon>OwingMoneyPayemtExpenseTemplate.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataTemplates\PaymentWindowExpenseView.xaml.cs">
+      <DependentUpon>PaymentWindowExpenseView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\OwingMoneyPaymentExpenseViewModel.cs" />
     <Compile Include="DataTemplates\OwnerExpenseUserControl.xaml.cs">
       <DependentUpon>OwnerExpenseUserControl.xaml</DependentUpon>
@@ -254,6 +257,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataTemplates\OwnerExpenseUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataTemplates\PaymentWindowExpenseView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -363,6 +370,7 @@
     <Content Include="Assets\icons\split.png" />
     <Content Include="Assets\icons\wallet.png" />
     <Content Include="Assets\AppLogo\white-background-with-3d-hexagonal-pattern-design_1017-28443.jpg" />
+    <Content Include="Assets\icons\walletSymbol.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-125.png" />
     <Content Include="Assets\LargeTile.scale-150.png" />
