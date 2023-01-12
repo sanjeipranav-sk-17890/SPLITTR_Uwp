@@ -60,8 +60,28 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
 
         public Task UpdateUserBobjAsync(UserBobj user)
-        {           
+        {
+            //updating Changes in local Cache Collection 
+            if (!_localUserCache.ContainsKey(user.EmailId))
+            {
+                //if updating User is Current User Then Changing Local reference of that Object
+                if (user.Equals(_currentUser))
+                {
+                    UpdateLocalUserCacheData(_currentUser, user);
+                }
+                return _userDataServices.UpDateUserAsync(user);
+            }
+            var cacheUser = _localUserCache[user.EmailId];
+            UpdateLocalUserCacheData(cacheUser, user);
+
             return _userDataServices.UpDateUserAsync(user);
+        }
+
+        void UpdateLocalUserCacheData(User oldUserData, User newUserData)
+        {
+            oldUserData.UserName = newUserData.UserName;
+            oldUserData.CurrencyIndex = newUserData.CurrencyIndex;
+            oldUserData.WalletBalance = newUserData.WalletBalance;
         }
         public async Task<User> FetchUserUsingMailId(string mailId)
         {
