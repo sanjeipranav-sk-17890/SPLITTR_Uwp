@@ -5,10 +5,14 @@
     xmlns:local="using:SPLITTR_Uwp.DataTemplates"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:views="using:SPLITTR_Uwp.Views"
+    xmlns:converter="using:SPLITTR_Uwp.DataRepository.Converters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
+    <UserControl.Resources>
+        <converter:BoolToVisConverter x:Key="BoolToVisConverter"/>
+    </UserControl.Resources>
 
 
 
@@ -27,14 +31,15 @@
                  CornerRadius="5"
                  Background="{ThemeResource SystemAccentColorLight2}"
                  Click="ButtonBase_OnClick"
+                 Visibility="{x:Bind _viewModel.SettleButtonVisibility,Mode=TwoWay,Converter={StaticResource BoolToVisConverter}}"
                  x:Name="SettleUpButton"
                  FontWeight="SemiBold">Settle Up</Button>
-        <local:PaymentWindowExpenseView x:Name="PaymentControl"
+        <local:PaymentWindowExpenseView Grid.Row="2"  x:Name="PaymentControl"
                                         DataContext="{x:Bind DataContext,Mode=OneWay}"
-                                        HorizontalAlignment="Stretch" Grid.Row="2" 
+                                        HorizontalAlignment="Stretch" 
                                         VerticalAlignment="Stretch"
                                         SettleUpButtonClicked="{x:Bind _viewModel.PaymentWindowXamlRoot_SettleUpButtonClicked}"
-                                        Visibility="Collapsed"/>
+                                        Visibility="{x:Bind _viewModel.PaymentControlVisibility,Mode=TwoWay,Converter={StaticResource BoolToVisConverter}}"></local:PaymentWindowExpenseView>
 
     </Grid>
 </UserControl>

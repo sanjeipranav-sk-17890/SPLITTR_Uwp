@@ -85,12 +85,12 @@ namespace SPLITTR_Uwp.ViewModel
             {
                 return;
             }
-            _expenseHistory.IsExpenseMarkedAsPaid(ExpenseObj.ExpenseUniqueId, async b =>
+            _expenseHistory.IsExpenseMarkedAsPaid(ExpenseObj.ExpenseUniqueId, async isPaid =>
             {
-               await UiService.RunOnUiThread((() =>
+               await UiService.RunOnUiThread(() =>
                {
-                   IsExpenseMarkedAsPaid = b;
-               }));
+                   IsExpenseMarkedAsPaid = isPaid;
+               });
 
             } );
         }

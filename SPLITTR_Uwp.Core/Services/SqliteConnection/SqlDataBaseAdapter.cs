@@ -52,6 +52,14 @@ namespace SPLITTR_Uwp.Core.Services.SqliteConnection
             return _connection.ExecuteAsync(sql, parameters);
         }
 
+        public Task RunInTransaction(Action action)
+        {
+            return _connection.RunInTransactionAsync(connection =>
+            {
+                action?.Invoke();
+            });
+        }
+
         private string GetConnectionString()
         {
             try

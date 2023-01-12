@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using SQLite;
 
@@ -12,5 +13,6 @@ namespace SPLITTR_Uwp.Core.Services.SqliteConnection
         Task<int> InsertObjects<T>(IEnumerable<T> objs);
         Task<int> UpdateObj<T>(T obj);
         Task<int> ExecuteQueryAsync<T>(string query,params object[] parameters);
+        public Task RunInTransaction(Action action);
     }
 }

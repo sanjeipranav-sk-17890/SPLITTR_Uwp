@@ -59,7 +59,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
         }
 
 
-        public Task UpdateUserBobjAsync(UserBobj user)
+        public Task UpdateUserBobjAsync(User user)
         {
             //updating Changes in local Cache Collection 
             if (!_localUserCache.ContainsKey(user.EmailId))

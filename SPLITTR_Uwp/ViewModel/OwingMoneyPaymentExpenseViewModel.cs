@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using SPLITTR_Uwp.Core.Models;
@@ -7,26 +9,72 @@ using Windows.UI.WindowManagement;
 using Windows.UI.Xaml.Controls;
 using SPLITTR_Uwp.Views;
 using Windows.UI.Xaml.Hosting;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
+using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
+using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.DataTemplates;
+using SPLITTR_Uwp.Services;
+using SPLITTR_Uwp.ViewModel.Models;
 
 namespace SPLITTR_Uwp.ViewModel;
 
-internal class OwingMoneyPaymentExpenseViewModel
+internal class OwingMoneyPaymentExpenseViewModel :ObservableObject
 {
+    private readonly IExpensePayment _expensePayment;
+    private readonly DataStore _store;
+    private bool _settleButtonVisibility;
+    private bool _paymentButtonVisibility;
 
 
-
-    public async void PaymetForExpenseButtonClicked(Expense expense)
+    public OwingMoneyPaymentExpenseViewModel(IExpensePayment expensePayment,DataStore store)
     {
-        
+        _expensePayment = expensePayment;
+        _store = store;
 
-        
     }
 
+    public bool SettleButtonVisibility
+    {
+        get => _settleButtonVisibility;
+        set => SetProperty(ref _settleButtonVisibility, value);
+    }
+
+    public bool PaymentControlVisibility
+    {
+        get => _paymentButtonVisibility;
+        set => SetProperty(ref _paymentButtonVisibility, value);
+    }
+
+
+    private ExpenseViewModel _moneyPaymentExpense = null;
     public void PaymentWindowXamlRoot_SettleUpButtonClicked(bool isWalletPayment)
     {
-        Debug.WriteLine($"is Wallet Payment.....{isWalletPayment}");
+
+        if (_moneyPaymentExpense is null)
+        {
+            Debug.WriteLine($"{nameof(_moneyPaymentExpense)} is null check Logic ");
+            return;
+        }
+        _expensePayment.SettleUpExpenses(_moneyPaymentExpense,_store.UserBobj,(OnSettleUpSuccessFull),isWalletPayment);
     }
+
+    private async void OnSettleUpSuccessFull()
+    {
+
+       await  UiService.ShowContentAsync("Splittr Completed SuccessFully","Payment Complete");
+       await UiService.RunOnUiThread(() =>
+       {
+           SettleButtonVisibility = false;
+           PaymentControlVisibility = false;
+       });
+
+    }
+
+    public void PaymetForExpenseButtonClicked(ExpenseViewModel expenseObj)
+    {
+        _moneyPaymentExpense = expenseObj;
+    }
+
 
 }
 //private static AppWindow _paymentWindow = null;

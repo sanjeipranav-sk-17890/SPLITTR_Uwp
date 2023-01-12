@@ -12,7 +12,7 @@ namespace SPLITTR_Uwp.Core.DataHandler.Contracts
         public Task<UserBobj> FetchCurrentUserDetails(string emailId);
         public Task<bool> IsUserAlreadyExist(string emailId);
         public Task<int> CreateNewUser(string userName, string emailId,int currencyPreference);
-        public Task UpdateUserBobjAsync (UserBobj user);
+        public Task UpdateUserBobjAsync (User user);
         public Task<User> FetchUserUsingMailId(string mailId);
         public Task<IEnumerable<User>> GetUsersSuggestionAsync(string userName);
     }

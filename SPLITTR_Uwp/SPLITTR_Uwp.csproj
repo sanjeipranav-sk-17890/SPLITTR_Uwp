@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\Configuration.cs" />
+    <Compile Include="DataRepository\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="DataRepository\Converters\TimeConverter.cs" />
     <Compile Include="DataRepository\DataStore.cs" />
     <Compile Include="DataTemplates\ExpenseDataTemplate.xaml.cs">
