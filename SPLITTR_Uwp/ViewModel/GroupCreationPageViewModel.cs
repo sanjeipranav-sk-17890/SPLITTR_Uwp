@@ -10,11 +10,12 @@ using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
+using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.Models;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    internal class GroupCreationPageViewModel : ObservableObject,IValueConverter
+    internal class GroupCreationPageViewModel : ObservableObject,IValueConverter,IViewModel
     {
         private readonly IGroupUtility _groupUtility;
         private readonly IUserUtility _userUtility;
@@ -108,7 +109,7 @@ namespace SPLITTR_Uwp.ViewModel
             
           await UiService.RunOnUiThread((() =>
             {
-                        OnPropertyChanged(nameof(GetCurrentUserInitial));
+                      BindingUpdateInvoked?.Invoke();
 
             }));
 
@@ -130,6 +131,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         #endregion
 
-        
+
+        public event Action BindingUpdateInvoked;
     }
 }

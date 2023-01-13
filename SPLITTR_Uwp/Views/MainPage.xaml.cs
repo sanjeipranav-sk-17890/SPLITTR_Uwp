@@ -30,8 +30,13 @@ namespace SPLITTR_Uwp.Views
         public MainPage()
         {
             _viewModel = ActivatorUtilities.CreateInstance<MainPageViewModel>(App.Container, this);
-            ;
+            _viewModel.BindingUpdateInvoked += _viewModel_BindingUpdateInvoked;
             this.InitializeComponent();
+        }
+
+        private void _viewModel_BindingUpdateInvoked()
+        {
+            Bindings.Update();
         }
 
 

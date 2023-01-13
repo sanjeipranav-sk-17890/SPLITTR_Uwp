@@ -1,4 +1,5 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using System.Diagnostics;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.DataHandler.Contracts;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
@@ -76,6 +77,7 @@ namespace SPLITTR_Uwp.ViewModel
             //Call to Database To check whether it is marked as take place only if it is a Paid
             if (ExpenseObj.ExpenseStatus != ExpenseStatus.Paid)
             {
+                IsExpenseMarkedAsPaid = false;
                 return;
             }
             _expenseHistory.IsExpenseMarkedAsPaid(ExpenseObj.ExpenseUniqueId, async isPaid =>
@@ -83,6 +85,7 @@ namespace SPLITTR_Uwp.ViewModel
                await UiService.RunOnUiThread(() =>
                {
                    IsExpenseMarkedAsPaid = isPaid;
+                   Debug.WriteLine($"{ExpenseObj.ExpenseUniqueId}------,{isPaid}-------------{ExpenseObj.CorrespondingUserObj.UserName}");
                });
 
             } );

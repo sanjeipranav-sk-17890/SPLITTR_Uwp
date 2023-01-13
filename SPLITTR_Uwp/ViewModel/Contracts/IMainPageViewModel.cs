@@ -8,7 +8,7 @@ using SPLITTR_Uwp.ViewModel.Models.ExpenseListObject;
 
 namespace SPLITTR_Uwp.ViewModel.Contracts;
 
-internal interface IMainPageViewModel : INotifyPropertyChanged
+internal interface IMainPageViewModel : INotifyPropertyChanged,IViewModel
 {
     string UserInitial { get; set; }
 
@@ -36,7 +36,5 @@ internal interface IMainPageViewModel : INotifyPropertyChanged
     void AddButtonItemSelected(object sender, RoutedEventArgs e);
     void AddWalletBalanceButtonClicked();
 
-    event PropertyChangedEventHandler PropertyChanged;
-
-    event PropertyChangingEventHandler PropertyChanging;
+    
 }

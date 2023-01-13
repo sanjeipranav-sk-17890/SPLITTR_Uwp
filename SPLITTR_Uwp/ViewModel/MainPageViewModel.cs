@@ -19,7 +19,7 @@ using SPLITTR_Uwp.ViewModel.VmLogic;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    internal class MainPageViewModel :ObservableObject, IMainPageViewModel
+    internal class MainPageViewModel :ObservableObject, IMainPageViewModel,IViewModel
     {
         
             
@@ -189,7 +189,7 @@ namespace SPLITTR_Uwp.ViewModel
                 //since this Will be called by Worker thread it needs to invoked by Ui thread so calling dispatcher to user it
                 await UiService.RunOnUiThread((() =>
                 {
-                    OnPropertyChanged(nameof(UserInitial));
+                    BindingUpdateInvoked?.Invoke();
                     ViewLoaded();//refreshing value assigning
                 }));
 
@@ -246,8 +246,6 @@ namespace SPLITTR_Uwp.ViewModel
             }
 
 
-
-
-            
+            public event Action BindingUpdateInvoked;
     }
 }
