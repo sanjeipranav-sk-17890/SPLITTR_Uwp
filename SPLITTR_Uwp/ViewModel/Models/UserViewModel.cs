@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Windows.UI.Xaml;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
-using SPLITTR_Uwp.Core.Models;
-using Windows.UI.Core;
 using SPLITTR_Uwp.Services;
 
 namespace SPLITTR_Uwp.ViewModel.Models

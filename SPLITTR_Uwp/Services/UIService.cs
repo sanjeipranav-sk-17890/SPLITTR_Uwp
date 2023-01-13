@@ -1,15 +1,7 @@
-﻿using Microsoft.Toolkit.Uwp.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
-using Windows.System;
 using Windows.UI.Core;
-using Windows.UI.Xaml.Controls;
-using Microsoft.Toolkit.Uwp;
 using Windows.UI.Popups;
-using Windows.UI.Xaml;
 
 namespace SPLITTR_Uwp.Services
 {

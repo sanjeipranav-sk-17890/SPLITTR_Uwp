@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.ViewModel.Models.ExpenseListObject;
 

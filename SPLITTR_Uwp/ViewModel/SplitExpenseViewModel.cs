@@ -2,31 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.UI.Xaml.Controls;
-using SPLITTR_Uwp.Core.DataHandler.Contracts;
-using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel.Models;
-using System.ComponentModel;
-using System.Net;
-using Windows.UI.Core;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
-using Windows.ApplicationModel.Core;
-using Windows.UI.Popups;
-using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Services;
-using SPLITTR_Uwp.Views;
 
 namespace SPLITTR_Uwp.ViewModel
 {

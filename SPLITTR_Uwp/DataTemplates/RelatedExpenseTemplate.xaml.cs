@@ -1,28 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.ApplicationModel.ConversationalAgent;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+﻿using System.ComponentModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 using Microsoft.Extensions.DependencyInjection;
-using SPLITTR_Uwp.Core.ExtensionMethod;
-using SPLITTR_Uwp.Core.Utility;
-using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel.Models;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.ViewModel;
-using System.ServiceModel.Channels;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 

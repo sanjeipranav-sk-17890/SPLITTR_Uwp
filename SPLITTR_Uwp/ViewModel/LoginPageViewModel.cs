@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Windows.UI.Xaml.Controls;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.Views;
 using Windows.UI.Xaml.Media.Animation;

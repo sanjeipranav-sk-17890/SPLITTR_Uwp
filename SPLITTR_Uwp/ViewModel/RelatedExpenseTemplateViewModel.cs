@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.DataHandler.Contracts;
 using SPLITTR_Uwp.Core.ExtensionMethod;
-using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Utility;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Models;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SPLITTR_Uwp.ViewModel
 {

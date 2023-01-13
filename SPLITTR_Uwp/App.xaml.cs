@@ -1,28 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Windows.ApplicationModel;
-using SPLITTR_Uwp.Services;
-
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using SPLITTR_Uwp.Configuration;
-using SPLITTR_Uwp.Core.Services.Contracts;
 using SPLITTR_Uwp.Views;
-using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Media;
-using SPLITTR_Uwp.Core.DataHandler.Contracts;
-using SPLITTR_Uwp.Core.ModelBobj;
-using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.DataRepository;
 
 namespace SPLITTR_Uwp
 {

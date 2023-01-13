@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Windows.UI;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;

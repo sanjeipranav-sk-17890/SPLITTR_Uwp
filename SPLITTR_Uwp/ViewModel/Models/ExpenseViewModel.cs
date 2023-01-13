@@ -1,11 +1,8 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using SPLITTR_Uwp.Core.CurrencyCoverter;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
-using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Services;
 
 namespace SPLITTR_Uwp.ViewModel.Models

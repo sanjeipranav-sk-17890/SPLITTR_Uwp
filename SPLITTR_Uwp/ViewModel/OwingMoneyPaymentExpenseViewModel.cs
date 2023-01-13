@@ -1,18 +1,7 @@
-﻿using System;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.UI.Xaml;
-using SPLITTR_Uwp.Core.Models;
-using Windows.UI.WindowManagement;
-using Windows.UI.Xaml.Controls;
-using SPLITTR_Uwp.Views;
-using Windows.UI.Xaml.Hosting;
+﻿using System.Diagnostics;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 using SPLITTR_Uwp.DataRepository;
-using SPLITTR_Uwp.DataTemplates;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Models;
 
