@@ -64,7 +64,7 @@ namespace SPLITTR_Uwp.DataTemplates
     }
     internal class PaymentWindowExpenseViewModel : ObservableObject
     {
-        private readonly DataStore _store;
+       
         private string _currentUserInitial;
         private string _owingUserInitial;
         private string _currencySymbol;
@@ -99,17 +99,17 @@ namespace SPLITTR_Uwp.DataTemplates
 
             InitializeValues(expenseObj);
         }
-        public PaymentWindowExpenseViewModel(DataStore store)
+        public PaymentWindowExpenseViewModel()
         {
-            _store = store;
-            CurrentUser = new UserViewModel(_store.UserBobj);
+            
+            CurrentUser = new UserViewModel(Store.CurreUserBobj);
 
         }
         private void InitializeValues(ExpenseViewModel expenseObj)
         {
             CurrentUserInitial = expenseObj.CorrespondingUserObj.UserName.GetUserInitial();
             OwingUserInitial = expenseObj.SplitRaisedOwner.UserName.GetUserInitial();
-            CurrencySymbol = expenseObj.StrExpenseAmount.ExpenseSymbol(_store.UserBobj);
+            CurrencySymbol = expenseObj.StrExpenseAmount.ExpenseSymbol(Store.CurreUserBobj);
         }
     }
 }

@@ -18,7 +18,6 @@ namespace SPLITTR_Uwp.ViewModel
     internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
     {
         private readonly IExpenseUtility _expenseUtility;
-        private readonly DataStore _store;
         private double _totalExpenditureAmount;
 
         public ObservableCollection<ExpenseViewModel> RelatedExpenses { get; } = new ObservableCollection<ExpenseViewModel>();
@@ -29,10 +28,9 @@ namespace SPLITTR_Uwp.ViewModel
             set => SetProperty(ref _totalExpenditureAmount, value);
         }
 
-        public ExpenseDetailedViewUserControlViewModel(IExpenseUtility expenseUtility,DataStore store)
+        public ExpenseDetailedViewUserControlViewModel(IExpenseUtility expenseUtility)
         {
             _expenseUtility = expenseUtility;
-            _store = store;
 
         }
 
@@ -46,7 +44,7 @@ namespace SPLITTR_Uwp.ViewModel
             }
             _expense = expenseObj;
 
-            _expenseUtility.GetRelatedExpenses(expenseObj,_store.UserBobj ,RelatedExpensesCallBack);
+            _expenseUtility.GetRelatedExpenses(expenseObj,Store.CurreUserBobj ,RelatedExpensesCallBack);
 
         }
         private async void RelatedExpensesCallBack(IEnumerable<ExpenseBobj> relatedExpenses)
@@ -81,7 +79,7 @@ namespace SPLITTR_Uwp.ViewModel
                 return string.Empty;
             }
             var groupName=string.Empty;
-            foreach (var userGroup in _store.UserBobj.Groups)
+            foreach (var userGroup in Store.CurreUserBobj.Groups)
             {
                 if (groupUniqueId.Equals(userGroup.GroupUniqueId))
                 {

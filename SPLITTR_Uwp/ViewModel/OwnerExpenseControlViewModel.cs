@@ -17,12 +17,11 @@ namespace SPLITTR_Uwp.ViewModel
     internal class OwnerExpenseControlViewModel : ObservableObject
     {
         private bool _expenseCancelButtonVisibility = false;
-        private readonly DataStore _store;
+   
         private readonly IExpenseUtility _expenseUtility;
 
-        public OwnerExpenseControlViewModel(DataStore store,IExpenseUtility expenseUtility)
+        public OwnerExpenseControlViewModel(IExpenseUtility expenseUtility)
         {
-            _store = store;
             _expenseUtility = expenseUtility;
             
         }
@@ -46,7 +45,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         private void ChangeButtonVisibility(ExpenseBobj expense)
         {
-            if (expense.ExpenseStatus == ExpenseStatus.Pending && expense.SplitRaisedOwner.Equals(_store.UserBobj))
+            if (expense.ExpenseStatus == ExpenseStatus.Pending && expense.SplitRaisedOwner.Equals(Store.CurreUserBobj))
             {
                 ExpenseCancelButtonVisibility = true;
                 return;
@@ -60,7 +59,7 @@ namespace SPLITTR_Uwp.ViewModel
             _expenseUtility.PresenterCallBackOnSuccess += ExpenseUtilityPresenterCallBackOnSuccess;
             _expenseUtility.OnError += (exception, s) => ExceptionHandlerService.HandleException(exception); 
 
-            _expenseUtility.CancelExpense(expense.ExpenseUniqueId,_store.UserBobj);
+            _expenseUtility.CancelExpense(expense.ExpenseUniqueId,Store.CurreUserBobj);
 
 
             async void ExpenseUtilityPresenterCallBackOnSuccess(EventArgs obj)
@@ -83,7 +82,7 @@ namespace SPLITTR_Uwp.ViewModel
             _expenseUtility.PresenterCallBackOnSuccess += ExpenseUtilityPresenterCallBackOnSuccess;
             _expenseUtility.OnError += (exception, s) => ExceptionHandlerService.HandleException(exception);
 
-            _expenseUtility.MarkExpenseAsPaid(expense.ExpenseUniqueId, _store.UserBobj);
+            _expenseUtility.MarkExpenseAsPaid(expense.ExpenseUniqueId, Store.CurreUserBobj);
 
 
             async void ExpenseUtilityPresenterCallBackOnSuccess(EventArgs obj)

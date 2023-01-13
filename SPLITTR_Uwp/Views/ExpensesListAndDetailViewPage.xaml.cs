@@ -37,12 +37,10 @@ namespace SPLITTR_Uwp.Views
     /// </summary>
     public sealed partial class ExpensesListAndDetailViewPage : Page
     {
-        private DataStore _store;
         private ExpenseListAndDetailedPageViewModel _viewModel;
         public ExpensesListAndDetailViewPage()
         {
             this.InitializeComponent();
-            _store = ActivatorUtilities.GetServiceOrCreateInstance<DataStore>(App.Container);
             _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<ExpenseListAndDetailedPageViewModel>(App.Container);
         }
 

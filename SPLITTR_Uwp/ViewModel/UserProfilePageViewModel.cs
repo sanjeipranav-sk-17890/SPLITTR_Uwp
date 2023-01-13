@@ -19,18 +19,16 @@ namespace SPLITTR_Uwp.ViewModel
     public class UserProfilePageViewModel : ObservableObject
     {
 
-        private readonly DataStore _dataStore;
         
         IUserUtility _userUtility;
         public UserViewModel User { get; }
 
 
-        public UserProfilePageViewModel(DataStore dataStore, IUserUtility userUtility)
+        public UserProfilePageViewModel(IUserUtility userUtility)
         {
-            _dataStore = dataStore;
             _userUtility = userUtility;
-            User = new UserViewModel(_dataStore.UserBobj);
-            _dataStore.UserBobj.ValueChanged += UserBobj_ValueChanged;
+            User = new UserViewModel(Store.CurreUserBobj);
+            Store.CurreUserBobj.ValueChanged += UserBobj_ValueChanged;
 
         }
 
@@ -59,7 +57,7 @@ namespace SPLITTR_Uwp.ViewModel
         {
             get
             {
-                return _dataStore.UserBobj?.CurrencyPreference.ToString();
+                return Store.CurreUserBobj?.CurrencyPreference.ToString();
             }
 
         }
@@ -127,7 +125,7 @@ namespace SPLITTR_Uwp.ViewModel
             }
             IsUserNameEmptyIndicatorVisible = false;
             //utility classes is updating the UserObj and its related data's
-             _userUtility.UpdateUserObjAsync(_dataStore.UserBobj, _currentUserName, (Currency)_preferedCurrencyIndex,(async () =>
+             _userUtility.UpdateUserObjAsync(Store.CurreUserBobj, _currentUserName, (Currency)_preferedCurrencyIndex,(async () =>
             {
                 await ShowSignUpSuccessFullMessageBoxAsync();
 

@@ -18,14 +18,14 @@ namespace SPLITTR_Uwp.ViewModel
 {
     internal class RelatedExpenseTemplateViewModel : ObservableObject
     {
-        private readonly DataStore _store;
+        
         private readonly IStringManipulator _stringManipulator;
         private readonly IExpenseHistoryUsecase _expenseHistory;
         private bool _isExpenseMarkedAsPaid;
 
-        public RelatedExpenseTemplateViewModel(DataStore store,IStringManipulator stringManipulator,IExpenseHistoryUsecase expenseHistory)
+        public RelatedExpenseTemplateViewModel(IStringManipulator stringManipulator,IExpenseHistoryUsecase expenseHistory)
         {
-            _store = store;
+         
             _stringManipulator = stringManipulator;
             _expenseHistory = expenseHistory;
 
@@ -37,7 +37,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         public string CurrencySymbol
         {
-            get => ExpenseObj is null ? string.Empty : _store.UserBobj.StrWalletBalance.ExpenseSymbol(_store.UserBobj); // Fetching Currency symbol Corresponding to user preference
+            get => ExpenseObj is null ? string.Empty : Store.CurreUserBobj.StrWalletBalance.ExpenseSymbol(Store.CurreUserBobj); // Fetching Currency symbol Corresponding to user preference
         }
 
         public string UserInitial
@@ -58,7 +58,7 @@ namespace SPLITTR_Uwp.ViewModel
                 {
                     return string.Empty;
                 }
-                return ExpenseObj.CorrespondingUserObj.Equals(_store.UserBobj) ? "you" : ExpenseObj.CorrespondingUserObj.UserName;
+                return ExpenseObj.CorrespondingUserObj.Equals(Store.CurreUserBobj) ? "you" : ExpenseObj.CorrespondingUserObj.UserName;
             }
         }
 

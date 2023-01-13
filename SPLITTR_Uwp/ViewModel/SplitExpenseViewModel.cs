@@ -34,7 +34,7 @@ namespace SPLITTR_Uwp.ViewModel
     {
         private readonly IUserUtility _userUtility;
         private readonly IExpenseUtility _expenseUtility;
-        private readonly DataStore _store;
+        
         
 
         public UserViewModel User { get;}
@@ -229,7 +229,7 @@ namespace SPLITTR_Uwp.ViewModel
             
             var observableGroupObj = new ObservableCollection<GroupBobj>();
             observableGroupObj.Add(_dummyGroup);
-            foreach (var grp in _store.UserBobj.Groups)
+            foreach (var grp in Store.CurreUserBobj.Groups)
             {
                 observableGroupObj.Add(grp);
             }
@@ -437,7 +437,7 @@ namespace SPLITTR_Uwp.ViewModel
                 if (_selectedUser != null)//Individual Split
                 {
 
-                    ExpensesToBeSplitted.Add(GenerateExpenseViewModel(_store.UserBobj,null));//current User
+                    ExpensesToBeSplitted.Add(GenerateExpenseViewModel(Store.CurreUserBobj,null));//current User
                     ExpensesToBeSplitted.Add(GenerateExpenseViewModel(_selectedUser,null));//Spiltting user
                    
                 }
@@ -457,10 +457,10 @@ namespace SPLITTR_Uwp.ViewModel
 
         private ExpenseBobj GenerateExpenseViewModel(User user,string groupUid)
         {
-            return new ExpenseBobj(_store.UserBobj.CurrencyConverter)
+            return new ExpenseBobj(Store.CurreUserBobj.CurrencyConverter)
             {
-                RequestedOwner = _store.UserBobj.EmailId,
-                SplitRaisedOwner = _store.UserBobj, //Currently by default current user is splitRaiseOwner , 
+                RequestedOwner = Store.CurreUserBobj.EmailId,
+                SplitRaisedOwner = Store.CurreUserBobj, //Currently by default current user is splitRaiseOwner , 
                 UserEmailId = user.EmailId,
                 CorrespondingUserObj = user,
                 StrExpenseAmount = 0.0,
@@ -525,7 +525,7 @@ namespace SPLITTR_Uwp.ViewModel
             _expenseUtility.PresenterCallBackOnSuccess += _expenseUtility_PresenterCallBackOnSuccess;
             
 
-               _expenseUtility.SplitNewExpensesAsync(expenseDescription,_store.UserBobj, ExpensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType);
+               _expenseUtility.SplitNewExpensesAsync(expenseDescription,Store.CurreUserBobj, ExpensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType);
 
         }
 
@@ -574,13 +574,12 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
        
-        public SplitExpenseViewModel(IUserUtility userUtility,IExpenseUtility expenseUtility,DataStore store)
+        public SplitExpenseViewModel(IUserUtility userUtility,IExpenseUtility expenseUtility)
         {
             _userUtility = userUtility;
             _expenseUtility = expenseUtility;
-            _store = store;
-            _store.UserBobj.ValueChanged += OnUserValueChanged;
-            User = new UserViewModel(_store.UserBobj);
+            Store.CurreUserBobj.ValueChanged += OnUserValueChanged;
+            User = new UserViewModel(Store.CurreUserBobj);
             ExpensesToBeSplitted.CollectionChanged += ExpensesToBeSplittedOnCollectionChanged;
 
             //on Error Call back 

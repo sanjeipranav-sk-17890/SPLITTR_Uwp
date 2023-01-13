@@ -23,7 +23,6 @@ namespace SPLITTR_Uwp.DataTemplates
         private string _expenseStatus;
         
         private static ExpenseItemViewModel ViewModel { get; set; }
-        private static DataStore Store { get; set; }
 
         public ExpenseViewModel ExpenseObj
         {
@@ -41,7 +40,7 @@ namespace SPLITTR_Uwp.DataTemplates
                 return string.Empty;
             }
 
-            if (ExpenseObj.SplitRaisedOwner.Equals(Store.UserBobj))
+            if (ExpenseObj.SplitRaisedOwner.Equals(Store.CurreUserBobj))
             {
                 ExpenseAmountTextBlock.Foreground = PaidColorBrush;
                 return ViewModel.FormatExpenseAmount(ExpenseObj);
@@ -152,7 +151,7 @@ namespace SPLITTR_Uwp.DataTemplates
 
         public string CurrencySymbol
         {
-            get => ExpenseObj?.StrExpenseAmount.ExpenseSymbol(Store.UserBobj);
+            get => ExpenseObj?.StrExpenseAmount.ExpenseSymbol(Store.CurreUserBobj);
         }
 
         public string FormatedExpenseAmount
@@ -188,7 +187,6 @@ namespace SPLITTR_Uwp.DataTemplates
             this.InitializeComponent();
             this.DataContextChanged += ExpenseDataTemplate_DataContextChanged;
             ViewModel ??= ActivatorUtilities.CreateInstance<ExpenseItemViewModel>(App.Container);
-            Store ??= ActivatorUtilities.GetServiceOrCreateInstance<DataStore>(App.Container);
         }
 
         private void ExpenseDataTemplate_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)

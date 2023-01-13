@@ -12,17 +12,16 @@ namespace SPLITTR_Uwp.ViewModel
         private readonly IUserUtility _userUtility;
         private string _moneyTextBoxText;
         private bool _invalidInputTextBlockVisibility;
-        private DataStore _store;
 
         public event Action CloseButtonClicked;
 
         public UserViewModel UserViewModel { get; }
 
-        public WalletBalanceUpdateViewModel(IUserUtility userUtility, DataStore store)
+        public WalletBalanceUpdateViewModel(IUserUtility userUtility)
         {
             _userUtility = userUtility;
-            _store = store;
-            UserViewModel = new UserViewModel(_store.UserBobj);
+        
+            UserViewModel = new UserViewModel(Store.CurreUserBobj);
         }
 
         public string MoneyTextBoxText
@@ -44,7 +43,7 @@ namespace SPLITTR_Uwp.ViewModel
             if (double.TryParse(MoneyTextBoxText, out var newWalletBalance) && newWalletBalance > -1)
             {
                 InvalidInputTextBlockVisibility = false;
-                _userUtility.UpdateUserObjAsync(_store.UserBobj, newWalletBalance,(async () =>
+                _userUtility.UpdateUserObjAsync(Store.CurreUserBobj, newWalletBalance,(async () =>
                 {
                   await  UiService.RunOnUiThread(async () =>
                     {

@@ -15,16 +15,14 @@ namespace SPLITTR_Uwp.ViewModel
 {
     internal class ExpenseListAndDetailedPageViewModel : ObservableObject
     {
-        private readonly DataStore _store;
+       
         private bool _ownerExpenseUserControlVisibility;
         private bool _owingMoneyPaymentControlVisibility;
         private ExpenseViewModel _controlDataContext;
 
-        public ExpenseListAndDetailedPageViewModel(DataStore store)
+        public ExpenseListAndDetailedPageViewModel()
         {
-            _store = store;
-
-
+            
         }
 
         public bool OwnerExpenseUserControlVisibility
@@ -73,7 +71,7 @@ namespace SPLITTR_Uwp.ViewModel
         }
         private bool IsNotCurrentUser(User user)
         {
-            return !_store.UserBobj.Equals(user);
+            return !Store.CurreUserBobj.Equals(user);
         }
 
 

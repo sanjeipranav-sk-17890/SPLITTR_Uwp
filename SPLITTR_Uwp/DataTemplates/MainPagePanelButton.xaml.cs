@@ -37,8 +37,7 @@ namespace SPLITTR_Uwp.Views
         {
             this.InitializeComponent();
             // fetching current user details to avoid showing user as participants in each and every group
-            var store = ActivatorUtilities.GetServiceOrCreateInstance<DataStore>(App.Container);
-            _currentUserViewModel = new UserViewModel(store?.UserBobj);
+            _currentUserViewModel = new UserViewModel(Store.CurreUserBobj);
             OnArrowButtonClicked += MainPageButtonControl_OnArrowButtonClicked;
         }
 

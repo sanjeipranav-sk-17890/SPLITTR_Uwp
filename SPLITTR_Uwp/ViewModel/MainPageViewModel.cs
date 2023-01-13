@@ -28,20 +28,20 @@ namespace SPLITTR_Uwp.ViewModel
     internal class MainPageViewModel :ObservableObject, IMainPageViewModel
     {
         
-            private readonly DataStore _store;
+            
             private readonly IMainView _mainPage;
             private readonly IExpenseGrouper _expenseGrouper;
             private string _userInitial;
             private bool _isUpdateWalletBalanceTeachingTipOpen;
 
 
-            public MainPageViewModel(DataStore store, IMainView mainPage,IExpenseGrouper expenseGrouper)
+            public MainPageViewModel( IMainView mainPage,IExpenseGrouper expenseGrouper)
             {
-                _store = store;
+               
                 _mainPage = mainPage;
                 _expenseGrouper = expenseGrouper;
-                UserViewModel = new UserViewModel(_store.UserBobj);
-                _store.UserBobj.ValueChanged += UserObjUpdated;
+                UserViewModel = new UserViewModel(Store.CurreUserBobj);
+                Store.CurreUserBobj.ValueChanged += UserObjUpdated;
 
             }
 
@@ -91,14 +91,14 @@ namespace SPLITTR_Uwp.ViewModel
             public void ViewLoaded() 
             {
 
-                  if (_store.UserBobj == null)
+                  if (Store.CurreUserBobj == null)
                   {
                       //Setting frame reference to Default windows Frame
                       NavigationService.Frame = null;
                       NavigationService.Navigate(typeof(LoginPage), new DrillInNavigationTransitionInfo());
                       return;
                   }
-                  UserGroups.ClearAndAdd(_store.UserBobj.Groups);
+                  UserGroups.ClearAndAdd(Store.CurreUserBobj.Groups);
                   PopulateIndividualSplitUsers();
                   PopulateAllExpense();
                   
@@ -107,7 +107,7 @@ namespace SPLITTR_Uwp.ViewModel
             {
                 ExpensesList.Clear();
                 
-                GroupingAndPopulateExpensesList(_store.UserBobj.Expenses);
+                GroupingAndPopulateExpensesList(Store.CurreUserBobj.Expenses);
             }
 
 
@@ -119,7 +119,7 @@ namespace SPLITTR_Uwp.ViewModel
                 }
                 ExpensesList.Clear();
                 //filter expenses based on particular group 
-                var groupSpecificExpenses = _store.UserBobj?.Expenses.Where(e => e.GroupUniqueId is not null && e.GroupUniqueId.Equals(selectedGroup.GroupUniqueId));
+                var groupSpecificExpenses = Store.CurreUserBobj?.Expenses.Where(e => e.GroupUniqueId is not null && e.GroupUniqueId.Equals(selectedGroup.GroupUniqueId));
                 
                 GroupingAndPopulateExpensesList(groupSpecificExpenses);
             }
@@ -130,7 +130,7 @@ namespace SPLITTR_Uwp.ViewModel
                     return;
                 }
                 ExpensesList.Clear();
-                var userSpecificExpenses = _store.UserBobj?.Expenses.Where(CheckExpenseMatchesUser);
+                var userSpecificExpenses = Store.CurreUserBobj?.Expenses.Where(CheckExpenseMatchesUser);
 
                 GroupingAndPopulateExpensesList(userSpecificExpenses);
 
@@ -148,7 +148,7 @@ namespace SPLITTR_Uwp.ViewModel
             {
                 ExpensesList.Clear();
 
-                var userRecievedExpenses = _store.UserBobj?.Expenses.Where(e => !e.SplitRaisedOwner.Equals(UserViewModel));
+                var userRecievedExpenses = Store.CurreUserBobj?.Expenses.Where(e => !e.SplitRaisedOwner.Equals(UserViewModel));
 
                 GroupingAndPopulateExpensesList(userRecievedExpenses);
             }
@@ -156,7 +156,7 @@ namespace SPLITTR_Uwp.ViewModel
             {
                 ExpensesList.Clear();
 
-                var userRaisedExpenses = _store.UserBobj?.Expenses.Where(e => e.SplitRaisedOwner.Equals(UserViewModel));
+                var userRaisedExpenses = Store.CurreUserBobj?.Expenses.Where(e => e.SplitRaisedOwner.Equals(UserViewModel));
 
                 GroupingAndPopulateExpensesList(userRaisedExpenses);
             }
@@ -168,18 +168,18 @@ namespace SPLITTR_Uwp.ViewModel
         private void PopulateIndividualSplitUsers()
             {
                 RelatedUsers.Clear();
-                foreach (var expense in _store.UserBobj.Expenses)
+                foreach (var expense in Store.CurreUserBobj.Expenses)
                 {
                     // Adds user object to Individual Split users  list Excluding Current User 
                     if (expense.GroupUniqueId is not null)
                     {
                         continue;
                     }
-                    if (!expense.SplitRaisedOwner.Equals(_store.UserBobj) && !RelatedUsers.Contains(expense.SplitRaisedOwner))
+                    if (!expense.SplitRaisedOwner.Equals(Store.CurreUserBobj) && !RelatedUsers.Contains(expense.SplitRaisedOwner))
                     {
                         RelatedUsers.Add(expense.SplitRaisedOwner);
                     }
-                    if (!expense.CorrespondingUserObj.Equals(_store.UserBobj) && !RelatedUsers.Contains(expense.CorrespondingUserObj))
+                    if (!expense.CorrespondingUserObj.Equals(Store.CurreUserBobj) && !RelatedUsers.Contains(expense.CorrespondingUserObj))
                     {
                         RelatedUsers.Add(expense.CorrespondingUserObj);
                     }
@@ -215,7 +215,7 @@ namespace SPLITTR_Uwp.ViewModel
 
             public void LogOutButtonClicked()
             {
-                _store.UserBobj = null;
+                Store.CurreUserBobj = null;
                 NavigationService.Frame = null;
                 NavigationService.Navigate(typeof(LoginPage), new DrillInNavigationTransitionInfo());
 
@@ -237,14 +237,9 @@ namespace SPLITTR_Uwp.ViewModel
                 var selectedItem = sender as MenuFlyoutItem;
                 var title = selectedItem.Text;
                 NavigationService.Frame = _mainPage.ChildFrame;
-                if (string.Compare(title, "Add Exepense", StringComparison.InvariantCultureIgnoreCase) == 0)
-                {
-                    NavigationService.Navigate(typeof(AddExpenseTestPage), new DrillInNavigationTransitionInfo());
-                }
-                else
-                {
-                    NavigationService.Navigate(typeof(GroupCreationPage), new DrillInNavigationTransitionInfo());
-                }
+                NavigationService.Navigate(string.Compare(title, "Add Exepense", StringComparison.InvariantCultureIgnoreCase) == 0 ?
+                    typeof(AddExpenseTestPage) :
+                    typeof(GroupCreationPage), new DrillInNavigationTransitionInfo());
             }
 
             #endregion

@@ -55,7 +55,6 @@ namespace SPLITTR_Uwp.Configuration
                 .AddSingleton<IUserDataHandler, UserDataHandler>()
                 .AddSingleton<IGroupDataHandler, GroupDataHandler>()
                 .AddSingleton<IExpenseDataHandler, ExpenseDataManager>()
-                .AddSingleton<DataStore>()
                 .AddSingleton<IExpenseHistoryUsecase,ExpenseHistoryManager>()
                 .AddTransient<IUserBobjBalanceCalculator, UserBobjPropertyCalculator>()
                 .AddSingleton<ICurrencyCalcFactory, CalculatorFactory>()

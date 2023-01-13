@@ -11,12 +11,11 @@ namespace SPLITTR_Uwp.ViewModel
 {
     internal class ExpenseItemViewModel
     {
-        private readonly DataStore _store;
+        
 
-        public ExpenseItemViewModel(DataStore store )
+        public ExpenseItemViewModel()
         {
-            _store = store;
-
+            
         }
 
         private string GetGroupNameByGroupId(string groupUniqueId)
@@ -27,7 +26,7 @@ namespace SPLITTR_Uwp.ViewModel
             }
 
             string groupName = String.Empty;
-            foreach (var group in _store.UserBobj.Groups)
+            foreach (var group in Store.CurreUserBobj.Groups)
             {
                 if (group.GroupUniqueId.Equals(groupUniqueId))
                 {
@@ -52,7 +51,7 @@ namespace SPLITTR_Uwp.ViewModel
                 return GetGroupNameByGroupId(expenseObj.GroupUniqueId);
             }
             //If Current user is Owner Showing the Name as You instead of Name
-            if (expenseObj.SplitRaisedOwner.Equals(_store.UserBobj))
+            if (expenseObj.SplitRaisedOwner.Equals(Store.CurreUserBobj))
             {
                 return "You";
             }
@@ -71,7 +70,7 @@ namespace SPLITTR_Uwp.ViewModel
             {
                 expenseAmount = expenseAmount.Substring(0, 7);
             }
-            if (expenseObj.SplitRaisedOwner.Equals(_store.UserBobj))
+            if (expenseObj.SplitRaisedOwner.Equals(Store.CurreUserBobj))
             {
                 return "+ " + expenseAmount;
             }
