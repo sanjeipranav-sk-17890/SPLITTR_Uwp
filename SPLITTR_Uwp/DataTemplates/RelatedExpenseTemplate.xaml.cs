@@ -25,6 +25,8 @@ namespace SPLITTR_Uwp.DataTemplates
             _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<RelatedExpenseTemplateViewModel>(App.Container);
             this.InitializeComponent();
             DataContextChanged += RelatedExpenseTemplate_DataContextChanged;
+            
+            
         }
 
         private void RelatedExpenseTemplate_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)

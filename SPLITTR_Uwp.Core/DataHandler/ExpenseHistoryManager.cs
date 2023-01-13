@@ -34,17 +34,23 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
             });
         }
+        private object _lock = new object();
         public  void IsExpenseMarkedAsPaid(string expenseId, Action<bool> ResultCallBack)
         {
             RunAsynchronously(async () =>
             {
-                var isExpenseMarkedAsPaid = _expenseHistory.ContainsKey(expenseId);
-
-                if (isExpenseMarkedAsPaid)
+                lock (_lock)
                 {
-                    ResultCallBack?.Invoke(true);
-                    return;
+                    var isExpenseMarkedAsPaid = _expenseHistory.ContainsKey(expenseId);
+
+                    if (isExpenseMarkedAsPaid)
+                    {
+                        ResultCallBack?.Invoke(true);
+                        return;
+                    }
+
                 }
+                
                 var expenseHistory = await _sqlDataServices.FetchTable<ExpenseHistory>().FirstOrDefaultAsync(h => h.ExpenseUniqueId.Equals(expenseId)).ConfigureAwait(false);
 
                 switch (expenseHistory)
