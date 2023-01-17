@@ -1,36 +1,164 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Linq;
+using Windows.UI.Xaml.Media;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
+using SPLITTR_Uwp.Core.ExtensionMethod;
+using SPLITTR_Uwp.Core.ModelBobj;
+using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 using SPLITTR_Uwp.DataRepository;
+using SPLITTR_Uwp.Services;
+using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.Models;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    internal class ExpenseItemViewModel
+    internal class ExpenseItemViewModel : ObservableObject,IViewModel
     {
-        
+        private readonly IExpenseUtility _expenseUtility;
 
-        public ExpenseItemViewModel()
+        private ExpenseViewModel _expenseVObj;
+        private Group _groupObject;
+        private string _expenseTotalAmount;
+        private string _splitOwnerTitle;
+
+        public ExpenseItemViewModel(IExpenseUtility expenseUtility)
         {
+            _expenseUtility = expenseUtility;
+        }
+
+        public bool IsGroupButtonVisible
+        {
+            get => _expenseVObj?.GroupUniqueId is not null;
+        }
+        public string GroupName
+        {
+            get => FormatGroupName(_expenseVObj?.GroupUniqueId);
             
+        }
+
+        public Group GroupObject
+        {
+            get => _groupObject;
+            set => SetProperty(ref _groupObject, value);
+        }
+
+        public string ExpenseTotalAmount
+        {
+            get => _expenseTotalAmount;
+            set => SetProperty(ref _expenseTotalAmount, value);
+        }
+
+        public string SplitOwnerTitle
+        {
+            get => GetExpenseOwnerTitle();
+
+        }
+
+        public bool OwingAmountTextBlockVisibility
+        {
+            get => _expenseVObj != null && !IsCurrentUserRaisedExpense(_expenseVObj);
+        }
+
+        public string OwingSplitAmount
+        {
+            get => _expenseVObj is null ? string.Empty : FormatExpenseAmountWithSymbol(_expenseVObj.StrExpenseAmount);
+        }
+
+      
+
+        public string OwingSplitTitle
+        {
+            get=> GetOwingExpenseAmountTitle();
+        }
+
+        public Brush OwingExpenseForeground
+        {
+            get
+            {
+                if (_expenseVObj is not null && IsCurrentUser(_expenseVObj.SplitRaisedOwner))
+                {
+                    return new SolidColorBrush(Windows.UI.Colors.DarkSeaGreen);
+                }
+                return new SolidColorBrush(Windows.UI.Colors.DarkOrange);
+
+            }
+        }
+
+        private string GetOwingExpenseAmountTitle()
+        {
+            if (_expenseVObj is null)
+            {
+                return string.Empty;
+            }
+            if (IsCurrentUserRaisedExpense(_expenseVObj))
+            {
+                return "You borrow Nothing";
+            }
+            return IsCurrentUser(_expenseVObj.SplitRaisedOwner) ? $"You lent {_expenseVObj.CorrespondingUserObj.UserName}" : $"{_expenseVObj.SplitRaisedOwner.UserName} lent you";
+        }
+
+        private bool IsCurrentUserRaisedExpense(ExpenseViewModel expenseVObj)
+        {
+            return expenseVObj.SplitRaisedOwner.Equals(expenseVObj.CorrespondingUserObj);
+        }
+
+
+        private string GetExpenseOwnerTitle()
+        {
+            if (_expenseVObj is null)
+            {
+                return string.Empty;
+            }
+            if (IsCurrentUser(_expenseVObj.SplitRaisedOwner))
+            {
+                return "You Paid";
+            }
+            return _expenseVObj.SplitRaisedOwner.UserName + " Paid";
+
+        }
+
+        private bool IsCurrentUser(User user)
+        {
+            return Store.CurreUserBobj.Equals(user);
         }
 
         private string GetGroupNameByGroupId(string groupUniqueId)
         {
             if (groupUniqueId is null)
             {
-                return String.Empty;
+                return string.Empty;
             }
 
-            string groupName = String.Empty;
+            var groupName = string.Empty;
             foreach (var group in Store.CurreUserBobj.Groups)
             {
-                if (group.GroupUniqueId.Equals(groupUniqueId))
+                if (!group.GroupUniqueId.Equals(groupUniqueId))
                 {
-                    groupName = group.GroupName;
-                    break;
+                    continue;
                 }
+                groupName = group.GroupName;
+                GroupObject = group;
+                break;
             }
             return groupName;
 
+        }
+
+        private string FormatGroupName(string groupUniqueId)
+        {
+            var groupName = GetGroupNameByGroupId(groupUniqueId);
+            if (string.IsNullOrEmpty(groupName))
+            {
+                return string.Empty;
+            }
+            if (groupName.Length > 10)
+            {
+               return groupName.Substring(0,10) + "....";
+            }
+            return groupName;
         }
 
 
@@ -57,10 +185,10 @@ namespace SPLITTR_Uwp.ViewModel
         {
             if (expenseObj is null)
             {
-                return String.Empty;
+                return string.Empty;
             }
             
-            string expenseAmount = expenseObj.ExpenseAmount.ToString();
+            var expenseAmount = expenseObj.ExpenseAmount.ToString();
             if (expenseAmount.Length > 7)
             {
                 expenseAmount = expenseAmount.Substring(0, 7);
@@ -72,6 +200,55 @@ namespace SPLITTR_Uwp.ViewModel
             return "- " + expenseAmount;
 
         }
+        
+        public void ExpenseObjLoaded(ExpenseViewModel expenseObj)
+        {
 
+            if (expenseObj is null)
+            {
+                return;
+            }
+            _expenseVObj = expenseObj;
+
+            _expenseVObj.PropertyChanged += _expenseVObj_PropertyChanged;
+            BindingUpdateInvoked?.Invoke();
+
+            _expenseUtility.GetRelatedExpenses(expenseObj,Store.CurreUserBobj,(ResultCallBack));
+        }
+
+        private void _expenseVObj_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            BindingUpdateInvoked?.Invoke();
+        }
+
+        private async void ResultCallBack(IEnumerable<ExpenseBobj> relatedExpenses)
+        {
+            var totalAmount = relatedExpenses.Sum(expense => expense.StrExpenseAmount);
+            totalAmount += _expenseVObj.StrExpenseAmount;
+
+
+            var formatedExpenseAmount = FormatExpenseAmountWithSymbol(totalAmount);
+
+            await  UiService.RunOnUiThread(() =>
+            {
+                ExpenseTotalAmount = formatedExpenseAmount;
+            });
+
+
+        }
+
+        private string FormatExpenseAmountWithSymbol(double expenseAmount)
+        {
+            //if expense amount is more than 7 digits then triming it to 7 digits and adding Currency Symbol
+            if (expenseAmount.ToString().Length > 7)
+            {
+                return expenseAmount.ExpenseSymbol(Store.CurreUserBobj) + expenseAmount.ToString().Substring(0, 7);
+            }
+            return expenseAmount.ExpenseAmount(Store.CurreUserBobj);
+        }
+
+
+
+        public event Action BindingUpdateInvoked;
     }
 }

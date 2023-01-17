@@ -156,11 +156,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\Configuration.cs" />
+    <Compile Include="DataRepository\Converters\BoolToRowSpanConverter.cs" />
     <Compile Include="DataRepository\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="DataRepository\Converters\TimeConverter.cs" />
     <Compile Include="DataRepository\Store.cs" />
     <Compile Include="DataTemplates\ExpenseDataTemplate.xaml.cs">
       <DependentUpon>ExpenseDataTemplate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataTemplates\ExpenseDataTemplateV2.xaml.cs">
+      <DependentUpon>ExpenseDataTemplateV2.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataTemplates\NewExpenseTemplate.xaml.cs">
       <DependentUpon>NewExpenseTemplate.xaml</DependentUpon>
@@ -247,6 +251,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="DataTemplates\ExpenseDataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataTemplates\ExpenseDataTemplateV2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -352,6 +360,7 @@
     <Content Include="Assets\AppLogo\62e914dea1e1b17f781f57f4.png" />
     <Content Include="Assets\icons\all-inclusive.png" />
     <Content Include="Assets\icons\AppIdolIMage.png" />
+    <Content Include="Assets\icons\BillImage.png" />
     <Content Include="Assets\icons\credit-cards-payment.png" />
     <Content Include="Assets\icons\Downarrow.png" />
     <Content Include="Assets\icons\google-logo-9826-16x16.ico" />
