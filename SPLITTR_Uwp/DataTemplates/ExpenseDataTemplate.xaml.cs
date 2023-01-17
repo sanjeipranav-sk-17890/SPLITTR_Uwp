@@ -205,9 +205,10 @@ namespace SPLITTR_Uwp.DataTemplates
         private void ExpenseObj_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             LoadValuesInUi();
-            OnPropertyChanged(nameof(FormatedExpenseDescription));
-            OnPropertyChanged(nameof(CurrencySymbol));
-            OnPropertyChanged(nameof(FormatedExpenseAmount));
+            //OnPropertyChanged(nameof(FormatedExpenseDescription));
+            //OnPropertyChanged(nameof(CurrencySymbol));
+            //OnPropertyChanged(nameof(FormatedExpenseAmount));
+            Bindings.Update();
         }
 
 

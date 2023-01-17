@@ -79,7 +79,7 @@ namespace SPLITTR_Uwp.Core.ExtensionMethod
                 Currency.Yen => " ¥",
                 _ => throw new Exception("Data Handling problem by Db")
             };
-            return resultString+symbol;
+            return symbol+" "+resultString;
 
         }
         public static string ExpenseSymbol(this double amount, UserBobj user)

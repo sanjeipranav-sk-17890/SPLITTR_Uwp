@@ -12,8 +12,6 @@
     BorderBrush="Black"
     BorderThickness="20"
     Visibility="{x:Bind ExpenseObj.Visibility,Mode=OneWay}"
-    PointerEntered="ExpenseDataTemplate_OnPointerEntered"
-    PointerExited="ExpenseDataTemplate_OnPointerExited"
 >
     <UserControl.Resources>
         <ImageBrush  ImageSource="../Assets/icons/GroupExpenseLogo.png" x:Key="GroupExpenseLogo" x:Name="GroupExpenseLogo" Opacity="0.8"   Stretch="Uniform"></ImageBrush>
@@ -68,23 +66,12 @@
                            Visibility="{x:Bind ExpenseStatusVisibility,Mode=OneWay}"
                            Foreground="{x:Bind ExpenseStatusForeground,Mode=OneWay}"
                            />
-                <TextBlock Foreground="{ThemeResource SystemAccentColorDark2}"
-                           Text=""
-                           FontSize="10"
-                           Margin="0 0 5 0"
-                           ToolTipService.ToolTip="Expense Date"
-                           FontFamily="Segoe MDL2 Assets"
-                           Visibility="{x:Bind DateOfExpenseTextBlockVisibility,Mode=OneWay}"
-                           VerticalAlignment="Center"/>
-                <TextBlock Text="{x:Bind ExpenseObj.DateOfExpense,Converter={StaticResource StringFormater},ConverterParameter='{}{0:MMM dd (ddd)}',Mode=OneWay}"
-                           Visibility="{x:Bind DateOfExpenseTextBlockVisibility,Mode=OneWay}"
-                           VerticalAlignment="Center"
-                           ></TextBlock>
+                
             </StackPanel>
            
         </Grid>
        
-        <Grid Grid.Row="1" Grid.ColumnSpan="3" x:Name="AdditionalDataGrid" Visibility="Collapsed" >
+        <Grid Grid.Row="1" Grid.ColumnSpan="3" x:Name="AdditionalDataGrid" Visibility="Visible" >
              <Grid.ColumnDefinitions>
                  <ColumnDefinition/>
                  <ColumnDefinition/>
@@ -100,11 +87,19 @@
 
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <TextBlock Text="Created Date :" 
-                           Foreground="{ThemeResource SystemAccentColorLight1}"
-                           Margin="5 0 4 0"
-                />
-                <TextBlock Text="{x:Bind ExpenseObj.CreatedDate,Converter={StaticResource StringFormater},ConverterParameter='{}{0:dd/MM/yyy (ddd)}',Mode=OneWay}"/>
+                <TextBlock Foreground="{ThemeResource SystemAccentColorDark2}"
+                           Text=""
+                           FontSize="10"
+                           Margin="0 0 5 0"
+                           ToolTipService.ToolTip="Expense Date"
+                           FontFamily="Segoe MDL2 Assets"
+                           Visibility="Visible"
+                           VerticalAlignment="Center"/>
+                <!--<TextBlock Text="{x:Bind ExpenseObj.DateOfExpense,Converter={StaticResource StringFormater},ConverterParameter='{}{0:MMM dd (ddd)}',Mode=OneWay}"
+                           Visibility="Visible"
+                           VerticalAlignment="Center"
+                ></TextBlock>-->
+                <TextBlock Text="{x:Bind ExpenseObj.DateOfExpense,Converter={StaticResource StringFormater},ConverterParameter='{}{0:dd/MM/yyy (ddd)}',Mode=OneWay}"/>
             </StackPanel>
         </Grid>
          <StackPanel Grid.Column="2" Grid.Row="0"

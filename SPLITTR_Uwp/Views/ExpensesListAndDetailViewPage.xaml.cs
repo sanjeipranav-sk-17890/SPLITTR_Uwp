@@ -28,7 +28,6 @@ namespace SPLITTR_Uwp.Views
             _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<ExpenseListAndDetailedPageViewModel>(App.Container);
         }
 
-
         public event Action PaneButtonOnClick;
 
         public readonly static DependencyProperty ItemsSourceProperty =
