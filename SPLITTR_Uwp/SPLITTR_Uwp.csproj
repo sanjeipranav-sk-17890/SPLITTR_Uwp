@@ -171,6 +171,7 @@
     <Compile Include="DataTemplates\PaymentWindowExpenseView.xaml.cs">
       <DependentUpon>PaymentWindowExpenseView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\Contracts\IViewModel.cs" />
     <Compile Include="ViewModel\OwingMoneyPaymentExpenseViewModel.cs" />
     <Compile Include="DataTemplates\OwnerExpenseUserControl.xaml.cs">
       <DependentUpon>OwnerExpenseUserControl.xaml</DependentUpon>
