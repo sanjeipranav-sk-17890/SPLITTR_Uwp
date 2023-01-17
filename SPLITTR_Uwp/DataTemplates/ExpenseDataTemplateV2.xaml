@@ -148,7 +148,7 @@
                                Margin="10 5 5 5"
                                HorizontalAlignment="Center"
                                Foreground="{ThemeResource SystemAccentColorLight2}"
-                               MaxWidth="65">
+                               MaxWidth="70">
                     </TextBlock>
                     <TextBlock Visibility="{x:Bind _viewModel.OwingAmountTextBlockVisibility,Mode=OneWay}"
                                FontWeight="SemiBold"

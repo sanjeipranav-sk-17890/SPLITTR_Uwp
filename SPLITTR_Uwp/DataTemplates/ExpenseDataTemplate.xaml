@@ -66,7 +66,18 @@
                            Visibility="{x:Bind ExpenseStatusVisibility,Mode=OneWay}"
                            Foreground="{x:Bind ExpenseStatusForeground,Mode=OneWay}"
                            />
-                
+                <TextBlock Foreground="{ThemeResource SystemAccentColorDark2}"
+                           Text=""
+                           FontSize="10"
+                           Margin="0 0 5 0"
+                           ToolTipService.ToolTip="Expense Date"
+                           FontFamily="Segoe MDL2 Assets"
+                           Visibility="Visible"
+                           VerticalAlignment="Center"/>
+                <TextBlock Text="{x:Bind ExpenseObj.DateOfExpense,Converter={StaticResource StringFormater},ConverterParameter='{}{0:MMM dd (ddd)}',Mode=OneWay}"
+                           Visibility="Visible"
+                           VerticalAlignment="Center"
+                           ></TextBlock>
             </StackPanel>
            
         </Grid>

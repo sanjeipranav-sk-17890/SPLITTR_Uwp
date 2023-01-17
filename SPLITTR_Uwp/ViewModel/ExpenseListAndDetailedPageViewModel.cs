@@ -14,11 +14,6 @@ namespace SPLITTR_Uwp.ViewModel
         private bool _owingMoneyPaymentControlVisibility;
         private ExpenseViewModel _controlDataContext;
 
-        public ExpenseListAndDetailedPageViewModel()
-        {
-            
-        }
-
         public bool OwnerExpenseUserControlVisibility
         {
             get => _ownerExpenseUserControlVisibility;
