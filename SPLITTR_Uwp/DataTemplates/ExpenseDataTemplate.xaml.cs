@@ -227,13 +227,5 @@ namespace SPLITTR_Uwp.DataTemplates
             return true;
         }
 
-        private void ExpenseDataTemplate_OnPointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            AdditionalDataGrid.Visibility = Visibility.Visible;
-        }
-        private void ExpenseDataTemplate_OnPointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            AdditionalDataGrid.Visibility = Visibility.Collapsed;
-        }
     }
 }
