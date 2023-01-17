@@ -12,8 +12,6 @@
     BorderBrush="Black"
     BorderThickness="20"
     Visibility="{x:Bind ExpenseObj.Visibility,Mode=OneWay}"
-    PointerEntered="ExpenseDataTemplate_OnPointerEntered"
-    PointerExited="ExpenseDataTemplate_OnPointerExited"
 >
     <UserControl.Resources>
         <ImageBrush  ImageSource="../Assets/icons/GroupExpenseLogo.png" x:Key="GroupExpenseLogo" x:Name="GroupExpenseLogo" Opacity="0.8"   Stretch="Uniform"></ImageBrush>
@@ -74,17 +72,17 @@
                            Margin="0 0 5 0"
                            ToolTipService.ToolTip="Expense Date"
                            FontFamily="Segoe MDL2 Assets"
-                           Visibility="{x:Bind DateOfExpenseTextBlockVisibility,Mode=OneWay}"
+                           Visibility="Visible"
                            VerticalAlignment="Center"/>
                 <TextBlock Text="{x:Bind ExpenseObj.DateOfExpense,Converter={StaticResource StringFormater},ConverterParameter='{}{0:MMM dd (ddd)}',Mode=OneWay}"
-                           Visibility="{x:Bind DateOfExpenseTextBlockVisibility,Mode=OneWay}"
+                           Visibility="Visible"
                            VerticalAlignment="Center"
                            ></TextBlock>
             </StackPanel>
            
         </Grid>
        
-        <Grid Grid.Row="1" Grid.ColumnSpan="3" x:Name="AdditionalDataGrid" Visibility="Collapsed" >
+        <Grid Grid.Row="1" Grid.ColumnSpan="3" x:Name="AdditionalDataGrid" Visibility="Visible" >
              <Grid.ColumnDefinitions>
                  <ColumnDefinition/>
                  <ColumnDefinition/>
