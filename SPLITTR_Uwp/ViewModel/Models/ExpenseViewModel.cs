@@ -62,12 +62,9 @@ namespace SPLITTR_Uwp.ViewModel.Models
 
 
 
-        public void InnerObjValueChanged()
+        public void InnerObjValueChanged(string property)
         {
-            OnPropertyChanged(nameof(ExpenseAmount));
-            OnPropertyChanged(nameof(ExpenseStatus));
-            OnPropertyChanged(nameof(Note));
-
+           OnPropertyChanged(property);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

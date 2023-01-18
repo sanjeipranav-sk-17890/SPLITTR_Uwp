@@ -22,14 +22,14 @@ namespace SPLITTR_Uwp.Core.ModelBobj
             set
             {
                 ExpenseStatusindex = (int)value;
-                OnValueChanged();
+                OnValueChanged(nameof(ExpenseStatus));
             }
         }
 
         public User SplitRaisedOwner { get; set; }
 
 
-        public virtual event Action ValueChanged;
+        public virtual event Action<string> ValueChanged;
 
 
         public  double StrExpenseAmount
@@ -38,9 +38,9 @@ namespace SPLITTR_Uwp.Core.ModelBobj
             set => base.ExpenseAmount = CurrencyConverter.ConvertToEntityCurrency(value);
         }
 
-        protected void OnValueChanged()
+        protected void OnValueChanged(string property)
         {
-            ValueChanged?.Invoke();
+            ValueChanged?.Invoke(property);
         }
 
         private ExpenseBobj(Expense expense) : base(expense.Description,expense.ExpenseAmount ,expense.RequestedOwner,dateOfExpense: expense.DateOfExpense,createdDate:expense.CreatedDate ,expense.Note, expense.GroupUniqueId, expense.ExpenseStatusindex, expense.ExpenseUniqueId, expense.UserEmailId, expense.ParentExpenseId)
