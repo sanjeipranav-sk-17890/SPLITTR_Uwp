@@ -14,34 +14,34 @@ namespace SPLITTR_Uwp.Core.DataHandler
 {
     public class ExpenseDataManager : IExpenseDataHandler
     {
-        private readonly IExpenseDataServices _dataServices;
+        private readonly IExpenseDBHandler _dbHandler;
         private readonly ICurrencyCalcFactory _currencyCalcFactory;
-        private  IUserDataHandler _userDataHandler;
+        private  IUserDataManager _userDataManager;
 
 
-        public ExpenseDataManager(IExpenseDataServices dataServices,ICurrencyCalcFactory currencyCalcFactory)
+        public ExpenseDataManager(IExpenseDBHandler dbHandler,ICurrencyCalcFactory currencyCalcFactory)
         {
-            _dataServices = dataServices;
+            _dbHandler = dbHandler;
             _currencyCalcFactory = currencyCalcFactory;
             
         }
 
         public Task InsertExpenseAsync(IEnumerable<ExpenseBobj> expenseBobjs)
         {
-           return _dataServices.InsertExpenseAsync(expenseBobjs);
+           return _dbHandler.InsertExpenseAsync(expenseBobjs);
         }
         
         public Task UpdateExpenseAsync(ExpenseBobj expenseBobj)
         {
-            return _dataServices.UpdateExpenseAsync(expenseBobj);
+            return _dbHandler.UpdateExpenseAsync(expenseBobj);
         }
 
-        public async Task<IEnumerable<ExpenseBobj>> GetUserExpensesAsync(User  user, IUserDataHandler userDataHandler)
+        public async Task<IEnumerable<ExpenseBobj>> GetUserExpensesAsync(User  user, IUserDataManager userDataManager)
         {
 
-            _userDataHandler = userDataHandler;
+            _userDataManager = userDataManager;
             //fetching Expense entity obj from db  
-            var userExpenses = await _dataServices.SelectUserExpensesAsync(user.EmailId).ConfigureAwait(false);
+            var userExpenses = await _dbHandler.SelectUserExpensesAsync(user.EmailId).ConfigureAwait(false);
 
             return await InitializeExpenseBobjs(userExpenses, user).ConfigureAwait(false);
         }
@@ -49,7 +49,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
         {
             var key = expenseBobj.ParentExpenseId ?? expenseBobj.ExpenseUniqueId;
 
-            var relatedExpenseList =await _dataServices.SelectRelatedExpenses(key).ConfigureAwait(false);
+            var relatedExpenseList =await _dbHandler.SelectRelatedExpenses(key).ConfigureAwait(false);
 
             return await InitializeExpenseBobjs(relatedExpenseList, currentUser).ConfigureAwait(false);
         }
@@ -92,9 +92,9 @@ namespace SPLITTR_Uwp.Core.DataHandler
                 }
 
 
-                requestedOwnerUserObj ??= await _userDataHandler.FetchUserUsingMailId(expense.RequestedOwner).ConfigureAwait(false);
+                requestedOwnerUserObj ??= await _userDataManager.FetchUserUsingMailId(expense.RequestedOwner).ConfigureAwait(false);
 
-                respectiveUserObj ??= await _userDataHandler.FetchUserUsingMailId(expense.UserEmailId).ConfigureAwait(false);
+                respectiveUserObj ??= await _userDataManager.FetchUserUsingMailId(expense.UserEmailId).ConfigureAwait(false);
 
 
                 return new ExpenseBobj(respectiveUserObj, requestedOwnerUserObj, currencyConverter: currencyCalculator, expense: expense);

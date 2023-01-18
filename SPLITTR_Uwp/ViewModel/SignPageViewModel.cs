@@ -13,7 +13,7 @@ namespace SPLITTR_Uwp.ViewModel
 {
     public class SignPageViewModel : ObservableObject
     {
-        private readonly IUserDataHandler _dataHandler;
+        private readonly IUserDataManager _dataManager;
         private bool _emailPassInputPanelVisibility=false;
         private string _userName;
         private bool _isValidEmailIdTextBlockVisibility=false;
@@ -29,9 +29,9 @@ namespace SPLITTR_Uwp.ViewModel
 
         public int SelectedIndex { get; set; }
 
-        public SignPageViewModel(IUserDataHandler dataHandler)
+        public SignPageViewModel(IUserDataManager dataManager)
         {
-            _dataHandler = dataHandler;
+            _dataManager = dataManager;
 
         }
 
@@ -107,7 +107,7 @@ namespace SPLITTR_Uwp.ViewModel
                 UserAlreadyExistTextBlockVisibility = false;
                 return;
             }
-            if (await _dataHandler.IsUserAlreadyExist(EmailIdText.Trim().ToLower()))
+            if (await _dataManager.IsUserAlreadyExist(EmailIdText.Trim().ToLower()))
             {
                 UserAlreadyExistTextBlockVisibility = true;
                 IsValidEmailIdTextBlockVisibility=false;
@@ -115,7 +115,7 @@ namespace SPLITTR_Uwp.ViewModel
             }
             UserAlreadyExistTextBlockVisibility = false;
             IsValidEmailIdTextBlockVisibility = false;
-            await _dataHandler.CreateNewUser(UserName.Trim(), EmailIdText.Trim().ToLower(),SelectedIndex).ConfigureAwait(false);
+            await _dataManager.CreateNewUser(UserName.Trim(), EmailIdText.Trim().ToLower(),SelectedIndex).ConfigureAwait(false);
             await  ShowSignUpSuccessFullMessageBoxAsync();
              
         }

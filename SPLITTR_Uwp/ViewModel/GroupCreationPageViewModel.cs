@@ -17,8 +17,8 @@ namespace SPLITTR_Uwp.ViewModel
 {
     internal class GroupCreationPageViewModel : ObservableObject,IValueConverter,IViewModel
     {
-        private readonly IGroupUtility _groupUtility;
-        private readonly IUserUtility _userUtility;
+        private readonly IGroupUseCase _groupUseCase;
+        private readonly IUserUseCase _userUseCase;
         private string _groupName;
 
 
@@ -38,11 +38,11 @@ namespace SPLITTR_Uwp.ViewModel
 
         public ObservableCollection<User> GroupParticipants { get; } = new ObservableCollection<User>();
 
-        public GroupCreationPageViewModel(IUserUtility userUtility,IGroupUtility groupUtility)
+        public GroupCreationPageViewModel(IUserUseCase userUseCase,IGroupUseCase groupUseCase)
         {
             
-            _userUtility = userUtility;
-            _groupUtility = groupUtility;
+            _userUseCase = userUseCase;
+            _groupUseCase = groupUseCase;
             Store.CurreUserBobj.ValueChanged += UserBobj_ValueChanged;
             User = new UserViewModel(Store.CurreUserBobj);
 
@@ -55,7 +55,7 @@ namespace SPLITTR_Uwp.ViewModel
         };
         public void PopulateSuggestionList(string userName)
         { 
-            _userUtility.GetUsersSuggestionAsync(userName.ToLower(), async (suggestions) =>
+            _userUseCase.GetUsersSuggestionAsync(userName.ToLower(), async (suggestions) =>
            {
                await UiService.RunOnUiThread((() =>
                {
@@ -76,12 +76,12 @@ namespace SPLITTR_Uwp.ViewModel
         {
             var groupName = _groupName.Trim();
 
-            if (_groupUtility is IUseCase useCase) //On Failed doing Respective Actions
+            if (_groupUseCase is IUseCase useCase) //On Failed doing Respective Actions
             {
                 useCase.OnError += UseCase_OnError;
             }
 
-            _groupUtility.CreateSplittrGroup(GroupParticipants,Store.CurreUserBobj,groupName, async () =>
+            _groupUseCase.CreateSplittrGroup(GroupParticipants,Store.CurreUserBobj,groupName, async () =>
             {
                 await UiService.RunOnUiThread(async () =>
                 { 

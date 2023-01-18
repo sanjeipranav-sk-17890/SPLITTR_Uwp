@@ -7,7 +7,7 @@ using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
 {
-    public interface IGroupUtility : IUseCase
+    public interface IGroupUseCase : IUseCase
     {
         /// <summary>
         /// Creates Group for user and change notification will bw raised 

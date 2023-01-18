@@ -8,11 +8,11 @@ using SPLITTR_Uwp.Core.Services.SqliteConnection;
 
 namespace SPLITTR_Uwp.Core.Services
 {
-    public class ExpenseDataServices : IExpenseDataServices
+    public class ExpenseDbHandler : IExpenseDBHandler
     {
         private readonly ISqlDataServices _sqlDbAccess;
 
-        public  ExpenseDataServices(ISqlDataServices sqlDbAccess)
+        public  ExpenseDbHandler(ISqlDataServices sqlDbAccess)
         {
             _sqlDbAccess = sqlDbAccess;
             _sqlDbAccess.CreateTable<Expense>();

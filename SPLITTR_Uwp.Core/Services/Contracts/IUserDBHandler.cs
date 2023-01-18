@@ -6,7 +6,7 @@ using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.Services.Contracts
 {
-    public interface IUserDataServices
+    public interface IUserDBHandler
     {
         Task<User> SelectUserObjByEmailId(string emailId);
         Task<int> InsertUserObjAsync(User user);

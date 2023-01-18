@@ -8,11 +8,11 @@ using SPLITTR_Uwp.Core.Services.SqliteConnection;
 
 namespace SPLITTR_Uwp.Core.Services
 {
-    public class GroupDataServices :IGroupDataServices
+    public class GroupDbHandler :IGroupDBHandler
     {
         private readonly ISqlDataServices _sqlDbAccess;
 
-        public GroupDataServices(ISqlDataServices sqlDbAccess)
+        public GroupDbHandler(ISqlDataServices sqlDbAccess)
         {
             _sqlDbAccess = sqlDbAccess;
             _sqlDbAccess.CreateTable<Group>();

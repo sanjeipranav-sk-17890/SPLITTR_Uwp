@@ -16,6 +16,7 @@ using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 using SPLITTR_Uwp.DataTemplates;
 using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.VmLogic;
+using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
 
 namespace SPLITTR_Uwp.Configuration
 {
@@ -40,12 +41,12 @@ namespace SPLITTR_Uwp.Configuration
         private static void AddServiceDependencies(IServiceCollection container)
         {
             container.AddSingleton<ISqlDataServices, SqlDataBaseAdapter>()
-                .AddSingleton<IUserDataServices, UserDataService>()
-                .AddSingleton<IExpenseDataServices, ExpenseDataServices>()
-                .AddSingleton<IGroupDataServices, GroupDataServices>()
-                .AddSingleton<IGroupToUserDataServices, GroupToUserDataServices>()
-                .AddSingleton<IUserDataHandler, UserDataHandler>()
-                .AddSingleton<IGroupDataHandler, GroupDataHandler>()
+                .AddSingleton<IUserDBHandler, UserDbHandler>()
+                .AddSingleton<IExpenseDBHandler, ExpenseDbHandler>()
+                .AddSingleton<IGroupDBHandler, GroupDbHandler>()
+                .AddSingleton<IGroupToUserDBHandler, GroupToUserDbHandler>()
+                .AddSingleton<IUserDataManager, UserDataManager>()
+                .AddSingleton<IGroupDataManager, GroupDataManager>()
                 .AddSingleton<IExpenseDataHandler, ExpenseDataManager>()
                 .AddSingleton<IExpenseHistoryUsecase,ExpenseHistoryManager>()
                 .AddTransient<IUserBobjBalanceCalculator, UserBobjPropertyCalculator>()
@@ -56,11 +57,11 @@ namespace SPLITTR_Uwp.Configuration
                 .AddTransient<YenConverter>()
                 .AddTransient<EuroConverter>()
                 .AddTransient<IStringManipulator, Manipulator>()
-                .AddTransient<IUserUtility, UserUtility>()
+                .AddTransient<IUserUseCase, UserUseCase>()
                 .AddTransient<IExpensePayment,ExpensePayment>()
-                .AddTransient<IGroupUtility,GroupUtility>()
+                .AddTransient<IGroupUseCase,GroupUseCase>()
                 .AddTransient<IExpenseGrouper,ExpenseGrouper>()
-                .AddTransient<IExpenseUtility,ExpenseUtility>();
+                .AddTransient<IExpenseUseCase,ExpenseUseCase>();
 
 
 

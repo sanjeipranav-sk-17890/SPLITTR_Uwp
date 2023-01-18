@@ -16,36 +16,36 @@ using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics;
 
 namespace SPLITTR_Uwp.Core.DataHandler
 {
-    public class UserDataHandler : IUserDataHandler
+    public class UserDataManager : IUserDataManager
     { 
-        readonly IUserDataServices _userDataServices;
+        readonly IUserDBHandler _userDbHandler;
         readonly IUserBobjBalanceCalculator _balanceCalculator;
-        readonly IGroupDataHandler _groupDataHandler;
+        readonly IGroupDataManager _groupDataManager;
         readonly IExpenseDataHandler _expenseDataHandler;
         private readonly ICurrencyCalcFactory _currencyCalc;
         private string _currentUserEmailId;
         private User _currentUser;
         private readonly ConcurrentDictionary<string, User> _localUserCache = new ConcurrentDictionary<string, User>();
 
-        public UserDataHandler(IUserDataServices userDataServices,IUserBobjBalanceCalculator balanceCalculator, IGroupDataHandler groupDataHandler, IExpenseDataHandler expenseDataHandler,ICurrencyCalcFactory currencyCalc)
+        public UserDataManager(IUserDBHandler userDbHandler,IUserBobjBalanceCalculator balanceCalculator, IGroupDataManager groupDataManager, IExpenseDataHandler expenseDataHandler,ICurrencyCalcFactory currencyCalc)
         {
-            _userDataServices = userDataServices;
+            _userDbHandler = userDbHandler;
             _balanceCalculator = balanceCalculator;
-            _groupDataHandler = groupDataHandler;
+            _groupDataManager = groupDataManager;
             _expenseDataHandler = expenseDataHandler;
             _currencyCalc = currencyCalc;
         }
 
         public Task<int> SignUpUserAsync(User user)
         {
-            return _userDataServices.InsertUserObjAsync(user);
+            return _userDbHandler.InsertUserObjAsync(user);
         }
 
         public async Task<bool> IsUserAlreadyExist(string emailId)
         {
            return await Task.Run(async () =>
            {
-               var userObj = await _userDataServices.SelectUserObjByEmailId(emailId).ConfigureAwait(false);
+               var userObj = await _userDbHandler.SelectUserObjByEmailId(emailId).ConfigureAwait(false);
 
                return userObj is not null;
            }).ConfigureAwait(false);
@@ -55,7 +55,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
         public Task<int> CreateNewUser(string userName, string emailId, int currencyPreference)
         {
             var newUser = new User(emailId, userName, 0.0,currencyPreference);
-            return _userDataServices.InsertUserObjAsync(newUser);
+            return _userDbHandler.InsertUserObjAsync(newUser);
         }
 
 
@@ -69,12 +69,12 @@ namespace SPLITTR_Uwp.Core.DataHandler
                 {
                     UpdateLocalUserCacheData(_currentUser, user);
                 }
-                return _userDataServices.UpDateUserAsync(user);
+                return _userDbHandler.UpDateUserAsync(user);
             }
             var cacheUser = _localUserCache[user.EmailId];
             UpdateLocalUserCacheData(cacheUser, user);
 
-            return _userDataServices.UpDateUserAsync(user);
+            return _userDbHandler.UpDateUserAsync(user);
         }
 
         void UpdateLocalUserCacheData(User oldUserData, User newUserData)
@@ -89,14 +89,14 @@ namespace SPLITTR_Uwp.Core.DataHandler
             {
                 if (_currentUser is null || !_currentUser.EmailId.Equals(_currentUserEmailId))
                 {
-                    _currentUser = await _userDataServices.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
+                    _currentUser = await _userDbHandler.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
                 }
                 return _currentUser;
             }
             
             if (!_localUserCache.ContainsKey(mailId)) 
             {
-                var user =await _userDataServices.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
+                var user =await _userDbHandler.SelectUserObjByEmailId(mailId).ConfigureAwait(false);
                 return  _localUserCache.GetOrAdd(mailId, user);
             } 
             
@@ -112,7 +112,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
         public async Task<IEnumerable<User>> GetUsersSuggestionAsync(string userName)
         {
-            var usersList =await _userDataServices.SelectUserFormUsers(userName.Trim()).ConfigureAwait(false);
+            var usersList =await _userDbHandler.SelectUserFormUsers(userName.Trim()).ConfigureAwait(false);
             var outputList = new List<User>();
             foreach (var user in usersList)
             {
@@ -130,10 +130,10 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
             var user = await FetchUserUsingMailId(emailId).ConfigureAwait(false);
 
-            //Passing In userDataHandler as Method injection to Avoid Circular Dependency in IServiceCollection 
+            //Passing In userDataManager as Method injection to Avoid Circular Dependency in IServiceCollection 
             var expenses =await _expenseDataHandler.GetUserExpensesAsync(_currentUser,this).ConfigureAwait(false);
 
-            var groups =await _groupDataHandler.GetUserPartcipatingGroups(_currentUser,this).ConfigureAwait(false);
+            var groups =await _groupDataManager.GetUserPartcipatingGroups(_currentUser,this).ConfigureAwait(false);
 
             var currencyCal = _currencyCalc.GetCurrencyCalculator((Currency)user.CurrencyIndex);
 

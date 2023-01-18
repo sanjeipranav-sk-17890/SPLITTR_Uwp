@@ -7,7 +7,7 @@ using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.DataHandler.Contracts
 {
-    public interface IUserDataHandler
+    public interface IUserDataManager
     {
         public Task<UserBobj> FetchCurrentUserDetails(string emailId);
         public Task<bool> IsUserAlreadyExist(string emailId);

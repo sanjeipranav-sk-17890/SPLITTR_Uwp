@@ -9,12 +9,12 @@ using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
 {
-    public class GroupUtility :UseCaseBase, IGroupUtility
+    public class GroupUseCase :UseCaseBase, IGroupUseCase
     {
-        private readonly IGroupDataHandler _groupDataHandler;
-        public GroupUtility(IGroupDataHandler groupDataHandler)
+        private readonly IGroupDataManager _groupDataManager;
+        public GroupUseCase(IGroupDataManager groupDataManager)
         {
-            _groupDataHandler = groupDataHandler;
+            _groupDataManager = groupDataManager;
 
         }
         public void CreateSplittrGroup(IEnumerable<User> particiapants, UserBobj currentUser, string groupName, Action onSuccessCallBack)
@@ -41,7 +41,7 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
 
 
                 //saving group Data to Data Repos
-                 _groupDataHandler.CreateGroupAsync(newGroup);
+                 _groupDataManager.CreateGroupAsync(newGroup);
 
                 //adding New Group obj to group UserBobj which will raise valuechanged event
                 currentUser.Groups.Add(newGroup);
