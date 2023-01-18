@@ -154,12 +154,13 @@ namespace SPLITTR_Uwp.ViewModel
 
                 GroupingAndPopulateExpensesList(userRaisedExpenses);
             }
+            
 
 
 
 
 
-        private void PopulateIndividualSplitUsers()
+            private void PopulateIndividualSplitUsers()
             {
                 RelatedUsers.Clear();
                 foreach (var expense in Store.CurreUserBobj.Expenses)
@@ -184,7 +185,7 @@ namespace SPLITTR_Uwp.ViewModel
             #endregion
 
 
-            public async void UserObjUpdated()
+            public async void UserObjUpdated(string property)
             {
                 //since this Will be called by Worker thread it needs to invoked by Ui thread so calling dispatcher to user it
                 await UiService.RunOnUiThread((() =>

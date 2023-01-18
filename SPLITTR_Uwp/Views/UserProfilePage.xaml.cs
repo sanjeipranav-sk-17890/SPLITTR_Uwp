@@ -18,9 +18,12 @@ namespace SPLITTR_Uwp.Views
         {
             _viewModel = App.Container.GetService<UserProfilePageViewModel>();
             this.InitializeComponent();
+            _viewModel.BindingUpdateInvoked += _viewModel_BindingUpdateInvoked;
         }
-        private void DependencyObjectCollection_OnVectorChanged(IObservableVector<DependencyObject> sender, IVectorChangedEventArgs @event)
+
+        private void _viewModel_BindingUpdateInvoked()
         {
+           Bindings.Update();
         }
     }
 }

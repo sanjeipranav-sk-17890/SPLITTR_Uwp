@@ -9,10 +9,11 @@ using Windows.UI.Xaml;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 using SPLITTR_Uwp.Services;
+using SPLITTR_Uwp.ViewModel.Contracts;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    public class UserProfilePageViewModel : ObservableObject
+    public class UserProfilePageViewModel : ObservableObject,IViewModel
     {
 
         
@@ -28,13 +29,11 @@ namespace SPLITTR_Uwp.ViewModel
 
         }
 
-        private async void UserBobj_ValueChanged()
+        private async void UserBobj_ValueChanged(string property)
         {
             await UiService.RunOnUiThread((() =>
             {
-                OnPropertyChanged(nameof(UserInitial));
-                OnPropertyChanged(nameof(CurrencyPreference));
-                OnPropertyChanged(nameof(CurrentUserName));
+                BindingUpdateInvoked?.Invoke();
 
             }));
         }
@@ -138,5 +137,7 @@ namespace SPLITTR_Uwp.ViewModel
             return UiService.ShowContentAsync("Account Updated SuccessFully", "SuccessFull!!");
 
         }
+
+        public event Action BindingUpdateInvoked;
     }
 }

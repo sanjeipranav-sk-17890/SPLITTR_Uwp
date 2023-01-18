@@ -6,20 +6,23 @@ using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace SPLITTR_Uwp.Core.ModelBobj
 {
     public class UserBobj : User
     {
-        private double _lendedAmount = 0.0;
+        private double _lentAmount = 0.0;
         private double _pendingAmount = 0.0;
-        private ObservableCollection<ExpenseBobj> _expenses = new ObservableCollection<ExpenseBobj>();
-        private ObservableCollection<GroupBobj> _groups = new ObservableCollection<GroupBobj>();
+        private readonly ObservableCollection<ExpenseBobj> _expenses = new ObservableCollection<ExpenseBobj>();
+        private readonly ObservableCollection<GroupBobj> _groups = new ObservableCollection<GroupBobj>();
 
         private readonly IUserBobjBalanceCalculator _balanceCalculator;
 
         public ICurrencyConverter CurrencyConverter { get; set; }
-        public event Action ValueChanged;
+        public event Action<string> ValueChanged;
 
 
         public ICollection<ExpenseBobj> Expenses
@@ -42,7 +45,7 @@ namespace SPLITTR_Uwp.Core.ModelBobj
             set
             {
                 base.WalletBalance = CurrencyConverter.ConvertToEntityCurrency(value);
-                OnValueChanged();
+                OnValueChanged(nameof(StrWalletBalance));
             }
 
         }
@@ -53,22 +56,19 @@ namespace SPLITTR_Uwp.Core.ModelBobj
             set
             {
                 CurrencyIndex = (int)value;
-                OnValueChanged();
+                OnValueChanged(nameof(CurrencyPreference));
             }
         }
 
-        public double LendedAmount
+        public double LentAmount
         {
             get
             {
                 _balanceCalculator.ReCalculate(this);
-                return _lendedAmount;
+                return _lentAmount;
 
             }
-            set
-            {
-                SetField(ref _lendedAmount, value);
-            }
+            set => SetField(ref _lentAmount, value);
         }
 
         public double PendingAmount
@@ -79,15 +79,12 @@ namespace SPLITTR_Uwp.Core.ModelBobj
                 return _pendingAmount;
 
             }
-            set
-            {
-                SetField(ref _pendingAmount, value);
-            }
+            set => SetField(ref _pendingAmount, value);
         }
 
-        protected void OnValueChanged()
+        protected void OnValueChanged(string property)
         {
-            ValueChanged?.Invoke();
+            ValueChanged?.Invoke(property);
         }
 
 
@@ -99,14 +96,18 @@ namespace SPLITTR_Uwp.Core.ModelBobj
             Expenses.AddRange(expenses);
             Groups.AddRange(groups);
 
-            _groups.CollectionChanged += CollectionChanged;
-            _expenses.CollectionChanged += CollectionChanged;
+            _groups.CollectionChanged += GroupCollectionChanged;
+            _expenses.CollectionChanged += ExpenseCollectionChanged;
+        }
+        private void ExpenseCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+          OnValueChanged(nameof(Expenses));
         }
 
-        private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void GroupCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             //calling value changed  event when collection is modified
-            OnValueChanged();
+            OnValueChanged(nameof(Groups));
         }
 
         protected UserBobj(UserBobj userBobj) : this(userBobj, userBobj.Expenses, userBobj.Groups, userBobj._balanceCalculator, userBobj.CurrencyConverter)
@@ -115,14 +116,16 @@ namespace SPLITTR_Uwp.Core.ModelBobj
         }
 
 
-        private void SetField<T>(ref T field, T value)
+        private bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(field, value))
-                return;
+                return false;
             field = value;
-            OnValueChanged();
-            return;
+           OnValueChanged(propertyName);
+            return true;
         }
 
     }
+   
+    
 }

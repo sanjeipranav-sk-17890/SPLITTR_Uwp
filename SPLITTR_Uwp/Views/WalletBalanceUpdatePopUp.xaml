@@ -52,7 +52,7 @@
                        HorizontalAlignment="Center"
                 />
                 <TextBlock
-                           Text="{x:Bind _viewModel.UserViewModel.CurrentUserWalletBalance,Mode=OneWay}"
+                           Text="{x:Bind _viewModel.UserViewModel.StrWalletBalance,Mode=OneWay}"
                            HorizontalAlignment="Center"
                            FontSize="18"
                            Margin="0 5 0 0"

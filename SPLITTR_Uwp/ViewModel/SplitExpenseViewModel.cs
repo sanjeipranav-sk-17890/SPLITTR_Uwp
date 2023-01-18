@@ -11,10 +11,11 @@ using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel.Models;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 using SPLITTR_Uwp.Services;
+using SPLITTR_Uwp.ViewModel.Contracts;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    public class SplitExpenseViewModel : ObservableObject
+    public class SplitExpenseViewModel : ObservableObject,IViewModel
     {
         private readonly IUserUtility _userUtility;
         private readonly IExpenseUtility _expenseUtility;
@@ -576,18 +577,19 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
 
-        public async void OnUserValueChanged()
+        public async void OnUserValueChanged(string property)
         {
             await UiService.RunOnUiThread(
                 () =>
                 {
-                    OnPropertyChanged(nameof(GetUserCurrencyPreference));
+                    BindingUpdateInvoked?.Invoke();
                 });
         }
 
 
 
-        
+
+        public event Action BindingUpdateInvoked;
     }
 
 

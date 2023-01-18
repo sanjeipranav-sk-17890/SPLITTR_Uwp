@@ -22,14 +22,9 @@ namespace SPLITTR_Uwp.ViewModel.Models
             get => _user.StrWalletBalance;
         }
 
-        public string CurrentUserWalletBalance
+        public new string LentAmount
         {
-            get => _user.StrWalletBalance.ExpenseAmount(_user);
-        }
-
-        public new string LendedAmount
-        {
-            get => _user.LendedAmount.ExpenseAmount(_user);
+            get => _user.LentAmount.ExpenseAmount(_user);
         }
 
         public new string PendingAmount
@@ -40,14 +35,8 @@ namespace SPLITTR_Uwp.ViewModel.Models
 
         public new int CurrencyPreference
         {
-            get
-            {
-                return (int)_user.CurrencyPreference;
-            }
-            set
-            {
-                _user.CurrencyPreference = (Currency)value;
-            }
+            get => (int)_user.CurrencyPreference;
+            set => _user.CurrencyPreference = (Currency)value;
         }
 
         
@@ -58,17 +47,9 @@ namespace SPLITTR_Uwp.ViewModel.Models
             _user.ValueChanged += InnerObjValueChanged;
         }
 
-        public void InnerObjValueChanged()
+        public void InnerObjValueChanged(string property)
         {
-            OnPropertyChanged(nameof(UserName));
-            OnPropertyChanged(nameof(CurrentUserWalletBalance));
-            OnPropertyChanged(nameof(LendedAmount));
-            OnPropertyChanged(nameof(PendingAmount));
-            OnPropertyChanged(nameof(CurrencyPreference));
-            OnPropertyChanged(nameof(UserName));
-            OnPropertyChanged(nameof(Expenses));
-            OnPropertyChanged(nameof(Groups));
-
+            OnPropertyChanged(property);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

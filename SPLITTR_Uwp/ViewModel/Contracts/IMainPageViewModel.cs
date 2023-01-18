@@ -30,7 +30,6 @@ internal interface IMainPageViewModel : INotifyPropertyChanged,IViewModel
     void PopulateUserRelatedExpenses(User selectedUser);
     void PopulateUserRecievedExpenses();
     void PopulateUserRaisedExpenses();
-    void UserObjUpdated();
     void LogOutButtonClicked();
     void PersonProfileClicked();
     void AddButtonItemSelected(object sender, RoutedEventArgs e);

@@ -14,11 +14,13 @@ namespace SPLITTR_Uwp.Views
             _viewModel = ActivatorUtilities.CreateInstance<SplitExpenseViewModel>(App.Container);
             this.InitializeComponent();
             this.DataContext = _viewModel;
+            _viewModel.BindingUpdateInvoked += _viewModel_BindingUpdateInvoked;
            
         }
 
-
-
-        
+        private void _viewModel_BindingUpdateInvoked()
+        {
+           Bindings.Update();
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics
                 }
 
             }
-            userBobj.LendedAmount = lendedAmount;
+            userBobj.LentAmount = lendedAmount;
             userBobj.PendingAmount = pendingAmount;
         }
     }

@@ -103,7 +103,7 @@ namespace SPLITTR_Uwp.ViewModel
       
         
 
-        private async void UserBobj_ValueChanged()
+        private async void UserBobj_ValueChanged(string property)
         {
             //since this Will be called by Worker thread it needs to invoked by Ui thread so calling dispatcher to user it
             

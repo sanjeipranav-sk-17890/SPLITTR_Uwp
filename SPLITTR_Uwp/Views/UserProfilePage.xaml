@@ -74,7 +74,7 @@
                                        Margin="5 0 0 0"
                                        VerticalAlignment="Center"
                                        Style="{StaticResource TextBlockStyle}"
-                                       Text="{x:Bind _viewModel.User.CurrentUserWalletBalance,Mode=OneWay}">
+                                       Text="{x:Bind _viewModel.User.StrWalletBalance,Mode=OneWay}">
                             </TextBlock>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
@@ -87,7 +87,7 @@
                                Margin="5 0 0 0"
                                VerticalAlignment="Center"
                                Style="{StaticResource TextBlockStyle}"
-                               Text="{x:Bind _viewModel.User.LendedAmount,Mode=OneWay}"/>
+                               Text="{x:Bind _viewModel.User.LentAmount,Mode=OneWay}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Name="PendindAmountLabel"
