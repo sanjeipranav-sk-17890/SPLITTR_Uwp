@@ -22,11 +22,16 @@
                  VerticalAlignment="Center">
 
             <Button.Content>
-                    <Image Source="../Assets/icons/right-arrow.png" Stretch="Uniform" x:Name="ArrowImage" >
+                    <FontIcon x:Name="ArrowImage" FontFamily="Wingdings 3" Foreground="{ThemeResource SystemAccentColorDark2}" Glyph="&#xF0EE;">
+                        <FontIcon.RotationTransition>
+                            <ScalarTransition />
+                        </FontIcon.RotationTransition>
+                    </FontIcon>
+                <!--<Image Source="../Assets/icons/right-arrow.png" Stretch="Uniform" x:Name="ArrowImage" >
                         <Image.RotationTransition >
                             <ScalarTransition />
                         </Image.RotationTransition>
-                    </Image>
+                    </Image>-->
                 </Button.Content>
         </Button>
             <TextBlock Margin="0 0 0 0"

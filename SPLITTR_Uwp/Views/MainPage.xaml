@@ -133,6 +133,7 @@
                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="AllExpense">
                                 <TextBlock Text ="☵"  
                                                FontSize="20"
+                                               Foreground="{ThemeResource SystemAccentColorDark3}"
                                                ></TextBlock>
                                 <TextBlock Text="All Expenses"
                                                      VerticalAlignment="Center"
@@ -246,6 +247,7 @@
                                     HorizontalAlignment="Stretch"
                                     HorizontalContentAlignment="Stretch"
                                     VerticalContentAlignment="Stretch"
+                                    Style="{StaticResource NoPointerAnimation}"
                                     Click="{x:Bind _viewModel.PersonProfileClicked}"
                                     BorderBrush="Transparent">
 
@@ -273,6 +275,7 @@
                         <Button Background="Transparent"
                                 HorizontalAlignment="Stretch"
                                 HorizontalContentAlignment="Left"
+                                Style="{StaticResource NoPointerAnimation}"
                                 BorderBrush="Transparent"
                                 Click="{x:Bind _viewModel.LogOutButtonClicked}">
                             <Button.Content>
