@@ -17,8 +17,8 @@ namespace SPLITTR_Uwp.ViewModel
 {
     public class SplitExpenseViewModel : ObservableObject,IViewModel
     {
-        private readonly IUserUtility _userUtility;
-        private readonly IExpenseUtility _expenseUtility;
+        private readonly IUserUseCase _userUseCase;
+        private readonly IExpenseUseCase _expenseUseCase;
         
         
 
@@ -96,7 +96,7 @@ namespace SPLITTR_Uwp.ViewModel
                 return;
             }
             UsersList.Clear(); 
-             _userUtility.GetUsersSuggestionAsync(SplittingUsersName.Trim().ToLower(), async suggestions =>
+             _userUseCase.GetUsersSuggestionAsync(SplittingUsersName.Trim().ToLower(), async suggestions =>
             {//remainCode will be run if data fetching from use case is finished
                await UiService.RunOnUiThread(() =>
                     {
@@ -507,10 +507,10 @@ namespace SPLITTR_Uwp.ViewModel
 
 
                 //on expense Splitting success Assigend Callback will be called
-            _expenseUtility.PresenterCallBackOnSuccess += _expenseUtility_PresenterCallBackOnSuccess;
+            _expenseUseCase.PresenterCallBackOnSuccess += ExpenseUseCasePresenterCallBackOnSuccess;
             
 
-               _expenseUtility.SplitNewExpensesAsync(expenseDescription,Store.CurreUserBobj, ExpensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType);
+               _expenseUseCase.SplitNewExpensesAsync(expenseDescription,Store.CurreUserBobj, ExpensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType);
 
         }
 
@@ -523,7 +523,7 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
         //if the splitting is successfull showing split completed text box and reset the page 
-        private async void _expenseUtility_PresenterCallBackOnSuccess(EventArgs args)
+        private async void ExpenseUseCasePresenterCallBackOnSuccess(EventArgs args)
         {
             
            await UiService.ShowContentAsync("Spliting SuccessFull", "Expenses Splitted Successfully");
@@ -532,7 +532,7 @@ namespace SPLITTR_Uwp.ViewModel
                  ResetPage();
 
                 }));
-           _expenseUtility.PresenterCallBackOnSuccess-= _expenseUtility_PresenterCallBackOnSuccess;
+           _expenseUseCase.PresenterCallBackOnSuccess-= ExpenseUseCasePresenterCallBackOnSuccess;
 
 
         }
@@ -559,18 +559,18 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
        
-        public SplitExpenseViewModel(IUserUtility userUtility,IExpenseUtility expenseUtility)
+        public SplitExpenseViewModel(IUserUseCase userUseCase,IExpenseUseCase expenseUseCase)
         {
-            _userUtility = userUtility;
-            _expenseUtility = expenseUtility;
+            _userUseCase = userUseCase;
+            _expenseUseCase = expenseUseCase;
             Store.CurreUserBobj.ValueChanged += OnUserValueChanged;
             User = new UserViewModel(Store.CurreUserBobj);
             ExpensesToBeSplitted.CollectionChanged += ExpensesToBeSplittedOnCollectionChanged;
 
             //on Error Call back 
-            if (_expenseUtility is IUseCase expenseUseCase)
+            if (_expenseUseCase is IUseCase useCase)
             {
-                expenseUseCase.OnError += ExpenseSplitting_OnError;
+                useCase.OnError += ExpenseSplitting_OnError;
             }
 
 

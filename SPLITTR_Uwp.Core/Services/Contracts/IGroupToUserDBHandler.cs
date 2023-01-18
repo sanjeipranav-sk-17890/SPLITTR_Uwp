@@ -6,7 +6,7 @@ using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.Services.Contracts
 {
-    public interface IGroupToUserDataServices
+    public interface IGroupToUserDBHandler
     {
         /// <summary>
         /// For given UserEmail(UNiqueID) fetches GroupIds Where User  is a member of the Group

@@ -12,7 +12,7 @@ namespace SPLITTR_Uwp.ViewModel
 {
     public class LoginPageViewModel :ObservableObject
     {
-        private readonly IUserDataHandler _userDataHandler;
+        private readonly IUserDataManager _userDataManager;
         private  int _selectedItem = 0;
         private  bool _loginInformationTextBox=false;
         private  bool _wrongUserCredentialTextBlockVisibility=false;
@@ -41,9 +41,9 @@ namespace SPLITTR_Uwp.ViewModel
 
         private DispatcherTimer _timer;
 
-        public LoginPageViewModel(IUserDataHandler userDataHandler)
+        public LoginPageViewModel(IUserDataManager userDataManager)
         {
-            _userDataHandler = userDataHandler;
+            _userDataManager = userDataManager;
             
 
             //Firing a event for every 0.5 seconds
@@ -91,7 +91,7 @@ namespace SPLITTR_Uwp.ViewModel
             }
             else
             {
-                var isOldUser = await _userDataHandler.IsUserAlreadyExist(UserEmailIdTextBox.Trim().ToLower());
+                var isOldUser = await _userDataManager.IsUserAlreadyExist(UserEmailIdTextBox.Trim().ToLower());
                 if (isOldUser is not true)
                 {
                     WrongUserCreDentialTextBlockVisibility = true;
@@ -99,7 +99,7 @@ namespace SPLITTR_Uwp.ViewModel
                 }
                 WrongUserCreDentialTextBlockVisibility = false;
                 //To be deleted
-                Store.CurreUserBobj = await _userDataHandler.FetchCurrentUserDetails(UserEmailIdTextBox.Trim().ToLower());
+                Store.CurreUserBobj = await _userDataManager.FetchCurrentUserDetails(UserEmailIdTextBox.Trim().ToLower());
                  
 
                  NavigationService.Navigate<MainPage>();

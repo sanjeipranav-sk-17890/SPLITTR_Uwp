@@ -149,7 +149,7 @@
                                         <TextBlock Text="{x:Bind GroupHeader.NoOfExpenses,Mode=OneWay}" Margin="0"></TextBlock>
                                         <TextBlock Text=")"/>
                                     </StackPanel>
-                                    <MenuFlyoutSeparator Grid.Row="1" HorizontalAlignment="Stretch" Margin="10 0 30 0"></MenuFlyoutSeparator>
+                                    <!--<MenuFlyoutSeparator Grid.Row="1" HorizontalAlignment="Stretch" Margin="10 0 30 0"></MenuFlyoutSeparator>-->
 
                                 </Grid>
 

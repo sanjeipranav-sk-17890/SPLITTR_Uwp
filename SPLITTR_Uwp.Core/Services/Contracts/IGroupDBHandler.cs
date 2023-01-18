@@ -7,7 +7,7 @@ using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.Services.Contracts
 {
-    public interface IGroupDataServices
+    public interface IGroupDBHandler
     {
         Task<Group> GetGroupObjByGroupId(string groupId);
         Task<int> InsertGroupAsync(Group group);

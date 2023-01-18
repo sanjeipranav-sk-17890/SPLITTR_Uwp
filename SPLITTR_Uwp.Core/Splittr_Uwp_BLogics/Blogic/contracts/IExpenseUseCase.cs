@@ -8,7 +8,7 @@ using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
 {
-    public interface IExpenseUtility : IUseCase
+    public interface IExpenseUseCase : IUseCase
     {
 
         /// <summary>

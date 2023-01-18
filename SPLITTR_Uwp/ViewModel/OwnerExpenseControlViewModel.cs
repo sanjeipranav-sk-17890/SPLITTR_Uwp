@@ -12,11 +12,11 @@ namespace SPLITTR_Uwp.ViewModel
     {
         private bool _expenseCancelButtonVisibility = false;
    
-        private readonly IExpenseUtility _expenseUtility;
+        private readonly IExpenseUseCase _expenseUseCase;
 
-        public OwnerExpenseControlViewModel(IExpenseUtility expenseUtility)
+        public OwnerExpenseControlViewModel(IExpenseUseCase expenseUseCase)
         {
-            _expenseUtility = expenseUtility;
+            _expenseUseCase = expenseUseCase;
             
         }
 
@@ -50,16 +50,16 @@ namespace SPLITTR_Uwp.ViewModel
    
         public void OnExpenseCancellation(ExpenseBobj expense)
         {
-            _expenseUtility.PresenterCallBackOnSuccess += ExpenseUtilityPresenterCallBackOnSuccess;
-            _expenseUtility.OnError += (exception, s) => ExceptionHandlerService.HandleException(exception); 
+            _expenseUseCase.PresenterCallBackOnSuccess += ExpenseUtilityPresenterCallBackOnSuccess;
+            _expenseUseCase.OnError += (exception, s) => ExceptionHandlerService.HandleException(exception); 
 
-            _expenseUtility.CancelExpense(expense.ExpenseUniqueId,Store.CurreUserBobj);
+            _expenseUseCase.CancelExpense(expense.ExpenseUniqueId,Store.CurreUserBobj);
 
 
             async void ExpenseUtilityPresenterCallBackOnSuccess(EventArgs obj)
             {
                 await UiService.ShowContentAsync($"{expense.Description} Cancelled", "Split Cancelled").ConfigureAwait(false);
-                _expenseUtility.PresenterCallBackOnSuccess -= ExpenseUtilityPresenterCallBackOnSuccess;
+                _expenseUseCase.PresenterCallBackOnSuccess -= ExpenseUtilityPresenterCallBackOnSuccess;
 
                 
                await UiService.RunOnUiThread(() =>
@@ -73,16 +73,16 @@ namespace SPLITTR_Uwp.ViewModel
 
         public void OnExpenseMarkedAsPaid(ExpenseBobj expense)
         {
-            _expenseUtility.PresenterCallBackOnSuccess += ExpenseUtilityPresenterCallBackOnSuccess;
-            _expenseUtility.OnError += (exception, s) => ExceptionHandlerService.HandleException(exception);
+            _expenseUseCase.PresenterCallBackOnSuccess += ExpenseUtilityPresenterCallBackOnSuccess;
+            _expenseUseCase.OnError += (exception, s) => ExceptionHandlerService.HandleException(exception);
 
-            _expenseUtility.MarkExpenseAsPaid(expense.ExpenseUniqueId, Store.CurreUserBobj);
+            _expenseUseCase.MarkExpenseAsPaid(expense.ExpenseUniqueId, Store.CurreUserBobj);
 
 
             async void ExpenseUtilityPresenterCallBackOnSuccess(EventArgs obj)
             {
                 await UiService.ShowContentAsync($"{expense.Description} Cancelled", "Split Cancelled").ConfigureAwait(false);
-                _expenseUtility.PresenterCallBackOnSuccess -= ExpenseUtilityPresenterCallBackOnSuccess;
+                _expenseUseCase.PresenterCallBackOnSuccess -= ExpenseUtilityPresenterCallBackOnSuccess;
                 await UiService.RunOnUiThread(() =>
                 {
                     ExpenseCancelButtonVisibility = false;

@@ -6,7 +6,7 @@ using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.Services.Contracts
 {
-    public interface IExpenseDataServices
+    public interface IExpenseDBHandler
     {
         /// <summary>
         /// Inserts Given Expense object to DataService Provided

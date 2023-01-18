@@ -8,7 +8,7 @@ using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
 {
-    public interface IUserUtility : IUseCase
+    public interface IUserUseCase : IUseCase
     {
         public void UpdateUserObjAsync(UserBobj userBobj, string newUserName, Currency currencyPreference,Action onSuccessCallBack);
         public void UpdateUserObjAsync(UserBobj userBobj, double walletBalance, Action onSuccessCallBack);

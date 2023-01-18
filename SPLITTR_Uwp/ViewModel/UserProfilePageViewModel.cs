@@ -17,13 +17,13 @@ namespace SPLITTR_Uwp.ViewModel
     {
 
         
-        IUserUtility _userUtility;
+        IUserUseCase _userUseCase;
         public UserViewModel User { get; }
 
 
-        public UserProfilePageViewModel(IUserUtility userUtility)
+        public UserProfilePageViewModel(IUserUseCase userUseCase)
         {
-            _userUtility = userUtility;
+            _userUseCase = userUseCase;
             User = new UserViewModel(Store.CurreUserBobj);
             Store.CurreUserBobj.ValueChanged += UserBobj_ValueChanged;
 
@@ -120,7 +120,7 @@ namespace SPLITTR_Uwp.ViewModel
             }
             IsUserNameEmptyIndicatorVisible = false;
             //utility classes is updating the UserObj and its related data's
-             _userUtility.UpdateUserObjAsync(Store.CurreUserBobj, _currentUserName, (Currency)_preferedCurrencyIndex,(async () =>
+             _userUseCase.UpdateUserObjAsync(Store.CurreUserBobj, _currentUserName, (Currency)_preferedCurrencyIndex,(async () =>
             {
                 await ShowSignUpSuccessFullMessageBoxAsync();
 

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
+using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Models;

@@ -10,14 +10,14 @@ using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 
-public class UserUtility : UseCaseBase, IUserUtility
+public class UserUseCase : UseCaseBase, IUserUseCase
 {
 
-    readonly IUserDataHandler _userDataHandler;
+    readonly IUserDataManager _userDataManager;
     private readonly ICurrencyCalcFactory _factory;
-    public UserUtility(IUserDataHandler userDataHandler, ICurrencyCalcFactory factory)
+    public UserUseCase(IUserDataManager userDataManager, ICurrencyCalcFactory factory)
     {
-        _userDataHandler = userDataHandler;
+        _userDataManager = userDataManager;
         _factory = factory;
     }
 
@@ -48,7 +48,7 @@ public class UserUtility : UseCaseBase, IUserUtility
             userBobj.CurrencyPreference = currencyPreference;
 
             //since it is updating on db in background We are waiting until it is completed
-            await _userDataHandler.UpdateUserBobjAsync(userBobj).ConfigureAwait(false);
+            await _userDataManager.UpdateUserBobjAsync(userBobj).ConfigureAwait(false);
 
             onSuccessCallBack?.Invoke();
         });
@@ -59,7 +59,7 @@ public class UserUtility : UseCaseBase, IUserUtility
          RunAsynchronously(async () =>
          {
              userBobj.StrWalletBalance += walletBalance;
-             await _userDataHandler.UpdateUserBobjAsync(userBobj).ConfigureAwait(false);
+             await _userDataManager.UpdateUserBobjAsync(userBobj).ConfigureAwait(false);
              onSuccessCallBack?.Invoke();
          });
 
@@ -68,7 +68,7 @@ public class UserUtility : UseCaseBase, IUserUtility
     {
         RunAsynchronously(async () =>
         {
-           var suggestionList = await _userDataHandler.GetUsersSuggestionAsync(userName).ConfigureAwait(false);
+           var suggestionList = await _userDataManager.GetUsersSuggestionAsync(userName).ConfigureAwait(false);
 
           resultCallBack?.Invoke(suggestionList);
         } );

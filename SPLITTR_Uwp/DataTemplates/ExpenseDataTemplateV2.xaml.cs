@@ -52,5 +52,6 @@ namespace SPLITTR_Uwp.DataTemplates
             Bindings.Update();
             _viewModel.ExpenseObjLoaded(ExpenseObj);
         }
+       
     }
 }

@@ -9,7 +9,7 @@ namespace SPLITTR_Uwp.ViewModel
 {
     public class WalletBalanceUpdateViewModel : ObservableObject
     {
-        private readonly IUserUtility _userUtility;
+        private readonly IUserUseCase _userUseCase;
         private string _moneyTextBoxText;
         private bool _invalidInputTextBlockVisibility;
 
@@ -17,9 +17,9 @@ namespace SPLITTR_Uwp.ViewModel
 
         public UserViewModel UserViewModel { get; }
 
-        public WalletBalanceUpdateViewModel(IUserUtility userUtility)
+        public WalletBalanceUpdateViewModel(IUserUseCase userUseCase)
         {
-            _userUtility = userUtility;
+            _userUseCase = userUseCase;
         
             UserViewModel = new UserViewModel(Store.CurreUserBobj);
         }
@@ -43,7 +43,7 @@ namespace SPLITTR_Uwp.ViewModel
             if (double.TryParse(MoneyTextBoxText, out var newWalletBalance) && newWalletBalance > -1)
             {
                 InvalidInputTextBlockVisibility = false;
-                _userUtility.UpdateUserObjAsync(Store.CurreUserBobj, newWalletBalance,(async () =>
+                _userUseCase.UpdateUserObjAsync(Store.CurreUserBobj, newWalletBalance,(async () =>
                 {
                   await  UiService.RunOnUiThread(async () =>
                     {

@@ -7,7 +7,7 @@ using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.DataHandler.Contracts
 {
-    public interface IGroupDataHandler
+    public interface IGroupDataManager
     {
         /// <summary>
         /// perform join operation on  Group table ,groupToUser table,User table based upon Provided User Email Id
@@ -15,7 +15,7 @@ namespace SPLITTR_Uwp.Core.DataHandler.Contracts
         /// </summary>
         /// <param name="emailId"></param>
         /// <returns></returns>
-        Task<ICollection<GroupBobj>> GetUserPartcipatingGroups(User user,IUserDataHandler userDataHandler);
+        Task<ICollection<GroupBobj>> GetUserPartcipatingGroups(User user,IUserDataManager userDataManager);
 
         Task CreateGroupAsync(GroupBobj groupBobj);
     }

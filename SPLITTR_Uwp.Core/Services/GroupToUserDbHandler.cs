@@ -9,11 +9,11 @@ using SPLITTR_Uwp.Core.Services.SqliteConnection;
 
 namespace SPLITTR_Uwp.Core.Services
 {
-    public class GroupToUserDataServices : IGroupToUserDataServices
+    public class GroupToUserDbHandler : IGroupToUserDBHandler
     {
         private readonly ISqlDataServices _sqlDbAccess;
 
-        public GroupToUserDataServices(ISqlDataServices sqlDbAccess)
+        public GroupToUserDbHandler(ISqlDataServices sqlDbAccess)
         {
             _sqlDbAccess = sqlDbAccess;
             _sqlDbAccess.CreateTable<GroupToUser>();

@@ -13,7 +13,7 @@ namespace SPLITTR_Uwp.ViewModel
 {
     internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
     {
-        private readonly IExpenseUtility _expenseUtility;
+        private readonly IExpenseUseCase _expenseUseCase;
         private double _totalExpenditureAmount;
 
         public ObservableCollection<ExpenseViewModel> RelatedExpenses { get; } = new ObservableCollection<ExpenseViewModel>();
@@ -24,9 +24,9 @@ namespace SPLITTR_Uwp.ViewModel
             set => SetProperty(ref _totalExpenditureAmount, value);
         }
 
-        public ExpenseDetailedViewUserControlViewModel(IExpenseUtility expenseUtility)
+        public ExpenseDetailedViewUserControlViewModel(IExpenseUseCase expenseUseCase)
         {
-            _expenseUtility = expenseUtility;
+            _expenseUseCase = expenseUseCase;
 
         }
 
@@ -40,7 +40,7 @@ namespace SPLITTR_Uwp.ViewModel
             }
             _expense = expenseObj;
 
-            _expenseUtility.GetRelatedExpenses(expenseObj,Store.CurreUserBobj ,RelatedExpensesCallBack);
+            _expenseUseCase.GetRelatedExpenses(expenseObj,Store.CurreUserBobj ,RelatedExpensesCallBack);
 
         }
         private async void RelatedExpensesCallBack(IEnumerable<ExpenseBobj> relatedExpenses)

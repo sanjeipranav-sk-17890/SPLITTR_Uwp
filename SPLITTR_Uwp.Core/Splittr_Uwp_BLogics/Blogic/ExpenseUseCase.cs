@@ -13,7 +13,7 @@ using SQLite;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 
-public class ExpenseUtility : UseCaseBase, IExpenseUtility
+public class ExpenseUseCase : UseCaseBase, IExpenseUseCase
 {
     private readonly IExpenseDataHandler _expenseDataHandler;
     private readonly IExpenseHistoryManager _expenseHistoryManager;
@@ -78,7 +78,7 @@ public class ExpenseUtility : UseCaseBase, IExpenseUtility
 
 
 
-    public ExpenseUtility(IExpenseDataHandler expenseDataHandler,IExpenseHistoryManager expenseHistoryManager)
+    public ExpenseUseCase(IExpenseDataHandler expenseDataHandler,IExpenseHistoryManager expenseHistoryManager)
     {
         _expenseDataHandler = expenseDataHandler;
         _expenseHistoryManager = expenseHistoryManager;

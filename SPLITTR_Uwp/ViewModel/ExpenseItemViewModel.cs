@@ -17,16 +17,16 @@ namespace SPLITTR_Uwp.ViewModel
 {
     internal class ExpenseItemViewModel : ObservableObject,IViewModel
     {
-        private readonly IExpenseUtility _expenseUtility;
+        private readonly IExpenseUseCase _expenseUseCase;
 
         private ExpenseViewModel _expenseVObj;
         private Group _groupObject;
         private string _expenseTotalAmount;
         private string _splitOwnerTitle;
 
-        public ExpenseItemViewModel(IExpenseUtility expenseUtility)
+        public ExpenseItemViewModel(IExpenseUseCase expenseUseCase)
         {
-            _expenseUtility = expenseUtility;
+            _expenseUseCase = expenseUseCase;
         }
 
         public bool IsGroupButtonVisible
@@ -213,7 +213,7 @@ namespace SPLITTR_Uwp.ViewModel
             _expenseVObj.PropertyChanged += _expenseVObj_PropertyChanged;
             BindingUpdateInvoked?.Invoke();
 
-            _expenseUtility.GetRelatedExpenses(expenseObj,Store.CurreUserBobj,(ResultCallBack));
+            _expenseUseCase.GetRelatedExpenses(expenseObj,Store.CurreUserBobj,(ResultCallBack));
         }
 
         private void _expenseVObj_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
