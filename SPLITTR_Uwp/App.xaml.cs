@@ -9,6 +9,7 @@ using SPLITTR_Uwp.Configuration;
 using SPLITTR_Uwp.Views;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Media;
+using SPLITTR_Uwp.Services;
 
 namespace SPLITTR_Uwp
 {
@@ -34,9 +35,9 @@ namespace SPLITTR_Uwp
         public App():base()
         {
             InitializeComponent();
-           
 
         }
+        
 
 
         private static IServiceProvider GetServiceProvider()
@@ -85,6 +86,13 @@ namespace SPLITTR_Uwp
                 // Ensure the current window is active
                 Window.Current.Activate();
             }
+            
+            //Registering Root Frame for Theme Change Functionality
+            ThemeHelperService.RegisterElement(rootFrame);
+
+            //Setting Initial preset  Theme
+            rootFrame.RequestedTheme = ThemeHelperService.GetPreferenceThemeIfSet();
+            
 
             //Setting Appliations title bar to Requeired theme color
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;

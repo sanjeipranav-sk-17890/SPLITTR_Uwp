@@ -160,6 +160,9 @@
     <Compile Include="DataRepository\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="DataRepository\Converters\TimeConverter.cs" />
     <Compile Include="DataRepository\Store.cs" />
+    <Compile Include="DataTemplates\Controls\ThemeChangerButton.xaml.cs">
+      <DependentUpon>ThemeChangerButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataTemplates\ExpenseDataTemplate.xaml.cs">
       <DependentUpon>ExpenseDataTemplate.xaml</DependentUpon>
     </Compile>
@@ -175,6 +178,7 @@
     <Compile Include="DataTemplates\PaymentWindowExpenseView.xaml.cs">
       <DependentUpon>PaymentWindowExpenseView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\ThemeHelperService.cs" />
     <Compile Include="ViewModel\Contracts\IViewModel.cs" />
     <Compile Include="ViewModel\OwingMoneyPaymentExpenseViewModel.cs" />
     <Compile Include="DataTemplates\OwnerExpenseUserControl.xaml.cs">
@@ -250,6 +254,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="DataTemplates\Controls\ThemeChangerButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DataTemplates\ExpenseDataTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

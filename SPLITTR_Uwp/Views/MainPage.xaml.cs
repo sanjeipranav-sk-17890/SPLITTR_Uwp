@@ -201,5 +201,6 @@ namespace SPLITTR_Uwp.Views
             OnPropertyChanged(propertyName);
             return true;
         }
+
     }
 }

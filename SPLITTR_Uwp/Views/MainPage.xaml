@@ -9,6 +9,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:themeButton="using:SPLITTR_Uwp.DataTemplates.Controls"
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     xmlns:services="using:SPLITTR_Uwp.Services"
     xmlns:objectModel="using:System.Collections.ObjectModel"
@@ -90,7 +91,7 @@
 
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
-
+                <themeButton:ThemeChangerButton/>
                 <Button Style="{StaticResource AddWalletButtonStyle}"
                         RelativePanel.LeftOf="TitleBarAddExpenseButton"  >
                     <Button.Content>
