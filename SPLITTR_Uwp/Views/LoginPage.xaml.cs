@@ -29,7 +29,7 @@ namespace SPLITTR_Uwp.Views
         {
             //=================Bypass Login========================//
              //To be Deleted
-             _viewModel.LoginButtonPressed();
+            // _viewModel.LoginButtonPressed();
         }
 
     }

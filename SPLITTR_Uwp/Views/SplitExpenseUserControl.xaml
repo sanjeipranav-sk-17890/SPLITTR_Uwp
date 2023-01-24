@@ -17,7 +17,7 @@
     Height="auto"
     d:DesignWidth="500" d:DesignHeight="590"
     
-    >
+>
 
     <UserControl.Resources>
         <Style x:Key="IndicatorTextBlockStyle" TargetType="TextBlock">
@@ -397,7 +397,7 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <Grid  CornerRadius="10">
+    <Grid  CornerRadius="10"   Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
          <RowDefinition  Height="Auto"/>
          <RowDefinition Height="Auto" />
@@ -645,6 +645,7 @@
                     
                         <ListView ItemsSource="{x:Bind _viewModel.ExpensesToBeSplitted,Mode=OneWay}"
                                   IsItemClickEnabled="False"
+                                  SelectionMode="None"
                         >
                             <ListView.ItemTemplate>
                                 <DataTemplate>

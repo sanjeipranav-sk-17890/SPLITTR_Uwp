@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using Windows.UI.Xaml;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
@@ -225,6 +226,10 @@ namespace SPLITTR_Uwp.ViewModel
 
         public void GroupItemSelectionChanged()
         {
+            if (SelectedGroupIndex < 0)
+            {
+                return;
+            }
             SelectedGroupName = UserParticipatingGroup[SelectedGroupIndex].GroupName;
 
             //if dummy is selected Clearing Users to be Splitted list so other UI Usecases work Properly
@@ -241,16 +246,16 @@ namespace SPLITTR_Uwp.ViewModel
 
             IsNameTextBoxReadOnly = true;
             _selectedUser = null;
-            var splitingGroup = UserParticipatingGroup[SelectedGroupIndex];
+            var splittingGroup = UserParticipatingGroup[SelectedGroupIndex];
             SplittingUsersName = String.Empty;
             _usersToBeSplitted.Clear();
-            foreach (var user in splitingGroup.GroupParticipants)
+            foreach (var user in splittingGroup.GroupParticipants)
             {
                 _isInnerInvokationOfTextChanged = true;
 
                 _usersToBeSplitted.Add(user);
 
-                //ingoring current users name in the GROUP MEMBERS SPLITTING NAME
+                //ignoring current users name in the GROUP MEMBERS SPLITTING NAME
                 if (user.EmailId == User.EmailId)
                     continue;
 

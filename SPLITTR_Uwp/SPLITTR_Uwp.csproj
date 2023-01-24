@@ -178,6 +178,7 @@
     <Compile Include="DataTemplates\PaymentWindowExpenseView.xaml.cs">
       <DependentUpon>PaymentWindowExpenseView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\StateService.cs" />
     <Compile Include="Services\ThemeHelperService.cs" />
     <Compile Include="ViewModel\Contracts\IViewModel.cs" />
     <Compile Include="ViewModel\OwingMoneyPaymentExpenseViewModel.cs" />

@@ -17,6 +17,7 @@ using SPLITTR_Uwp.DataTemplates;
 using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.VmLogic;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
+using SPLITTR_Uwp.Services;
 
 namespace SPLITTR_Uwp.Configuration
 {
@@ -52,6 +53,7 @@ namespace SPLITTR_Uwp.Configuration
                 .AddTransient<IUserBobjBalanceCalculator, UserBobjPropertyCalculator>()
                 .AddSingleton<ICurrencyCalcFactory, CalculatorFactory>()
                 .AddSingleton<IExpenseHistoryManager,ExpenseHistoryManager>()
+                .AddTransient<IStateService,StateService>()
                 .AddTransient<RupessConverter>()
                 .AddTransient<DollarConverter>()
                 .AddTransient<YenConverter>()
