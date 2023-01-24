@@ -25,15 +25,17 @@ namespace SPLITTR_Uwp.ViewModel
             
             private readonly IMainView _mainPage;
             private readonly IExpenseGrouper _expenseGrouper;
+            private readonly IStateService _stateService;
             private string _userInitial;
             private bool _isUpdateWalletBalanceTeachingTipOpen;
 
 
-            public MainPageViewModel( IMainView mainPage,IExpenseGrouper expenseGrouper)
+            public MainPageViewModel( IMainView mainPage,IExpenseGrouper expenseGrouper,IStateService stateService)
             {
                
                 _mainPage = mainPage;
                 _expenseGrouper = expenseGrouper;
+                _stateService = stateService;
                 UserViewModel = new UserViewModel(Store.CurreUserBobj);
                 Store.CurreUserBobj.ValueChanged += UserObjUpdated;
 
@@ -210,6 +212,10 @@ namespace SPLITTR_Uwp.ViewModel
 
             public void LogOutButtonClicked()
             {
+                //Invoking Logout Event Before Clearing Current uSer Cache 
+                _stateService.InvokeCurrentUserLoggedOut(Store.CurreUserBobj);
+
+                //Clearing Reference to Current USer Cache
                 Store.CurreUserBobj = null;
                 NavigationService.Frame = null;
                 NavigationService.Navigate(typeof(LoginPage), new DrillInNavigationTransitionInfo());

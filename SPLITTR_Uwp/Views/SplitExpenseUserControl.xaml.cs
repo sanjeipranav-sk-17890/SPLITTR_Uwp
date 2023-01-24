@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using System.Diagnostics;
+using Windows.UI.Xaml.Controls;
 using SPLITTR_Uwp.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,7 +16,20 @@ namespace SPLITTR_Uwp.Views
             this.InitializeComponent();
             this.DataContext = _viewModel;
             _viewModel.BindingUpdateInvoked += _viewModel_BindingUpdateInvoked;
-           
+            Unloaded += SplitExpenseUserControl_Unloaded;
+            Loaded += SplitExpenseUserControl_Loaded;
+        }
+
+        private void SplitExpenseUserControl_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            //SuggestionListTeachingTip.XamlRoot = XamlRoot;
+            SuggestionListTeachingTip.Target = SplitUserNameTextBlock;
+            Debug.WriteLine("loaded SplitExpenseasdfsdf");
+        }
+
+        private void SplitExpenseUserControl_Unloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+          Debug.WriteLine("Unloaded SplitExpenseasdfsdf");
         }
 
         private void _viewModel_BindingUpdateInvoked()

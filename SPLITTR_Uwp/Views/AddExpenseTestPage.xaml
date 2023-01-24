@@ -8,8 +8,10 @@
     mc:Ignorable="d"
     Style="{StaticResource HomePageBackground}" x:Name="ExpenseSplitPage">
 
-    <Grid>
-            <local:SplitExpenseUserControl HorizontalAlignment="Center" 
+    <Grid Name="MainGrid">
+            <local:SplitExpenseUserControl HorizontalAlignment="Center" CanDrag="True"
+                                           x:Name="SplitExpneseControl"
+                                           DragStarting="SplitExpenseControl_OnDragStarting" 
             ></local:SplitExpenseUserControl>
     </Grid>
 </Page>

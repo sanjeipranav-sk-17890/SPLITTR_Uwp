@@ -13,7 +13,7 @@
         <Setter Property="Stretch" Value="Uniform" />
     </Style>
     <media:AcrylicBrush x:Key="bgAcrylicBrushHome"
-            BackgroundSource="HostBackdrop"  TintOpacity="0" TintLuminosityOpacity="0" TintColor="{ThemeResource SystemAccentColorDark2}" FallbackColor="White"  
+            BackgroundSource="HostBackdrop"  TintOpacity="0" TintLuminosityOpacity="0" TintColor="{ThemeResource SystemAccentColorLight3}" FallbackColor="White"  
             />
 
     <Style x:Key="HeaderTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource HeaderTextBlockStyle}">
@@ -34,8 +34,7 @@
                         Opacity="1.00"
                         TintColor="#FF101010"
                         TintOpacity="0.8"
-                        FallbackColor="#FF101010"                        
-                        />
+                        FallbackColor="{ThemeResource SystemAccentColorLight2}" />
     <Style x:Key="HomePageBackground" TargetType="Page">
         <Setter Property="Background" Value="{StaticResource bgAcrylicBrushHome}"/>
     </Style>
