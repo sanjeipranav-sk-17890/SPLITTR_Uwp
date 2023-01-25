@@ -18,6 +18,7 @@ using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.VmLogic;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
 using SPLITTR_Uwp.Services;
+using SPLITTR_Uwp.Views;
 
 namespace SPLITTR_Uwp.Configuration
 {
@@ -62,6 +63,7 @@ namespace SPLITTR_Uwp.Configuration
                 .AddTransient<IUserUseCase, UserUseCase>()
                 .AddTransient<IExpensePayment,ExpensePayment>()
                 .AddTransient<IGroupUseCase,GroupUseCase>()
+                .AddTransient<ISplitExpenseView,SplitExpenseUserControl>()
                 .AddTransient<IExpenseGrouper,ExpenseGrouper>()
                 .AddTransient<IExpenseUseCase,ExpenseUseCase>();
 

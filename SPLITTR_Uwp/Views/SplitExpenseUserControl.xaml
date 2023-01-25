@@ -470,7 +470,8 @@
                 Margin="5 0 5 0"
             >
             </TextBox>
-            <controls:TeachingTip Target="{x:Bind SplitUserNameTextBlock}"
+            <controls:TeachingTip Target="{x:Bind SplitUserNameTextBlock}" 
+                                  ShouldConstrainToRootBounds="False"
                                   TailVisibility="Collapsed" x:Name="SuggestionListTeachingTip"  
                                   Style="{StaticResource NoCloseButtonTeachingTipstyle}"
                                   PreferredPlacement="Bottom"
@@ -636,7 +637,9 @@
                 <controls:TeachingTip Name="UnEqualSplitTeachingTip"
                                       Target="{x:Bind SplitingMethodSelectionComboBox}"
                                       PreferredPlacement="Right"
-                                      PlacementMargin="50 0 0 0"
+                                      PlacementMargin="50 0 0 0" Background="Red"
+                                      PointerEntered="UnEqualSplitTeachingTip_OnPointerEntered"
+                                      ShouldConstrainToRootBounds="False"
                                       Closed="{x:Bind _viewModel.UnequalSplitTeachingSplitClosed}"
                                       IsOpen="{x:Bind _viewModel.UneqaulSplitPopUpVisibility,Mode=TwoWay}">
                     <!--<Rectangle Height="300"
