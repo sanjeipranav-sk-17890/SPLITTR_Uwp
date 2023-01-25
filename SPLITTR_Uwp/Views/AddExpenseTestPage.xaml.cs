@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using Windows.Foundation;
 using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
 using SPLITTR_Uwp.Services;
+using Windows.UI.WindowManagement.Preview;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -41,6 +43,10 @@ namespace SPLITTR_Uwp.Views
         {
             var splitExpenseUCtrl = MainGrid.FindName(nameof(SplitExpneseControl)) as SplitExpenseUserControl;
             MainGrid.Children.Remove(splitExpenseUCtrl);
+            if (splitExpenseUCtrl is not null)
+            {
+                splitExpenseUCtrl.CanDrag = false;
+            }
             return splitExpenseUCtrl;
         }
 
@@ -66,9 +72,10 @@ namespace SPLITTR_Uwp.Views
                     ThemeHelperService.RegisterElement(_rootGrid);
                 };
 
+                SetMinimumWindowWidth(_sptrAppWindow,new Size(500,700));
 
                 //Setting Window Content Property to root Grid
-               ElementCompositionPreview.SetAppWindowContent(_sptrAppWindow, _rootGrid);
+                ElementCompositionPreview.SetAppWindowContent(_sptrAppWindow, _rootGrid);
                _sptrAppWindow.RequestMoveAdjacentToCurrentView();
 
                _sptrAppWindow.Closed += SptrAppWindowClosed;
@@ -77,14 +84,21 @@ namespace SPLITTR_Uwp.Views
            await _sptrAppWindow.TryShowAsync();
 
         }
+        private void SetMinimumWindowWidth(AppWindow window, Size minimumWindowWidth)
+        {
+            // If specified size is smaller than the default min size for a window we need to set a new preferred min size first.
+            // Let's set it to the smallest allowed and leave it at that.
+            WindowManagementPreview.SetPreferredMinSize(_sptrAppWindow, new Size(500, 700));
 
-        
-
+            // Request the size of our window
+            _sptrAppWindow.RequestSize(new Size(500, 700));
+        }
         private void SptrAppWindowClosed(AppWindow sender, AppWindowClosedEventArgs args)
         {
             _sptrAppWindow.Closed -= SptrAppWindowClosed;
             _sptrAppWindow = null;
             _rootGrid.Children.Remove(SplitExpenseUCtrl);
+            SplitExpenseUCtrl.CanDrag = true;
             ThemeHelperService.UnRegisterElement(_rootGrid);
             _rootGrid = null;
             MainGrid.Children.Add(SplitExpenseUCtrl);

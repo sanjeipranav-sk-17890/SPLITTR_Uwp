@@ -13,6 +13,7 @@ using SPLITTR_Uwp.ViewModel.Models;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Contracts;
+using SPLITTR_Uwp.Views;
 
 namespace SPLITTR_Uwp.ViewModel
 {
@@ -20,8 +21,9 @@ namespace SPLITTR_Uwp.ViewModel
     {
         private readonly IUserUseCase _userUseCase;
         private readonly IExpenseUseCase _expenseUseCase;
-        
-        
+        private readonly ISplitExpenseView _view;
+
+
 
         public UserViewModel User { get;}
 
@@ -530,16 +532,12 @@ namespace SPLITTR_Uwp.ViewModel
         //if the splitting is successfull showing split completed text box and reset the page 
         private async void ExpenseUseCasePresenterCallBackOnSuccess(EventArgs args)
         {
-            
-           await UiService.ShowContentAsync("Spliting SuccessFull", "Expenses Splitted Successfully");
-           await     UiService.RunOnUiThread((() =>
-                {
-                 ResetPage();
-
-                }));
-           _expenseUseCase.PresenterCallBackOnSuccess-= ExpenseUseCasePresenterCallBackOnSuccess;
-
-
+            await UiService.RunOnUiThread((() =>
+            {
+                UiService.ShowContentAsync("Spliting SuccessFull", "Expenses Splitted Successfully", _view.XamlRoot);
+                ResetPage();
+            }));
+            _expenseUseCase.PresenterCallBackOnSuccess-= ExpenseUseCasePresenterCallBackOnSuccess;
         }
         private void ResetPage()//resets UserControl to initial stage
         {
@@ -564,10 +562,11 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
        
-        public SplitExpenseViewModel(IUserUseCase userUseCase,IExpenseUseCase expenseUseCase)
+        public SplitExpenseViewModel(IUserUseCase userUseCase,IExpenseUseCase expenseUseCase,ISplitExpenseView view)
         {
             _userUseCase = userUseCase;
             _expenseUseCase = expenseUseCase;
+            _view = view;
             Store.CurreUserBobj.ValueChanged += OnUserValueChanged;
             User = new UserViewModel(Store.CurreUserBobj);
             ExpensesToBeSplitted.CollectionChanged += ExpensesToBeSplittedOnCollectionChanged;

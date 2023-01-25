@@ -15,7 +15,7 @@
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d"
     Height="auto"
-    d:DesignWidth="500" d:DesignHeight="590"
+    d:DesignWidth="500" d:DesignHeight="700"
     
 >
 
@@ -470,15 +470,16 @@
                 Margin="5 0 5 0"
             >
             </TextBox>
-            <controls:TeachingTip Target="{x:Bind SplitUserNameTextBlock}"
-                                  TailVisibility="Collapsed"
+            <controls:TeachingTip Target="{x:Bind SplitUserNameTextBlock}" 
+                                  ShouldConstrainToRootBounds="False"
+                                  TailVisibility="Collapsed" x:Name="SuggestionListTeachingTip"  
                                   Style="{StaticResource NoCloseButtonTeachingTipstyle}"
                                   PreferredPlacement="Bottom"
                                   IsOpen="{x:Bind _viewModel.IsUserSuggestionListOpen,Mode=TwoWay}">
                 <controls:TeachingTip.Content>
                     <ListView ItemsSource="{x:Bind _viewModel.UsersList,Mode=OneWay}"
                               SelectionChanged="{x:Bind _viewModel.ListViewOnSelected}"
-                              SelectionMode="Single"
+                              SelectionMode="Single" 
                               SelectedIndex="{x:Bind _viewModel.SelectedUserIndex,Mode=TwoWay}"
                     >
                        <ListView.ItemTemplate>
@@ -636,7 +637,9 @@
                 <controls:TeachingTip Name="UnEqualSplitTeachingTip"
                                       Target="{x:Bind SplitingMethodSelectionComboBox}"
                                       PreferredPlacement="Right"
-                                      PlacementMargin="50 0 0 0"
+                                      PlacementMargin="50 0 0 0" Background="Red"
+                                      PointerEntered="UnEqualSplitTeachingTip_OnPointerEntered"
+                                      ShouldConstrainToRootBounds="False"
                                       Closed="{x:Bind _viewModel.UnequalSplitTeachingSplitClosed}"
                                       IsOpen="{x:Bind _viewModel.UneqaulSplitPopUpVisibility,Mode=TwoWay}">
                     <!--<Rectangle Height="300"
