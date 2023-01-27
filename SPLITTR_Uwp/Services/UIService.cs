@@ -23,10 +23,13 @@ namespace SPLITTR_Uwp.Services
                 return RunOnUiThread(async () =>
                 {
                     rootElement ??= Window.Current.Content.XamlRoot;
-                    var msg = new ContentDialog();
-                    msg.Title = title;
-                    msg.Content = content;
-                    msg.CloseButtonText = "close";
+                    var msg = new ContentDialog
+                    {
+                        Title = title,
+                        Content = content,
+                        CloseButtonText = "close",
+                        XamlRoot = rootElement
+                    };
                     await msg.ShowAsync();
                 });
             }

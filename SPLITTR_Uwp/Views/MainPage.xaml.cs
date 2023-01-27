@@ -32,6 +32,7 @@ namespace SPLITTR_Uwp.Views
             _viewModel = ActivatorUtilities.CreateInstance<MainPageViewModel>(App.Container, this);
             _viewModel.BindingUpdateInvoked += _viewModel_BindingUpdateInvoked;
             this.InitializeComponent();
+
         }
 
         private void _viewModel_BindingUpdateInvoked()
@@ -87,14 +88,12 @@ namespace SPLITTR_Uwp.Views
 
         private string _innerPageTitle = nameof(AllExpense);
 
-       
-        
         private void AppIcon_OnClick(object sender, TappedRoutedEventArgs e)
         {
             MainPageNavigationView.IsPaneOpen = true;
             NavigationService.Frame = InnerFrame;
             NavigationService.Navigated += NavigationService_Navigated;
-            NavigationService.Navigate(typeof(ExpensesListAndDetailViewPage), _viewModel.ExpensesList);
+            NavigationService.Navigate(typeof(ExpensesListAndDetailViewPage));
         }
 
         private void NavigationService_Navigated(object sender, NavigationEventArgs e)
@@ -106,7 +105,6 @@ namespace SPLITTR_Uwp.Views
             }
             page.ItemsSource = _viewModel.ExpensesList;
             page.PaneButtonOnClick += (PageOnPaneButtonOnClick);
-
             //setting binding manually  for title in that Page 
             Binding binding = new Binding()
             {
@@ -114,9 +112,12 @@ namespace SPLITTR_Uwp.Views
                 Path = new PropertyPath(nameof(InnerPageTitle)),
                 Mode = BindingMode.OneWay
             };
-            BindingOperations.SetBinding(page,ExpensesListAndDetailViewPage.TitleTextProperty,binding);
-        }
+            BindingOperations.SetBinding(page, ExpensesListAndDetailViewPage.TitleTextProperty, binding);
 
+            //Unsubscribing NavigationServices
+            NavigationService.Navigated -= NavigationService_Navigated;
+        }
+        
 
         private void PageOnPaneButtonOnClick()
         {

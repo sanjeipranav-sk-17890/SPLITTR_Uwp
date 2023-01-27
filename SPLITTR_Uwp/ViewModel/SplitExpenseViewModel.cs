@@ -101,8 +101,7 @@ namespace SPLITTR_Uwp.ViewModel
             UsersList.Clear(); 
              _userUseCase.GetUsersSuggestionAsync(SplittingUsersName.Trim().ToLower(), async suggestions =>
             {//remainCode will be run if data fetching from use case is finished
-               await UiService.RunOnUiThread(() =>
-                    {
+               await UiService.RunOnUiThread(() => {
                         foreach (var user in suggestions)
                         {
                             UsersList.Add(user);
@@ -534,7 +533,7 @@ namespace SPLITTR_Uwp.ViewModel
         {
             await UiService.RunOnUiThread((() =>
             {
-                UiService.ShowContentAsync("Spliting SuccessFull", "Expenses Splitted Successfully", _view.XamlRoot);
+                UiService.ShowContentAsync("Spliting SuccessFull", "Expenses Splitted Successfully", _view.VisualRoot);
                 ResetPage();
             }));
             _expenseUseCase.PresenterCallBackOnSuccess-= ExpenseUseCasePresenterCallBackOnSuccess;

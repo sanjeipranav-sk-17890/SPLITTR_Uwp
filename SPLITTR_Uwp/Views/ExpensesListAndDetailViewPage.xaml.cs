@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
@@ -26,6 +27,7 @@ namespace SPLITTR_Uwp.Views
         {
             this.InitializeComponent();
             _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<ExpenseListAndDetailedPageViewModel>(App.Container);
+            
         }
 
         public event Action PaneButtonOnClick;
@@ -73,7 +75,10 @@ namespace SPLITTR_Uwp.Views
 
         public ObservableCollection<ExpenseBobj> DateSortedExpenseList { get; } = new ObservableCollection<ExpenseBobj>();
 
-
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {    //clearing previous subscriptions 
+            PaneButtonOnClick = null;
+        }
 
 
         private void ExpensesListAndDetailViewPage_OnLoaded(object sender, RoutedEventArgs args)

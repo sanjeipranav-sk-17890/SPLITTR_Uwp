@@ -475,6 +475,7 @@
                                   TailVisibility="Collapsed" x:Name="SuggestionListTeachingTip"  
                                   Style="{StaticResource NoCloseButtonTeachingTipstyle}"
                                   PreferredPlacement="Bottom"
+                                  XamlRoot="{x:Bind XamlRoot,Mode=OneWay}"
                                   IsOpen="{x:Bind _viewModel.IsUserSuggestionListOpen,Mode=TwoWay}">
                 <controls:TeachingTip.Content>
                     <ListView ItemsSource="{x:Bind _viewModel.UsersList,Mode=OneWay}"
@@ -484,7 +485,7 @@
                     >
                        <ListView.ItemTemplate>
                             <DataTemplate x:DataType="model:User">
-                                <TextBlock Text="{x:Bind UserName}" Width="auto" FontSize="15" HorizontalAlignment="Center"></TextBlock>
+                                <TextBlock Text="{x:Bind UserName}" Width="auto" FontSize="15"  HorizontalAlignment="Center"></TextBlock>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                      </ListView>
@@ -637,7 +638,8 @@
                 <controls:TeachingTip Name="UnEqualSplitTeachingTip"
                                       Target="{x:Bind SplitingMethodSelectionComboBox}"
                                       PreferredPlacement="Right"
-                                      PlacementMargin="50 0 0 0" Background="Red"
+                                      PlacementMargin="50 0 0 0" 
+                                      XamlRoot="{x:Bind XamlRoot,Mode=OneWay}"
                                       PointerEntered="UnEqualSplitTeachingTip_OnPointerEntered"
                                       ShouldConstrainToRootBounds="False"
                                       Closed="{x:Bind _viewModel.UnequalSplitTeachingSplitClosed}"
@@ -678,6 +680,7 @@
             />-->
            <CalendarDatePicker HorizontalAlignment="Center"
                                Width="200"
+                               XamlRoot="{x:Bind XamlRoot,Mode=OneWay}"
                                PlaceholderText="Date Of Expense :"
                                MaxDate="{x:Bind _viewModel.MaxYearDisplayLimit,Mode=OneWay}"
                                 Date="{x:Bind _viewModel.ExpenditureDate,Mode=TwoWay}"

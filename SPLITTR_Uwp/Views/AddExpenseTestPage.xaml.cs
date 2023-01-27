@@ -70,6 +70,7 @@ namespace SPLITTR_Uwp.Views
                     //Applying Current Theme To Root Grid
                     _rootGrid.RequestedTheme = ThemeHelperService.GetPreferenceThemeIfSet();
                     ThemeHelperService.RegisterElement(_rootGrid);
+                    SplitExpenseUCtrl.XamlRoot = _rootGrid.XamlRoot;
                 };
 
                 SetMinimumWindowWidth(_sptrAppWindow,new Size(500,700));
@@ -88,7 +89,7 @@ namespace SPLITTR_Uwp.Views
         {
             // If specified size is smaller than the default min size for a window we need to set a new preferred min size first.
             // Let's set it to the smallest allowed and leave it at that.
-            WindowManagementPreview.SetPreferredMinSize(_sptrAppWindow, new Size(500, 700));
+            WindowManagementPreview.SetPreferredMinSize(_sptrAppWindow, new Size(800, 1000));
 
             // Request the size of our window
             _sptrAppWindow.RequestSize(new Size(500, 700));
