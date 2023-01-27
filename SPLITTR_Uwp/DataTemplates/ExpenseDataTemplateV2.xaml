@@ -106,10 +106,10 @@
                        MaxHeight="40"></Image>
                 <StackPanel Orientation="Vertical" Margin="5 0 0 0" VerticalAlignment="Center">
                     <TextBlock Text="{x:Bind ExpenseObj.Description,Mode=OneWay}"
-                               FontSize="15"
-                               TextWrapping="Wrap"
+                               FontSize="15" TextTrimming="WordEllipsis"
+                                  TextWrapping="WrapWholeWords"
                     ></TextBlock>
-                    <Button Style="{StaticResource NoPointerAnimation}" Visibility="{x:Bind _viewModel.IsGroupButtonVisible,Mode=OneWay}"
+                        <Button Style="{StaticResource NoPointerAnimation}" Visibility="{x:Bind _viewModel.IsGroupButtonVisible,Mode=OneWay}"
                             Content="{x:Bind _viewModel.GroupName,Mode=OneWay}"
                             FontSize="10"
                             CornerRadius="4"

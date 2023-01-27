@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -87,7 +88,7 @@ namespace SPLITTR_Uwp.Services
             }
         }
 
-        public static bool ChangeTheme(ElementTheme theme)
+        public async static Task<bool> ChangeTheme(ElementTheme theme)
         {
 
           if (CurrentTheme == theme )
@@ -100,7 +101,11 @@ namespace SPLITTR_Uwp.Services
 
           foreach (var rootCollection in XamlRootCollections)
           {
-              rootCollection.Value.RequestedTheme = CurrentTheme.GetValueOrDefault();
+             await rootCollection.Value.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, (() =>
+              {
+                  rootCollection.Value.RequestedTheme = CurrentTheme.GetValueOrDefault();
+
+              }));
           }
           return true;
         }

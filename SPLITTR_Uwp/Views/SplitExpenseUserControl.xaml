@@ -16,6 +16,7 @@
     mc:Ignorable="d"
     Height="auto"
     d:DesignWidth="500" d:DesignHeight="700"
+    MaxWidth="500"
     
 >
 
@@ -640,7 +641,6 @@
                                       PreferredPlacement="Right"
                                       PlacementMargin="50 0 0 0" 
                                       XamlRoot="{x:Bind XamlRoot,Mode=OneWay}"
-                                      PointerEntered="UnEqualSplitTeachingTip_OnPointerEntered"
                                       ShouldConstrainToRootBounds="False"
                                       Closed="{x:Bind _viewModel.UnequalSplitTeachingSplitClosed}"
                                       IsOpen="{x:Bind _viewModel.UneqaulSplitPopUpVisibility,Mode=TwoWay}">

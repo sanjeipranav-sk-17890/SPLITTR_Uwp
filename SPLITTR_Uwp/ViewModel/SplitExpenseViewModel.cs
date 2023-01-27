@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Windows.UI.Xaml;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.ModelBobj;
@@ -21,7 +23,8 @@ namespace SPLITTR_Uwp.ViewModel
     {
         private readonly IUserUseCase _userUseCase;
         private readonly IExpenseUseCase _expenseUseCase;
-        private readonly ISplitExpenseView _view;
+
+        public  ISplitExpenseView View { get; set; }
 
 
 
@@ -113,7 +116,7 @@ namespace SPLITTR_Uwp.ViewModel
 
                         IsUserSuggestionListOpen = true;
                        
-                    },_view.ApplicationViewId);
+                    },View.Dispatcher);
                
             });
 
@@ -533,9 +536,9 @@ namespace SPLITTR_Uwp.ViewModel
         {
             await UiService.RunOnUiThread((() =>
             {
-                UiService.ShowContentAsync("Spliting SuccessFull", "Expenses Splitted Successfully", _view.VisualRoot);
+                UiService.ShowContentAsync("Spliting SuccessFull", "Expenses Splitted Successfully");
                 ResetPage();
-            }));
+            }),View.Dispatcher);
             _expenseUseCase.PresenterCallBackOnSuccess-= ExpenseUseCasePresenterCallBackOnSuccess;
         }
         private void ResetPage()//resets UserControl to initial stage
@@ -565,7 +568,7 @@ namespace SPLITTR_Uwp.ViewModel
         {
             _userUseCase = userUseCase;
             _expenseUseCase = expenseUseCase;
-            _view = view;
+            View = view;
             Store.CurreUserBobj.ValueChanged += OnUserValueChanged;
             User = new UserViewModel(Store.CurreUserBobj);
             ExpensesToBeSplitted.CollectionChanged += ExpensesToBeSplittedOnCollectionChanged;
@@ -584,16 +587,42 @@ namespace SPLITTR_Uwp.ViewModel
         {
             await UiService.RunOnUiThread(
                 () =>
-                {
+                { 
                     BindingUpdateInvoked?.Invoke();
-                },_view.ApplicationViewId);
+                },View.Dispatcher);
         }
-        
-
 
 
         public event Action BindingUpdateInvoked;
     }
+    //public class Test : INotifyPropertyChanged
+    //{
 
+    //    public event PropertyChangedEventHandler PropertyChanged
+    //    {
+    //        add
+    //        {
+    //          _onPropertyChanged+=  value;
+    //        }
+    //        remove
+    //        {
+                
+    //        }
+    //    }
+
+    //    private  Action<object,PropertyChangedEventArgs> _onPropertyChanged;
+    //    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    //    {
+    //        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    //    }
+    //    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+    //    {
+    //        if (EqualityComparer<T>.Default.Equals(field, value))
+    //            return false;
+    //        field = value;
+    //        OnPropertyChanged(propertyName);
+    //        return true;
+    //    }
+    //}
 
 }

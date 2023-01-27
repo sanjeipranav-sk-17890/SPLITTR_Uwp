@@ -23,8 +23,7 @@
        <ImageBrush ImageSource="../Assets/LoginPageFlipViewItems/imageedit_7_2815236106.png" Stretch="Uniform" x:Key="FlipViewImage4"></ImageBrush>
 
 
-
-</Page.Resources>
+   </Page.Resources>
     <Grid >
          <Grid.RowDefinitions>
              <RowDefinition Height="Auto"/>
@@ -41,7 +40,7 @@
                          Name="LogoStactPanel" Margin="40 0 0 0">
                  <Image Source="../Assets/AppLogo/62e914dea1e1b17f781f57f4.png" RelativePanel.AlignRightWithPanel="True"
                         RelativePanel.AlignTopWithPanel="True"
-                        Height="75"
+                        Height="75" 
                         Width="150"></Image>
                  <TextBlock Text="SPLITTR"
                             VerticalAlignment="Bottom"

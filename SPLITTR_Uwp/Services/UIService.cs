@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
@@ -21,10 +22,11 @@ namespace SPLITTR_Uwp.Services
         /// <param name="content"></param>
         /// <param name="title"></param>
         /// <param name="rootElement"></param>
+        /// <param name="dispatcher"></param>
         /// <returns></returns>
-        public static Task ShowContentAsync(string content = "",string title= "",XamlRoot rootElement = null)
-            {
-                return RunOnUiThread(async () =>
+        public static Task ShowContentAsync(string content = "",string title= "",XamlRoot rootElement = null,CoreDispatcher dispatcher = null)
+        {
+            return RunOnUiThread(async () =>
                 {
                     rootElement ??= Window.Current.Content.XamlRoot;
                     var msg = new ContentDialog
@@ -35,32 +37,28 @@ namespace SPLITTR_Uwp.Services
                         XamlRoot = rootElement
                     };
                     await msg.ShowAsync();
-                });
-            }
+                },dispatcher);
+        }
 
         /// <summary>
         /// Runs assigned Block of code in Ui Thread
         /// </summary>
         /// <param name="function"></param>
-        /// <param name="applicationViewId"></param>
+        /// <param name="dispatcher"></param>
         /// <returns></returns>
-        public async static Task RunOnUiThread(Action function,int applicationViewId=default)
-            {
-                var dispatcher = CoreApplication.MainView.Dispatcher;
-                if (applicationViewId != default)
-                {
-                   dispatcher = CoreApplication.Views.FirstOrDefault(v => ApplicationView.GetApplicationViewIdForWindow(v.CoreWindow) == applicationViewId)?.Dispatcher;
-                }
+        public async static Task RunOnUiThread(Action function, CoreDispatcher dispatcher = null)
+        {
+            dispatcher ??= CoreApplication.MainView.Dispatcher;
 
-                if (dispatcher != null)
+            if (dispatcher != null)
+            {
+                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        function?.Invoke();
-                    });
-                    
-                }
+                    function?.Invoke();
+                });
+
             }
-            
+        }
+
     }
 }
