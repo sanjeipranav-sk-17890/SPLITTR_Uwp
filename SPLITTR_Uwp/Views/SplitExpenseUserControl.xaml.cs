@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using Windows.UI.Core;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -28,7 +26,7 @@ namespace SPLITTR_Uwp.Views
 
         private void SplitExpenseUserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            Bindings.Update();
+            Debug.WriteLine(XamlRoot.IsHostVisible);
         }
 
         private void _viewModel_BindingUpdateInvoked()
@@ -36,6 +34,7 @@ namespace SPLITTR_Uwp.Views
            Bindings.Update();
         }
 
+      
         private void UnEqualSplitTeachingTip_OnPointerEntered(object sender, PointerRoutedEventArgs e)
         {
             Debug.WriteLine("Pointer entered UnequalTEaching tip");
@@ -49,30 +48,9 @@ namespace SPLITTR_Uwp.Views
             }
         }
 
-        public int ApplicationViewId
-        {
-            get
-            {
-                return ApplicationView.GetApplicationViewIdForWindow(Window.Current.CoreWindow);
-            }
-        }
-
-        public SplitExpenseUserControl(SplitExpenseUserControl control)
-        {
-            _viewModel = control._viewModel;
-            _viewModel.BindingUpdateInvoked +=  _viewModel_BindingUpdateInvoked;
-            this.InitializeComponent();
-            Loaded += SplitExpenseUserControl_Loaded;
-        }
-
     }
-
-
-
     public interface ISplitExpenseView
     {
         public XamlRoot VisualRoot { get;}
-
-        public int ApplicationViewId { get;}
     }
 }

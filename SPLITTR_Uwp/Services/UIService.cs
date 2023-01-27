@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.Popups;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -38,29 +34,17 @@ namespace SPLITTR_Uwp.Services
                 });
             }
 
-        /// <summary>
-        /// Runs assigned Block of code in Ui Thread
-        /// </summary>
-        /// <param name="function"></param>
-        /// <param name="applicationViewId"></param>
-        /// <returns></returns>
-        public async static Task RunOnUiThread(Action function,int applicationViewId=default)
+            /// <summary>
+            /// Runs assigned Block of code in Ui Thread
+            /// </summary>
+            /// <param name="function"></param>
+            /// <returns></returns>
+            public async static Task RunOnUiThread(Action function)
             {
-                var dispatcher = CoreApplication.MainView.Dispatcher;
-                if (applicationViewId != default)
-                {
-                   dispatcher = CoreApplication.Views.FirstOrDefault(v => ApplicationView.GetApplicationViewIdForWindow(v.CoreWindow) == applicationViewId)?.Dispatcher;
-                }
-
-                if (dispatcher != null)
-                {
-                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        function?.Invoke();
-                    });
-                    
-                }
+            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,()=>
+                { 
+                   function?.Invoke();
+                });
             }
-            
     }
 }
