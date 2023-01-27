@@ -113,7 +113,7 @@ namespace SPLITTR_Uwp.ViewModel
 
                         IsUserSuggestionListOpen = true;
                        
-                    });
+                    },_view.ApplicationViewId);
                
             });
 
@@ -423,7 +423,7 @@ namespace SPLITTR_Uwp.ViewModel
             ExpensesToBeSplitted.Clear();
 
             //cheching whether it is dummy groupobj
-            if (_selectedGroupIndex == 0)
+            if (_selectedGroupIndex <= 0)
             {
                 if (_selectedUser != null)//Individual Split
                 {
@@ -586,9 +586,9 @@ namespace SPLITTR_Uwp.ViewModel
                 () =>
                 {
                     BindingUpdateInvoked?.Invoke();
-                });
+                },_view.ApplicationViewId);
         }
-
+        
 
 
 
