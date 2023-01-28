@@ -96,9 +96,9 @@ namespace SPLITTR_Uwp
 
             //Setting Appliations title bar to Requeired theme color
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            var applicationThemeColor =(SolidColorBrush) Application.Current.Resources["ApplicationMainThemeColor"];
-            titleBar.BackgroundColor = applicationThemeColor.Color;
-            titleBar.ButtonBackgroundColor=applicationThemeColor.Color;
+            var applicationThemeColor =(Microsoft.UI.Xaml.Media.AcrylicBrush) Application.Current.Resources["ApplicationMainThemeAcrylicBrush"];
+            titleBar.BackgroundColor = applicationThemeColor.FallbackColor;
+            titleBar.ButtonBackgroundColor=applicationThemeColor.FallbackColor;
         }
 
         /// <summary>

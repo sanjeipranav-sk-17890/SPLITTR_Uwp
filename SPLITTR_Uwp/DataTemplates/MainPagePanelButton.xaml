@@ -18,11 +18,12 @@
                  BorderBrush="Transparent"
                  Width="30"
                  Height="30"
+                 Style="{StaticResource NoPointerAnimation}"
                  Click="ButtonBase_OnClick" VerticalContentAlignment="Stretch"
                  VerticalAlignment="Center">
 
             <Button.Content>
-                    <FontIcon x:Name="ArrowImage" FontFamily="Wingdings 3" Foreground="{ThemeResource SystemAccentColorDark2}" Glyph="&#xF0EE;">
+                    <FontIcon x:Name="ArrowImage" FontFamily="Wingdings 3" Foreground="{ThemeResource SystemAccentColorDark3}" Glyph="&#xF0EE;">
                         <FontIcon.RotationTransition>
                             <ScalarTransition />
                         </FontIcon.RotationTransition>

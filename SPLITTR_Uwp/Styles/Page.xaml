@@ -12,7 +12,7 @@
         <Setter Property="Width" Value="200" />
         <Setter Property="Stretch" Value="Uniform" />
     </Style>
-    <media:AcrylicBrush x:Key="bgAcrylicBrushHome"
+    <media:AcrylicBrush x:Key="BgAcrylicBrushHome"
             BackgroundSource="HostBackdrop"  TintOpacity="0" TintLuminosityOpacity="0" TintColor="{ThemeResource SystemAccentColorLight3}" FallbackColor="White"  
             />
 
@@ -21,12 +21,10 @@
     </Style>
     <SolidColorBrush x:Key="ThemeControlForegroundBaseHighBrush" Color="{ThemeResource SystemBaseHighColor}" />
 
-    <Color x:Key="BrandColor">#FF046DD7</Color>
     <SolidColorBrush x:Key="SystemControlForegroundAccentBrush" Color="#FFFFFFFF" />
     <!--Override foreground color for this custom theme-->
     <SolidColorBrush x:Key="MTCScrubberBarTextBrush" Color="#FF101010" />
 
-    <SolidColorBrush x:Key="BrandColorBrush" Color="{StaticResource BrandColor}" />
     <SolidColorBrush x:Key="HeaderColor" Color="#10101010" />
    
     <media:AcrylicBrush x:Key="bgAcrylicBrush" 
@@ -36,15 +34,13 @@
                         TintOpacity="0.8"
                         FallbackColor="{ThemeResource SystemAccentColorLight2}" />
     <Style x:Key="HomePageBackground" TargetType="Page">
-        <Setter Property="Background" Value="{StaticResource bgAcrylicBrushHome}"/>
+        <Setter Property="Background" Value="{StaticResource BgAcrylicBrushHome}"/>
     </Style>
 
     <Style x:Key="PageBackground" TargetType="Panel">
         <Setter Property="Background" Value="{StaticResource bgAcrylicBrush}"/>
     </Style>
-    <media:AcrylicBrush x:Key="NavigationViewExpandedPaneBackground" BackgroundSource="HostBackdrop" TintColor="{StaticResource BrandColor}" TintOpacity="0.6" FallbackColor="#FF046DD7" />
-    <media:AcrylicBrush x:Key="NavigationViewDefaultPaneBackground" BackgroundSource="Backdrop" TintColor="{StaticResource BrandColor}" TintOpacity="0.6" FallbackColor="#FF046DD7" />
-    <!--Overriding Pointer over animation -->
+ 
     <Style x:Key="NoPointerAnimation" TargetType="Button">
         <Setter Property="Background" Value="{ThemeResource ButtonBackground}"/>
         <Setter Property="BackgroundSizing" Value="OuterBorderEdge"/>

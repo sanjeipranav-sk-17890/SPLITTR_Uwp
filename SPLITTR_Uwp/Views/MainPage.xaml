@@ -15,11 +15,12 @@
     xmlns:objectModel="using:System.Collections.ObjectModel"
     xmlns:models="using:SPLITTR_Uwp.Core.Models" Loaded="{x:Bind _viewModel.ViewLoaded}"
 
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationMainThemeAcrylicBrush}">
     <Page.Resources>
         <Style x:Key="AddWalletButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="CornerRadius" Value="4"></Setter>
         </Style>
         <Style x:Key="IconStyle" TargetType="Image">
             <Setter Property="Stretch" Value="Uniform" />
@@ -29,13 +30,10 @@
             <Setter Property="FontFamily" Value="Segoe UI Variable" />
             <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"></Setter>
         </Style>
-        <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="{ThemeResource SystemAccentColorLight2}"/>
-        <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="{ThemeResource SystemAccentColorLight2}" />
-
         <!--<SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="{ThemeResource SystemAccentColor}" />-->
     </Page.Resources>
 
-    <Grid>
+    <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
@@ -66,7 +64,7 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <Grid Grid.Row="0" Background="{ThemeResource ApplicationMainThemeColor}" >
+        <Grid Grid.Row="0" Background="{ThemeResource ApplicationMainThemeAcrylicBrush}" >
             <Grid.Resources>
                 <Style x:Key="ButtonStyle" TargetType="Button">
                     <Setter Property="Background" Value="{ThemeResource ApplicationMainThemeColor}" />
@@ -95,7 +93,7 @@
                 <Button Style="{StaticResource AddWalletButtonStyle}"
                         RelativePanel.LeftOf="TitleBarAddExpenseButton"  >
                     <Button.Content>
-                        <Image Source="/Assets/icons/more.png" Style="{StaticResource IconStyle}" />
+                        <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="23" Glyph="&#xECCD;" />
                     </Button.Content>
                     <Button.Flyout>
                         <MenuFlyout>
@@ -121,11 +119,11 @@
 
         </Grid>
             <!-- Main Navigation View-->
-        <controls:NavigationView
+        <controls:NavigationView Style="{StaticResource NarrowWindowNavigationViewStyle}"
             x:Name="MainPageNavigationView"
             Grid.Row="1"
             IsSettingsVisible="False"
-            PaneDisplayMode="Left"
+            Margin="-1 0 0 0"
             CompactPaneLength="0"
             IsPaneOpen="{x:Bind _viewModel.PaneVisibility,Mode=TwoWay}"
             IsBackButtonVisible="Collapsed"
@@ -282,9 +280,7 @@
                             <Button.Content>
 
                                 <StackPanel Grid.Row="1"  Orientation="Horizontal">
-                                    <Image Source="/Assets/icons/logout.png" Width="22"
-                                           Height="25"
-                                    ></Image>
+                                    <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xEB97;" />
                                     <TextBlock Text="Logout"
                                                FontSize="18"
                                                Margin="20 0 0 0"
@@ -300,7 +296,7 @@
             </controls:NavigationView.PaneFooter>
         </controls:NavigationView>
         <RelativePanel Grid.Row="2"  Grid.Column="0"
-                       Background="{ThemeResource ApplicationMainThemeColor}"
+                       Background="{ThemeResource ApplicationMainThemeAcrylicBrush}"
                        Name="BottomPanel" Visibility="Collapsed"
                                    HorizontalAlignment="Stretch">
             <StackPanel RelativePanel.AlignRightWithPanel="True"  Orientation="Horizontal">

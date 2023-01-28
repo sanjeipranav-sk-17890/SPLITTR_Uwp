@@ -9,8 +9,7 @@
     xmlns:vm="using:SPLITTR_Uwp.ViewModel.Models"
     xmlns:header="using:SPLITTR_Uwp.ViewModel.Models.ExpenseListObject"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    Style="{ThemeResource HomePageBackground}"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Background="{ThemeResource ApplicationMainThemeAcrylicBrush}"
     xmlns:template="using:SPLITTR_Uwp.DataTemplates"
     Loaded="ExpensesListAndDetailViewPage_OnLoaded">
     <Page.Resources>
@@ -76,7 +75,7 @@
             <ColumnDefinition MinWidth="400"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" CornerRadius="15">
+        <Grid Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" CornerRadius="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
@@ -202,17 +201,17 @@
         </Grid>
         <!--Column Grid Splitter-->
         <controls:GridSplitter Grid.Column="1" Width="10" ResizeBehavior="BasedOnAlignment"
-                               ResizeDirection="Auto" Background="White"  CornerRadius="5" >
+                               ResizeDirection="Auto" Background="Transparent"   >
             <controls:GridSplitter.Element>
-                <Grid Background="White" >
+                <Grid Background="Transparent" >
 
                 </Grid>
             </controls:GridSplitter.Element>
         </controls:GridSplitter>
         <!-- ================================= -->
-        <Grid Grid.Column="2"  CornerRadius="15">
-            <ScrollViewer HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch">
+        <Grid Grid.Column="2"  CornerRadius="5" Background="Red" >
+            <ScrollViewer HorizontalAlignment="Stretch" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                          VerticalAlignment="Stretch" CornerRadius="5">
                 <StackPanel Orientation="Vertical">
                     <template:OwnerExpenseUserControl     HorizontalAlignment="Stretch"
                                                           VerticalAlignment="Stretch"
