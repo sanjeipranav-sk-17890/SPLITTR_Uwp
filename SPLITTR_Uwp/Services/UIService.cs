@@ -34,12 +34,13 @@ namespace SPLITTR_Uwp.Services
                         Title = title,
                         Content = content,
                         CloseButtonText = "close",
-                        XamlRoot = rootElement
+                        XamlRoot = rootElement,
+                        RequestedTheme = ThemeHelperService.GetPreferenceThemeIfSet()
                     };
                     await msg.ShowAsync();
                 },dispatcher);
         }
-
+        
         /// <summary>
         /// Runs assigned Block of code in Ui Thread
         /// </summary>

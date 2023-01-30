@@ -589,40 +589,30 @@ namespace SPLITTR_Uwp.ViewModel
                 () =>
                 { 
                     BindingUpdateInvoked?.Invoke();
+                    if (property.Equals(nameof(User.CurrencyPreference)))
+                    {
+                        UpdateExpensesToSplittedObjs();
+                    }
                 },View.Dispatcher);
+        }
+
+        /// <summary>
+        /// Updating expense objects Currency Converter if the currency preference Changes 
+        /// </summary>
+        private void UpdateExpensesToSplittedObjs()
+        {
+            if (!ExpensesToBeSplitted.Any())
+            {
+                return;
+            }
+            foreach (var expenseBobj in ExpensesToBeSplitted)
+            {
+                    expenseBobj.CurrencyConverter = Store.CurreUserBobj.CurrencyConverter;
+            }
         }
 
 
         public event Action BindingUpdateInvoked;
     }
-    //public class Test : INotifyPropertyChanged
-    //{
-
-    //    public event PropertyChangedEventHandler PropertyChanged
-    //    {
-    //        add
-    //        {
-    //          _onPropertyChanged+=  value;
-    //        }
-    //        remove
-    //        {
-                
-    //        }
-    //    }
-
-    //    private  Action<object,PropertyChangedEventArgs> _onPropertyChanged;
-    //    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    //    {
-    //        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    //    }
-    //    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-    //    {
-    //        if (EqualityComparer<T>.Default.Equals(field, value))
-    //            return false;
-    //        field = value;
-    //        OnPropertyChanged(propertyName);
-    //        return true;
-    //    }
-    //}
-
+    
 }
