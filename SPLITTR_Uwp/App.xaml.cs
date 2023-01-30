@@ -1,6 +1,7 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -50,7 +51,7 @@ namespace SPLITTR_Uwp
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -93,12 +94,8 @@ namespace SPLITTR_Uwp
             //Setting Initial preset  Theme
             rootFrame.RequestedTheme = ThemeHelperService.GetPreferenceThemeIfSet();
             
-
             //Setting Appliations title bar to Requeired theme color
-            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            var applicationThemeColor =(Microsoft.UI.Xaml.Media.AcrylicBrush) Application.Current.Resources["ApplicationMainThemeAcrylicBrush"];
-            titleBar.BackgroundColor = applicationThemeColor.FallbackColor;
-            titleBar.ButtonBackgroundColor=applicationThemeColor.FallbackColor;
+            AccentColorService.Register(Window.Current.CoreWindow);
         }
 
         /// <summary>

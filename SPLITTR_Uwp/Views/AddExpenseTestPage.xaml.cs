@@ -77,6 +77,9 @@ namespace SPLITTR_Uwp.Views
 
                 _sptrAppView = ApplicationView.GetForCurrentView();
 
+                //Registering For System Accent Color Change
+                AccentColorService.Register(_splittrCoreWindow.CoreWindow);
+
                 _sptrAppView.Consolidated += SptrAppView_Consolidated;
                 
             }));
@@ -85,8 +88,13 @@ namespace SPLITTR_Uwp.Views
 
         private void SptrAppView_Consolidated(ApplicationView sender, ApplicationViewConsolidatedEventArgs args)
         {
+            
             _sptrAppView.Consolidated -= SptrAppView_Consolidated;
+            //Unsubscribe For Theme Transition
             ThemeHelperService.UnRegisterElement(_rootGrid);
+            //Unsubscribe For Accent Color Transition
+            AccentColorService.UnRegister(_splittrCoreWindow.CoreWindow);
+            //Releasing Resources
             _splittrCoreWindow = null;
             _sptrAppView = null;
             _rootGrid = null;
