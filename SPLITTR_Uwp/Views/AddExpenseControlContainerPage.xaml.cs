@@ -63,13 +63,7 @@ namespace SPLITTR_Uwp.Views
                 _rootGrid.Children.Add(splitCntrl);
 
                 //Registering Root Xaml Element To ThemeHelper onLoaded 
-                _rootGrid.Loaded += (o, eventArgs) =>
-                {
-                    //Applying Current Theme To Root Grid
-                    _rootGrid.RequestedTheme = ThemeHelperService.GetPreferenceThemeIfSet();
-                    ThemeHelperService.RegisterElement(_rootGrid);
-                    //  SplitExpenseUCtrl.XamlRoot = _rootGrid.XamlRoot;
-                };
+                _rootGrid.Loaded += OnRootGridOnLoaded;
 
                 Window.Current.Content = _rootGrid;
 
@@ -83,7 +77,21 @@ namespace SPLITTR_Uwp.Views
                 _sptrAppView.Consolidated += SptrAppView_Consolidated;
                 
             }));
+
             await ApplicationViewSwitcher.TryShowAsStandaloneAsync(_sptrAppView.Id);
+
+            MainPage.RequestMainPageNavigation();
+        }
+
+        private void OnRootGridOnLoaded(object o, RoutedEventArgs eventArgs)
+        {
+            //Applying Current Theme To Root Grid
+            _rootGrid.RequestedTheme = ThemeHelperService.GetPreferenceThemeIfSet();
+            ThemeHelperService.RegisterElement(_rootGrid);
+
+            //Applying Background To Root Element
+            _rootGrid.Background = (Brush)Application.Current.Resources["ApplicationMainThemeWindowAcrylicBrush"];
+
         }
 
         private void SptrAppView_Consolidated(ApplicationView sender, ApplicationViewConsolidatedEventArgs args)

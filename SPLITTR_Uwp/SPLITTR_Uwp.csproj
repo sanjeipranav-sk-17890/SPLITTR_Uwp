@@ -215,8 +215,8 @@
     <Compile Include="ViewModel\VmLogic\ExpenseGrouper.cs" />
     <Compile Include="ViewModel\VmLogic\IExpenseGrouper.cs" />
     <Compile Include="ViewModel\WalletBalanceUpdateViewModel.cs" />
-    <Compile Include="Views\AddExpenseTestPage.xaml.cs">
-      <DependentUpon>AddExpenseTestPage.xaml</DependentUpon>
+    <Compile Include="Views\AddExpenseControlContainerPage.xaml.cs">
+      <DependentUpon>AddExpenseControlContainerPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExpensesListAndDetailViewPage.xaml.cs">
       <DependentUpon>ExpensesListAndDetailViewPage.xaml</DependentUpon>
@@ -316,7 +316,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\AddExpenseTestPage.xaml">
+    <Page Include="Views\AddExpenseControlContainerPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

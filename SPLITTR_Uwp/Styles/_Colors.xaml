@@ -12,4 +12,8 @@
     <media:AcrylicBrush x:Key="NavigationViewExpandedPaneBackground" TintColor="{ThemeResource SystemAccentColorLight1}" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemAccentColorLight1}" />
     <media:AcrylicBrush x:Key="NavigationViewDefaultPaneBackground" TintColor="{ThemeResource SystemAccentColorLight1}" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemAccentColorLight1}" />
 
+ 
+<!-- New Window Background Brush -->
+    <media:AcrylicBrush TintColor="{ThemeResource SystemAccentColorLight1}" x:Key="ApplicationMainThemeWindowAcrylicBrush" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemColorWindowColor}" />
+
 </ResourceDictionary>

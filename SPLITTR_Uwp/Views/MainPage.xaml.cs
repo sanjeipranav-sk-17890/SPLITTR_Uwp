@@ -1,4 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SPLITTR_Uwp.Core.ModelBobj;
+using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.Services;
+using SPLITTR_Uwp.ViewModel;
+using SPLITTR_Uwp.ViewModel.Contracts;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -7,12 +13,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
-using SPLITTR_Uwp.ViewModel;
-using Microsoft.Extensions.DependencyInjection;
-using SPLITTR_Uwp.Core.ModelBobj;
-using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Services;
-using SPLITTR_Uwp.ViewModel.Contracts;
 using NavigationView = Microsoft.UI.Xaml.Controls.NavigationView;
 using NavigationViewSelectionChangedEventArgs = Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs;
 
@@ -23,23 +23,42 @@ namespace SPLITTR_Uwp.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page, IMainView,INotifyPropertyChanged
+    public sealed partial class MainPage : Page, IMainView, INotifyPropertyChanged
     {
         IMainPageViewModel _viewModel;
+        private static MainPage _view;
+
+        private string _innerPageTitle = nameof(AllExpense);
+
+        private void PageOnPaneButtonOnClick()
+        {
+            var isMainPaneOpen = MainPageNavigationView.IsPaneOpen;
+            MainPageNavigationView.IsPaneOpen = !isMainPaneOpen;
+        }
+
+        public Frame ChildFrame
+        {
+            get => InnerFrame;
+        }
+
+        public string InnerPageTitle
+        {
+            get => _innerPageTitle;
+            set => SetField(ref _innerPageTitle, value);
+        }
 
         public MainPage()
         {
             _viewModel = ActivatorUtilities.CreateInstance<MainPageViewModel>(App.Container, this);
             _viewModel.BindingUpdateInvoked += _viewModel_BindingUpdateInvoked;
             this.InitializeComponent();
-
+            _view = this;
         }
 
         private void _viewModel_BindingUpdateInvoked()
         {
             Bindings.Update();
         }
-
 
         #region Error Handling MEchanisam
 
@@ -85,20 +104,28 @@ namespace SPLITTR_Uwp.Views
 
         #endregion
 
-
-        private string _innerPageTitle = nameof(AllExpense);
+        #region NavigationLogic
 
         private void AppIcon_OnClick(object sender, TappedRoutedEventArgs e)
         {
+            NavigationRequested();
+        }
+        private void NavigationRequested()
+        {
+
             MainPageNavigationView.IsPaneOpen = true;
             NavigationService.Frame = InnerFrame;
             NavigationService.Navigated += NavigationService_Navigated;
             NavigationService.Navigate(typeof(ExpensesListAndDetailViewPage));
         }
+        public static void RequestMainPageNavigation()
+        {
+            _view?.NavigationRequested();
+        }
 
         private void NavigationService_Navigated(object sender, NavigationEventArgs e)
         {
-            
+
             if (InnerFrame.Content is not ExpensesListAndDetailViewPage page)
             {
                 return;
@@ -117,13 +144,10 @@ namespace SPLITTR_Uwp.Views
             //Unsubscribing NavigationServices
             NavigationService.Navigated -= NavigationService_Navigated;
         }
-        
 
-        private void PageOnPaneButtonOnClick()
-        {
-            var isMainPaneOpen = MainPageNavigationView.IsPaneOpen;
-            MainPageNavigationView.IsPaneOpen = !isMainPaneOpen;
-        }
+        #endregion
+
+        #region ExpenseSelection Control Redirection 
 
         private void UserSelectedFromIndividualSplitList(User selectedUser)
         {
@@ -132,7 +156,7 @@ namespace SPLITTR_Uwp.Views
                 return;
             }
             //Setting Title
-            InnerPageTitle = "Individual Split"+$" : {selectedUser.UserName}" ;
+            InnerPageTitle = "Individual Split" + $" : {selectedUser.UserName}";
 
 
             _viewModel.PopulateUserRelatedExpenses(selectedUser);
@@ -177,17 +201,10 @@ namespace SPLITTR_Uwp.Views
         }
 
 
-        public Frame ChildFrame
-        {
-            get => InnerFrame;
-        }
 
-        public string InnerPageTitle
-        {
-            get => _innerPageTitle;
-            set => SetField(ref _innerPageTitle, value);
-        }
+        #endregion
 
+        #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -202,6 +219,10 @@ namespace SPLITTR_Uwp.Views
             OnPropertyChanged(propertyName);
             return true;
         }
+
+
+        #endregion
+
 
     }
 }
