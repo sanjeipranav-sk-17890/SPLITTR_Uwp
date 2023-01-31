@@ -12,7 +12,7 @@ namespace SPLITTR_Uwp.Core.ModelBobj
     {
         
 
-        public ICurrencyConverter CurrencyConverter { get; set; }
+        public static ICurrencyConverter CurrencyConverter { get; set; }
 
         public User CorrespondingUserObj { get; set; }
 
@@ -48,14 +48,13 @@ namespace SPLITTR_Uwp.Core.ModelBobj
 
         }
 
-        public ExpenseBobj(User correspondingUser,User splitRaisedOwner,ICurrencyConverter currencyConverter, Expense expense) : this(expense)
+        public ExpenseBobj(User correspondingUser,User splitRaisedOwner, Expense expense) : this(expense)
         {
             CorrespondingUserObj = correspondingUser;
             SplitRaisedOwner = splitRaisedOwner;
-            CurrencyConverter = currencyConverter;
 
         }
-        public ExpenseBobj(ExpenseBobj expenseBobj) : this(expenseBobj.CorrespondingUserObj,expenseBobj.SplitRaisedOwner ,expenseBobj.CurrencyConverter, expenseBobj)
+        public ExpenseBobj(ExpenseBobj expenseBobj) : this(expenseBobj.CorrespondingUserObj,expenseBobj.SplitRaisedOwner, expenseBobj)
         {
 
         }

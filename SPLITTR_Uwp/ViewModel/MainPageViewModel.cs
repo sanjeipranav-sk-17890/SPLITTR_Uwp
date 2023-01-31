@@ -192,17 +192,19 @@ namespace SPLITTR_Uwp.ViewModel
                 //since this Will be called by Worker thread it needs to invoked by Ui thread so calling dispatcher to user it
                 await UiService.RunOnUiThread((() =>
                 {
-                    //if (property.Equals(nameof(UserViewModel.Groups)))
-                    //{
-                    //       UserGroups.ClearAndAdd(Store.CurreUserBobj.Groups);
-                    //}
-                    //if (property.Equals(nameof(UserViewModel.Expenses)))
-                    //{
-                    //    PopulateIndividualSplitUsers();
-                    //    PopulateAllExpense();
-                    //}
+                    switch (property)
+                    {
+                        //refreshing value assigning
+                        case nameof(UserViewModel.Groups):
+                            UserGroups.ClearAndAdd(Store.CurreUserBobj.Groups);
+                            break;
+                        case nameof(UserViewModel.Expenses):
+                            PopulateIndividualSplitUsers();
+                            PopulateAllExpense();
+                            break;
+                    }
                     BindingUpdateInvoked?.Invoke();
-                   ViewLoaded();//refreshing value assigning
+                   //ViewLoaded();
                 }));
 
             }
