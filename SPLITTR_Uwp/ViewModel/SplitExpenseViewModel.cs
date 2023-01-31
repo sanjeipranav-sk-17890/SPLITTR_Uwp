@@ -508,7 +508,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         public  void SplitButtonOnClick()
         {
-            var expenseNote = ExpenseNote != null ? ExpenseNote.Trim() : String.Empty;
+            var expenseNote = ExpenseNote != null ? ExpenseNote.Trim() : string.Empty;
             var dateOfExpense = ExpenditureDate.DateTime;
             var expenseDescription = ExpenseDescription?.Trim() ?? string.Empty;
            
@@ -589,29 +589,12 @@ namespace SPLITTR_Uwp.ViewModel
                 () =>
                 { 
                     BindingUpdateInvoked?.Invoke();
-                    if (property.Equals(nameof(User.CurrencyPreference)))
-                    {
-                        UpdateExpensesToSplittedObjs();
-                    }
                 },View.Dispatcher);
         }
 
         /// <summary>
         /// Updating expense objects Currency Converter if the currency preference Changes 
         /// </summary>
-        private void UpdateExpensesToSplittedObjs()
-        {
-            if (!ExpensesToBeSplitted.Any())
-            {
-                return;
-            }
-            foreach (var expenseBobj in ExpensesToBeSplitted)
-            {
-                    expenseBobj.CurrencyConverter = Store.CurreUserBobj.CurrencyConverter;
-            }
-        }
-
-
         public event Action BindingUpdateInvoked;
     }
     

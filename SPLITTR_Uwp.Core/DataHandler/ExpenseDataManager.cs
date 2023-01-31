@@ -62,7 +62,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
 
             //getting ICurrencyConverter Based on Currency PReference
-            var currencyCalculator = _currencyCalcFactory.GetCurrencyCalculator(userCurrencyPreference);
+            ExpenseBobj.CurrencyConverter = _currencyCalcFactory.GetCurrencyCalculator(userCurrencyPreference);
 
 
             var outputList = new List<ExpenseBobj>();
@@ -97,7 +97,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
                 respectiveUserObj ??= await _userDataManager.FetchUserUsingMailId(expense.UserEmailId).ConfigureAwait(false);
 
 
-                return new ExpenseBobj(respectiveUserObj, requestedOwnerUserObj, currencyConverter: currencyCalculator, expense: expense);
+                return new ExpenseBobj(respectiveUserObj, requestedOwnerUserObj, expense: expense);
             }
 
         }

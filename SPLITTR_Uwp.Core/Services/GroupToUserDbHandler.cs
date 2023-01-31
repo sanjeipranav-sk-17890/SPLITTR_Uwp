@@ -21,14 +21,14 @@ namespace SPLITTR_Uwp.Core.Services
 
         public async Task<IEnumerable<string>> SelectGroupIdsWithUserEmail(string userEmail)
         {
-            var result = await _sqlDbAccess.FetchTable<GroupToUser>().Where(g => g.UserEmailId == userEmail).ToListAsync();
+            var result = await _sqlDbAccess.FetchTable<GroupToUser>().Where(g => g.UserEmailId == userEmail).ToListAsync().ConfigureAwait(false);
             return result.Select(g => g.GroupUniqueId);
         }
 
         public async Task<IEnumerable<string>> SelectUserMailIdsWithGroupUniuqeId(string groupUniqueId)
         {
             var result = await _sqlDbAccess.FetchTable<GroupToUser>().Where(g => g.GroupUniqueId == groupUniqueId)
-                .ToListAsync();
+                .ToListAsync().ConfigureAwait(false);
 
             return result.Select(g => g.UserEmailId);
         }

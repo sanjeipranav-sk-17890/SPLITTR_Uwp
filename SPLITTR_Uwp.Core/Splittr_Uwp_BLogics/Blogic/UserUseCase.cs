@@ -38,10 +38,8 @@ public class UserUseCase : UseCaseBase, IUserUseCase
             ICurrencyConverter currencyConverter = _factory.GetCurrencyCalculator(currencyPreference);
 
             //changing each currency converter in Expense so setting and fetching value can be made in corresponing currency formats
-            foreach (var expense in userBobj.Expenses)
-            {
-                expense.CurrencyConverter = currencyConverter;
-            }
+            ExpenseBobj.CurrencyConverter = currencyConverter;
+           
 
             //updating IConverter so fetching wallet  amount will be fetched in requered currency preference 
             userBobj.CurrencyConverter = currencyConverter;

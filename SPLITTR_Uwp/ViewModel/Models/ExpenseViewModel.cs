@@ -17,22 +17,13 @@ namespace SPLITTR_Uwp.ViewModel.Models
         public override  string Note
         {
             get => _expense.Note;
-            set
-            {
-                _expense.Note = value;
-                OnPropertyChanged();
-            }
         }
 
         [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override double ExpenseAmount
         {
             get => _expense.StrExpenseAmount;
-            set
-            {
-                _expense.StrExpenseAmount = value;
-                OnPropertyChanged();
-            }
+           
         }
 
         [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]

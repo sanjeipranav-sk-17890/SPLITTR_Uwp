@@ -201,7 +201,7 @@
         </Grid>
         <!--Column Grid Splitter-->
         <controls:GridSplitter Grid.Column="1" Width="10" ResizeBehavior="BasedOnAlignment"
-                               ResizeDirection="Auto" Background="Transparent"   >
+                               ResizeDirection="Auto" Background="Transparent"  BorderBrush="Transparent" >
             <controls:GridSplitter.Element>
                 <Grid Background="Transparent" >
 

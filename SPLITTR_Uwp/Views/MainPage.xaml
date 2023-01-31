@@ -124,7 +124,7 @@
             Grid.Row="1"
             IsSettingsVisible="False"
             Margin="-1 0 0 0"
-            CompactPaneLength="0" OpenPaneLength="200"
+            CompactPaneLength="0" OpenPaneLength="230"
             IsPaneOpen="{x:Bind _viewModel.PaneVisibility,Mode=TwoWay}"
             IsBackButtonVisible="Collapsed"
             IsPaneToggleButtonVisible="False"   SelectionChanged="MainPageNavigationView_OnSelectionChanged" >
