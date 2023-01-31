@@ -51,14 +51,14 @@ namespace SPLITTR_Uwp.ViewModel
             {
                 Interval = TimeSpan.FromSeconds(2)
             };
-            _timer.Tick += _timer_Tick;
+            _timer.Tick += Timer_Tick;
             _timer.Start();
             
         }
 
         private int _change = 1;
 
-        private void _timer_Tick(object sender, object e)
+        private void Timer_Tick(object sender, object e)
         {
             SelectedItem += _change;
             if (SelectedItem < 1 || SelectedItem > 2)

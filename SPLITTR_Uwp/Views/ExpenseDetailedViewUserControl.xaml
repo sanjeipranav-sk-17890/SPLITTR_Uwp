@@ -103,7 +103,7 @@
                         Foreground="{ThemeResource SystemAccentColorDark1}"
                         
                         VerticalAlignment="Top"/>
-            <TextBlock Margin="5 0 0 0">Date Of Expense :</TextBlock>
+            <TextBlock Margin="5 0 0 0" TextTrimming="CharacterEllipsis">Date Of Expense :</TextBlock>
             </StackPanel>
             <TextBlock Grid.Row="4" 
                        Grid.Column="1"

@@ -16,8 +16,6 @@ namespace SPLITTR_Uwp.Core.ModelBobj
     {
         private double _lentAmount = 0.0;
         private double _pendingAmount = 0.0;
-        private readonly ObservableCollection<ExpenseBobj> _expenses = new ObservableCollection<ExpenseBobj>();
-        private readonly ObservableCollection<GroupBobj> _groups = new ObservableCollection<GroupBobj>();
 
         private readonly IUserBobjBalanceCalculator _balanceCalculator;
 
@@ -25,15 +23,9 @@ namespace SPLITTR_Uwp.Core.ModelBobj
         public event Action<string> ValueChanged;
 
 
-        public ICollection<ExpenseBobj> Expenses
-        {
-            get => _expenses;
-        }
+        public ObservableCollection<ExpenseBobj> Expenses { get; } = new ObservableCollection<ExpenseBobj>();
 
-        public ICollection<GroupBobj> Groups
-        {
-            get => _groups;
-        }
+        public ObservableCollection<GroupBobj> Groups { get; } = new ObservableCollection<GroupBobj>();
 
 
         /// <summary>
@@ -96,8 +88,8 @@ namespace SPLITTR_Uwp.Core.ModelBobj
             Expenses.AddRange(expenses);
             Groups.AddRange(groups);
 
-            _groups.CollectionChanged += GroupCollectionChanged;
-            _expenses.CollectionChanged += ExpenseCollectionChanged;
+            Groups.CollectionChanged += GroupCollectionChanged;
+            Expenses.CollectionChanged += ExpenseCollectionChanged;
         }
         private void ExpenseCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {

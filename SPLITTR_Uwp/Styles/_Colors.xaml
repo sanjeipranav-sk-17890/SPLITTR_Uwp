@@ -16,4 +16,25 @@
 <!-- New Window Background Brush -->
     <media:AcrylicBrush TintColor="{ThemeResource SystemAccentColorLight1}" x:Key="ApplicationMainThemeWindowAcrylicBrush" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemColorWindowColor}" />
 
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+            <Style x:Key="ThemedBackgroundGrid" TargetType="Grid">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <ImageBrush Stretch="UniformToFill" ImageSource="../Assets/AppLogo/white-background-with-3d-hexagonal-pattern-design_1017-28443.jpg"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <Style x:Key="ThemedBackgroundGrid" TargetType="Grid">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <ImageBrush Stretch="UniformToFill" ImageSource="../Assets/AppLogo/DarkThemeBackGround.jpg"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
 </ResourceDictionary>

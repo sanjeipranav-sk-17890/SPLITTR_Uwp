@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:SPLITTR_Uwp.Views"
+    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -103,8 +104,8 @@
             </Border>
 
         </StackPanel>
-         <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"
-               Background="{StaticResource LoginPageImageBrush}">
+        <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Style="{ThemeResource ThemedBackgroundGrid}">
+
              <Grid.ColumnDefinitions>
                  <ColumnDefinition Width="*"/>
                  <ColumnDefinition Width="Auto"/>
@@ -173,9 +174,10 @@
                                        FontSize="20"
                                        Margin="0 20 0 0"
                                        HorizontalAlignment="Stretch"/>
-                                <TextBox FontSize="24" 
+                                <PasswordBox FontSize="24" 
                                      HorizontalAlignment="Stretch"
-                                     BorderThickness="1"></TextBox>
+                                     BorderThickness="1" PasswordRevealMode="Peek" IsPasswordRevealButtonEnabled="True"
+                                      />
                                 <Button Background="{ThemeResource ApplicationMainThemeColor}"
                                     HorizontalAlignment="Stretch"
                                     Margin="0 30 0 0"

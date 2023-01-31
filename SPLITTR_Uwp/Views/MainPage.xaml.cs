@@ -176,7 +176,7 @@ namespace SPLITTR_Uwp.Views
                     break;
                 case nameof(RequestToMe):
                     InnerPageTitle = nameof(RequestToMe);
-                    _viewModel.PopulateUserRecievedExpenses();
+                    _viewModel.PopulateUserReceivedExpenses();
                     break;
                 case nameof(RequestedByMe):
                     InnerPageTitle = nameof(RequestedByMe);

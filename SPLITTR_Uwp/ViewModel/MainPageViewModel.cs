@@ -140,13 +140,13 @@ namespace SPLITTR_Uwp.ViewModel
                 }
 
             }
-            public void PopulateUserRecievedExpenses()
+            public void PopulateUserReceivedExpenses()
             {
                 ExpensesList.Clear();
 
-                var userRecievedExpenses = Store.CurreUserBobj?.Expenses.Where(e => !e.SplitRaisedOwner.Equals(UserViewModel));
+                var userReceivedExpenses = Store.CurreUserBobj?.Expenses.Where(e => !e.SplitRaisedOwner.Equals(UserViewModel));
 
-                GroupingAndPopulateExpensesList(userRecievedExpenses);
+                GroupingAndPopulateExpensesList(userReceivedExpenses);
             }
             public void PopulateUserRaisedExpenses()
             {
@@ -192,8 +192,17 @@ namespace SPLITTR_Uwp.ViewModel
                 //since this Will be called by Worker thread it needs to invoked by Ui thread so calling dispatcher to user it
                 await UiService.RunOnUiThread((() =>
                 {
+                    //if (property.Equals(nameof(UserViewModel.Groups)))
+                    //{
+                    //       UserGroups.ClearAndAdd(Store.CurreUserBobj.Groups);
+                    //}
+                    //if (property.Equals(nameof(UserViewModel.Expenses)))
+                    //{
+                    //    PopulateIndividualSplitUsers();
+                    //    PopulateAllExpense();
+                    //}
                     BindingUpdateInvoked?.Invoke();
-                    ViewLoaded();//refreshing value assigning
+                   ViewLoaded();//refreshing value assigning
                 }));
 
             }

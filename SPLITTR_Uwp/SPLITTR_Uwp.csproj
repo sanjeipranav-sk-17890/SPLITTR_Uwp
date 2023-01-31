@@ -368,6 +368,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\AppLogo\62e914dea1e1b17f781f57f4.png" />
+    <Content Include="Assets\AppLogo\DarkThemeBackGround.jpg" />
+    <Content Include="Assets\AppLogo\WhiteThemeBAckGround.jpg" />
     <Content Include="Assets\icons\all-inclusive.png" />
     <Content Include="Assets\icons\AppIdolIMage.png" />
     <Content Include="Assets\icons\BillImage.png" />

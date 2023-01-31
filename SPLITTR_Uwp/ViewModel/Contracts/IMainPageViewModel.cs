@@ -28,7 +28,7 @@ internal interface IMainPageViewModel : INotifyPropertyChanged,IViewModel
     void PopulateAllExpense();
     void PopulateSpecificGroupExpenses(Group selectedGroup);
     void PopulateUserRelatedExpenses(User selectedUser);
-    void PopulateUserRecievedExpenses();
+    void PopulateUserReceivedExpenses();
     void PopulateUserRaisedExpenses();
     void LogOutButtonClicked();
     void PersonProfileClicked();

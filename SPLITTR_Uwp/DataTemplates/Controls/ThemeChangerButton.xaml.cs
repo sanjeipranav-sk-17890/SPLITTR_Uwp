@@ -24,7 +24,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         {
             this.InitializeComponent();
         }
-        private void ApplicationThemeButton_OnClick(object sender, RoutedEventArgs e)
+        private async void ApplicationThemeButton_OnClick(object sender, RoutedEventArgs e)
         {
             if (Window.Current.Content is not Frame rootFrame)
             {
@@ -33,11 +33,11 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             if (rootFrame.ActualTheme == ElementTheme.Light)
             {
 
-                ThemeHelperService.ChangeTheme(ElementTheme.Dark);
+              await  ThemeHelperService.ChangeTheme(ElementTheme.Dark);
                 return;
             }
             // ApplicationThemeButton.Content = LightModeIcon;
-            ThemeHelperService.ChangeTheme(ElementTheme.Light);
+              await ThemeHelperService.ChangeTheme(ElementTheme.Light);
 
         }
        
