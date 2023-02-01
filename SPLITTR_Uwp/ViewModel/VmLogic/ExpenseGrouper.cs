@@ -27,9 +27,7 @@ namespace SPLITTR_Uwp.ViewModel.VmLogic
         public IEnumerable<ExpenseGroupingList> CreateExpenseGroupList(IEnumerable<ExpenseBobj> expenses)
         {
             //grouped Expenses based on Types into ExpenseGroupingList
-            var groupedExpenses = expenses.GroupBy(e => e.ExpenseStatus)
-                .Select(grouped => new ExpenseGroupingList(grouped.Key,grouped)).ToList();
-
+            var groupedExpenses = expenses.GroupBy(e => e.ExpenseStatus).Select(grouped => new ExpenseGroupingList(grouped.Key, grouped)).ToList();
 
 
             //if list not contains a particualar specific Dummy grouping is added with empty list for Ui Purposes

@@ -5,7 +5,6 @@ using SQLite;
 
 namespace SPLITTR_Uwp.Core.Models
 {
-    public delegate void ValueChanged();
     public class User 
     {
         private string _userName;
@@ -29,19 +28,21 @@ namespace SPLITTR_Uwp.Core.Models
 
         public  int CurrencyIndex { get; set; }
 
+        public  double OwingAmount { get; set; }
 
-
-
+        public  double LentAmount { get; set; }
 
         public User()
         {
 
         }
-        public User(string emailId, string userName, double walletBalance,int currencyIndex)
+        public User(string emailId, string userName, double walletBalance,int currencyIndex,double owingAmount,double lentAmount)
         {
             _walletBalance = walletBalance;
             EmailId = emailId.ToLower();
             _userName = userName;
+            OwingAmount = owingAmount;
+            LentAmount = lentAmount;
             CurrencyIndex = currencyIndex;
         }
 

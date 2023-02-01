@@ -22,5 +22,4 @@ namespace SPLITTR_Uwp.DataRepository.Converters
         }
     }
 
-
 }

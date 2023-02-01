@@ -51,7 +51,8 @@ namespace SPLITTR_Uwp.ViewModel
         public void OnExpenseCancellation(ExpenseBobj expense)
         {
             _expenseUseCase.PresenterCallBackOnSuccess += ExpenseUtilityPresenterCallBackOnSuccess;
-            _expenseUseCase.OnError += (exception, s) => ExceptionHandlerService.HandleException(exception); 
+
+            _expenseUseCase.OnError += OnExpenseUseCaseOnOnError; 
 
             _expenseUseCase.CancelExpense(expense.ExpenseUniqueId,Store.CurreUserBobj);
 
@@ -67,9 +68,17 @@ namespace SPLITTR_Uwp.ViewModel
                     ExpenseCancelButtonVisibility = false;
                 });
             }
+          
+
         }
 
-       
+        void OnExpenseUseCaseOnOnError(Exception exception, string s)
+        {
+            _expenseUseCase.OnError -= OnExpenseUseCaseOnOnError;
+
+            ExceptionHandlerService.HandleException(exception);
+        }
+
 
         public void OnExpenseMarkedAsPaid(ExpenseBobj expense)
         {
@@ -91,6 +100,5 @@ namespace SPLITTR_Uwp.ViewModel
 
         }
 
-        
     }
 }

@@ -158,6 +158,7 @@
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="DataRepository\Converters\BoolToRowSpanConverter.cs" />
     <Compile Include="DataRepository\Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="DataRepository\Converters\ExpenseAmountFormatter.cs" />
     <Compile Include="DataRepository\Converters\TimeConverter.cs" />
     <Compile Include="DataRepository\Store.cs" />
     <Compile Include="DataTemplates\Controls\ThemeChangerButton.xaml.cs">

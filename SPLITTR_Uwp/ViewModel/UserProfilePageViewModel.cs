@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
+using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Contracts;
 
@@ -16,17 +17,17 @@ namespace SPLITTR_Uwp.ViewModel
     public class UserProfilePageViewModel : ObservableObject,IViewModel
     {
 
-        
-        IUserUseCase _userUseCase;
+
+        private readonly IUserUseCase _updateUserUseCase;
         public UserViewModel User { get; }
 
 
-        public UserProfilePageViewModel(IUserUseCase userUseCase)
+        public UserProfilePageViewModel(IUserUseCase updateUserUseCase)
         {
-            _userUseCase = userUseCase;
+            _updateUserUseCase = updateUserUseCase;
             User = new UserViewModel(Store.CurreUserBobj);
             Store.CurreUserBobj.ValueChanged += UserBobj_ValueChanged;
-
+            
         }
 
         private async void UserBobj_ValueChanged(string property)
@@ -120,7 +121,7 @@ namespace SPLITTR_Uwp.ViewModel
             }
             IsUserNameEmptyIndicatorVisible = false;
             //utility classes is updating the UserObj and its related data's
-             _userUseCase.UpdateUserObjAsync(Store.CurreUserBobj, _currentUserName, (Currency)_preferedCurrencyIndex,(async () =>
+             _updateUserUseCase.UpdateUserObjAsync(Store.CurreUserBobj, _currentUserName, (Currency)_preferedCurrencyIndex,(async () =>
             {
                 await ShowSignUpSuccessFullMessageBoxAsync();
 

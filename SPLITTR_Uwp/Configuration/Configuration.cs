@@ -61,8 +61,8 @@ namespace SPLITTR_Uwp.Configuration
                 .AddTransient<EuroConverter>()
                 .AddTransient<IStringManipulator, Manipulator>()
                 .AddTransient<IUserUseCase, UserUseCase>()
-                .AddTransient<IExpensePayment,ExpensePayment>()
-                .AddTransient<IGroupUseCase,GroupUseCase>()
+                .AddTransient<IExpensePayment, ExpensePayment>()
+                .AddTransient<IGroupUseCase, GroupCreationUseCase>()
                 .AddTransient<ISplitExpenseView,SplitExpenseUserControl>()
                 .AddTransient<IExpenseGrouper,ExpenseGrouper>()
                 .AddTransient<IExpenseUseCase,ExpenseUseCase>();
@@ -72,7 +72,7 @@ namespace SPLITTR_Uwp.Configuration
         }
 
         /// <summary>
-        /// Adding ViewModel's of the Spliiter into the container 
+        /// Adding ViewModel's of the Splitter into the container 
         /// </summary>
         ///
         private static void AddViewModels(IServiceCollection container)

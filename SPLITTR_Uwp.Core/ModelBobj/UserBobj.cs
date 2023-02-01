@@ -14,10 +14,7 @@ namespace SPLITTR_Uwp.Core.ModelBobj
 {
     public class UserBobj : User
     {
-        private double _lentAmount = 0.0;
-        private double _pendingAmount = 0.0;
-
-        private readonly IUserBobjBalanceCalculator _balanceCalculator;
+      
 
         public ICurrencyConverter CurrencyConverter { get; set; }
         public event Action<string> ValueChanged;
@@ -52,26 +49,24 @@ namespace SPLITTR_Uwp.Core.ModelBobj
             }
         }
 
-        public double LentAmount
+        public virtual double StrLentAmount
         {
-            get
+            get => CurrencyConverter.ConvertCurrency(base.LentAmount);
+            set
             {
-                _balanceCalculator.ReCalculate(this);
-                return _lentAmount;
-
+                LentAmount = CurrencyConverter.ConvertToEntityCurrency(value);
+                OnValueChanged(nameof(StrLentAmount));
             }
-            set => SetField(ref _lentAmount, value);
         }
 
-        public double PendingAmount
+        public virtual double StrOwingAmount
         {
-            get
+            get => CurrencyConverter.ConvertCurrency(base.OwingAmount);
+            set
             {
-                _balanceCalculator.ReCalculate(this);
-                return _pendingAmount;
-
+                OwingAmount = CurrencyConverter.ConvertToEntityCurrency(value);
+                OnValueChanged(nameof(StrOwingAmount));
             }
-            set => SetField(ref _pendingAmount, value);
         }
 
         protected void OnValueChanged(string property)
@@ -80,10 +75,9 @@ namespace SPLITTR_Uwp.Core.ModelBobj
         }
 
 
-        public UserBobj(User user, ICollection<ExpenseBobj> expenses, ICollection<GroupBobj> groups, IUserBobjBalanceCalculator balanceCalculator, ICurrencyConverter currencyConverter)
-            : base(user.EmailId, user.UserName, user.WalletBalance, user.CurrencyIndex)
+        public UserBobj(User user, ICollection<ExpenseBobj> expenses, ICollection<GroupBobj> groups, ICurrencyConverter currencyConverter)
+            : base(user.EmailId, user.UserName, user.WalletBalance, user.CurrencyIndex,user.OwingAmount,user.LentAmount)
         {
-            _balanceCalculator = balanceCalculator;
             CurrencyConverter = currencyConverter;
             Expenses.AddRange(expenses);
             Groups.AddRange(groups);
@@ -102,19 +96,9 @@ namespace SPLITTR_Uwp.Core.ModelBobj
             OnValueChanged(nameof(Groups));
         }
 
-        protected UserBobj(UserBobj userBobj) : this(userBobj, userBobj.Expenses, userBobj.Groups, userBobj._balanceCalculator, userBobj.CurrencyConverter)
+        protected UserBobj(UserBobj userBobj) : this(userBobj, userBobj.Expenses, userBobj.Groups, userBobj.CurrencyConverter)
         {
 
-        }
-
-
-        private bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value))
-                return false;
-            field = value;
-           OnValueChanged(propertyName);
-            return true;
         }
 
     }

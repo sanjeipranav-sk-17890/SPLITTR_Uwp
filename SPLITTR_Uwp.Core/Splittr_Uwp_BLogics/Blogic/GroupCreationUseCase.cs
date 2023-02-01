@@ -9,14 +9,16 @@ using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
 {
-    public class GroupUseCase :UseCaseBase, IGroupUseCase
+    public class GroupCreationUseCase :UseCaseBase, IGroupUseCase
     {
         private readonly IGroupDataManager _groupDataManager;
-        public GroupUseCase(IGroupDataManager groupDataManager)
+        public GroupCreationUseCase(IGroupDataManager groupDataManager)
         {
             _groupDataManager = groupDataManager;
 
         }
+        /// <exception cref="ArgumentNullException"><paramref name="collection">collection</paramref> is null.</exception>
+        /// <exception cref="ArgumentException">Group Participants Must be Grater than 2</exception>
         public void CreateSplittrGroup(IEnumerable<User> particiapants, UserBobj currentUser, string groupName, Action onSuccessCallBack)
         { 
 
