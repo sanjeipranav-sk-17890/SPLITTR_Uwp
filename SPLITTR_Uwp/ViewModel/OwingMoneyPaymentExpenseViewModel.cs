@@ -9,14 +9,14 @@ namespace SPLITTR_Uwp.ViewModel;
 
 internal class OwingMoneyPaymentExpenseViewModel :ObservableObject
 {
-    private readonly IExpensePayment _expensePayment;
+    private readonly IExpensePayment _expenseSettleUpUseCase;
     private bool _settleButtonVisibility;
     private bool _paymentButtonVisibility;
 
 
-    public OwingMoneyPaymentExpenseViewModel(IExpensePayment expensePayment)
+    public OwingMoneyPaymentExpenseViewModel(IExpensePayment expenseSettleUpUseCase)
     {
-        _expensePayment = expensePayment;
+        _expenseSettleUpUseCase = expenseSettleUpUseCase;
         
     }
 
@@ -42,7 +42,7 @@ internal class OwingMoneyPaymentExpenseViewModel :ObservableObject
             Debug.WriteLine($"{nameof(_moneyPaymentExpense)} is null check Logic ");
             return;
         }
-        _expensePayment.SettleUpExpenses(_moneyPaymentExpense,Store.CurreUserBobj,(OnSettleUpSuccessFull),isWalletPayment);
+        _expenseSettleUpUseCase.SettleUpExpenses(_moneyPaymentExpense,Store.CurreUserBobj,(OnSettleUpSuccessFull),isWalletPayment);
     }
 
     private async void OnSettleUpSuccessFull()

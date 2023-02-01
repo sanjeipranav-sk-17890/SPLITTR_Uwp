@@ -17,20 +17,18 @@ using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics;
 namespace SPLITTR_Uwp.Core.DataHandler
 {
     public class UserDataManager : IUserDataManager
-    { 
-        readonly IUserDBHandler _userDbHandler;
-        readonly IUserBobjBalanceCalculator _balanceCalculator;
-        readonly IGroupDataManager _groupDataManager;
-        readonly IExpenseDataHandler _expenseDataHandler;
+    {
+        private readonly IUserDBHandler _userDbHandler;
+        private readonly IGroupDataManager _groupDataManager;
+        private readonly IExpenseDataHandler _expenseDataHandler;
         private readonly ICurrencyCalcFactory _currencyCalc;
         private string _currentUserEmailId;
         private User _currentUser;
         private readonly ConcurrentDictionary<string, User> _localUserCache = new ConcurrentDictionary<string, User>();
 
-        public UserDataManager(IUserDBHandler userDbHandler,IUserBobjBalanceCalculator balanceCalculator, IGroupDataManager groupDataManager, IExpenseDataHandler expenseDataHandler,ICurrencyCalcFactory currencyCalc)
+        public UserDataManager(IUserDBHandler userDbHandler, IGroupDataManager groupDataManager, IExpenseDataHandler expenseDataHandler,ICurrencyCalcFactory currencyCalc)
         {
             _userDbHandler = userDbHandler;
-            _balanceCalculator = balanceCalculator;
             _groupDataManager = groupDataManager;
             _expenseDataHandler = expenseDataHandler;
             _currencyCalc = currencyCalc;
@@ -54,7 +52,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
         public Task<int> CreateNewUser(string userName, string emailId, int currencyPreference)
         {
-            var newUser = new User(emailId, userName, 0.0,currencyPreference);
+            var newUser = new User(emailId, userName, 0.0,currencyPreference,0.0,0.0);
             return _userDbHandler.InsertUserObjAsync(newUser);
         }
 
@@ -82,6 +80,8 @@ namespace SPLITTR_Uwp.Core.DataHandler
             oldUserData.UserName = newUserData.UserName;
             oldUserData.CurrencyIndex = newUserData.CurrencyIndex;
             oldUserData.WalletBalance = newUserData.WalletBalance;
+            oldUserData.LentAmount = newUserData.LentAmount;
+            oldUserData.OwingAmount = newUserData.OwingAmount;
         }
         public async Task<User> FetchUserUsingMailId(string mailId)
         {
@@ -138,7 +138,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
             var currencyCal = _currencyCalc.GetCurrencyCalculator((Currency)user.CurrencyIndex);
 
 
-            return new UserBobj(user, expenses.ToList(), groups, _balanceCalculator,currencyCal);
+            return new UserBobj(user, expenses.ToList(), groups,currencyCal);
 
         }
     }

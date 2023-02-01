@@ -17,6 +17,7 @@ public class ExpenseUseCase : UseCaseBase, IExpenseUseCase
 {
     private readonly IExpenseDataHandler _expenseDataHandler;
     private readonly IExpenseHistoryManager _expenseHistoryManager;
+    private readonly IUserDataManager _userDataManager;
 
     public event Action<EventArgs> PresenterCallBackOnSuccess;
 
@@ -70,18 +71,69 @@ public class ExpenseUseCase : UseCaseBase, IExpenseUseCase
 
         await _expenseDataHandler.UpdateExpenseAsync(expenseStatusChangeBobj).ConfigureAwait(false);
 
+        //Updating User Lent and Owing Amount
+        await UpdateCreditDetails(expenseStatusChangeBobj,currentUser).ConfigureAwait(false);
+
         //Invoking Valued changed on UserObj so  Calculation based on that expense will update
         currentUser.Expenses.RemoveAndAdd(expenseStatusChangeBobj);
 
         PresenterCallBackOnSuccess?.Invoke(EventArgs.Empty);
     }
+    private async Task UpdateCreditDetails(ExpenseBobj expenseStatusChangeBobj,UserBobj currentUser)
+    {
+        var requestOwner = expenseStatusChangeBobj.SplitRaisedOwner;
+        var correspondingUser = expenseStatusChangeBobj.CorrespondingUserObj;
+
+        if (currentUser.Equals(requestOwner))//assign to Current USerBobj So Change Notification raised
+        {
+            currentUser.StrLentAmount -= expenseStatusChangeBobj.ExpenseAmount;
+        }
+        else
+        {
+            requestOwner.LentAmount -= expenseStatusChangeBobj.ExpenseAmount;
+        }
+        if (currentUser.Equals(correspondingUser))
+        {
+            currentUser.StrOwingAmount -= expenseStatusChangeBobj.ExpenseAmount;
+        }
+        else
+        {
+            correspondingUser.OwingAmount -= expenseStatusChangeBobj.ExpenseAmount;
+        }
 
 
+        await _userDataManager.UpdateUserBobjAsync(requestOwner).ConfigureAwait(false);
+        await _userDataManager.UpdateUserBobjAsync(correspondingUser).ConfigureAwait(false);
+    }
 
-    public ExpenseUseCase(IExpenseDataHandler expenseDataHandler,IExpenseHistoryManager expenseHistoryManager)
+    private Task UpdateDebitDetails(IEnumerable<ExpenseBobj> expenses,UserBobj splitOwner)
+    {
+        var updatingUsers = new List<User>();
+        
+        foreach (var expense in expenses)
+        {
+            if ( expense.ExpenseStatus != ExpenseStatus.Pending)
+            {
+                continue;
+            }
+            var correspondingUser = expense.CorrespondingUserObj;
+            splitOwner.StrLentAmount += expense.StrExpenseAmount;
+            correspondingUser.OwingAmount += expense.ExpenseAmount;
+            updatingUsers.Add(correspondingUser);
+        }
+        updatingUsers.Add(splitOwner);
+
+        var userUpdation = updatingUsers.Select(u => _userDataManager.UpdateUserBobjAsync(u));
+
+        return Task.WhenAll(userUpdation);
+    }
+
+
+    public ExpenseUseCase(IExpenseDataHandler expenseDataHandler,IExpenseHistoryManager expenseHistoryManager,IUserDataManager userDataManager)
     {
         _expenseDataHandler = expenseDataHandler;
         _expenseHistoryManager = expenseHistoryManager;
+        _userDataManager = userDataManager;
 
     }
 
@@ -125,7 +177,7 @@ public class ExpenseUseCase : UseCaseBase, IExpenseUseCase
     /// <exception cref="Exception">A delegate callback throws an exception.</exception>
     public  void SplitNewExpensesAsync(string expenseDescription,UserBobj currentUser, IEnumerable<ExpenseBobj> expenses, string expenseNote, DateTime dateOfExpense, double expenseAmount, int expenditureSplitType)
     {
-        RunAsynchronously(() =>
+        RunAsynchronously(async () =>
          {
              ExpenseBobj parentExpenseBobj = ValidateExpenseBobjs(expenseDescription,expenses, expenseNote, expenseAmount, dateOfExpense, expenditureSplitType);
 
@@ -150,15 +202,18 @@ public class ExpenseUseCase : UseCaseBase, IExpenseUseCase
 
              }
 
-             _expenseDataHandler.InsertExpenseAsync(expenses);
+             await  _expenseDataHandler.InsertExpenseAsync(expenses);
+
+             await UpdateDebitDetails(expenses,currentUser);
 
              //adds expenseObjs into 
              currentUser.Expenses.AddRange(expenses);
 
              //Calling Process Success Call back
-             PresenterCallBackOnSuccess?.Invoke(SplittrEventArgs.Empty);
+             PresenterCallBackOnSuccess?.Invoke(EventArgs.Empty);
          });
         ;
     }
+
 
 }

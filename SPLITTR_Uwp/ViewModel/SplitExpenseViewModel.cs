@@ -13,6 +13,7 @@ using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel.Models;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
+using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.Views;
@@ -21,7 +22,7 @@ namespace SPLITTR_Uwp.ViewModel
 {
     public class SplitExpenseViewModel : ObservableObject,IViewModel
     {
-        private readonly IUserUseCase _userUseCase;
+        private readonly IUserUseCase _updateUserUseCase;
         private readonly IExpenseUseCase _expenseUseCase;
 
         public  ISplitExpenseView View { get; set; }
@@ -102,7 +103,7 @@ namespace SPLITTR_Uwp.ViewModel
                 return;
             }
             UsersList.Clear(); 
-             _userUseCase.GetUsersSuggestionAsync(SplittingUsersName.Trim().ToLower(), async suggestions =>
+             _updateUserUseCase.GetUsersSuggestionAsync(SplittingUsersName.Trim().ToLower(), async suggestions =>
             {//remainCode will be run if data fetching from use case is finished
                await UiService.RunOnUiThread(() => {
                         foreach (var user in suggestions)
@@ -564,9 +565,9 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
        
-        public SplitExpenseViewModel(IUserUseCase userUseCase,IExpenseUseCase expenseUseCase,ISplitExpenseView view)
+        public SplitExpenseViewModel(IUserUseCase updateUserUseCase,IExpenseUseCase expenseUseCase,ISplitExpenseView view)
         {
-            _userUseCase = userUseCase;
+            _updateUserUseCase = updateUserUseCase;
             _expenseUseCase = expenseUseCase;
             View = view;
             Store.CurreUserBobj.ValueChanged += OnUserValueChanged;

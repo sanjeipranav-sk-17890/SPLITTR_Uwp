@@ -71,7 +71,7 @@ namespace SPLITTR_Uwp.Core.ExtensionMethod
             }
 
             var resultString = amount.ToString("##,###.000");
-            string symbol = user.CurrencyPreference switch
+            var symbol = user.CurrencyPreference switch
             {
                 Currency.Rupee => " ₹",
                 Currency.Dollar => " $",
@@ -89,7 +89,7 @@ namespace SPLITTR_Uwp.Core.ExtensionMethod
                 return string.Empty;
             }
 
-            string symbol = user.CurrencyPreference switch
+            var symbol = user.CurrencyPreference switch
             {
                 Currency.Rupee => " ₹",
                 Currency.Dollar => " $",

@@ -6,17 +6,16 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:converter="using:SPLITTR_Uwp.DataRepository.Converters"
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:media="using:Microsoft.UI.Xaml.Media"
     Style="{ThemeResource HomePageBackground}">
-    <!--<Page.Background>
-        <ImageBrush ImageSource="../Assets/AppLogo/white-background-with-3d-hexagonal-pattern-design_1017-28443.jpg"
-                    Stretch="UniformToFill"
-                    ></ImageBrush>
-    </Page.Background>-->
 
+    <Page.Resources>
+        <converter:ExpenseAmountFormatter x:Key="AmountFormatter"/> 
+    </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -33,9 +32,7 @@
             <StackPanel RelativePanel.AlignHorizontalCenterWithPanel="True"
                         RelativePanel.AlignVerticalCenterWithPanel="True"
                         Width="auto">
-                <StackPanel.Resources>
-                    
-                    </StackPanel.Resources>
+               
              
                     <StackPanel Orientation="Horizontal">
                     <PersonPicture 
@@ -87,7 +84,7 @@
                                Margin="5 0 0 0"
                                VerticalAlignment="Center"
                                Style="{StaticResource TextBlockStyle}"
-                               Text="{x:Bind _viewModel.User.LentAmount,Mode=OneWay}"/>
+                               Text="{x:Bind _viewModel.User.StrLentAmount,Converter={StaticResource AmountFormatter},Mode=OneWay}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Name="PendindAmountLabel"
@@ -99,7 +96,7 @@
                                Margin="5 0 0 0"
                                VerticalAlignment="Center"
                                Style="{StaticResource TextBlockStyle}"
-                               Text="{x:Bind _viewModel.User.PendingAmount,Mode=OneWay}"/>
+                               Text="{x:Bind _viewModel.User.StrOwingAmount,Converter={StaticResource AmountFormatter},Mode=OneWay}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Name="CurrencyPreferenceLabel"

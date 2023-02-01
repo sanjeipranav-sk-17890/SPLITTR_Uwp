@@ -22,16 +22,15 @@ namespace SPLITTR_Uwp.ViewModel.Models
             get => _user.StrWalletBalance;
         }
 
-        public new string LentAmount
+        public override double StrLentAmount
         {
-            get => _user.LentAmount.ExpenseAmount(_user);
+            get => _user.StrLentAmount;
         }
 
-        public new string PendingAmount
+        public override double StrOwingAmount
         {
-            get => _user.PendingAmount.ExpenseAmount(_user);
+            get => _user.StrOwingAmount;
         }
-
 
         public new int CurrencyPreference
         {

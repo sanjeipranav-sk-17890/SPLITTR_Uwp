@@ -29,8 +29,8 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics
                 }
 
             }
-            userBobj.LentAmount = lendedAmount;
-            userBobj.PendingAmount = pendingAmount;
+            userBobj.StrLentAmount = lendedAmount;
+            userBobj.StrOwingAmount = pendingAmount;
         }
     }
 }
