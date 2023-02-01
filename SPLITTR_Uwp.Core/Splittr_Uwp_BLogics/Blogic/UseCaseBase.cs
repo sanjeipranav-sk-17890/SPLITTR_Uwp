@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 
