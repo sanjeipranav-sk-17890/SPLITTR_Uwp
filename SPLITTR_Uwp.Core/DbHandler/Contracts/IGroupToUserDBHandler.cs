@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.Models;
 
-namespace SPLITTR_Uwp.Core.Services.Contracts
+namespace SPLITTR_Uwp.Core.DbHandler.Contracts
 {
-    public interface IGroupToUserDBHandler
+    public interface IGroupToUserDbHandler
     {
         /// <summary>
         /// For given UserEmail(UNiqueID) fetches GroupIds Where User  is a member of the Group

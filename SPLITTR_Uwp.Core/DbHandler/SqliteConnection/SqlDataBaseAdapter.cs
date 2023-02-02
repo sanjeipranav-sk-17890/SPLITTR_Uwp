@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using SQLite;
 
-
-namespace SPLITTR_Uwp.Core.Services.SqliteConnection
+namespace SPLITTR_Uwp.Core.DbHandler.SqliteConnection
 {
     public class SqlDataBaseAdapter : ISqlDataServices
     {

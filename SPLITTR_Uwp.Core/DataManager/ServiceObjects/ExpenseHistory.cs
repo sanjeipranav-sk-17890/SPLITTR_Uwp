@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using SQLite;
 
-namespace SPLITTR_Uwp.Core.DataHandler.ServiceObjects
+namespace SPLITTR_Uwp.Core.DataManager.ServiceObjects
 {
     public class ExpenseHistory 
     {

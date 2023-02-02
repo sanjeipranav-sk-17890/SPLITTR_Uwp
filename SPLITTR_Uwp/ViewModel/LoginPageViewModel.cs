@@ -4,7 +4,7 @@ using Microsoft.Toolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.Views;
 using Windows.UI.Xaml.Media.Animation;
-using SPLITTR_Uwp.Core.DataHandler.Contracts;
+using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.DataRepository;
 

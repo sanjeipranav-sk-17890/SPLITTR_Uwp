@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using SPLITTR_Uwp.Core.DataHandler.Contracts;
-using SPLITTR_Uwp.Core.DataHandler.ServiceObjects;
-using SPLITTR_Uwp.Core.ModelBobj;
-using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.Services.SqliteConnection;
+using SPLITTR_Uwp.Core.DataManager.Contracts;
+using SPLITTR_Uwp.Core.DataManager.ServiceObjects;
+using SPLITTR_Uwp.Core.DbHandler.SqliteConnection;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 
-namespace SPLITTR_Uwp.Core.DataHandler
+namespace SPLITTR_Uwp.Core.DataManager
 {
     public class ExpenseHistoryManager :UseCaseBase, IExpenseHistoryManager,IExpenseHistoryUsecase
     {
@@ -35,7 +30,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
             });
         }
         private object _lock = new object();
-        public  void IsExpenseMarkedAsPaid(string expenseId, Action<bool> ResultCallBack)
+        public  void IsExpenseMarkedAsPaid(string expenseId, Action<bool> resultCallBack)
         {
             RunAsynchronously(async () =>
             {
@@ -45,7 +40,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
 
                     if (isExpenseMarkedAsPaid)
                     {
-                        ResultCallBack?.Invoke(true);
+                        resultCallBack?.Invoke(true);
                         return;
                     }
 
@@ -57,12 +52,12 @@ namespace SPLITTR_Uwp.Core.DataHandler
                 {
                     //if null(no history record) then that expense is not marked as Paid 
                     case null:
-                        ResultCallBack?.Invoke(false);
+                        resultCallBack?.Invoke(false);
                         return;
                       
                      default:
                         var result= _expenseHistory.GetOrAdd(expenseId, expenseHistory) is null;
-                        ResultCallBack?.Invoke(result);
+                        resultCallBack?.Invoke(result);
                         break;
 
                 }

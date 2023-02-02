@@ -1,24 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.CurrencyCoverter.Factory;
-using SPLITTR_Uwp.Core.DataHandler.Contracts;
+using SPLITTR_Uwp.Core.DataManager.Contracts;
+using SPLITTR_Uwp.Core.DbHandler.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.Services.Contracts;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics;
 
-namespace SPLITTR_Uwp.Core.DataHandler
+namespace SPLITTR_Uwp.Core.DataManager
 {
     public class UserDataManager : IUserDataManager
     {
-        private readonly IUserDBHandler _userDbHandler;
+        private readonly IUserDbHandler _userDbHandler;
         private readonly IGroupDataManager _groupDataManager;
         private readonly IExpenseDataHandler _expenseDataHandler;
         private readonly ICurrencyCalcFactory _currencyCalc;
@@ -26,7 +22,7 @@ namespace SPLITTR_Uwp.Core.DataHandler
         private User _currentUser;
         private readonly ConcurrentDictionary<string, User> _localUserCache = new ConcurrentDictionary<string, User>();
 
-        public UserDataManager(IUserDBHandler userDbHandler, IGroupDataManager groupDataManager, IExpenseDataHandler expenseDataHandler,ICurrencyCalcFactory currencyCalc)
+        public UserDataManager(IUserDbHandler userDbHandler, IGroupDataManager groupDataManager, IExpenseDataHandler expenseDataHandler,ICurrencyCalcFactory currencyCalc)
         {
             _userDbHandler = userDbHandler;
             _groupDataManager = groupDataManager;

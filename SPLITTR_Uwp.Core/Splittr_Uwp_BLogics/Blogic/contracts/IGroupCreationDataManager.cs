@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
-using SPLITTR_Uwp.Core.UseCase.contracts;
+using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.CreateGroup;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
 {
@@ -19,6 +20,6 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
         /// <param name="groupName"></param>
         /// <param name="callBack"></param>
         /// <exception cref="System.ArgumentException">number of particpants must be greater than 1 to form a group </exception>
-        public void CreateSplittrGroup(IEnumerable<User> participants, UserBobj currentUser, string groupName,IUseCaseCallBackBase<GroupCreationResponseObj> callBack);
+        public void CreateSplittrGroup(IEnumerable<User> participants, UserBobj currentUser, string groupName,IUseCaseCallBack<GroupCreationResponseObj> callBack);
     }
 }

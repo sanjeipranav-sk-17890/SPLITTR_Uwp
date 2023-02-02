@@ -15,14 +15,14 @@ namespace SPLITTR_Uwp.Services
 {
     internal class AccentColorService
     {
-        private readonly static UISettings _uiSettings;
+        private readonly static UISettings UiSettings;
 
         private readonly static Dictionary<UIContext,CoreWindow> AppWindows= new Dictionary<UIContext, CoreWindow>();
 
         static AccentColorService()
         {
-            _uiSettings = new UISettings();
-            _uiSettings.ColorValuesChanged += UiSettings_ColorValuesChanged;
+            UiSettings = new UISettings();
+            UiSettings.ColorValuesChanged += UiSettings_ColorValuesChanged;
         }
 
         private async static void UiSettings_ColorValuesChanged(UISettings sender, object args)

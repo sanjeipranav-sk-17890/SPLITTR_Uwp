@@ -1,11 +1,9 @@
-﻿using SPLITTR_Uwp.Core.ModelBobj;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
 
-namespace SPLITTR_Uwp.Core.DataHandler.Contracts
+namespace SPLITTR_Uwp.Core.DataManager.Contracts
 {
     public interface IUserDataManager
     {

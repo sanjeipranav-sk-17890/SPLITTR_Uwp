@@ -34,7 +34,7 @@ namespace SPLITTR_Uwp.ViewModel
         /// <summary>
         /// Contains Expenses obj which will be processed and inserted into db
         /// </summary>
-        public readonly ObservableCollection<ExpenseBobj> ExpensesToBeSplitted = new ObservableCollection<ExpenseBobj>();
+        public readonly ObservableCollection<ExpenseBobj> _expensesToBeSplitted = new ObservableCollection<ExpenseBobj>();
 
 
 
@@ -424,7 +424,7 @@ namespace SPLITTR_Uwp.ViewModel
         //Manupulates ExpenseViewModels for Unequal Splitting in teaching tip 
         private void SplittingUserPreferenceChanged()
         { 
-            ExpensesToBeSplitted.Clear();
+            _expensesToBeSplitted.Clear();
 
             //cheching whether it is dummy groupobj
             if (_selectedGroupIndex <= 0)
@@ -432,8 +432,8 @@ namespace SPLITTR_Uwp.ViewModel
                 if (_selectedUser != null)//Individual Split
                 {
 
-                    ExpensesToBeSplitted.Add(GenerateExpenseViewModel(Store.CurreUserBobj,null));//current User
-                    ExpensesToBeSplitted.Add(GenerateExpenseViewModel(_selectedUser,null));//Spiltting user
+                    _expensesToBeSplitted.Add(GenerateExpenseViewModel(Store.CurreUserBobj,null));//current User
+                    _expensesToBeSplitted.Add(GenerateExpenseViewModel(_selectedUser,null));//Spiltting user
                    
                 }
             }
@@ -444,7 +444,7 @@ namespace SPLITTR_Uwp.ViewModel
 
                 foreach (var participant in group.GroupParticipants)
                 {
-                   ExpensesToBeSplitted.Add(GenerateExpenseViewModel(participant,group.GroupUniqueId)); 
+                   _expensesToBeSplitted.Add(GenerateExpenseViewModel(participant,group.GroupUniqueId)); 
                 }
             }
 
@@ -494,7 +494,7 @@ namespace SPLITTR_Uwp.ViewModel
         //event raises when collection item changes
         private void ExpensesToBeSplittedOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            var expensesBobjCount = ExpensesToBeSplitted.Count;
+            var expensesBobjCount = _expensesToBeSplitted.Count;
 
             if (expensesBobjCount < 1 )
             {
@@ -520,7 +520,7 @@ namespace SPLITTR_Uwp.ViewModel
             _expenseUseCase.PresenterCallBackOnSuccess += ExpenseUseCasePresenterCallBackOnSuccess;
             
 
-               _expenseUseCase.SplitNewExpensesAsync(expenseDescription,Store.CurreUserBobj, ExpensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType);
+               _expenseUseCase.SplitNewExpensesAsync(expenseDescription,Store.CurreUserBobj, _expensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType);
 
         }
 
@@ -572,7 +572,7 @@ namespace SPLITTR_Uwp.ViewModel
             View = view;
             Store.CurreUserBobj.ValueChanged += OnUserValueChanged;
             User = new UserViewModel(Store.CurreUserBobj);
-            ExpensesToBeSplitted.CollectionChanged += ExpensesToBeSplittedOnCollectionChanged;
+            _expensesToBeSplitted.CollectionChanged += ExpensesToBeSplittedOnCollectionChanged;
 
             //on Error Call back 
             if (_expenseUseCase is IUseCase useCase)

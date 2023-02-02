@@ -150,7 +150,7 @@
            FontSize="10"
            Visibility="{x:Bind _viewModel.IsUserNameEmptyIndicatorVisible,Mode=OneWay}"></TextBlock>
                <TextBlock Text="Currency Preference" Style="{StaticResource TextBlockStyle}"></TextBlock>
-               <ComboBox ItemsSource="{x:Bind _viewModel.CurrencyList}"
+               <ComboBox ItemsSource="{x:Bind _viewModel._currencyList}"
                          SelectedIndex="{x:Bind _viewModel.PreferendCurrencyIndex,Mode=TwoWay}"
                          HorizontalAlignment="Stretch"
                          CornerRadius="8"

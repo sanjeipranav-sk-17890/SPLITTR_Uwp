@@ -1,25 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.CurrencyCoverter.Factory;
-using SPLITTR_Uwp.Core.DataHandler.Contracts;
+using SPLITTR_Uwp.Core.DataManager.Contracts;
+using SPLITTR_Uwp.Core.DbHandler.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.Services.Contracts;
 
-namespace SPLITTR_Uwp.Core.DataHandler
+namespace SPLITTR_Uwp.Core.DataManager
 {
     public class ExpenseDataManager : IExpenseDataHandler
     {
-        private readonly IExpenseDBHandler _dbHandler;
+        private readonly IExpenseDbHandler _dbHandler;
         private readonly ICurrencyCalcFactory _currencyCalcFactory;
         private  IUserDataManager _userDataManager;
 
 
-        public ExpenseDataManager(IExpenseDBHandler dbHandler,ICurrencyCalcFactory currencyCalcFactory)
+        public ExpenseDataManager(IExpenseDbHandler dbHandler,ICurrencyCalcFactory currencyCalcFactory)
         {
             _dbHandler = dbHandler;
             _currencyCalcFactory = currencyCalcFactory;

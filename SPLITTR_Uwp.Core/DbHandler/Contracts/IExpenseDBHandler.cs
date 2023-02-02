@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.Models;
 
-namespace SPLITTR_Uwp.Core.Services.Contracts
+namespace SPLITTR_Uwp.Core.DbHandler.Contracts
 {
-    public interface IExpenseDBHandler
+    public interface IExpenseDbHandler
     {
         /// <summary>
         /// Inserts Given Expense object to DataService Provided

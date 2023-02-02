@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
-using SPLITTR_Uwp.Core.DataHandler.Contracts;
+using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Utility;

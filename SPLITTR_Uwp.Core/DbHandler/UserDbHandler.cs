@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
-using System.Text;
+using System.Net.Mime;
 using System.Threading.Tasks;
+using SPLITTR_Uwp.Core.DbHandler.Contracts;
+using SPLITTR_Uwp.Core.DbHandler.SqliteConnection;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.Services.Contracts;
-using SPLITTR_Uwp.Core.Services.SqliteConnection;
 
-namespace SPLITTR_Uwp.Core.Services
+namespace SPLITTR_Uwp.Core.DbHandler
 {
-    public class UserDbHandler : IUserDBHandler
+    public class UserDbHandler : IUserDbHandler
     {
         private readonly ISqlDataServices _sqlDbAccess;
 
         public UserDbHandler(ISqlDataServices sqlDbAccess)
         {
-            _sqlDbAccess = sqlDbAccess;
+            _sqlDbAccess = sqlDbAccess; 
            _sqlDbAccess.CreateTable<User>();
         }
 

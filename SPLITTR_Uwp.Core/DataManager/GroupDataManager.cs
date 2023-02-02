@@ -1,24 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
-using SPLITTR_Uwp.Core.DataHandler.Contracts;
+using SPLITTR_Uwp.Core.DataManager.Contracts;
+using SPLITTR_Uwp.Core.DbHandler.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.Services.Contracts;
 
-namespace SPLITTR_Uwp.Core.DataHandler
+namespace SPLITTR_Uwp.Core.DataManager
 {
     public class GroupDataManager : IGroupDataManager
     {
-        private readonly IGroupDBHandler _groupDbHandler;
-        private readonly IGroupToUserDBHandler _groupToUserDbHandler;
+        private readonly IGroupDbHandler _groupDbHandler;
+        private readonly IGroupToUserDbHandler _groupToUserDbHandler;
         private  IUserDataManager _userDataManager;
 
-        public GroupDataManager(IGroupDBHandler groupDbHandler, IGroupToUserDBHandler groupToUserDbHandler)
+        public GroupDataManager(IGroupDbHandler groupDbHandler, IGroupToUserDbHandler groupToUserDbHandler)
         {
             _groupDbHandler = groupDbHandler;
             _groupToUserDbHandler = groupToUserDbHandler;

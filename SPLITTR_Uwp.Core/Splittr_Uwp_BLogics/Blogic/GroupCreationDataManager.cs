@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using SPLITTR_Uwp.Core.DataHandler.Contracts;
+using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.UseCase.contracts;
+using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.CreateGroup;
 using SQLite;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
@@ -22,7 +23,7 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
         }
         /// <exception cref="ArgumentNullException"><paramref name="collection">collection</paramref> is null.</exception>
         /// <exception cref="ArgumentException">Group Participants Must be Grater than 2</exception>
-        public async void CreateSplittrGroup(IEnumerable<User> particiapants, UserBobj currentUser, string groupName, IUseCaseCallBackBase<GroupCreationResponseObj> callBack)
+        public async void CreateSplittrGroup(IEnumerable<User> particiapants, UserBobj currentUser, string groupName, IUseCaseCallBack<GroupCreationResponseObj> callBack)
         {
             try
             {

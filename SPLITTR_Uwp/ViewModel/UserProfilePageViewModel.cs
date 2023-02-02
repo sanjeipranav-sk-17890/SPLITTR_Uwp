@@ -64,7 +64,7 @@ namespace SPLITTR_Uwp.ViewModel
             set => SetProperty(ref _isEditUserProfileVisible, value);
         }
 
-        public List<string> CurrencyList = new List<string>()
+        public List<string> _currencyList = new List<string>()
         {
             "Rupees ₹",
             "Dollar $",

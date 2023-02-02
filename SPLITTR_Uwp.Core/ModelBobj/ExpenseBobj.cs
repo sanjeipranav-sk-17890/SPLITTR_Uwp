@@ -1,6 +1,5 @@
 ﻿using System;
 using SPLITTR_Uwp.Core.CurrencyCoverter;
-using SPLITTR_Uwp.Core.DataHandler.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
 using System.Threading.Tasks;

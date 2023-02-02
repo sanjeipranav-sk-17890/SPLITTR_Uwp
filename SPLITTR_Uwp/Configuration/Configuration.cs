@@ -4,11 +4,12 @@ using System.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.CurrencyCoverter;
 using SPLITTR_Uwp.Core.CurrencyCoverter.Factory;
-using SPLITTR_Uwp.Core.DataHandler;
-using SPLITTR_Uwp.Core.DataHandler.Contracts;
-using SPLITTR_Uwp.Core.Services;
-using SPLITTR_Uwp.Core.Services.Contracts;
-using SPLITTR_Uwp.Core.Services.SqliteConnection;
+using SPLITTR_Uwp.Core;
+using SPLITTR_Uwp.Core.DataManager;
+using SPLITTR_Uwp.Core.DataManager.Contracts;
+using SPLITTR_Uwp.Core.DbHandler;
+using SPLITTR_Uwp.Core.DbHandler.Contracts;
+using SPLITTR_Uwp.Core.DbHandler.SqliteConnection;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics;
 using SPLITTR_Uwp.Core.Utility;
 using SPLITTR_Uwp.ViewModel;
@@ -17,9 +18,9 @@ using SPLITTR_Uwp.DataTemplates;
 using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.VmLogic;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
-using SPLITTR_Uwp.Core.UseCase.contracts;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.Views;
+using SPLITTR_Uwp.Core.UseCase.CreateGroup;
 
 namespace SPLITTR_Uwp.Configuration
 {
@@ -44,10 +45,10 @@ namespace SPLITTR_Uwp.Configuration
         private static void AddServiceDependencies(IServiceCollection container)
         {
             container.AddSingleton<ISqlDataServices, SqlDataBaseAdapter>()
-                .AddSingleton<IUserDBHandler, UserDbHandler>()
-                .AddSingleton<IExpenseDBHandler, ExpenseDbHandler>()
-                .AddSingleton<IGroupDBHandler, GroupDbHandler>()
-                .AddSingleton<IGroupToUserDBHandler, GroupToUserDbHandler>()
+                .AddSingleton<IUserDbHandler, UserDbHandler>()
+                .AddSingleton<IExpenseDbHandler, ExpenseDbHandler>()
+                .AddSingleton<IGroupDbHandler, GroupDbHandler>()
+                .AddSingleton<IGroupToUserDbHandler, GroupToUserDbHandler>()
                 .AddSingleton<IUserDataManager, UserDataManager>()
                 .AddSingleton<IGroupDataManager, GroupDataManager>()
                 .AddSingleton<IExpenseDataHandler, ExpenseDataManager>()

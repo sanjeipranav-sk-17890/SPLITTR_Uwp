@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Animation;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
-using SPLITTR_Uwp.Core.DataHandler.Contracts;
+using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.Views;
@@ -19,7 +19,7 @@ namespace SPLITTR_Uwp.ViewModel
         private bool _isValidEmailIdTextBlockVisibility=false;
         private bool _userAlreadyExistTextBlockVisibility=false;
 
-        public List<string> CurrencyList = new List<string>()
+        public List<string> _currencyList = new List<string>()
         {
             "Rupees ₹",
             "Dollar $",

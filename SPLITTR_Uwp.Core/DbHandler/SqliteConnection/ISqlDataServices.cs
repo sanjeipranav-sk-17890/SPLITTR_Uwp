@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SQLite;
 
-namespace SPLITTR_Uwp.Core.Services.SqliteConnection
+namespace SPLITTR_Uwp.Core.DbHandler.SqliteConnection
 {
     public interface ISqlDataServices
     {

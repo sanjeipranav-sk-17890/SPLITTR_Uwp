@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using SPLITTR_Uwp.Core.DbHandler.Contracts;
+using SPLITTR_Uwp.Core.DbHandler.SqliteConnection;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.Services.Contracts;
-using SPLITTR_Uwp.Core.Services.SqliteConnection;
 
-namespace SPLITTR_Uwp.Core.Services
+namespace SPLITTR_Uwp.Core.DbHandler
 {
-    public class GroupToUserDbHandler : IGroupToUserDBHandler
+    public class GroupToUserDbHandler : IGroupToUserDbHandler
     {
         private readonly ISqlDataServices _sqlDbAccess;
 
