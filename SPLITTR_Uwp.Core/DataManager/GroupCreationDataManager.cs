@@ -7,11 +7,12 @@ using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.CreateGroup;
 using SQLite;
 
-namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
+namespace SPLITTR_Uwp.Core.DataManager
 {
     public class GroupCreationDataManager : IGroupCreationDataManager
     {
@@ -40,7 +41,8 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
 
                 var newGroup = new GroupBobj(new Group
                 {
-                    UserEmailId = currentUser.EmailId, GroupName = groupName.Trim()
+                    UserEmailId = currentUser.EmailId,
+                    GroupName = groupName.Trim()
                 }, groupParticipants);
 
 

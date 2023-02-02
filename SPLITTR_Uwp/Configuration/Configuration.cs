@@ -21,6 +21,9 @@ using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.Views;
 using SPLITTR_Uwp.Core.UseCase.CreateGroup;
+using SPLITTR_Uwp.Core.UseCase.UpdateUser;
+using SPLITTR_Uwp.Core.UseCase.AddWalletAmount;
+using SPLITTR_Uwp.Core.UseCase.UserSuggestion;
 
 namespace SPLITTR_Uwp.Configuration
 {
@@ -52,32 +55,32 @@ namespace SPLITTR_Uwp.Configuration
                 .AddSingleton<IUserDataManager, UserDataManager>()
                 .AddSingleton<IGroupDataManager, GroupDataManager>()
                 .AddSingleton<IExpenseDataHandler, ExpenseDataManager>()
-                .AddSingleton<IExpenseHistoryUsecase,ExpenseHistoryManager>()
-                .AddSingleton<IGroupCreationDataManager,GroupCreationDataManager>()
-                .AddTransient<IUserBobjBalanceCalculator, UserBobjPropertyCalculator>()
+                .AddSingleton<IExpenseHistoryUsecase, ExpenseHistoryManager>()
+                .AddSingleton<IGroupCreationDataManager, GroupCreationDataManager>()
                 .AddSingleton<ICurrencyCalcFactory, CalculatorFactory>()
-                .AddSingleton<IExpenseHistoryManager,ExpenseHistoryManager>()
-                .AddTransient<IStateService,StateService>()
+                .AddSingleton<IExpenseHistoryManager, ExpenseHistoryManager>()
+                .AddSingleton<IUserProfileUpdateDataManager, UserUpdateDataManager>()
+                .AddSingleton<IAddWalletBalanceDataManager, UserUpdateDataManager>()
+                .AddSingleton<IUserSuggestionDataManager,UserUpdateDataManager>()
+                .AddTransient<IStateService, StateService>()
                 .AddTransient<RupessConverter>()
-                .AddTransient<GroupCreation>()
                 .AddTransient<DollarConverter>()
                 .AddTransient<YenConverter>()
                 .AddTransient<EuroConverter>()
                 .AddTransient<IStringManipulator, Manipulator>()
-                .AddTransient<IUserUseCase, UserUseCase>()
                 .AddTransient<IExpensePayment, ExpensePayment>()
-                .AddTransient<ISplitExpenseView,SplitExpenseUserControl>()
-                .AddTransient<IExpenseGrouper,ExpenseGrouper>()
-                .AddTransient<IExpenseUseCase,ExpenseUseCase>();
-
-
-
+                .AddTransient<ISplitExpenseView, SplitExpenseUserControl>()
+                .AddTransient<IExpenseGrouper, ExpenseGrouper>()
+                .AddTransient<IExpenseUseCase, ExpenseUseCase>()
+                .AddTransient<UpdateUser>()
+                .AddTransient<AddWalletAmount>()
+                .AddTransient<GroupCreation>()
+                .AddTransient<UserSuggestion>();
         }
 
         /// <summary>
         /// Adding ViewModel's of the Splitter into the container 
         /// </summary>
-        ///
         private static void AddViewModels(IServiceCollection container)
         {
             container.AddTransient<LoginPageViewModel>();

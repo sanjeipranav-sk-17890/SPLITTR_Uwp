@@ -17,12 +17,17 @@ using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.Views;
+using SPLITTR_Uwp.Core.UseCase.UserSuggestion;
+using System.Threading;
+using SPLITTR_Uwp.Core.EventArg;
+using SPLITTR_Uwp.Core.UseCase;
+using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    public class SplitExpenseViewModel : ObservableObject,IViewModel
+    public class SplitExpenseViewModel : ObservableObject,IViewModel ,IPresenterCallBack<UserSuggestionResponseObject>
     {
-        private readonly IUserUseCase _updateUserUseCase;
+     
         private readonly IExpenseUseCase _expenseUseCase;
 
         public  ISplitExpenseView View { get; set; }
@@ -102,28 +107,40 @@ namespace SPLITTR_Uwp.ViewModel
                 IsUserSuggestionListOpen = false;
                 return;
             }
-            UsersList.Clear(); 
-             _updateUserUseCase.GetUsersSuggestionAsync(SplittingUsersName.Trim().ToLower(), async suggestions =>
-            {//remainCode will be run if data fetching from use case is finished
-               await UiService.RunOnUiThread(() => {
-                        foreach (var user in suggestions)
-                        {
-                            UsersList.Add(user);
-                        }
-                        if (!UsersList.Any())
-                        {
-                            UsersList.Add(_dummyUser);
-                        }
+            UsersList.Clear();
 
-                        IsUserSuggestionListOpen = true;
-                       
-                    },View.Dispatcher);
-               
-            });
+            //to be Made static Cancel previous Request if Another Made 
+            var cts = new CancellationTokenSource().Token;
+            var fetchSuggestionReqObj = new UserSuggestionRequestObject(this, cts, SplittingUsersName.Trim().ToLower());
 
+            var suggestionFetchUseCase = InstanceHelper.CreateInstance<UserSuggestion>(fetchSuggestionReqObj);
+
+            suggestionFetchUseCase.Execute();
             
         }
+        public async void OnSuccess(UserSuggestionResponseObject result)
+        {
+            await UiService.RunOnUiThread(() => {
+                foreach (var user in result.UserSuggestions)
+                {
+                    UsersList.Add(user);
+                }
+                if (!UsersList.Any())
+                {
+                    UsersList.Add(_dummyUser);
+                }
 
+                IsUserSuggestionListOpen = true;
+
+            }, View.Dispatcher);
+        }
+        public void OnError(SplittrException ex)
+        {
+            if (ex.InnerException is SQLiteException)
+            {
+                ExceptionHandlerService.HandleException(ex);
+            }
+        }
 
 
         private User _dummyUser = new User()
@@ -565,9 +582,8 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
        
-        public SplitExpenseViewModel(IUserUseCase updateUserUseCase,IExpenseUseCase expenseUseCase,ISplitExpenseView view)
+        public SplitExpenseViewModel(IExpenseUseCase expenseUseCase,ISplitExpenseView view)
         {
-            _updateUserUseCase = updateUserUseCase;
             _expenseUseCase = expenseUseCase;
             View = view;
             Store.CurreUserBobj.ValueChanged += OnUserValueChanged;
@@ -597,6 +613,8 @@ namespace SPLITTR_Uwp.ViewModel
         /// Updating expense objects Currency Converter if the currency preference Changes 
         /// </summary>
         public event Action BindingUpdateInvoked;
+
+
     }
     
 }

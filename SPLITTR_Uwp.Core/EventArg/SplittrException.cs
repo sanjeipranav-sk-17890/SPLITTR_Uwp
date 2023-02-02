@@ -10,9 +10,4 @@ namespace SPLITTR_Uwp.Core.EventArg
         {
         }
     }
-    public interface IPresenterCallBack<in T>
-    {
-        void OnSuccess(T result);
-        void OnError(SplittrException ex);
-    }
 }

@@ -9,21 +9,23 @@ using Microsoft.Toolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
+using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.Models;
 using SQLite;
 using SPLITTR_Uwp.Core.UseCase.CreateGroup;
+using SPLITTR_Uwp.Core.UseCase.UserSuggestion;
+using SPLITTR_Uwp.Core.DataManager;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    internal class GroupCreationPageViewModel : ObservableObject,IViewModel, Core.UseCase.IPresenterCallBack<GroupCreationResponseObj>
+    internal class GroupCreationPageViewModel : ObservableObject,IViewModel,IPresenterCallBack<GroupCreationResponseObj>,IPresenterCallBack<UserSuggestionResponseObject>
     {
         
-        private readonly IUserUseCase _updateUserUseCase;
+        private readonly IUserUpdateDataManager _updateUserUpdateDataManager;
         private string _groupName;
 
 
@@ -43,10 +45,10 @@ namespace SPLITTR_Uwp.ViewModel
 
         public ObservableCollection<User> GroupParticipants { get; } = new ObservableCollection<User>();
 
-        public GroupCreationPageViewModel(IUserUseCase updateUserUseCase)
+        public GroupCreationPageViewModel(IUserUpdateDataManager updateUserUpdateDataManager)
         {
             
-            _updateUserUseCase = updateUserUseCase;
+            _updateUserUpdateDataManager = updateUserUpdateDataManager;
             Store.CurreUserBobj.ValueChanged += UserBobj_ValueChanged;
             User = new UserViewModel(Store.CurreUserBobj);
 
@@ -59,25 +61,34 @@ namespace SPLITTR_Uwp.ViewModel
         };
         public void PopulateSuggestionList(string userName)
         { 
-            _updateUserUseCase.GetUsersSuggestionAsync(userName.ToLower(), async (suggestions) =>
-           {
-               await UiService.RunOnUiThread((() =>
-               {
-                   foreach (var suggestedUser in suggestions)
-                   {
-                       if(GroupParticipants.Contains(suggestedUser)) continue; //suggestion is not showed if the user is already added to group participants
-                       UserSuggestionList.Add(suggestedUser);
-                   }
-                   if (!UserSuggestionList.Any())
-                   {
-                       UserSuggestionList.Add(_dummyUser);
-                   }
+            //to be Made static Cancel previous Request if Another Made 
+            var cts = new CancellationTokenSource().Token;
+            var fetchSuggestionReqObj = new UserSuggestionRequestObject(this, cts, userName);
 
-               }));
-           });
+            var suggestionFetchUseCase = InstanceHelper.CreateInstance<UserSuggestion>(fetchSuggestionReqObj);
+
+            suggestionFetchUseCase.Execute();
         }
 
+        //User Suggestion Call BAck
+        public async void OnSuccess(UserSuggestionResponseObject response)
+        {
+            await UiService.RunOnUiThread((() =>
+            {
+                foreach (var suggestedUser in response.UserSuggestions)
+                {
+                    if (GroupParticipants.Contains(suggestedUser)) continue; //suggestion is not showed if the user is already added to group participants
+                    UserSuggestionList.Add(suggestedUser);
+                }
+                if (!UserSuggestionList.Any())
+                {
+                    UserSuggestionList.Add(_dummyUser);
+                }
 
+            }));
+        }
+
+        //Group Creation Success Call Back
         public void GroupCreateButtonClicked(object sender, RoutedEventArgs e)
         {
             var groupName = _groupName.Trim();
@@ -103,6 +114,7 @@ namespace SPLITTR_Uwp.ViewModel
             });
             Debug.WriteLine("******************************Group Created Successfully *******************************************************");
         }
+       
         public void OnError(SplittrException ex)
         {
             switch (ex.InnerException)
