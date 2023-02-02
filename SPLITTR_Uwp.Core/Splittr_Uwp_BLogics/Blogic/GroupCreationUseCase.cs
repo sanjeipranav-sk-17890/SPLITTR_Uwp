@@ -4,26 +4,27 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using SPLITTR_Uwp.Core.DataHandler.Contracts;
+using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.Core.UseCase.contracts;
+using SQLite;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
 {
-    public class GroupCreationUseCase :UseCaseBase, IGroupUseCase
+    public class GroupCreationDataManager : IGroupCreationDataManager
     {
         private readonly IGroupDataManager _groupDataManager;
-        public GroupCreationUseCase(IGroupDataManager groupDataManager)
+        public GroupCreationDataManager(IGroupDataManager groupDataManager)
         {
             _groupDataManager = groupDataManager;
 
         }
         /// <exception cref="ArgumentNullException"><paramref name="collection">collection</paramref> is null.</exception>
         /// <exception cref="ArgumentException">Group Participants Must be Grater than 2</exception>
-        public void CreateSplittrGroup(IEnumerable<User> particiapants, UserBobj currentUser, string groupName, Action onSuccessCallBack)
-        { 
-
-            
-            RunAsynchronously(() =>
+        public async void CreateSplittrGroup(IEnumerable<User> particiapants, UserBobj currentUser, string groupName, IUseCaseCallBackBase<GroupCreationResponseObj> callBack)
+        {
+            try
             {
                 if (!particiapants.Any())
                 {
@@ -34,7 +35,7 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
                 {
                     currentUser
                 };
-                groupParticipants.AddRange(particiapants);//adding current user as one of the participants
+                groupParticipants.AddRange(particiapants); //adding current user as one of the participants
 
                 var newGroup = new GroupBobj(new Group
                 {
@@ -43,16 +44,37 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
 
 
                 //saving group Data to Data Repos
-                 _groupDataManager.CreateGroupAsync(newGroup);
+                await _groupDataManager.CreateGroupAsync(newGroup).ConfigureAwait(false);
 
-                //adding New Group obj to group UserBobj which will raise valuechanged event
+                //adding New Group obj to group UserBobj which will raise valueChanged event
                 currentUser.Groups.Add(newGroup);
 
-                
-                //invoking call Back functions
-                onSuccessCallBack?.Invoke();
+                //Passing Response to UseCase CallBack
+                var responseObj = CreateResponseObject(newGroup);
+                callBack?.OnSuccess(responseObj);
+            }
+            catch (ArgumentException ex)
+            {
+                var error = new SplittrException(ex, ex.Message);
+                callBack.OnError(error);
+            }
+            catch (SQLiteException ex)
+            {
+                var error = new SplittrException(ex, ex.Message);
+                callBack.OnError(error);
+            }
+            catch (Exception ex)
+            {
+                var error = new SplittrException(ex, ex.Message);
+                callBack?.OnError(error);
+            }
 
-            });
+        }
+
+
+        private GroupCreationResponseObj CreateResponseObject(GroupBobj groupBobj)
+        {
+            return new GroupCreationResponseObj(groupBobj);
         }
     }
 }

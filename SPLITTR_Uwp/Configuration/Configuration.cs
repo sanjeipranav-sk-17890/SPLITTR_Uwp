@@ -17,6 +17,7 @@ using SPLITTR_Uwp.DataTemplates;
 using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.VmLogic;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
+using SPLITTR_Uwp.Core.UseCase.contracts;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.Views;
 
@@ -51,18 +52,19 @@ namespace SPLITTR_Uwp.Configuration
                 .AddSingleton<IGroupDataManager, GroupDataManager>()
                 .AddSingleton<IExpenseDataHandler, ExpenseDataManager>()
                 .AddSingleton<IExpenseHistoryUsecase,ExpenseHistoryManager>()
+                .AddSingleton<IGroupCreationDataManager,GroupCreationDataManager>()
                 .AddTransient<IUserBobjBalanceCalculator, UserBobjPropertyCalculator>()
                 .AddSingleton<ICurrencyCalcFactory, CalculatorFactory>()
                 .AddSingleton<IExpenseHistoryManager,ExpenseHistoryManager>()
                 .AddTransient<IStateService,StateService>()
                 .AddTransient<RupessConverter>()
+                .AddTransient<GroupCreation>()
                 .AddTransient<DollarConverter>()
                 .AddTransient<YenConverter>()
                 .AddTransient<EuroConverter>()
                 .AddTransient<IStringManipulator, Manipulator>()
                 .AddTransient<IUserUseCase, UserUseCase>()
                 .AddTransient<IExpensePayment, ExpensePayment>()
-                .AddTransient<IGroupUseCase, GroupCreationUseCase>()
                 .AddTransient<ISplitExpenseView,SplitExpenseUserControl>()
                 .AddTransient<IExpenseGrouper,ExpenseGrouper>()
                 .AddTransient<IExpenseUseCase,ExpenseUseCase>();

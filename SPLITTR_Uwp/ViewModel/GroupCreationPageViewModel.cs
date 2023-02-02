@@ -2,13 +2,16 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
+using SPLITTR_Uwp.Core.UseCase.contracts;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Contracts;
@@ -17,9 +20,9 @@ using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    internal class GroupCreationPageViewModel : ObservableObject,IValueConverter,IViewModel
+    internal class GroupCreationPageViewModel : ObservableObject,IViewModel, Core.UseCase.IPresenterCallBack<GroupCreationResponseObj>
     {
-        private readonly IGroupUseCase _groupCreationUseCase;
+        
         private readonly IUserUseCase _updateUserUseCase;
         private string _groupName;
 
@@ -40,11 +43,10 @@ namespace SPLITTR_Uwp.ViewModel
 
         public ObservableCollection<User> GroupParticipants { get; } = new ObservableCollection<User>();
 
-        public GroupCreationPageViewModel(IUserUseCase updateUserUseCase,IGroupUseCase groupCreationUseCase)
+        public GroupCreationPageViewModel(IUserUseCase updateUserUseCase)
         {
             
             _updateUserUseCase = updateUserUseCase;
-            _groupCreationUseCase = groupCreationUseCase;
             Store.CurreUserBobj.ValueChanged += UserBobj_ValueChanged;
             User = new UserViewModel(Store.CurreUserBobj);
 
@@ -74,44 +76,45 @@ namespace SPLITTR_Uwp.ViewModel
                }));
            });
         }
+
+
         public void GroupCreateButtonClicked(object sender, RoutedEventArgs e)
         {
             var groupName = _groupName.Trim();
 
-            if (_groupCreationUseCase is IUseCase useCase) //On Failed doing Respective Actions
-            {
-                useCase.OnError += UseCase_OnError;
-            }
+            var token = new CancellationTokenSource().Token;
 
-            _groupCreationUseCase.CreateSplittrGroup(GroupParticipants,Store.CurreUserBobj,groupName, async () =>
-            {
-                await UiService.RunOnUiThread(async () =>
-                { 
-                    await UiService.ShowContentAsync($"{_groupName} Group Created SuccessFull", "SuccessFully Created !! ");
+            var groupCreationRequestObject = new GroupCreationRequestObj(token, this, Store.CurreUserBobj, GroupParticipants, groupName);
 
-                    //clearing groupAdding PAge controls 
-                    GroupParticipants.Clear();
-                    GroupName = String.Empty;
-                });
-                Debug.WriteLine("******************************Group Created Successfully *******************************************************");
-            });
+            var groupCreationUseCase = InstanceHelper.CreateInstance<GroupCreation>(groupCreationRequestObject);
+
+            groupCreationUseCase.Execute();
         }
 
-        private void UseCase_OnError(Exception arg, string arg2)
+        public async void OnSuccess(GroupCreationResponseObj result)
         {
-            switch (arg)
+            await UiService.RunOnUiThread(async () =>
+            {
+                await UiService.ShowContentAsync($"{_groupName} Group Created SuccessFull", "SuccessFully Created !! ");
+
+                //clearing groupAdding PAge controls 
+                GroupParticipants.Clear();
+                GroupName = string.Empty;
+            });
+            Debug.WriteLine("******************************Group Created Successfully *******************************************************");
+        }
+        public void OnError(SplittrException ex)
+        {
+            switch (ex.InnerException)
             {
                 case ArgumentException or ArgumentNullException:
-                    ExceptionHandlerService.HandleException(arg);
+                    ExceptionHandlerService.HandleException(ex.InnerException);
                     break;
                 case SQLiteException:
                     //Retry Code Logic Here
                     break;
             }
         }
-
-      
-        
 
         private async void UserBobj_ValueChanged(string property)
         {
@@ -125,23 +128,8 @@ namespace SPLITTR_Uwp.ViewModel
 
         }
 
-
-
-        #region UserInitialConvertRegion
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            var name = (string)value;
-            return name.GetUserInitial();
-        }
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        #endregion
-
-
         public event Action BindingUpdateInvoked;
+
+        
     }
 }

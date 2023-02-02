@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:Converter="using:SPLITTR_Uwp.DataRepository.Converters"
     xmlns:models="using:SPLITTR_Uwp.Core.Models"
     Style="{ThemeResource HomePageBackground}">
     <Page.Resources>
@@ -13,7 +14,7 @@
             <Setter Property="Foreground" Value="DarkGray" />
             <Setter Property="FontSize" Value="24" />
         </Style>
-        
+        <Converter:UserInitialFormatter x:Key="UserInitialFormatter"/>
     </Page.Resources>
 
     <Grid>
@@ -78,6 +79,7 @@
                                             <PersonPicture Height="40" HorizontalAlignment="Left"
                                                            Margin="-5 0 0 0"
                                                            BorderBrush="{ThemeResource ApplicationMainThemeColor}"
+                                                           Initials="{x:Bind  UserName,Mode=OneWay,Converter={StaticResource UserInitialFormatter}}"
                                                            />
                                             <TextBlock Grid.Column="1"
                                                        FontSize="25"

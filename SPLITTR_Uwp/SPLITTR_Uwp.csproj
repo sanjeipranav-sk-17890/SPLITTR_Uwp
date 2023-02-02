@@ -160,6 +160,7 @@
     <Compile Include="DataRepository\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="DataRepository\Converters\ExpenseAmountFormatter.cs" />
     <Compile Include="DataRepository\Converters\TimeConverter.cs" />
+    <Compile Include="DataRepository\Converters\UserInitialFormater.cs" />
     <Compile Include="DataRepository\Store.cs" />
     <Compile Include="DataTemplates\Controls\ThemeChangerButton.xaml.cs">
       <DependentUpon>ThemeChangerButton.xaml</DependentUpon>
