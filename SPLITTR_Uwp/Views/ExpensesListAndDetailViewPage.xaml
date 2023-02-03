@@ -75,7 +75,7 @@
             <ColumnDefinition MinWidth="400"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" CornerRadius="5">
+        <Grid Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" CornerRadius="5" Padding="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>

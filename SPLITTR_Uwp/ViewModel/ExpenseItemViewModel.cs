@@ -35,7 +35,7 @@ namespace SPLITTR_Uwp.ViewModel
         }
         public string GroupName
         {
-            get => FormatGroupName(_expenseVObj?.GroupUniqueId);
+            get => GetGroupNameByGroupId(_expenseVObj?.GroupUniqueId);
             
         }
 

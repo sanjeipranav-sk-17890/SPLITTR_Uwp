@@ -156,7 +156,7 @@ namespace SPLITTR_Uwp.Views
                 return;
             }
             //Setting Title
-            InnerPageTitle = "Individual Split" + $" : {selectedUser.UserName}";
+            InnerPageTitle = "Individual Split  " + $" : {selectedUser.UserName}";
 
 
             _viewModel.PopulateUserRelatedExpenses(selectedUser);
@@ -171,15 +171,15 @@ namespace SPLITTR_Uwp.Views
             switch (stackpanel.Name)
             {
                 case nameof(AllExpense):
-                    InnerPageTitle = nameof(AllExpense);
+                    InnerPageTitle = "All Expenses";
                     _viewModel.PopulateAllExpense();
                     break;
                 case nameof(RequestToMe):
-                    InnerPageTitle = nameof(RequestToMe);
+                    InnerPageTitle = "Request To Me";
                     _viewModel.PopulateUserReceivedExpenses();
                     break;
                 case nameof(RequestedByMe):
-                    InnerPageTitle = nameof(RequestedByMe);
+                    InnerPageTitle ="Request By Me";
                     _viewModel.PopulateUserRaisedExpenses();
                     break;
 
