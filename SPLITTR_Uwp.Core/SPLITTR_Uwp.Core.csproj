@@ -15,5 +15,11 @@
 
    <ItemGroup>
      <Folder Include="UseCase\contracts\" />
+     <Folder Include="UseCase\GetRelatedExpense\" />
+     <Folder Include="UseCase\CancelExpense\" />
+     <Folder Include="UseCase\MarkAsPaid\" />
+     <Folder Include="UseCase\LoginUser\" />
+     <Folder Include="UseCase\NewFolder\" />
+     <Folder Include="UseCase\SignUpUser\" />
    </ItemGroup>
 </Project>

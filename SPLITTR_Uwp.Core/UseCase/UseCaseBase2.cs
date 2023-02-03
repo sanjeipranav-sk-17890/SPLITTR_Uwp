@@ -28,7 +28,7 @@ namespace SPLITTR_Uwp.Core.UseCase
     {
         private  CancellationToken _cts;
 
-        protected IPresenterCallBack<T> PresenterCallBack { get; set; }
+        public IPresenterCallBack<T> PresenterCallBack { get; set; }
 
         protected UseCaseBase(IPresenterCallBack<T> callBack,CancellationToken token)
         {

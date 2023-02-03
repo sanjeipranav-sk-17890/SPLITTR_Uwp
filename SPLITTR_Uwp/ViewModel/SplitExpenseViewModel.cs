@@ -21,15 +21,14 @@ using SPLITTR_Uwp.Core.UseCase.UserSuggestion;
 using System.Threading;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.SplitExpenses;
 using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    public class SplitExpenseViewModel : ObservableObject,IViewModel ,IPresenterCallBack<UserSuggestionResponseObject>
+    public class SplitExpenseViewModel : ObservableObject,IViewModel ,IPresenterCallBack<UserSuggestionResponseObject>,IPresenterCallBack<SplitExpenseResponseObj>
     {
-     
-        private readonly IExpenseUseCase _expenseUseCase;
-
+        
         public  ISplitExpenseView View { get; set; }
 
 
@@ -134,11 +133,25 @@ namespace SPLITTR_Uwp.ViewModel
 
             }, View.Dispatcher);
         }
+
+        //if the splitting is successfull showing split completed text box and reset the page 
+        public async void OnSuccess(SplitExpenseResponseObj result)
+        {
+
+            await UiService.RunOnUiThread((() =>
+            {
+                UiService.ShowContentAsync("Spliting SuccessFull", "Expenses Splitted Successfully");
+                ResetPage();
+            }), View.Dispatcher);
+        }
         public void OnError(SplittrException ex)
         {
-            if (ex.InnerException is SQLiteException)
+            switch (ex.InnerException)
             {
-                ExceptionHandlerService.HandleException(ex);
+                case SQLiteException:
+                case ArgumentException:
+                    ExceptionHandlerService.HandleException(ex);
+                    break;
             }
         }
 
@@ -529,36 +542,18 @@ namespace SPLITTR_Uwp.ViewModel
             var expenseNote = ExpenseNote != null ? ExpenseNote.Trim() : string.Empty;
             var dateOfExpense = ExpenditureDate.DateTime;
             var expenseDescription = ExpenseDescription?.Trim() ?? string.Empty;
-           
-                var splittingType = SelectedSplitPreferenceIndex;// 0 if equal split or >0 for unequal split
 
+            var splittingType = SelectedSplitPreferenceIndex;// 0 if equal split or >0 for unequal split
 
-                //on expense Splitting success Assigend Callback will be called
-            _expenseUseCase.PresenterCallBackOnSuccess += ExpenseUseCasePresenterCallBackOnSuccess;
-            
+            var ctk = new CancellationTokenSource().Token;
 
-               _expenseUseCase.SplitNewExpensesAsync(expenseDescription,Store.CurreUserBobj, _expensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType);
+            var splitExpenseRequestObj = new SplitExpenseRequestObj(expenseDescription, Store.CurreUserBobj, _expensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType,ctk,this);
 
+            var splitExpenseUseCaseObj = InstanceHelper.CreateInstance<SplitExpenses>(splitExpenseRequestObj);
+
+            splitExpenseUseCaseObj.Execute();
         }
 
-        private async void ExpenseSplitting_OnError(Exception arg, string message)
-        {
-            await UiService.RunOnUiThread((() =>
-            {
-                ExceptionHandlerService.HandleException(arg);
-            }));
-        }
-
-        //if the splitting is successfull showing split completed text box and reset the page 
-        private async void ExpenseUseCasePresenterCallBackOnSuccess(EventArgs args)
-        {
-            await UiService.RunOnUiThread((() =>
-            {
-                UiService.ShowContentAsync("Spliting SuccessFull", "Expenses Splitted Successfully");
-                ResetPage();
-            }),View.Dispatcher);
-            _expenseUseCase.PresenterCallBackOnSuccess-= ExpenseUseCasePresenterCallBackOnSuccess;
-        }
         private void ResetPage()//resets UserControl to initial stage
         {
             SplittingUsersName = string.Empty;
@@ -582,20 +577,12 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
        
-        public SplitExpenseViewModel(IExpenseUseCase expenseUseCase,ISplitExpenseView view)
+        public SplitExpenseViewModel(ISplitExpenseView view)
         {
-            _expenseUseCase = expenseUseCase;
             View = view;
             Store.CurreUserBobj.ValueChanged += OnUserValueChanged;
             User = new UserViewModel(Store.CurreUserBobj);
             _expensesToBeSplitted.CollectionChanged += ExpensesToBeSplittedOnCollectionChanged;
-
-            //on Error Call back 
-            if (_expenseUseCase is IUseCase useCase)
-            {
-                useCase.OnError += ExpenseSplitting_OnError;
-            }
-
 
         }
 

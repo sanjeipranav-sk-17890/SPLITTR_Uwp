@@ -9,11 +9,13 @@ using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.Core.UseCase.SplitExpenses;
+using SPLITTR_Uwp.Core.UseCase;
 using SQLite;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 
-public class ExpenseUseCase : UseCaseBase, IExpenseUseCase
+public class ExpenseUseCase : UseCaseBase, IExpenseUseCase, ISplitExpenseDataManager
 {
     private readonly IExpenseDataHandler _expenseDataHandler;
     private readonly IExpenseHistoryManager _expenseHistoryManager;
@@ -175,44 +177,53 @@ public class ExpenseUseCase : UseCaseBase, IExpenseUseCase
 
 
     /// <exception cref="Exception">A delegate callback throws an exception.</exception>
-    public  void SplitNewExpensesAsync(string expenseDescription,UserBobj currentUser, IEnumerable<ExpenseBobj> expenses, string expenseNote, DateTime dateOfExpense, double expenseAmount, int expenditureSplitType)
+    public async void SplitNewExpensesAsync(string expenseDescription,UserBobj currentUser, IEnumerable<ExpenseBobj> expenses, string expenseNote, DateTime dateOfExpense, double expenseAmount, int expenditureSplitType, IUseCaseCallBack<SplitExpenseResponseObj> callBack)
     {
-        RunAsynchronously(async () =>
-         {
-             ExpenseBobj parentExpenseBobj = ValidateExpenseBobjs(expenseDescription,expenses, expenseNote, expenseAmount, dateOfExpense, expenditureSplitType);
+        try
+        {
 
-             var noOfExpenses = expenses.Count();
-             //assiging parentExpenditure Id to remaining Expenses except parent Expenses
-             foreach (var expense in expenses)
-             {
-                 if (expenditureSplitType <= 0)// assinging equal expense amount if equal split option is selected
-                 {
-                     expense.StrExpenseAmount = expenseAmount / noOfExpenses;
-                 }
-                 if (expense.ExpenseUniqueId.Equals(parentExpenseBobj.ExpenseUniqueId) is not true)//expenseStatus for split raiser is pending for others  
-                 {
-                     expense.ParentExpenseId = parentExpenseBobj.ExpenseUniqueId;
-                     expense.ExpenseStatus = ExpenseStatus.Pending;
+            ExpenseBobj parentExpenseBobj = ValidateExpenseBobjs(expenseDescription, expenses, expenseNote, expenseAmount, dateOfExpense, expenditureSplitType);
 
-                     if (expense.StrExpenseAmount == 0) //if split amount is 0 mark it as paid
-                     {
-                         expense.ExpenseStatus = ExpenseStatus.Paid;
-                     }
-                 }
+            var noOfExpenses = expenses.Count();
+            //assiging parentExpenditure Id to remaining Expenses except parent Expenses
+            foreach (var expense in expenses)
+            {
+                if (expenditureSplitType <= 0) // assinging equal expense amount if equal split option is selected
+                {
+                    expense.StrExpenseAmount = expenseAmount / noOfExpenses;
+                }
+                if (expense.ExpenseUniqueId.Equals(parentExpenseBobj.ExpenseUniqueId) is not true) //expenseStatus for split raiser is pending for others  
+                {
+                    expense.ParentExpenseId = parentExpenseBobj.ExpenseUniqueId;
+                    expense.ExpenseStatus = ExpenseStatus.Pending;
 
-             }
+                    if (expense.StrExpenseAmount == 0) //if split amount is 0 mark it as paid
+                    {
+                        expense.ExpenseStatus = ExpenseStatus.Paid;
+                    }
+                }
 
-             await  _expenseDataHandler.InsertExpenseAsync(expenses);
+            }
 
-             await UpdateDebitDetails(expenses,currentUser);
+            await _expenseDataHandler.InsertExpenseAsync(expenses);
 
-             //adds expenseObjs into 
-             currentUser.Expenses.AddRange(expenses);
+            await UpdateDebitDetails(expenses, currentUser);
 
-             //Calling Process Success Call back
-             PresenterCallBackOnSuccess?.Invoke(EventArgs.Empty);
-         });
-        ;
+            //adds expenseObjs into 
+            currentUser.Expenses.AddRange(expenses);
+
+            //Calling Process Success Call back
+            callBack?.OnSuccess(new SplitExpenseResponseObj(expenses));
+        }
+        catch (ArgumentException ex)
+        {
+            callBack?.OnError(new SplittrException(ex, ex.Message));
+        }
+        catch (SQLiteException ex)
+        {
+            callBack?.OnError(new SplittrException(ex,"Db Fetch Error"));
+        }
+
     }
 
 

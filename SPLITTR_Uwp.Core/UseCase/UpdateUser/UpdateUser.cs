@@ -5,7 +5,7 @@ using SPLITTR_Uwp.Core.EventArg;
 
 namespace SPLITTR_Uwp.Core.UseCase.UpdateUser
 {
-    public class UpdateUser : UseCaseBase<UpdateUserResponseObj>,IUseCaseCallBack<UpdateUserResponseObj>
+    public class UpdateUser : UseCaseBase<UpdateUserResponseObj>
     {
         private readonly IUserProfileUpdateDataManager _dataManager;
 
@@ -18,16 +18,9 @@ namespace SPLITTR_Uwp.Core.UseCase.UpdateUser
         }
         public override void Action()
         {
-            _dataManager.UpdateUserObjAsync(_requestObj.CurrentUser,_requestObj.NewUserName,_requestObj.CurrencyPreference,this);
+            _dataManager.UpdateUserObjAsync(_requestObj.CurrentUser,_requestObj.NewUserName,_requestObj.CurrencyPreference,new UseCaseCallBackBase<UpdateUserResponseObj>(this));
         }
-        void IUseCaseCallBack<UpdateUserResponseObj>.OnSuccess(UpdateUserResponseObj responseObj)
-        {
-           PresenterCallBack?.OnSuccess(responseObj);
-        }
-        void IUseCaseCallBack<UpdateUserResponseObj>.OnError(SplittrException error)
-        {
-            PresenterCallBack?.OnError(error);
-        }
+     
     }
 
 }

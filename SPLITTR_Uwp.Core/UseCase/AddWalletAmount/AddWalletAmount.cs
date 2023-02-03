@@ -5,7 +5,7 @@ using SPLITTR_Uwp.Core.UseCase.UpdateUser;
 
 namespace SPLITTR_Uwp.Core.UseCase.AddWalletAmount;
 
-public class AddWalletAmount : UseCaseBase<UpdateUserResponseObj>, IUseCaseCallBack<UpdateUserResponseObj>
+public class AddWalletAmount : UseCaseBase<UpdateUserResponseObj>
 {
     private readonly AddWalletAmountRequestObject _requestObj;
 
@@ -18,15 +18,6 @@ public class AddWalletAmount : UseCaseBase<UpdateUserResponseObj>, IUseCaseCallB
     }
     public override void Action()
     {
-        _dataManager.UpdateUserObjAsync(_requestObj.CurrentUser, _requestObj.WalletBalance, this);
-    }
-    void IUseCaseCallBack<UpdateUserResponseObj>.OnSuccess(UpdateUserResponseObj responseObj)
-    {
-        PresenterCallBack?.OnSuccess(responseObj);
-    }
-    void IUseCaseCallBack<UpdateUserResponseObj>.OnError(SplittrException error)
-    {
-        //Retry To Predefined count , if call fails
-        PresenterCallBack?.OnError(error);
+        _dataManager.UpdateUserObjAsync(_requestObj.CurrentUser, _requestObj.WalletBalance,new UseCaseCallBackBase<UpdateUserResponseObj>(this));
     }
 }

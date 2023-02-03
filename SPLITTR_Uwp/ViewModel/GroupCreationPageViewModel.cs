@@ -25,7 +25,7 @@ namespace SPLITTR_Uwp.ViewModel
     internal class GroupCreationPageViewModel : ObservableObject,IViewModel,IPresenterCallBack<GroupCreationResponseObj>,IPresenterCallBack<UserSuggestionResponseObject>
     {
         
-        private readonly IUserUpdateDataManager _updateUserUpdateDataManager;
+       
         private string _groupName;
 
 
@@ -45,13 +45,10 @@ namespace SPLITTR_Uwp.ViewModel
 
         public ObservableCollection<User> GroupParticipants { get; } = new ObservableCollection<User>();
 
-        public GroupCreationPageViewModel(IUserUpdateDataManager updateUserUpdateDataManager)
+        public GroupCreationPageViewModel()
         {
-            
-            _updateUserUpdateDataManager = updateUserUpdateDataManager;
             Store.CurreUserBobj.ValueChanged += UserBobj_ValueChanged;
             User = new UserViewModel(Store.CurreUserBobj);
-
         }
 
 

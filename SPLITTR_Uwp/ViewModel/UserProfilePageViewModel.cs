@@ -114,7 +114,7 @@ namespace SPLITTR_Uwp.ViewModel
             IsEditUserProfileVisible = false;
             IsUserNameEmptyIndicatorVisible = false;
         }
-        public  void SaveButtonClicked(object sender, RoutedEventArgs e)
+        public  void SaveButtonClicked()
         {
             if (string.IsNullOrEmpty(_currentUserName.Trim()))
             {
