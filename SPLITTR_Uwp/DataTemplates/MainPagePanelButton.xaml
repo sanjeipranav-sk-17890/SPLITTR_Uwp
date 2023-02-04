@@ -23,7 +23,7 @@
                  VerticalAlignment="Center">
 
             <Button.Content>
-                    <FontIcon x:Name="ArrowImage" FontFamily="Wingdings 3" Foreground="{ThemeResource SystemAccentColorDark3}" Glyph="&#xF0EE;">
+                    <FontIcon x:Name="ArrowImage" FontFamily="Wingdings 3" Foreground="{ThemeResource AccentTextColorBrush}" Glyph="&#xF0EE;">
                         <FontIcon.RotationTransition>
                             <ScalarTransition />
                         </FontIcon.RotationTransition>

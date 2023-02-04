@@ -21,10 +21,11 @@
         </Grid.RowDefinitions>
         <RelativePanel Grid.Row="0">
             <Border RelativePanel.AlignLeftWithPanel="True"
-                    Padding="2"
+                    Padding="5"
                     CornerRadius="4"
                     BorderThickness="1"
-                    BorderBrush="{ThemeResource SystemAccentColorDark3}"
+                    BorderBrush="{ThemeResource AccentTextColorBrush}"
+                    
                     Margin="4">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock FontFamily="Segoe MDL2 Assets"
@@ -54,7 +55,7 @@
                <ColumnDefinition Width="2*"/>
                <ColumnDefinition Width="5*"/>
            </Grid.ColumnDefinitions>
-            <TextBlock Foreground="{ThemeResource SystemAccentColorDark1}"  
+            <TextBlock Foreground="{ThemeResource AccentTextColorBrush}"  
                        Grid.Row="0" 
                        Grid.Column="0"
                        FontSize="16"
@@ -71,7 +72,7 @@
                        Margin="4 4 0 0"
                        FontSize="16"
                        FontWeight="Light"
-                       Foreground="{ThemeResource SystemAccentColorDark1}">Description :</TextBlock>
+                       Foreground="{ThemeResource AccentTextColorBrush}">Description :</TextBlock>
             <TextBlock Grid.Row="1"
                        Grid.Column="1"
                        Margin="10 4 0 0"
@@ -100,7 +101,7 @@
                         FontFamily="Segoe MDL2 Assets" 
                         Text="" 
                         ToolTipService.ToolTip="Date Of Expense "
-                        Foreground="{ThemeResource SystemAccentColorDark1}"
+                        Foreground="{ThemeResource AccentTextColorBrush}"
                         
                         VerticalAlignment="Top"/>
             <TextBlock Margin="5 0 0 0" TextTrimming="CharacterEllipsis">Date Of Expense :</TextBlock>
@@ -115,7 +116,7 @@
                     FontFamily="Segoe MDL2 Assets" 
                     Text="" 
                     ToolTipService.ToolTip="Additional Details "
-                    Foreground="{ThemeResource SystemAccentColorDark1}"
+                    Foreground="{ThemeResource AccentTextColorBrush}"
                     VerticalAlignment="Top"/>
                 <TextBlock Margin="5 0 0 0">Note :</TextBlock>
 

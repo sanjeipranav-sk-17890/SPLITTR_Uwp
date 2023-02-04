@@ -398,7 +398,7 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <Grid  CornerRadius="10"   Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid  CornerRadius="10"  Padding="4 0 4 0"  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
          <RowDefinition  Height="Auto"/>
          <RowDefinition Height="Auto" />
@@ -670,7 +670,7 @@
             <MenuFlyoutSeparator Style="{StaticResource MenuFlyoutSeparatorStyle}"></MenuFlyoutSeparator>
             <TextBlock HorizontalAlignment="Center"
                        Text="Date Of Expense"
-                       Foreground="{ThemeResource ApplicationMainThemeColor}"></TextBlock>
+                       Foreground="{ThemeResource AccentTextColorBrush}"></TextBlock>
             <!--<DatePicker HorizontalAlignment="Center"
                         CornerRadius="4"
                         Margin="0 5 0 0"

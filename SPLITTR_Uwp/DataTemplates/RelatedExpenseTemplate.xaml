@@ -63,7 +63,7 @@
                        Margin="4 0 0 0"
                        FontSize="20"
                        Text="{x:Bind _viewModel.CurrencySymbol,Mode=OneWay}"
-                       Foreground="{ThemeResource SystemAccentColorDark1}"/>
+                       Foreground="{ThemeResource AccentTextColorBrush}"/>
             <TextBlock x:Name="CurrencyAmountTextBlock"
                        VerticalAlignment="Center"
                        Text="{x:Bind _viewModel.ExpenditureAmount,Mode=OneWay}"

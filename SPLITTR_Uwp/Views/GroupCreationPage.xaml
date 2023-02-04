@@ -5,12 +5,15 @@
     xmlns:local="using:SPLITTR_Uwp.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:control="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
     xmlns:models="using:SPLITTR_Uwp.Core.Models"
-    Style="{ThemeResource HomePageBackground}">
+    control:BackdropMaterial.ApplyToRootOrPageBackground="True"
+    >
+    <!--Style="{ThemeResource HomePageBackground}"-->
     <Page.Resources>
         <Style x:Key="MinimalisticTitleTextBlockStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="DarkGray" />
+            <Setter Property="Foreground" Value="{ThemeResource AccentTextColorBrush}" />
             <Setter Property="FontSize" Value="24" />
         </Style>
         
@@ -42,7 +45,7 @@
                                 x:Name="GroupMembersStackPanel"
                                 Visibility="Collapsed">
                         <MenuFlyoutSeparator/>
-                          <TextBlock Text="Group Members" Style="{StaticResource MinimalisticTitleTextBlockStyle}"/>
+                          <TextBlock Text="Group Members" Style="{ThemeResource MinimalisticTitleTextBlockStyle}"/>
                           <ListView ItemsSource="{x:Bind _viewModel.GroupParticipants,Mode=OneWay}" >
                               <ListView.Header>
                                   <Grid >
@@ -53,15 +56,19 @@
 
                                         </Grid.ColumnDefinitions>
                                       <PersonPicture Height="40"
+                                                     VerticalAlignment="Center"
                                                      Initials="{x:Bind _viewModel.GetCurrentUserInitial,Mode=OneWay}"
                                                      BorderBrush="{ThemeResource ApplicationMainThemeColor}"/>
                                       <TextBlock Grid.Column="1"
                                                  FontSize="25"
+                                                 Margin="15 0 0 0"
+                                                 VerticalAlignment="Center"
                                                  Text="{x:Bind _viewModel.User.UserName,Mode=OneWay}"
                                                  HorizontalAlignment="Stretch"></TextBlock>
                                       <Border Grid.Column="2" BorderBrush="DarkSeaGreen"
                                               BorderThickness="1"
                                               VerticalAlignment="Center"
+                                              Padding="2"
                                               CornerRadius="5">
                                           <TextBlock Foreground="DarkSeaGreen">admin</TextBlock>
                                       </Border>
@@ -127,7 +134,7 @@
                                
                         </Grid>
                         <MenuFlyoutSeparator/>
-                        <HyperlinkButton Foreground="{ThemeResource ApplicationMainThemeColor}">Add Person +</HyperlinkButton>
+                        <HyperlinkButton Foreground="{ThemeResource AccentTextColorBrush}">Add Person +</HyperlinkButton>
                     </StackPanel>
                     <Button Style="{StaticResource OrangeButtonStyle}"
                             Content="Create"

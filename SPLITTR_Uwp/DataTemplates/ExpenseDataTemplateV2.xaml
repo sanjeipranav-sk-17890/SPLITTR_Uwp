@@ -90,12 +90,12 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <StackPanel VerticalAlignment="Center" Margin="5">
-                <TextBlock Foreground="{ThemeResource SystemAccentColorDark1}"
+                <TextBlock Foreground="{ThemeResource AccentTextColorBrush}"
                            FontSize="15"
                            FontFamily="Leelawadee UI"
                            Text="{x:Bind ExpenseObj.DateOfExpense,Converter={StaticResource StringFormater},ConverterParameter='{}{0:MMM}',Mode=OneWay}"
                            HorizontalAlignment="Center"></TextBlock>
-                <TextBlock Foreground="{ThemeResource SystemAccentColorDark1}"
+                <TextBlock Foreground="{ThemeResource AccentTextColorBrush}"
                            FontSize="22"
                            Text="{x:Bind ExpenseObj.DateOfExpense,Converter={StaticResource StringFormater},ConverterParameter='{}{0:dd}',Mode=OneWay}"
                            HorizontalAlignment="Center"/>
@@ -114,7 +114,7 @@
                             FontSize="10"
                             ToolTipService.ToolTip="{x:Bind _viewModel.GroupName,Mode=OneWay}"
                             CornerRadius="4"
-                            Foreground="{ThemeResource SystemAccentColorDark1}"
+                            Foreground="{ThemeResource AccentTextColorBrush}"
                             DataContext="{x:Bind _viewModel.GroupObject,Mode=OneWay}"></Button>
 
                 </StackPanel>
@@ -134,7 +134,7 @@
                                FontSize="12"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
-                               Foreground="{ThemeResource SystemAccentColorLight2}"/>
+                               Foreground="{ThemeResource AccentTextColorBrush}"/>
                     <TextBlock Text="{x:Bind _viewModel.ExpenseTotalAmount,Mode=OneWay}"
                                HorizontalAlignment="Center"
                                Grid.Row="1" Grid.Column="0"
@@ -149,7 +149,7 @@
                                FontSize="12"
                                Margin="10 5 5 5"
                                HorizontalAlignment="Center"
-                               Foreground="{ThemeResource SystemAccentColorLight2}"
+                               Foreground="{ThemeResource AccentTextColorBrush}"
                                MaxWidth="70">
                     </TextBlock>
                     <TextBlock Visibility="{x:Bind _viewModel.OwingAmountTextBlockVisibility,Mode=OneWay}"

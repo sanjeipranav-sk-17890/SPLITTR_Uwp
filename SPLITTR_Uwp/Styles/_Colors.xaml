@@ -6,18 +6,24 @@
 
     <SolidColorBrush x:Key="ApplicationMainThemeColor" Color="{ThemeResource SystemAccentColorLight1}" ></SolidColorBrush>
 
-    <media:AcrylicBrush TintColor="{ThemeResource SystemAccentColorLight1}" x:Key="ApplicationMainThemeAcrylicBrush" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemAccentColorLight1}" />
+    <!--<media:AcrylicBrush TintColor="{ThemeResource SystemAccentColorLight1}" x:Key="ApplicationMainThemeAcrylicBrush" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemAccentColorLight1}" />-->
 
  <!-- Main Page Navigation View BorderOverride-->
-    <media:AcrylicBrush x:Key="NavigationViewExpandedPaneBackground" TintColor="{ThemeResource SystemAccentColorLight1}" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemAccentColorLight1}" />
-    <media:AcrylicBrush x:Key="NavigationViewDefaultPaneBackground" TintColor="{ThemeResource SystemAccentColorLight1}" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemAccentColorLight1}" />
+    <!--<media:AcrylicBrush x:Key="NavigationViewExpandedPaneBackground" TintColor="{ThemeResource SystemAccentColorLight1}" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemAccentColorLight1}" />
+    <media:AcrylicBrush x:Key="NavigationViewDefaultPaneBackground" TintColor="{ThemeResource SystemAccentColorLight1}" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemAccentColorLight1}" />-->
 
  
 <!-- New Window Background Brush -->
-    <media:AcrylicBrush TintColor="{ThemeResource SystemAccentColorLight1}" x:Key="ApplicationMainThemeWindowAcrylicBrush" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemColorWindowColor}" />
+    <media:AcrylicBrush TintColor="{ThemeResource SystemAccentColorLight1}" x:Key="ApplicationMainThemeWindowAcrylicBrush" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemAccentColorLight3}" />
 
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
+            <media:AcrylicBrush TintColor="{ThemeResource SystemAccentColorLight3}" x:Key="ApplicationMainThemeAcrylicBrush" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemAccentColorLight3}" />
+            <SolidColorBrush x:Key="BackGroundBrush" Color="{ThemeResource SystemAccentColorLight3}"></SolidColorBrush>
+            <SolidColorBrush x:Key="AccentTextColorBrush" Color="{ThemeResource SystemAccentColor}"></SolidColorBrush>
+            <media:AcrylicBrush x:Key="NavigationViewExpandedPaneBackground" TintColor="{ThemeResource SystemAccentColorLight3}" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemAccentColorLight3}" />
+            <media:AcrylicBrush x:Key="NavigationViewDefaultPaneBackground" TintColor="{ThemeResource SystemAccentColorLight3}" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemAccentColorLight3}" />
+
             <Style x:Key="ThemedBackgroundGrid" TargetType="Grid">
                 <Setter Property="Background">
                     <Setter.Value>
@@ -27,6 +33,11 @@
             </Style>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
+            <media:AcrylicBrush TintColor="{ThemeResource SystemAccentColorDark3}" x:Key="ApplicationMainThemeAcrylicBrush" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemAccentColorDark3}" />
+            <SolidColorBrush x:Key="BackGroundBrush" Color="{ThemeResource SystemAccentColorDark3}"></SolidColorBrush>
+            <SolidColorBrush x:Key="AccentTextColorBrush" Color="{ThemeResource SystemAccentColor}"></SolidColorBrush>
+            <media:AcrylicBrush x:Key="NavigationViewExpandedPaneBackground" TintColor="{ThemeResource SystemAccentColorDark3}" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemAccentColorDark3}" />
+            <media:AcrylicBrush x:Key="NavigationViewDefaultPaneBackground" TintColor="{ThemeResource SystemAccentColorDark3}" TintOpacity="0.5" TintLuminosityOpacity="0.4" BackgroundSource="HostBackdrop" FallbackColor="{ThemeResource SystemAccentColorDark3}" />
             <Style x:Key="ThemedBackgroundGrid" TargetType="Grid">
                 <Setter Property="Background">
                     <Setter.Value>

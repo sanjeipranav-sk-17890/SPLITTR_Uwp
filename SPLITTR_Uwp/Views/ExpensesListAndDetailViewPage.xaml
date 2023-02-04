@@ -137,7 +137,7 @@
                                     <StackPanel Orientation="Horizontal"  Grid.Column="0" Margin="10,0">
                                         <StackPanel.Resources>
                                             <Style TargetType="TextBlock">
-                                                <Setter Property="Foreground" Value="{ThemeResource SystemAccentColorDark1}"></Setter>
+                                                <Setter Property="Foreground" Value="{ThemeResource AccentTextColorBrush}"></Setter>
                                             </Style>
                                         </StackPanel.Resources>
                                         <Button Click="ExpenseShowButton_OnClick" Style="{ThemeResource ShowExpensesButtonStyle}">

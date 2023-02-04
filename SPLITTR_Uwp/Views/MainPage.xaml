@@ -132,7 +132,7 @@
                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="AllExpense">
                                 <TextBlock Text ="☵"  
                                                FontSize="20"
-                                               Foreground="{ThemeResource SystemAccentColorDark3}"
+                                               Foreground="{ThemeResource AccentTextColorBrush}"
                                                ></TextBlock>
                                 <TextBlock Text="All Expenses"
                                                      VerticalAlignment="Center"
