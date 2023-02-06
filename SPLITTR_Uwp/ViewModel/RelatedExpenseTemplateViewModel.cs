@@ -1,28 +1,31 @@
 ﻿using System.Diagnostics;
+using System.Threading;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
+using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.VerifyPaidExpense;
 using SPLITTR_Uwp.Core.Utility;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Models;
+using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    internal class RelatedExpenseTemplateViewModel : ObservableObject
+    internal class RelatedExpenseTemplateViewModel : ObservableObject,IPresenterCallBack<VerifyPaidExpenseResponseObj>
     {
         
         private readonly IStringManipulator _stringManipulator;
-        private readonly IExpenseHistoryUsecase _expenseHistory;
         private bool _isExpenseMarkedAsPaid;
 
-        public RelatedExpenseTemplateViewModel(IStringManipulator stringManipulator,IExpenseHistoryUsecase expenseHistory)
+        public RelatedExpenseTemplateViewModel(IStringManipulator stringManipulator)
         {
          
             _stringManipulator = stringManipulator;
-            _expenseHistory = expenseHistory;
-
+            
         }
         public bool IsParentComment
         {
@@ -80,21 +83,36 @@ namespace SPLITTR_Uwp.ViewModel
                 IsExpenseMarkedAsPaid = false;
                 return;
             }
-            _expenseHistory.IsExpenseMarkedAsPaid(ExpenseObj.ExpenseUniqueId, async isPaid =>
-            {
-               await UiService.RunOnUiThread(() =>
-               {
-                   IsExpenseMarkedAsPaid = isPaid;
-                   Debug.WriteLine($"{ExpenseObj.ExpenseUniqueId}------,{isPaid}-------------{ExpenseObj.CorrespondingUserObj.UserName}");
-               });
+            var cts = new CancellationTokenSource();
 
-            } );
+            var verifyExpensePaidRequestObj = new VerifyPaidExpenseRequestObj(ExpenseObj.ExpenseUniqueId, cts.Token, this);
+
+            var verifyExpenseUseCaseObj = InstanceBuilder.CreateInstance<VerifyPaidExpense>(verifyExpensePaidRequestObj);
+
+            verifyExpenseUseCaseObj.Execute();
         }
 
 
         private void ExpenseObj_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
            CheckExpenseMarkHistory();   
+        }
+        public async void OnSuccess(VerifyPaidExpenseResponseObj result)
+        {
+            await UiService.RunOnUiThread(() =>
+            {
+                IsExpenseMarkedAsPaid = result.IsExpenseMarkAsPaid;
+                Debug.WriteLine($"{ExpenseObj.ExpenseUniqueId}------,{result.IsExpenseMarkAsPaid}-------------{ExpenseObj.CorrespondingUserObj.UserName}");
+            });
+
+        }
+        public void OnError(SplittrException ex)
+        {
+            if (ex.InnerException is SQLiteException)
+            {
+                ExceptionHandlerService.HandleException(ex);
+            }
+            
         }
     }
 }

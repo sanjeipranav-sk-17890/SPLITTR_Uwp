@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
+using SPLITTR_Uwp.Core.DataManager;
 using SQLite;
 
 namespace SPLITTR_Uwp.Core.UseCase.SplitExpenses

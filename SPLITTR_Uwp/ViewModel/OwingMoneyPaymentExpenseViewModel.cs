@@ -1,24 +1,24 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Threading;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
+using SPLITTR_Uwp.Core.EventArg;
+using SPLITTR_Uwp.Core.DataManager;
+using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.SettleUpExpense;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Models;
+using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel;
 
-internal class OwingMoneyPaymentExpenseViewModel :ObservableObject
+internal class OwingMoneyPaymentExpenseViewModel :ObservableObject,IPresenterCallBack<SettleUpExpenseResponseObj>
 {
-    private readonly IExpensePayment _expenseSettleUpUseCase;
+    
     private bool _settleButtonVisibility;
     private bool _paymentButtonVisibility;
 
-
-    public OwingMoneyPaymentExpenseViewModel(IExpensePayment expenseSettleUpUseCase)
-    {
-        _expenseSettleUpUseCase = expenseSettleUpUseCase;
-        
-    }
 
     public bool SettleButtonVisibility
     {
@@ -42,20 +42,16 @@ internal class OwingMoneyPaymentExpenseViewModel :ObservableObject
             Debug.WriteLine($"{nameof(_moneyPaymentExpense)} is null check Logic ");
             return;
         }
-        _expenseSettleUpUseCase.SettleUpExpenses(_moneyPaymentExpense,Store.CurreUserBobj,(OnSettleUpSuccessFull),isWalletPayment);
-    }
+        var cts = new CancellationTokenSource();
 
-    private async void OnSettleUpSuccessFull()
-    {
+        var settleUpReqObj = new SettleUPExpenseRequestObj(isWalletPayment, Store.CurreUserBobj, _moneyPaymentExpense, this, cts.Token);
 
-       await  UiService.ShowContentAsync("Splittr Completed SuccessFully","Payment Complete");
-       await UiService.RunOnUiThread(() =>
-       {
-           SettleButtonVisibility = false;
-           PaymentControlVisibility = false;
-       });
+        var settleUpUseCaseObj = InstanceBuilder.CreateInstance<SettleUpSplit>(settleUpReqObj);
+
+        settleUpUseCaseObj.Execute();
 
     }
+
 
     public void PaymetForExpenseButtonClicked(ExpenseViewModel expenseObj)
     {
@@ -63,6 +59,26 @@ internal class OwingMoneyPaymentExpenseViewModel :ObservableObject
     }
 
 
+    public async void OnSuccess(SettleUpExpenseResponseObj result)
+    {
+        await UiService.ShowContentAsync("Splittr Completed SuccessFully", "Payment Complete");
+        await UiService.RunOnUiThread(() =>
+        {
+            SettleButtonVisibility = false;
+            PaymentControlVisibility = false;
+        });
+    }
+    public void OnError(SplittrException ex)
+    {
+        if (ex.InnerException is NotSupportedException)
+        {
+            ExceptionHandlerService.HandleException(ex);
+        }
+        if (ex.InnerException is SQLiteException)
+        {
+            //logic to Show Something Went wrong
+        }
+    }
 }
 //private static AppWindow _paymentWindow = null;
 /*

@@ -7,7 +7,7 @@ using Microsoft.Toolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
+using SPLITTR_Uwp.Core.DataManager;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
 using SPLITTR_Uwp.DataRepository;

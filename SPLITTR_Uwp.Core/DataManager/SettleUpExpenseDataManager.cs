@@ -4,21 +4,24 @@ using System.Linq;
 using System.Text;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DbHandler.SqliteConnection;
+using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.SettleUpExpense;
 
-namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts
+namespace SPLITTR_Uwp.Core.DataManager
 {
-    
-    public class ExpensePayment : UseCaseBase, IExpensePayment
+
+    public class SettleUpExpenseDataManager : ISettleUpSplitDataManager
     {
         private readonly IUserDataManager _userDataManager;
         private readonly ISqlDataServices _sqlDataServices;
         private readonly IExpenseDataManager _expenseDataManager;
 
-        public ExpensePayment(IUserDataManager userDataManager, ISqlDataServices sqlDataServices, IExpenseDataManager expenseDataManager)
+        public SettleUpExpenseDataManager(IUserDataManager userDataManager, ISqlDataServices sqlDataServices, IExpenseDataManager expenseDataManager)
         {
             _userDataManager = userDataManager;
             _sqlDataServices = sqlDataServices;
@@ -42,11 +45,11 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts
         }
 
         /// <exception cref="NotSupportedException">thrown if Insufficient Wallet Balance</exception>
-        public void SettleUpExpenses(ExpenseBobj settleExpenseRef, UserBobj currentUser, Action successCallBack, bool isWalletTransaction = false)
+        public async void SettleUpExpenses(ExpenseBobj settleExpenseRef, UserBobj currentUser, IUseCaseCallBack<SettleUpExpenseResponseObj> callBack, bool isWalletTransaction = false)
         {
-            RunAsynchronously(async () =>
-            {
 
+            try
+            {
                 ValidateInputs(settleExpenseRef, currentUser);
 
                 var toBeSettledExpenseObj = currentUser.Expenses.FirstOrDefault(ex => ex.ExpenseUniqueId.Equals(settleExpenseRef.ExpenseUniqueId));
@@ -81,9 +84,17 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts
 
                 currentUser.Expenses.RemoveAndAdd(toBeSettledExpenseObj);
 
-                successCallBack?.Invoke();
+                callBack?.OnSuccess(new SettleUpExpenseResponseObj(toBeSettledExpenseObj));
 
-            });
+            }
+            catch (NotSupportedException ex)
+            {
+                callBack?.OnError(new SplittrException(ex, "Insufficient Wallet Balance"));
+            }
+            catch (Exception ex)
+            {
+                callBack?.OnError(new SplittrException(ex, ex.Message));
+            }
         }
 
     }

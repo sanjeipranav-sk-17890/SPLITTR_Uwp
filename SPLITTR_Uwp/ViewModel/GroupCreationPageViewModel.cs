@@ -9,7 +9,6 @@ using Microsoft.Toolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;

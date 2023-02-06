@@ -8,11 +8,8 @@
 
   <ItemGroup>
     <Compile Remove="UseCase\contracts\**" />
-    <Compile Remove="UseCase\NewFolder\**" />
     <EmbeddedResource Remove="UseCase\contracts\**" />
-    <EmbeddedResource Remove="UseCase\NewFolder\**" />
     <None Remove="UseCase\contracts\**" />
-    <None Remove="UseCase\NewFolder\**" />
   </ItemGroup>
 
    <ItemGroup>

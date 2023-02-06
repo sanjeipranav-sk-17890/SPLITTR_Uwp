@@ -10,8 +10,6 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.UpdateUser;
 using SPLITTR_Uwp.Services;

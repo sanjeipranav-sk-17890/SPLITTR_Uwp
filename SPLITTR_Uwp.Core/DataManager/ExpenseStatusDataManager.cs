@@ -17,15 +17,15 @@ using SQLite;
 using SPLITTR_Uwp.Core.UseCase.CancelExpense;
 using System.Security.Cryptography;
 
-namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
+namespace SPLITTR_Uwp.Core.DataManager;
 
-public class ExpenseStatusDataManager : ISplitExpenseDataManager,IMarkExpensePaidDataManager, IExpenseCancellationDataManager
+public class ExpenseStatusDataManager : ISplitExpenseDataManager, IMarkExpensePaidDataManager, IExpenseCancellationDataManager
 {
     private readonly IExpenseDataManager _expenseDataManager;
     private readonly IExpenseHistoryManager _expenseHistoryManager;
     private readonly IUserDataManager _userDataManager;
 
-    
+
     public async void CancelExpense(string expenseToBeCancelledId, UserBobj currentUser, IUseCaseCallBack<CancelExpenseResponseObj> callBack)
     {
         try
@@ -44,13 +44,13 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager,IMarkExpensePai
         }
         catch (Exception ex)
         {
-            callBack?.OnError(new SplittrException(ex,ex.Message));
+            callBack?.OnError(new SplittrException(ex, ex.Message));
         }
     }
 
 
 
-    public async void MarkExpenseAsPaid(string expenseToBeMarkedAsPaid, UserBobj currentUser,IUseCaseCallBack<MarkAsPaidResponseObj> callBack)
+    public async void MarkExpenseAsPaid(string expenseToBeMarkedAsPaid, UserBobj currentUser, IUseCaseCallBack<MarkAsPaidResponseObj> callBack)
     {
         try
         {
@@ -62,10 +62,10 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager,IMarkExpensePai
         }
         catch (SQLiteException e)
         {
-            callBack?.OnError(new SplittrException(e,"Db Fetch Error"));
+            callBack?.OnError(new SplittrException(e, "Db Fetch Error"));
         }
 
-      
+
     }
 
     private async Task<ExpenseBobj> ChangeExpenseStatus(string expenseId, UserBobj currentUser, ExpenseStatus status)
@@ -78,7 +78,7 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager,IMarkExpensePai
         await _expenseDataManager.UpdateExpenseAsync(expenseStatusChangeBobj).ConfigureAwait(false);
 
         //Updating User Lent and Owing Amount
-        await UpdateCreditDetails(expenseStatusChangeBobj,currentUser).ConfigureAwait(false);
+        await UpdateCreditDetails(expenseStatusChangeBobj, currentUser).ConfigureAwait(false);
 
         //Invoking Valued changed on UserObj so  Calculation based on that expense will update
         currentUser.Expenses.RemoveAndAdd(expenseStatusChangeBobj);
@@ -87,7 +87,7 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager,IMarkExpensePai
 
     }
 
-    private async Task UpdateCreditDetails(ExpenseBobj expenseStatusChangeBobj,UserBobj currentUser)
+    private async Task UpdateCreditDetails(ExpenseBobj expenseStatusChangeBobj, UserBobj currentUser)
     {
         var requestOwner = expenseStatusChangeBobj.SplitRaisedOwner;
         var correspondingUser = expenseStatusChangeBobj.CorrespondingUserObj;
@@ -114,13 +114,13 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager,IMarkExpensePai
         await _userDataManager.UpdateUserBobjAsync(correspondingUser).ConfigureAwait(false);
     }
 
-    private Task UpdateDebitDetails(IEnumerable<ExpenseBobj> expenses,UserBobj splitOwner)
+    private Task UpdateDebitDetails(IEnumerable<ExpenseBobj> expenses, UserBobj splitOwner)
     {
         var updatingUsers = new List<User>();
-        
+
         foreach (var expense in expenses)
         {
-            if ( expense.ExpenseStatus != ExpenseStatus.Pending)
+            if (expense.ExpenseStatus != ExpenseStatus.Pending)
             {
                 continue;
             }
@@ -137,7 +137,7 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager,IMarkExpensePai
     }
 
 
-    public ExpenseStatusDataManager(IExpenseDataManager expenseDataManager,IExpenseHistoryManager expenseHistoryManager,IUserDataManager userDataManager)
+    public ExpenseStatusDataManager(IExpenseDataManager expenseDataManager, IExpenseHistoryManager expenseHistoryManager, IUserDataManager userDataManager)
     {
         _expenseDataManager = expenseDataManager;
         _expenseHistoryManager = expenseHistoryManager;
@@ -167,7 +167,7 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager,IMarkExpensePai
             }
 
             expense.Note = expenseNote;
-            expense.Description=expenseDescription;
+            expense.Description = expenseDescription;
             expense.DateOfExpense = dateOfExpense;
             if (expense.RequestedOwner.Equals(expense.UserEmailId) && parentExpenseBobj is null)//expenseStatus for split raiser is always paid
             {
@@ -183,7 +183,7 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager,IMarkExpensePai
 
 
     /// <exception cref="Exception">A delegate callback throws an exception.</exception>
-    public async void SplitNewExpensesAsync(string expenseDescription,UserBobj currentUser, IEnumerable<ExpenseBobj> expenses, string expenseNote, DateTime dateOfExpense, double expenseAmount, int expenditureSplitType, IUseCaseCallBack<SplitExpenseResponseObj> callBack)
+    public async void SplitNewExpensesAsync(string expenseDescription, UserBobj currentUser, IEnumerable<ExpenseBobj> expenses, string expenseNote, DateTime dateOfExpense, double expenseAmount, int expenditureSplitType, IUseCaseCallBack<SplitExpenseResponseObj> callBack)
     {
         try
         {
@@ -227,7 +227,7 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager,IMarkExpensePai
         }
         catch (SQLiteException ex)
         {
-            callBack?.OnError(new SplittrException(ex,"Db Fetch Error"));
+            callBack?.OnError(new SplittrException(ex, "Db Fetch Error"));
         }
 
     }

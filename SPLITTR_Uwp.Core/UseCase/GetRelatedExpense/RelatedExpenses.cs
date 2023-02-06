@@ -2,7 +2,7 @@
 using System.Text;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.EventArg;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
+using SPLITTR_Uwp.Core.DataManager;
 
 namespace SPLITTR_Uwp.Core.UseCase.GetRelatedExpense
 {

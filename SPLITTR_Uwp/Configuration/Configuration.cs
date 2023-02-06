@@ -10,14 +10,11 @@ using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DbHandler;
 using SPLITTR_Uwp.Core.DbHandler.Contracts;
 using SPLITTR_Uwp.Core.DbHandler.SqliteConnection;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics;
 using SPLITTR_Uwp.Core.Utility;
 using SPLITTR_Uwp.ViewModel;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 using SPLITTR_Uwp.DataTemplates;
 using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.VmLogic;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.Views;
 using SPLITTR_Uwp.Core.UseCase.CreateGroup;
@@ -26,8 +23,10 @@ using SPLITTR_Uwp.Core.UseCase.AddWalletAmount;
 using SPLITTR_Uwp.Core.UseCase.CancelExpense;
 using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
 using SPLITTR_Uwp.Core.UseCase.MarkAsPaid;
+using SPLITTR_Uwp.Core.UseCase.SettleUpExpense;
 using SPLITTR_Uwp.Core.UseCase.SplitExpenses;
 using SPLITTR_Uwp.Core.UseCase.UserSuggestion;
+using SPLITTR_Uwp.Core.UseCase.VerifyPaidExpense;
 
 namespace SPLITTR_Uwp.Configuration
 {
@@ -59,7 +58,6 @@ namespace SPLITTR_Uwp.Configuration
                 .AddSingleton<IUserDataManager, UserDataManager>()
                 .AddSingleton<IGroupDataManager, GroupDataManager>()
                 .AddSingleton<IExpenseDataManager, ExpenseDataManager>()
-                .AddSingleton<IExpenseHistoryUsecase, ExpenseHistoryManager>()
                 .AddSingleton<IGroupCreationDataManager, GroupCreationDataManager>()
                 .AddSingleton<ICurrencyCalcFactory, CalculatorFactory>()
                 .AddSingleton<IExpenseHistoryManager, ExpenseHistoryManager>()
@@ -70,13 +68,13 @@ namespace SPLITTR_Uwp.Configuration
                 .AddSingleton<ISplitExpenseDataManager, ExpenseStatusDataManager>()
                 .AddSingleton<IMarkExpensePaidDataManager, ExpenseStatusDataManager>()
                 .AddSingleton<IExpenseCancellationDataManager, ExpenseStatusDataManager>()
+                .AddSingleton<ISettleUpSplitDataManager, SettleUpExpenseDataManager>()
                 .AddTransient<IStateService, StateService>()
                 .AddTransient<RupessConverter>()
                 .AddTransient<DollarConverter>()
                 .AddTransient<YenConverter>()
                 .AddTransient<EuroConverter>()
                 .AddTransient<IStringManipulator, Manipulator>()
-                .AddTransient<IExpensePayment, ExpensePayment>()
                 .AddTransient<ISplitExpenseView, SplitExpenseUserControl>()
                 .AddTransient<IExpenseGrouper, ExpenseGrouper>()
                 .AddTransient<UpdateUser>()
@@ -85,7 +83,9 @@ namespace SPLITTR_Uwp.Configuration
                 .AddTransient<SplitExpenses>()
                 .AddTransient<RelatedExpense>()
                 .AddTransient<MarkAsPaid>()
+                .AddTransient<SettleUpSplit>()
                 .AddTransient<CancelExpense>()
+                .AddTransient<VerifyPaidExpense>()
                 .AddTransient<UserSuggestion>();
         }
 
