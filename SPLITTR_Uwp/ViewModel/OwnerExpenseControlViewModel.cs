@@ -1,30 +1,26 @@
 ﻿using System;
+using System.Threading;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
+using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.CancelExpense;
+using SPLITTR_Uwp.Core.UseCase.MarkAsPaid;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
+using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    internal class OwnerExpenseControlViewModel : ObservableObject
+    internal class OwnerExpenseControlViewModel : ObservableObject,IPresenterCallBack<MarkAsPaidResponseObj>,IPresenterCallBack<CancelExpenseResponseObj>
     {
         private bool _expenseCancelButtonVisibility = false;
-   
-        private readonly IExpenseUseCase _expenseUseCase;
+        
 
-        public OwnerExpenseControlViewModel(IExpenseUseCase expenseUseCase)
-        {
-            _expenseUseCase = expenseUseCase;
-            
-        }
-
-        private void Utility_OnError(Exception exception, string arg2)
-        {
-            ExceptionHandlerService.HandleException(exception);
-        }
-
+        
         public bool ExpenseCancelButtonVisibility
         {
             get => _expenseCancelButtonVisibility;
@@ -50,55 +46,57 @@ namespace SPLITTR_Uwp.ViewModel
    
         public void OnExpenseCancellation(ExpenseBobj expense)
         {
-            _expenseUseCase.PresenterCallBackOnSuccess += ExpenseUtilityPresenterCallBackOnSuccess;
+            
+            var cts = new CancellationTokenSource();
+            var cancelExpenseRequestObj = new CancelExpenseRequestObj(this, Store.CurreUserBobj, expense.ExpenseUniqueId, cts.Token);
 
-            _expenseUseCase.OnError += OnExpenseUseCaseOnOnError; 
+            var cancelExpensesUseCaseObj = InstanceBuilder.CreateInstance<CancelExpense>(cancelExpenseRequestObj);
 
-            _expenseUseCase.CancelExpense(expense.ExpenseUniqueId,Store.CurreUserBobj);
-
-
-            async void ExpenseUtilityPresenterCallBackOnSuccess(EventArgs obj)
-            {
-                await UiService.ShowContentAsync($"{expense.Description} Cancelled", "Split Cancelled").ConfigureAwait(false);
-                _expenseUseCase.PresenterCallBackOnSuccess -= ExpenseUtilityPresenterCallBackOnSuccess;
-
-                
-               await UiService.RunOnUiThread(() =>
-                {
-                    ExpenseCancelButtonVisibility = false;
-                });
-            }
-          
+            cancelExpensesUseCaseObj?.Execute();
 
         }
-
-        void OnExpenseUseCaseOnOnError(Exception exception, string s)
-        {
-            _expenseUseCase.OnError -= OnExpenseUseCaseOnOnError;
-
-            ExceptionHandlerService.HandleException(exception);
-        }
-
 
         public void OnExpenseMarkedAsPaid(ExpenseBobj expense)
         {
-            _expenseUseCase.PresenterCallBackOnSuccess += ExpenseUtilityPresenterCallBackOnSuccess;
-            _expenseUseCase.OnError += (exception, s) => ExceptionHandlerService.HandleException(exception);
+            
+            var cts = new CancellationTokenSource();
 
-            _expenseUseCase.MarkExpenseAsPaid(expense.ExpenseUniqueId, Store.CurreUserBobj);
+            var markAsPaidRequestObj = new MarkAsPaidRequestObj(this, cts.Token, expense.ExpenseUniqueId, Store.CurreUserBobj);
 
+            var markAsPaidUseCaseObj = InstanceBuilder.CreateInstance<MarkAsPaid>(markAsPaidRequestObj);
 
-            async void ExpenseUtilityPresenterCallBackOnSuccess(EventArgs obj)
-            {
-                await UiService.ShowContentAsync($"{expense.Description} Cancelled", "Split Cancelled").ConfigureAwait(false);
-                _expenseUseCase.PresenterCallBackOnSuccess -= ExpenseUtilityPresenterCallBackOnSuccess;
-                await UiService.RunOnUiThread(() =>
-                {
-                    ExpenseCancelButtonVisibility = false;
-                });
-            }
+            markAsPaidUseCaseObj.Execute();
 
         }
 
+        public async void OnSuccess(MarkAsPaidResponseObj result)
+        {
+            await UiService.ShowContentAsync($"{result.MarkedPaidExpenseBobj.Description} Paid", "Marked as PAid").ConfigureAwait(false);
+            await UiService.RunOnUiThread(() =>
+            {
+                ExpenseCancelButtonVisibility = false;
+            });
+        }
+        public async void OnSuccess(CancelExpenseResponseObj result)
+        {
+            await UiService.ShowContentAsync($"{result.CancelledExpense.Description} Cancelled", "Split Cancelled").ConfigureAwait(false);
+            
+            await UiService.RunOnUiThread(() =>
+            {
+                ExpenseCancelButtonVisibility = false;
+            });
+
+        }
+        public void OnError(SplittrException ex)
+        {
+            if (ex.InnerException is SQLiteException)
+            {
+               //Some UI Logic to show Something Went Wrong
+            }
+            else if(ex.InnerException is ArgumentException )
+            {
+                ExceptionHandlerService.HandleException(ex);
+            }
+        }
     }
 }

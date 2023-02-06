@@ -23,7 +23,9 @@ using SPLITTR_Uwp.Views;
 using SPLITTR_Uwp.Core.UseCase.CreateGroup;
 using SPLITTR_Uwp.Core.UseCase.UpdateUser;
 using SPLITTR_Uwp.Core.UseCase.AddWalletAmount;
+using SPLITTR_Uwp.Core.UseCase.CancelExpense;
 using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
+using SPLITTR_Uwp.Core.UseCase.MarkAsPaid;
 using SPLITTR_Uwp.Core.UseCase.SplitExpenses;
 using SPLITTR_Uwp.Core.UseCase.UserSuggestion;
 
@@ -65,7 +67,9 @@ namespace SPLITTR_Uwp.Configuration
                 .AddSingleton<IAddWalletBalanceDataManager, UserUpdateDataManager>()
                 .AddSingleton<IUserSuggestionDataManager,UserUpdateDataManager>()
                 .AddSingleton<IRelatedExpenseDataManager,RelatedExpenseDataManager>()
-                .AddSingleton<ISplitExpenseDataManager, ExpenseUseCase>()
+                .AddSingleton<ISplitExpenseDataManager, ExpenseStatusDataManager>()
+                .AddSingleton<IMarkExpensePaidDataManager, ExpenseStatusDataManager>()
+                .AddSingleton<IExpenseCancellationDataManager, ExpenseStatusDataManager>()
                 .AddTransient<IStateService, StateService>()
                 .AddTransient<RupessConverter>()
                 .AddTransient<DollarConverter>()
@@ -75,12 +79,13 @@ namespace SPLITTR_Uwp.Configuration
                 .AddTransient<IExpensePayment, ExpensePayment>()
                 .AddTransient<ISplitExpenseView, SplitExpenseUserControl>()
                 .AddTransient<IExpenseGrouper, ExpenseGrouper>()
-                .AddTransient<IExpenseUseCase, ExpenseUseCase>()
                 .AddTransient<UpdateUser>()
                 .AddTransient<AddWalletAmount>()
                 .AddTransient<GroupCreation>()
                 .AddTransient<SplitExpenses>()
                 .AddTransient<RelatedExpense>()
+                .AddTransient<MarkAsPaid>()
+                .AddTransient<CancelExpense>()
                 .AddTransient<UserSuggestion>();
         }
 

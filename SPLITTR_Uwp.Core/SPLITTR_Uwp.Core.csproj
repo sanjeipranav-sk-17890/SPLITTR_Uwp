@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UseCase\contracts\**" />
     <Compile Remove="UseCase\NewFolder\**" />
+    <EmbeddedResource Remove="UseCase\contracts\**" />
     <EmbeddedResource Remove="UseCase\NewFolder\**" />
+    <None Remove="UseCase\contracts\**" />
     <None Remove="UseCase\NewFolder\**" />
   </ItemGroup>
 
@@ -20,10 +23,7 @@
    </ItemGroup>
 
    <ItemGroup>
-     <Folder Include="UseCase\contracts\" />
      <Folder Include="UseCase\GetRelatedExpense\" />
-     <Folder Include="UseCase\CancelExpense\" />
-     <Folder Include="UseCase\MarkAsPaid\" />
      <Folder Include="UseCase\LoginUser\" />
      <Folder Include="UseCase\SignUpUser\" />
    </ItemGroup>

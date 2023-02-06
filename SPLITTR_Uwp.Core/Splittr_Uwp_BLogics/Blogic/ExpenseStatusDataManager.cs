@@ -12,41 +12,63 @@ using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.UseCase.SplitExpenses;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
+using SPLITTR_Uwp.Core.UseCase.MarkAsPaid;
 using SQLite;
+using SPLITTR_Uwp.Core.UseCase.CancelExpense;
+using System.Security.Cryptography;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 
-public class ExpenseUseCase : UseCaseBase, IExpenseUseCase, ISplitExpenseDataManager
+public class ExpenseStatusDataManager : ISplitExpenseDataManager,IMarkExpensePaidDataManager, IExpenseCancellationDataManager
 {
     private readonly IExpenseDataManager _expenseDataManager;
     private readonly IExpenseHistoryManager _expenseHistoryManager;
     private readonly IUserDataManager _userDataManager;
 
-    public event Action<EventArgs> PresenterCallBackOnSuccess;
-
     
-
-    public void CancelExpense(string expenseToBeCancelledId, UserBobj currentUser)
+    public async void CancelExpense(string expenseToBeCancelledId, UserBobj currentUser, IUseCaseCallBack<CancelExpenseResponseObj> callBack)
     {
-        RunAsynchronously(async () =>
+        try
         {
-            await ChangeExpenseStatus(expenseToBeCancelledId, currentUser, ExpenseStatus.Cancelled).ConfigureAwait(false);
-        });
+            var cancelledExpenseObj = await ChangeExpenseStatus(expenseToBeCancelledId, currentUser, ExpenseStatus.Cancelled).ConfigureAwait(false);
+
+            callBack?.OnSuccess(new CancelExpenseResponseObj(cancelledExpenseObj));
+        }
+        catch (SQLiteException ex)
+        {
+            callBack?.OnError(new SplittrException(ex, "Db Fetch Error"));
+        }
+        catch (ArgumentException ex)
+        {
+            callBack?.OnError(new SplittrException(ex, "Owner of Passed Expense Didn't match Current User"));
+        }
+        catch (Exception ex)
+        {
+            callBack?.OnError(new SplittrException(ex,ex.Message));
+        }
     }
 
 
 
-    public void MarkExpenseAsPaid(string expenseToBeMarkedAsPaid, UserBobj currentUser)
+    public async void MarkExpenseAsPaid(string expenseToBeMarkedAsPaid, UserBobj currentUser,IUseCaseCallBack<MarkAsPaidResponseObj> callBack)
     {
-        RunAsynchronously(async () =>
+        try
         {
-            await  ChangeExpenseStatus(expenseToBeMarkedAsPaid, currentUser, ExpenseStatus.Paid).ConfigureAwait(false);
+            var paidExpenseObj = await ChangeExpenseStatus(expenseToBeMarkedAsPaid, currentUser, ExpenseStatus.Paid).ConfigureAwait(false);
             //storing record about that expense in dataService
-             _expenseHistoryManager.RecordExpenseMarkedAsPaid(expenseToBeMarkedAsPaid);
-        });
+            _expenseHistoryManager.RecordExpenseMarkedAsPaid(expenseToBeMarkedAsPaid);
+
+            callBack?.OnSuccess(new MarkAsPaidResponseObj(paidExpenseObj));
+        }
+        catch (SQLiteException e)
+        {
+            callBack?.OnError(new SplittrException(e,"Db Fetch Error"));
+        }
+
+      
     }
 
-    private async Task ChangeExpenseStatus(string expenseId, UserBobj currentUser, ExpenseStatus status)
+    private async Task<ExpenseBobj> ChangeExpenseStatus(string expenseId, UserBobj currentUser, ExpenseStatus status)
     {
         //Fetching expense obj with matching id
         var expenseStatusChangeBobj = currentUser.Expenses.First(ex => ex.ExpenseUniqueId.Equals(expenseId));
@@ -61,8 +83,10 @@ public class ExpenseUseCase : UseCaseBase, IExpenseUseCase, ISplitExpenseDataMan
         //Invoking Valued changed on UserObj so  Calculation based on that expense will update
         currentUser.Expenses.RemoveAndAdd(expenseStatusChangeBobj);
 
-        PresenterCallBackOnSuccess?.Invoke(EventArgs.Empty);
+        return expenseStatusChangeBobj;
+
     }
+
     private async Task UpdateCreditDetails(ExpenseBobj expenseStatusChangeBobj,UserBobj currentUser)
     {
         var requestOwner = expenseStatusChangeBobj.SplitRaisedOwner;
@@ -113,7 +137,7 @@ public class ExpenseUseCase : UseCaseBase, IExpenseUseCase, ISplitExpenseDataMan
     }
 
 
-    public ExpenseUseCase(IExpenseDataManager expenseDataManager,IExpenseHistoryManager expenseHistoryManager,IUserDataManager userDataManager)
+    public ExpenseStatusDataManager(IExpenseDataManager expenseDataManager,IExpenseHistoryManager expenseHistoryManager,IUserDataManager userDataManager)
     {
         _expenseDataManager = expenseDataManager;
         _expenseHistoryManager = expenseHistoryManager;
