@@ -6,6 +6,12 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="UseCase\NewFolder\**" />
+    <EmbeddedResource Remove="UseCase\NewFolder\**" />
+    <None Remove="UseCase\NewFolder\**" />
+  </ItemGroup>
+
    <ItemGroup>
      <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
@@ -19,7 +25,6 @@
      <Folder Include="UseCase\CancelExpense\" />
      <Folder Include="UseCase\MarkAsPaid\" />
      <Folder Include="UseCase\LoginUser\" />
-     <Folder Include="UseCase\NewFolder\" />
      <Folder Include="UseCase\SignUpUser\" />
    </ItemGroup>
 </Project>

@@ -11,38 +11,20 @@ using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.UseCase.SplitExpenses;
 using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
 using SQLite;
 
 namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 
 public class ExpenseUseCase : UseCaseBase, IExpenseUseCase, ISplitExpenseDataManager
 {
-    private readonly IExpenseDataHandler _expenseDataHandler;
+    private readonly IExpenseDataManager _expenseDataManager;
     private readonly IExpenseHistoryManager _expenseHistoryManager;
     private readonly IUserDataManager _userDataManager;
 
     public event Action<EventArgs> PresenterCallBackOnSuccess;
 
-    /// <exception cref="ArgumentException">Expense passed cannot be null</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="source">source</paramref> or <paramref name="predicate">predicate</paramref> is null.</exception>
-    public void GetRelatedExpenses(ExpenseBobj referenceExpense,UserBobj currentUser, Action<IEnumerable<ExpenseBobj>> resultCallBack)
-    {
-        RunAsynchronously((async () =>
-        {
-            if (referenceExpense is null)
-            {
-                throw new ArgumentException("Expense passed cannot be null");
-            }
-
-
-            var relatedExpenses =await _expenseDataHandler.GetRelatedExpenses(referenceExpense,currentUser).ConfigureAwait(false);
-
-            var filteredExpense = relatedExpenses.Where(ex => !ex.ExpenseUniqueId.Equals(referenceExpense.ExpenseUniqueId));
-
-            resultCallBack?.Invoke(filteredExpense);
-        }));
-    }
-
+    
 
     public void CancelExpense(string expenseToBeCancelledId, UserBobj currentUser)
     {
@@ -71,7 +53,7 @@ public class ExpenseUseCase : UseCaseBase, IExpenseUseCase, ISplitExpenseDataMan
 
         expenseStatusChangeBobj.ExpenseStatus = status;
 
-        await _expenseDataHandler.UpdateExpenseAsync(expenseStatusChangeBobj).ConfigureAwait(false);
+        await _expenseDataManager.UpdateExpenseAsync(expenseStatusChangeBobj).ConfigureAwait(false);
 
         //Updating User Lent and Owing Amount
         await UpdateCreditDetails(expenseStatusChangeBobj,currentUser).ConfigureAwait(false);
@@ -131,9 +113,9 @@ public class ExpenseUseCase : UseCaseBase, IExpenseUseCase, ISplitExpenseDataMan
     }
 
 
-    public ExpenseUseCase(IExpenseDataHandler expenseDataHandler,IExpenseHistoryManager expenseHistoryManager,IUserDataManager userDataManager)
+    public ExpenseUseCase(IExpenseDataManager expenseDataManager,IExpenseHistoryManager expenseHistoryManager,IUserDataManager userDataManager)
     {
-        _expenseDataHandler = expenseDataHandler;
+        _expenseDataManager = expenseDataManager;
         _expenseHistoryManager = expenseHistoryManager;
         _userDataManager = userDataManager;
 
@@ -205,7 +187,7 @@ public class ExpenseUseCase : UseCaseBase, IExpenseUseCase, ISplitExpenseDataMan
 
             }
 
-            await _expenseDataHandler.InsertExpenseAsync(expenses);
+            await _expenseDataManager.InsertExpenseAsync(expenses);
 
             await UpdateDebitDetails(expenses, currentUser);
 

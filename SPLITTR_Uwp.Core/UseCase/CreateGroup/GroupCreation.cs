@@ -1,4 +1,5 @@
-﻿using SPLITTR_Uwp.Core.EventArg;
+﻿using SPLITTR_Uwp.Core.DataManager.Contracts;
+using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 
 namespace SPLITTR_Uwp.Core.UseCase.CreateGroup;

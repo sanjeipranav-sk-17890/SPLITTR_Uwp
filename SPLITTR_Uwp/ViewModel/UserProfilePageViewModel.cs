@@ -126,7 +126,7 @@ namespace SPLITTR_Uwp.ViewModel
             //useCase classes is updating the UserObj and its related data's
             var updateUserRequestOBj = new UpdateUserRequestObj(cts,this,Store.CurreUserBobj,_currentUserName,(Currency)_preferedCurrencyIndex);
 
-            var updateUserUseCaseObj = InstanceHelper.CreateInstance<UpdateUser>(updateUserRequestOBj);
+            var updateUserUseCaseObj = InstanceBuilder.CreateInstance<UpdateUser>(updateUserRequestOBj);
 
             updateUserUseCaseObj.Execute();
 

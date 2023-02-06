@@ -62,7 +62,7 @@ namespace SPLITTR_Uwp.ViewModel
             var cts = new CancellationTokenSource().Token;
             var fetchSuggestionReqObj = new UserSuggestionRequestObject(this, cts, userName);
 
-            var suggestionFetchUseCase = InstanceHelper.CreateInstance<UserSuggestion>(fetchSuggestionReqObj);
+            var suggestionFetchUseCase = InstanceBuilder.CreateInstance<UserSuggestion>(fetchSuggestionReqObj);
 
             suggestionFetchUseCase.Execute();
         }
@@ -94,7 +94,7 @@ namespace SPLITTR_Uwp.ViewModel
 
             var groupCreationRequestObject = new GroupCreationRequestObj(token, this, Store.CurreUserBobj, GroupParticipants, groupName);
 
-            var groupCreationUseCase = InstanceHelper.CreateInstance<GroupCreation>(groupCreationRequestObject);
+            var groupCreationUseCase = InstanceBuilder.CreateInstance<GroupCreation>(groupCreationRequestObject);
 
             groupCreationUseCase.Execute();
         }

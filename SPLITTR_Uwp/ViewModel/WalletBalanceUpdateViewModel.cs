@@ -53,7 +53,7 @@ namespace SPLITTR_Uwp.ViewModel
 
                 var addWalletAmountRequestObject = new AddWalletAmountRequestObject(this, cts, Store.CurreUserBobj, newWalletBalance);
 
-                var addWalletAmountUseCase = InstanceHelper.CreateInstance<AddWalletAmount>(addWalletAmountRequestObject);
+                var addWalletAmountUseCase = InstanceBuilder.CreateInstance<AddWalletAmount>(addWalletAmountRequestObject);
 
                 addWalletAmountUseCase.Execute();
             }

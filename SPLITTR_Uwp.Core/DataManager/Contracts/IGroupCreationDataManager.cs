@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.CreateGroup;
 
-namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic
+namespace SPLITTR_Uwp.Core.DataManager.Contracts
 {
     public interface IGroupCreationDataManager 
     {

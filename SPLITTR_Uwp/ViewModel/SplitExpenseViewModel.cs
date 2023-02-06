@@ -112,7 +112,7 @@ namespace SPLITTR_Uwp.ViewModel
             var cts = new CancellationTokenSource().Token;
             var fetchSuggestionReqObj = new UserSuggestionRequestObject(this, cts, SplittingUsersName.Trim().ToLower());
 
-            var suggestionFetchUseCase = InstanceHelper.CreateInstance<UserSuggestion>(fetchSuggestionReqObj);
+            var suggestionFetchUseCase = InstanceBuilder.CreateInstance<UserSuggestion>(fetchSuggestionReqObj);
 
             suggestionFetchUseCase.Execute();
             
@@ -549,7 +549,7 @@ namespace SPLITTR_Uwp.ViewModel
 
             var splitExpenseRequestObj = new SplitExpenseRequestObj(expenseDescription, Store.CurreUserBobj, _expensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType,ctk,this);
 
-            var splitExpenseUseCaseObj = InstanceHelper.CreateInstance<SplitExpenses>(splitExpenseRequestObj);
+            var splitExpenseUseCaseObj = InstanceBuilder.CreateInstance<SplitExpenses>(splitExpenseRequestObj);
 
             splitExpenseUseCaseObj.Execute();
         }

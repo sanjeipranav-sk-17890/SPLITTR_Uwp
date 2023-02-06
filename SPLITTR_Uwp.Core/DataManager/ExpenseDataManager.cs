@@ -10,7 +10,7 @@ using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.DataManager
 {
-    public class ExpenseDataManager : IExpenseDataHandler
+    public class ExpenseDataManager : IExpenseDataManager
     {
         private readonly IExpenseDbHandler _dbHandler;
         private readonly ICurrencyCalcFactory _currencyCalcFactory;
@@ -43,15 +43,6 @@ namespace SPLITTR_Uwp.Core.DataManager
 
             return await InitializeExpenseBobjs(userExpenses, user).ConfigureAwait(false);
         }
-        public async Task<IEnumerable<ExpenseBobj>> GetRelatedExpenses(ExpenseBobj expenseBobj, User currentUser)
-        {
-            var key = expenseBobj.ParentExpenseId ?? expenseBobj.ExpenseUniqueId;
-
-            var relatedExpenseList =await _dbHandler.SelectRelatedExpenses(key).ConfigureAwait(false);
-
-            return await InitializeExpenseBobjs(relatedExpenseList, currentUser).ConfigureAwait(false);
-        }
-
 
         async Task<IEnumerable<ExpenseBobj>> InitializeExpenseBobjs(IEnumerable<Expense> expenses,User currentUser)
         {

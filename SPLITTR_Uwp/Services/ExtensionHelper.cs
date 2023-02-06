@@ -25,7 +25,7 @@ namespace SPLITTR_Uwp.Services
         }
     }
 
-    internal static class InstanceHelper
+    internal static class InstanceBuilder
     {
         public static T CreateInstance<T>(params object[] args)
         {

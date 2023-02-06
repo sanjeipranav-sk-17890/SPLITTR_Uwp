@@ -16,17 +16,17 @@ namespace SPLITTR_Uwp.Core.DataManager
     {
         private readonly IUserDbHandler _userDbHandler;
         private readonly IGroupDataManager _groupDataManager;
-        private readonly IExpenseDataHandler _expenseDataHandler;
+        private readonly IExpenseDataManager _expenseDataManager;
         private readonly ICurrencyCalcFactory _currencyCalc;
         private string _currentUserEmailId;
         private User _currentUser;
         private readonly ConcurrentDictionary<string, User> _localUserCache = new ConcurrentDictionary<string, User>();
 
-        public UserDataManager(IUserDbHandler userDbHandler, IGroupDataManager groupDataManager, IExpenseDataHandler expenseDataHandler,ICurrencyCalcFactory currencyCalc)
+        public UserDataManager(IUserDbHandler userDbHandler, IGroupDataManager groupDataManager, IExpenseDataManager expenseDataManager,ICurrencyCalcFactory currencyCalc)
         {
             _userDbHandler = userDbHandler;
             _groupDataManager = groupDataManager;
-            _expenseDataHandler = expenseDataHandler;
+            _expenseDataManager = expenseDataManager;
             _currencyCalc = currencyCalc;
         }
 
@@ -127,7 +127,7 @@ namespace SPLITTR_Uwp.Core.DataManager
             var user = await FetchUserUsingMailId(emailId).ConfigureAwait(false);
 
             //Passing In userDataManager as Method injection to Avoid Circular Dependency in IServiceCollection 
-            var expenses =await _expenseDataHandler.GetUserExpensesAsync(_currentUser,this).ConfigureAwait(false);
+            var expenses =await _expenseDataManager.GetUserExpensesAsync(_currentUser,this).ConfigureAwait(false);
 
             var groups =await _groupDataManager.GetUserPartcipatingGroups(_currentUser,this).ConfigureAwait(false);
 

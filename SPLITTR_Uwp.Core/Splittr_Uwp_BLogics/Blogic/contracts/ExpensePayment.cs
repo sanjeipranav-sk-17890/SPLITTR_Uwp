@@ -16,13 +16,13 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts
     {
         private readonly IUserDataManager _userDataManager;
         private readonly ISqlDataServices _sqlDataServices;
-        private readonly IExpenseDataHandler _expenseDataHandler;
+        private readonly IExpenseDataManager _expenseDataManager;
 
-        public ExpensePayment(IUserDataManager userDataManager, ISqlDataServices sqlDataServices, IExpenseDataHandler expenseDataHandler)
+        public ExpensePayment(IUserDataManager userDataManager, ISqlDataServices sqlDataServices, IExpenseDataManager expenseDataManager)
         {
             _userDataManager = userDataManager;
             _sqlDataServices = sqlDataServices;
-            _expenseDataHandler = expenseDataHandler;
+            _expenseDataManager = expenseDataManager;
 
         }
 
@@ -76,7 +76,7 @@ namespace SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts
                 await _sqlDataServices.RunInTransaction(() =>
                 {
                     _userDataManager.UpdateUserBobjAsync(requestedOwner);
-                    _expenseDataHandler.UpdateExpenseAsync(toBeSettledExpenseObj);
+                    _expenseDataManager.UpdateExpenseAsync(toBeSettledExpenseObj);
                 }).ConfigureAwait(false);
 
                 currentUser.Expenses.RemoveAndAdd(toBeSettledExpenseObj);
