@@ -18,7 +18,7 @@ namespace SPLITTR_Uwp.Views
             this.InitializeComponent();
             _viewModel = App.Container.GetService<LoginPageViewModel>();
             this.DataContextChanged += (sender, args) => Bindings.Update();
-            
+
         }
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {

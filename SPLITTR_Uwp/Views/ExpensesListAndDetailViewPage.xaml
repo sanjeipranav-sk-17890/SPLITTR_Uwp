@@ -13,6 +13,20 @@
     xmlns:template="using:SPLITTR_Uwp.DataTemplates"
     Loaded="ExpensesListAndDetailViewPage_OnLoaded">
     <Page.Resources>
+        <Style x:Key="CustomGridSplitterStyle" TargetType="controls:GridSplitter">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:GridSplitter">
+                    <Grid x:Name="Root" >
+                        <!-- Background -->
+                        <Rectangle Fill="Transparent" StrokeThickness="0"  />
+                        <!-- Focus Visual -->
+                        <Rectangle x:Name="FocusVisual" Stroke="Transparent" StrokeThickness="1" Opacity="0" IsHitTestVisible="false" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        </Style>
         <CollectionViewSource  x:Name="CollectionViewSource" x:Key="GroupedSource" IsSourceGrouped="True"/>
         <Style x:Key="HideExpensesButtonStyle" x:FieldModifier="public" x:Name="HideExpenseButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent" />
@@ -201,7 +215,7 @@
         </Grid>
         <!--Column Grid Splitter-->
         <controls:GridSplitter Grid.Column="1" Width="10" ResizeBehavior="BasedOnAlignment"
-                               ResizeDirection="Auto" Background="Transparent"  BorderBrush="Transparent" >
+                               ResizeDirection="Auto" Background="Transparent"  BorderBrush="Transparent" Style="{StaticResource CustomGridSplitterStyle}">
             <controls:GridSplitter.Element>
                 <Grid Background="Transparent" >
 
