@@ -21,7 +21,5 @@
 
    <ItemGroup>
      <Folder Include="UseCase\GetRelatedExpense\" />
-     <Folder Include="UseCase\LoginUser\" />
-     <Folder Include="UseCase\SignUpUser\" />
    </ItemGroup>
 </Project>

@@ -35,17 +35,6 @@ namespace SPLITTR_Uwp.Core.DataManager
             return _userDbHandler.InsertUserObjAsync(user);
         }
 
-        public async Task<bool> IsUserAlreadyExist(string emailId)
-        {
-           return await Task.Run(async () =>
-           {
-               var userObj = await _userDbHandler.SelectUserObjByEmailId(emailId).ConfigureAwait(false);
-
-               return userObj is not null;
-           }).ConfigureAwait(false);
-           
-        }
-
         public Task<int> CreateNewUser(string userName, string emailId, int currencyPreference)
         {
             var newUser = new User(emailId, userName, 0.0,currencyPreference,0.0,0.0);
@@ -109,15 +98,7 @@ namespace SPLITTR_Uwp.Core.DataManager
         public async Task<IEnumerable<User>> GetUsersSuggestionAsync(string userName)
         {
             var usersList =await _userDbHandler.SelectUserFormUsers(userName.Trim()).ConfigureAwait(false);
-            var outputList = new List<User>();
-            foreach (var user in usersList)
-            {
-                if (user.EmailId != _currentUserEmailId)
-                {
-                     outputList.Add(user);
-                }
-            }
-            return outputList;
+            return usersList.Where(user => user.EmailId != _currentUserEmailId).ToList();
         }
 
         public async Task<UserBobj> FetchCurrentUserDetails(string emailId)

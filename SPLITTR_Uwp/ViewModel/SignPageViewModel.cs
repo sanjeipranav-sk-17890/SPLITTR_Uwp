@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Animation;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
+using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
+using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.SignUpUser;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.Views;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    public class SignPageViewModel : ObservableObject
+    public class SignPageViewModel : ObservableObject,IPresenterCallBack<SignUpUserResponseObj>
     {
         private readonly IUserDataManager _dataManager;
         private bool _emailPassInputPanelVisibility=false;
@@ -107,23 +111,42 @@ namespace SPLITTR_Uwp.ViewModel
                 UserAlreadyExistTextBlockVisibility = false;
                 return;
             }
-            if (await _dataManager.IsUserAlreadyExist(EmailIdText.Trim().ToLower()))
+            IsValidEmailIdTextBlockVisibility=false;
+            
+            var cts = new CancellationTokenSource();
+
+            var signUpReqObj = new SignUpUserReqObj(SelectedIndex, EmailIdText.Trim().ToLower(), UserName.Trim(), this, cts.Token);
+
+            var signUpUseCaseOBj = InstanceBuilder.CreateInstance<SignUpUser>(signUpReqObj);
+
+            signUpUseCaseOBj.Execute();
+
+        }
+        public async void OnSuccess(SignUpUserResponseObj result)
+        {
+           await UiService.RunOnUiThread((() =>
+           {
+               UserAlreadyExistTextBlockVisibility = false;
+               IsValidEmailIdTextBlockVisibility = false;
+
+           } ));
+           await ShowSignUpSuccessFullMessageBoxAsync();
+
+        }
+        public async void OnError(SplittrException ex)
+        {
+            if (ex.InnerException is UserAlreadyExistException)
             {
-                UserAlreadyExistTextBlockVisibility = true;
-                IsValidEmailIdTextBlockVisibility=false;
-                return;
+              await  UiService.RunOnUiThread(() =>
+              {
+                  UserAlreadyExistTextBlockVisibility = true;
+              });
+
             }
-            UserAlreadyExistTextBlockVisibility = false;
-            IsValidEmailIdTextBlockVisibility = false;
-            await _dataManager.CreateNewUser(UserName.Trim(), EmailIdText.Trim().ToLower(),SelectedIndex).ConfigureAwait(false);
-            await  ShowSignUpSuccessFullMessageBoxAsync();
-             
         }
         private async  Task ShowSignUpSuccessFullMessageBoxAsync()
         {
             IUICommand msgBoxResult;
-
-
 
             await UiService.RunOnUiThread(
                 async () =>
@@ -137,9 +160,7 @@ namespace SPLITTR_Uwp.ViewModel
                     {
                         LoginButtonOnClicked();
                     }
-
                 });
-
         }
     }
 }

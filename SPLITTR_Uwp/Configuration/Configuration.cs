@@ -22,8 +22,10 @@ using SPLITTR_Uwp.Core.UseCase.UpdateUser;
 using SPLITTR_Uwp.Core.UseCase.AddWalletAmount;
 using SPLITTR_Uwp.Core.UseCase.CancelExpense;
 using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
+using SPLITTR_Uwp.Core.UseCase.LoginUser;
 using SPLITTR_Uwp.Core.UseCase.MarkAsPaid;
 using SPLITTR_Uwp.Core.UseCase.SettleUpExpense;
+using SPLITTR_Uwp.Core.UseCase.SignUpUser;
 using SPLITTR_Uwp.Core.UseCase.SplitExpenses;
 using SPLITTR_Uwp.Core.UseCase.UserSuggestion;
 using SPLITTR_Uwp.Core.UseCase.VerifyPaidExpense;
@@ -69,6 +71,8 @@ namespace SPLITTR_Uwp.Configuration
                 .AddSingleton<IMarkExpensePaidDataManager, ExpenseStatusDataManager>()
                 .AddSingleton<IExpenseCancellationDataManager, ExpenseStatusDataManager>()
                 .AddSingleton<ISettleUpSplitDataManager, SettleUpExpenseDataManager>()
+                .AddSingleton<ISignUpDataManager,AuthenticationManager>()
+                .AddSingleton<IAuthenticationManager,AuthenticationManager>()
                 .AddTransient<IStateService, StateService>()
                 .AddTransient<RupessConverter>()
                 .AddTransient<DollarConverter>()
@@ -85,6 +89,8 @@ namespace SPLITTR_Uwp.Configuration
                 .AddTransient<MarkAsPaid>()
                 .AddTransient<SettleUpSplit>()
                 .AddTransient<CancelExpense>()
+                .AddTransient<UserLogin>()
+                .AddTransient<SignUpUser>()
                 .AddTransient<VerifyPaidExpense>()
                 .AddTransient<UserSuggestion>();
         }

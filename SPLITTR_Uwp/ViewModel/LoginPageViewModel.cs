@@ -1,18 +1,21 @@
 ﻿using System;
+using System.Threading;
 using Windows.UI.Xaml;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.Views;
 using Windows.UI.Xaml.Media.Animation;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
+using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
+using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.LoginUser;
 using SPLITTR_Uwp.DataRepository;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    public class LoginPageViewModel :ObservableObject
+    public class LoginPageViewModel :ObservableObject,IPresenterCallBack<LoginResponseObj>
     {
-        private readonly IUserDataManager _userDataManager;
         private  int _selectedItem = 0;
         private  bool _loginInformationTextBox=false;
         private  bool _wrongUserCredentialTextBlockVisibility=false;
@@ -41,11 +44,8 @@ namespace SPLITTR_Uwp.ViewModel
 
         private DispatcherTimer _timer;
 
-        public LoginPageViewModel(IUserDataManager userDataManager)
+        public LoginPageViewModel()
         {
-            _userDataManager = userDataManager;
-            
-
             //Firing a event for every 0.5 seconds
             _timer = new DispatcherTimer()
             {
@@ -91,18 +91,14 @@ namespace SPLITTR_Uwp.ViewModel
             }
             else
             {
-                var isOldUser = await _userDataManager.IsUserAlreadyExist(UserEmailIdTextBox.Trim().ToLower());
-                if (isOldUser is not true)
-                {
-                    WrongUserCreDentialTextBlockVisibility = true;
-                    return;
-                }
-                WrongUserCreDentialTextBlockVisibility = false;
-                //To be deleted
-                Store.CurreUserBobj = await _userDataManager.FetchCurrentUserDetails(UserEmailIdTextBox.Trim().ToLower());
-                 
+                var cts = new CancellationTokenSource();
 
-                 NavigationService.Navigate<MainPage>();
+                var loginReqObj = new LoginRequestObj(UserEmailIdTextBox.Trim().ToLower(), this,cts.Token);
+
+                var loginUseCaseObj = InstanceBuilder.CreateInstance<UserLogin>(loginReqObj);
+
+                loginUseCaseObj.Execute();
+
             }
 
 
@@ -112,11 +108,33 @@ namespace SPLITTR_Uwp.ViewModel
             NavigationService.Frame.Navigate(typeof(SignUpPage),null, infoOverride:new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
         }
 
-
         public void PageUnloaded()
         {
             //stoping main page animation if the the page is unloaded
             _timer.Stop();
+        }
+        public async void OnSuccess(LoginResponseObj result)
+        {
+           await UiService.RunOnUiThread((() =>
+           {
+               if (!result.IsUserAlreadyExist)
+               {
+                   WrongUserCreDentialTextBlockVisibility = true;
+                   return;
+               }
+               WrongUserCreDentialTextBlockVisibility = false;
+               Store.CurreUserBobj = result.LoginUserCred;
+               NavigationService.Navigate<MainPage>();
+
+           })).ConfigureAwait(false);
+
+        }
+        public void OnError(SplittrException ex)
+        {
+            if (ex.InnerException is ArgumentNullException)
+            {
+                WrongUserCreDentialTextBlockVisibility =true;
+            }
         }
     }
 }
