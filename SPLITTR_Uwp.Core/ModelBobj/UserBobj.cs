@@ -2,7 +2,6 @@
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

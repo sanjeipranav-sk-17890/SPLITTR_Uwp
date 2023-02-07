@@ -1,16 +1,19 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Models;
 using System;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
+using System.Threading;
+using SPLITTR_Uwp.Core.EventArg;
+using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.AddWalletAmount;
+using SPLITTR_Uwp.Core.UseCase.UpdateUser;
+using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    public class WalletBalanceUpdateViewModel : ObservableObject
+    public class WalletBalanceUpdateViewModel : ObservableObject,IPresenterCallBack<UpdateUserResponseObj>
     {
-        private readonly IUserUseCase _updateUserUseCase;
         private string _moneyTextBoxText;
         private bool _invalidInputTextBlockVisibility;
 
@@ -18,10 +21,8 @@ namespace SPLITTR_Uwp.ViewModel
 
         public UserViewModel UserViewModel { get; }
 
-        public WalletBalanceUpdateViewModel(IUserUseCase updateUserUseCase)
+        public WalletBalanceUpdateViewModel()
         {
-            _updateUserUseCase = updateUserUseCase;
-        
             UserViewModel = new UserViewModel(Store.CurreUserBobj);
         }
 
@@ -44,16 +45,15 @@ namespace SPLITTR_Uwp.ViewModel
             if (double.TryParse(MoneyTextBoxText, out var newWalletBalance) && newWalletBalance > -1)
             {
                 InvalidInputTextBlockVisibility = false;
-                _updateUserUseCase.UpdateUserObjAsync(Store.CurreUserBobj, newWalletBalance,(async () =>
-                {
-                  await  UiService.RunOnUiThread(async () =>
-                    {
-                        await UiService.ShowContentAsync("Amount Added to Wallet SuccessFully", "Payment SuccessFull!!");
-                      CloseButtonClicked?.Invoke();
-                    });
-
-                }));
                 
+                //Should Made Static invoke source if Previous Request Cancelled
+                var cts = new CancellationTokenSource().Token;
+
+                var addWalletAmountRequestObject = new AddWalletAmountRequestObject(this, cts, Store.CurreUserBobj, newWalletBalance);
+
+                var addWalletAmountUseCase = InstanceBuilder.CreateInstance<AddWalletAmount>(addWalletAmountRequestObject);
+
+                addWalletAmountUseCase.Execute();
             }
             else
             {
@@ -62,7 +62,21 @@ namespace SPLITTR_Uwp.ViewModel
 
         }
 
+        public async void OnSuccess(UpdateUserResponseObj result)
+        {
+            await UiService.RunOnUiThread(async () =>
+            {
+                await UiService.ShowContentAsync("Amount Added to Wallet SuccessFully", "Payment SuccessFull!!");
+                CloseButtonClicked?.Invoke();
+            }).ConfigureAwait(false);
 
-
+        }
+        public void OnError(SplittrException ex)
+        {
+            if (ex.InnerException is SQLiteException)
+            {
+                ExceptionHandlerService.HandleException(ex);
+            }
+        }
     }
 }

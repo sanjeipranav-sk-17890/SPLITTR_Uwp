@@ -1,19 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Threading;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
+using SPLITTR_Uwp.Core.DataManager;
+using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Models;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
+    internal class ExpenseDetailedViewUserControlViewModel :ObservableObject,IPresenterCallBack<RelatedExpenseResponseObj>
     {
-        private readonly IExpenseUseCase _expenseUseCase;
+        
         private double _totalExpenditureAmount;
 
         public ObservableCollection<ExpenseViewModel> RelatedExpenses { get; } = new ObservableCollection<ExpenseViewModel>();
@@ -22,12 +27,6 @@ namespace SPLITTR_Uwp.ViewModel
         {
             get => _totalExpenditureAmount;
             set => SetProperty(ref _totalExpenditureAmount, value);
-        }
-
-        public ExpenseDetailedViewUserControlViewModel(IExpenseUseCase expenseUseCase)
-        {
-            _expenseUseCase = expenseUseCase;
-
         }
 
         //Storing Reference Of passed Expense ,utilized to make Ui manupulation
@@ -40,18 +39,16 @@ namespace SPLITTR_Uwp.ViewModel
             }
             _expense = expenseObj;
 
-            _expenseUseCase.GetRelatedExpenses(expenseObj,Store.CurreUserBobj ,RelatedExpensesCallBack);
+            var cts = new CancellationTokenSource();
+            var relatedExpenseRequestObj = new RelatedExpenseRequestObj(expenseObj, Store.CurreUserBobj, cts.Token, this);
+
+            var relatedExpenseUseCase = InstanceBuilder.CreateInstance<RelatedExpense>(relatedExpenseRequestObj);
+
+            relatedExpenseUseCase.Execute();
 
         }
-        private async void RelatedExpensesCallBack(IEnumerable<ExpenseBobj> relatedExpenses)
-        {
-          await UiService.RunOnUiThread(() =>
-          {
-               
-               PopulateRelatedExpenses(relatedExpenses);
-
-          }).ConfigureAwait(false);
-        }
+      
+      
         private void PopulateRelatedExpenses(IEnumerable<ExpenseBobj> relatedExpenses)
         {
             //sum of all expenses before split 
@@ -84,6 +81,21 @@ namespace SPLITTR_Uwp.ViewModel
                 
             }
             return groupName;
+        }
+        public async void OnSuccess(RelatedExpenseResponseObj result)
+        {
+            await UiService.RunOnUiThread(() =>
+            {
+                PopulateRelatedExpenses(result.RelatedExpenses);
+
+            }).ConfigureAwait(false);
+        }
+        public void OnError(SplittrException ex)
+        {
+            if (ex.InnerException is SqlException)
+            {
+                // Ui Notify to retry 
+            }
         }
     }
 }

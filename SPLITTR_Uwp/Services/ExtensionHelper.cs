@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SPLITTR_Uwp.Services
 {
@@ -17,5 +18,19 @@ namespace SPLITTR_Uwp.Services
              destination?.Add(obj);   
             }
         }
+
+        public static T CreateInstance<T>(params object[] args)
+        {
+           return ActivatorUtilities.CreateInstance<T>(App.Container,parameters:args);
+        }
     }
+
+    internal static class InstanceBuilder
+    {
+        public static T CreateInstance<T>(params object[] args)
+        {
+            return ActivatorUtilities.CreateInstance<T>(App.Container, parameters: args);
+        }
+    }
+
 }

@@ -648,7 +648,7 @@
                                Width="300"
                                Fill="Red"></Rectangle>-->
                     
-                        <ListView ItemsSource="{x:Bind _viewModel.ExpensesToBeSplitted,Mode=OneWay}"
+                        <ListView ItemsSource="{x:Bind _viewModel._expensesToBeSplitted,Mode=OneWay}"
                                   IsItemClickEnabled="False"
                                   SelectionMode="None"
                         >

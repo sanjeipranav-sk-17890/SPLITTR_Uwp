@@ -12,19 +12,22 @@ using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel.Models;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
+using SPLITTR_Uwp.Core.DataManager;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.Views;
+using SPLITTR_Uwp.Core.UseCase.UserSuggestion;
+using System.Threading;
+using SPLITTR_Uwp.Core.EventArg;
+using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.SplitExpenses;
+using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    public class SplitExpenseViewModel : ObservableObject,IViewModel
+    public class SplitExpenseViewModel : ObservableObject,IViewModel ,IPresenterCallBack<UserSuggestionResponseObject>,IPresenterCallBack<SplitExpenseResponseObj>
     {
-        private readonly IUserUseCase _updateUserUseCase;
-        private readonly IExpenseUseCase _expenseUseCase;
-
+        
         public  ISplitExpenseView View { get; set; }
 
 
@@ -34,7 +37,7 @@ namespace SPLITTR_Uwp.ViewModel
         /// <summary>
         /// Contains Expenses obj which will be processed and inserted into db
         /// </summary>
-        public readonly ObservableCollection<ExpenseBobj> ExpensesToBeSplitted = new ObservableCollection<ExpenseBobj>();
+        public readonly ObservableCollection<ExpenseBobj> _expensesToBeSplitted = new ObservableCollection<ExpenseBobj>();
 
 
 
@@ -102,28 +105,54 @@ namespace SPLITTR_Uwp.ViewModel
                 IsUserSuggestionListOpen = false;
                 return;
             }
-            UsersList.Clear(); 
-             _updateUserUseCase.GetUsersSuggestionAsync(SplittingUsersName.Trim().ToLower(), async suggestions =>
-            {//remainCode will be run if data fetching from use case is finished
-               await UiService.RunOnUiThread(() => {
-                        foreach (var user in suggestions)
-                        {
-                            UsersList.Add(user);
-                        }
-                        if (!UsersList.Any())
-                        {
-                            UsersList.Add(_dummyUser);
-                        }
+            UsersList.Clear();
 
-                        IsUserSuggestionListOpen = true;
-                       
-                    },View.Dispatcher);
-               
-            });
+            //to be Made static Cancel previous Request if Another Made 
+            var cts = new CancellationTokenSource().Token;
+            var fetchSuggestionReqObj = new UserSuggestionRequestObject(this, cts, SplittingUsersName.Trim().ToLower());
 
+            var suggestionFetchUseCase = InstanceBuilder.CreateInstance<UserSuggestion>(fetchSuggestionReqObj);
+
+            suggestionFetchUseCase.Execute();
             
         }
+        public async void OnSuccess(UserSuggestionResponseObject result)
+        {
+            await UiService.RunOnUiThread(() => {
+                foreach (var user in result.UserSuggestions)
+                {
+                    UsersList.Add(user);
+                }
+                if (!UsersList.Any())
+                {
+                    UsersList.Add(_dummyUser);
+                }
 
+                IsUserSuggestionListOpen = true;
+
+            }, View.Dispatcher);
+        }
+
+        //if the splitting is successfull showing split completed text box and reset the page 
+        public async void OnSuccess(SplitExpenseResponseObj result)
+        {
+
+            await UiService.RunOnUiThread((() =>
+            {
+                UiService.ShowContentAsync("Spliting SuccessFull", "Expenses Splitted Successfully");
+                ResetPage();
+            }), View.Dispatcher);
+        }
+        public void OnError(SplittrException ex)
+        {
+            switch (ex.InnerException)
+            {
+                case SQLiteException:
+                case ArgumentException:
+                    ExceptionHandlerService.HandleException(ex);
+                    break;
+            }
+        }
 
 
         private User _dummyUser = new User()
@@ -424,7 +453,7 @@ namespace SPLITTR_Uwp.ViewModel
         //Manupulates ExpenseViewModels for Unequal Splitting in teaching tip 
         private void SplittingUserPreferenceChanged()
         { 
-            ExpensesToBeSplitted.Clear();
+            _expensesToBeSplitted.Clear();
 
             //cheching whether it is dummy groupobj
             if (_selectedGroupIndex <= 0)
@@ -432,8 +461,8 @@ namespace SPLITTR_Uwp.ViewModel
                 if (_selectedUser != null)//Individual Split
                 {
 
-                    ExpensesToBeSplitted.Add(GenerateExpenseViewModel(Store.CurreUserBobj,null));//current User
-                    ExpensesToBeSplitted.Add(GenerateExpenseViewModel(_selectedUser,null));//Spiltting user
+                    _expensesToBeSplitted.Add(GenerateExpenseViewModel(Store.CurreUserBobj,null));//current User
+                    _expensesToBeSplitted.Add(GenerateExpenseViewModel(_selectedUser,null));//Spiltting user
                    
                 }
             }
@@ -444,7 +473,7 @@ namespace SPLITTR_Uwp.ViewModel
 
                 foreach (var participant in group.GroupParticipants)
                 {
-                   ExpensesToBeSplitted.Add(GenerateExpenseViewModel(participant,group.GroupUniqueId)); 
+                   _expensesToBeSplitted.Add(GenerateExpenseViewModel(participant,group.GroupUniqueId)); 
                 }
             }
 
@@ -494,7 +523,7 @@ namespace SPLITTR_Uwp.ViewModel
         //event raises when collection item changes
         private void ExpensesToBeSplittedOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            var expensesBobjCount = ExpensesToBeSplitted.Count;
+            var expensesBobjCount = _expensesToBeSplitted.Count;
 
             if (expensesBobjCount < 1 )
             {
@@ -512,36 +541,18 @@ namespace SPLITTR_Uwp.ViewModel
             var expenseNote = ExpenseNote != null ? ExpenseNote.Trim() : string.Empty;
             var dateOfExpense = ExpenditureDate.DateTime;
             var expenseDescription = ExpenseDescription?.Trim() ?? string.Empty;
-           
-                var splittingType = SelectedSplitPreferenceIndex;// 0 if equal split or >0 for unequal split
 
+            var splittingType = SelectedSplitPreferenceIndex;// 0 if equal split or >0 for unequal split
 
-                //on expense Splitting success Assigend Callback will be called
-            _expenseUseCase.PresenterCallBackOnSuccess += ExpenseUseCasePresenterCallBackOnSuccess;
-            
+            var ctk = new CancellationTokenSource().Token;
 
-               _expenseUseCase.SplitNewExpensesAsync(expenseDescription,Store.CurreUserBobj, ExpensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType);
+            var splitExpenseRequestObj = new SplitExpenseRequestObj(expenseDescription, Store.CurreUserBobj, _expensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType,ctk,this);
 
+            var splitExpenseUseCaseObj = InstanceBuilder.CreateInstance<SplitExpenses>(splitExpenseRequestObj);
+
+            splitExpenseUseCaseObj.Execute();
         }
 
-        private async void ExpenseSplitting_OnError(Exception arg, string message)
-        {
-            await UiService.RunOnUiThread((() =>
-            {
-                ExceptionHandlerService.HandleException(arg);
-            }));
-        }
-
-        //if the splitting is successfull showing split completed text box and reset the page 
-        private async void ExpenseUseCasePresenterCallBackOnSuccess(EventArgs args)
-        {
-            await UiService.RunOnUiThread((() =>
-            {
-                UiService.ShowContentAsync("Spliting SuccessFull", "Expenses Splitted Successfully");
-                ResetPage();
-            }),View.Dispatcher);
-            _expenseUseCase.PresenterCallBackOnSuccess-= ExpenseUseCasePresenterCallBackOnSuccess;
-        }
         private void ResetPage()//resets UserControl to initial stage
         {
             SplittingUsersName = string.Empty;
@@ -565,21 +576,12 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
        
-        public SplitExpenseViewModel(IUserUseCase updateUserUseCase,IExpenseUseCase expenseUseCase,ISplitExpenseView view)
+        public SplitExpenseViewModel(ISplitExpenseView view)
         {
-            _updateUserUseCase = updateUserUseCase;
-            _expenseUseCase = expenseUseCase;
             View = view;
             Store.CurreUserBobj.ValueChanged += OnUserValueChanged;
             User = new UserViewModel(Store.CurreUserBobj);
-            ExpensesToBeSplitted.CollectionChanged += ExpensesToBeSplittedOnCollectionChanged;
-
-            //on Error Call back 
-            if (_expenseUseCase is IUseCase useCase)
-            {
-                useCase.OnError += ExpenseSplitting_OnError;
-            }
-
+            _expensesToBeSplitted.CollectionChanged += ExpensesToBeSplittedOnCollectionChanged;
 
         }
 
@@ -597,6 +599,8 @@ namespace SPLITTR_Uwp.ViewModel
         /// Updating expense objects Currency Converter if the currency preference Changes 
         /// </summary>
         public event Action BindingUpdateInvoked;
+
+
     }
     
 }

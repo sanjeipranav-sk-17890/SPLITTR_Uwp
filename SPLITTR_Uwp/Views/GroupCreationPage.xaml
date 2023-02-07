@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:control="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
+    xmlns:Converter="using:SPLITTR_Uwp.DataRepository.Converters"
     xmlns:models="using:SPLITTR_Uwp.Core.Models"
     control:BackdropMaterial.ApplyToRootOrPageBackground="True"
     >
@@ -16,7 +17,7 @@
             <Setter Property="Foreground" Value="{ThemeResource AccentTextColorBrush}" />
             <Setter Property="FontSize" Value="24" />
         </Style>
-        
+        <Converter:UserInitialFormatter x:Key="UserInitialFormatter"/>
     </Page.Resources>
 
     <Grid>
@@ -85,6 +86,7 @@
                                             <PersonPicture Height="40" HorizontalAlignment="Left"
                                                            Margin="-5 0 0 0"
                                                            BorderBrush="{ThemeResource ApplicationMainThemeColor}"
+                                                           Initials="{x:Bind  UserName,Mode=OneWay,Converter={StaticResource UserInitialFormatter}}"
                                                            />
                                             <TextBlock Grid.Column="1"
                                                        FontSize="25"

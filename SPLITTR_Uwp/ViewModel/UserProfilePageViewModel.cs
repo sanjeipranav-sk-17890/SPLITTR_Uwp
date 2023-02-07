@@ -4,30 +4,30 @@ using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
+using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic.contracts;
+using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.UpdateUser;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Contracts;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    public class UserProfilePageViewModel : ObservableObject,IViewModel
+    public class UserProfilePageViewModel : ObservableObject,IViewModel,IPresenterCallBack<UpdateUserResponseObj>
     {
 
 
-        private readonly IUserUseCase _updateUserUseCase;
         public UserViewModel User { get; }
 
 
-        public UserProfilePageViewModel(IUserUseCase updateUserUseCase)
+        public UserProfilePageViewModel()
         {
-            _updateUserUseCase = updateUserUseCase;
             User = new UserViewModel(Store.CurreUserBobj);
             Store.CurreUserBobj.ValueChanged += UserBobj_ValueChanged;
-            
         }
 
         private async void UserBobj_ValueChanged(string property)
@@ -64,7 +64,7 @@ namespace SPLITTR_Uwp.ViewModel
             set => SetProperty(ref _isEditUserProfileVisible, value);
         }
 
-        public List<string> CurrencyList = new List<string>()
+        public List<string> _currencyList = new List<string>()
         {
             "Rupees ₹",
             "Dollar $",
@@ -112,33 +112,43 @@ namespace SPLITTR_Uwp.ViewModel
             IsEditUserProfileVisible = false;
             IsUserNameEmptyIndicatorVisible = false;
         }
-        public  void SaveButtonClicked(object sender, RoutedEventArgs e)
+        public  void SaveButtonClicked()
         {
-            if (String.IsNullOrEmpty(_currentUserName.Trim()))
+            if (string.IsNullOrEmpty(_currentUserName.Trim()))
             {
                 IsUserNameEmptyIndicatorVisible = true;
                 return;
             }
             IsUserNameEmptyIndicatorVisible = false;
-            //utility classes is updating the UserObj and its related data's
-             _updateUserUseCase.UpdateUserObjAsync(Store.CurreUserBobj, _currentUserName, (Currency)_preferedCurrencyIndex,(async () =>
-            {
-                await ShowSignUpSuccessFullMessageBoxAsync();
+            var cts = new CancellationTokenSource().Token;
+            //useCase classes is updating the UserObj and its related data's
+            var updateUserRequestOBj = new UpdateUserRequestObj(cts,this,Store.CurreUserBobj,_currentUserName,(Currency)_preferedCurrencyIndex);
 
-            }));
+            var updateUserUseCaseObj = InstanceBuilder.CreateInstance<UpdateUser>(updateUserRequestOBj);
 
-            //showing Update successfull messagebox
+            updateUserUseCaseObj.Execute();
 
-            IsEditUserProfileVisible = false;
 
         }
-        private Task ShowSignUpSuccessFullMessageBoxAsync()
-        {
-
-            return UiService.ShowContentAsync("Account Updated SuccessFully", "SuccessFull!!");
-
-        }
-
+        
         public event Action BindingUpdateInvoked;
+
+        public async void OnSuccess(UpdateUserResponseObj result)
+        { 
+
+           await UiService.ShowContentAsync("Account Updated SuccessFully", "SuccessFull!!").ConfigureAwait(false);
+           await UiService.RunOnUiThread(() =>
+           {
+               //showing Update successFull messageBox
+               IsEditUserProfileVisible = false;
+           }).ConfigureAwait(false);
+        }
+        public void OnError(SplittrException ex)
+        {
+            if (ex.InnerException is SqlException)
+            {
+                ExceptionHandlerService.HandleException(ex);
+            }
+        }
     }
 }

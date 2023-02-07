@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Threading;
 using Windows.UI.Xaml.Media;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.Splittr_Uwp_BLogics.Blogic;
+using SPLITTR_Uwp.Core.DataManager;
+using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Contracts;
@@ -15,19 +20,15 @@ using SPLITTR_Uwp.ViewModel.Models;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    internal class ExpenseItemViewModel : ObservableObject,IViewModel
+    internal class ExpenseItemViewModel : ObservableObject,IViewModel,IPresenterCallBack<RelatedExpenseResponseObj>
     {
-        private readonly IExpenseUseCase _expenseUseCase;
+       
 
         private ExpenseViewModel _expenseVObj;
         private Group _groupObject;
         private string _expenseTotalAmount;
         private string _splitOwnerTitle;
 
-        public ExpenseItemViewModel(IExpenseUseCase expenseUseCase)
-        {
-            _expenseUseCase = expenseUseCase;
-        }
 
         public bool IsGroupButtonVisible
         {
@@ -213,7 +214,13 @@ namespace SPLITTR_Uwp.ViewModel
             _expenseVObj.PropertyChanged += _expenseVObj_PropertyChanged;
             BindingUpdateInvoked?.Invoke();
 
-            _expenseUseCase.GetRelatedExpenses(expenseObj,Store.CurreUserBobj,(ResultCallBack));
+            var cts = new CancellationTokenSource();
+
+            var relatedExpenseReqObj = new RelatedExpenseRequestObj(expenseObj, Store.CurreUserBobj, cts.Token, this);
+
+            var relatedExpenseUseCase = InstanceBuilder.CreateInstance<RelatedExpense>(relatedExpenseReqObj);
+
+            relatedExpenseUseCase.Execute();
         }
 
         private void _expenseVObj_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -221,21 +228,6 @@ namespace SPLITTR_Uwp.ViewModel
             BindingUpdateInvoked?.Invoke();
         }
 
-        private async void ResultCallBack(IEnumerable<ExpenseBobj> relatedExpenses)
-        {
-            var totalAmount = relatedExpenses.Sum(expense => expense.StrExpenseAmount);
-            totalAmount += _expenseVObj.StrExpenseAmount;
-
-
-            var formatedExpenseAmount = FormatExpenseAmountWithSymbol(totalAmount);
-
-            await  UiService.RunOnUiThread(() =>
-            {
-                ExpenseTotalAmount = formatedExpenseAmount;
-            });
-
-
-        }
 
         private string FormatExpenseAmountWithSymbol(double expenseAmount)
         {
@@ -248,7 +240,26 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
 
-
         public event Action BindingUpdateInvoked;
+
+        public async void OnSuccess(RelatedExpenseResponseObj result)
+        {
+            var totalAmount = result.RelatedExpenses.Sum(expense => expense.StrExpenseAmount);
+            totalAmount += _expenseVObj.StrExpenseAmount;
+
+            var formatedExpenseAmount = FormatExpenseAmountWithSymbol(totalAmount);
+
+            await UiService.RunOnUiThread(() =>
+            {
+                ExpenseTotalAmount = formatedExpenseAmount;
+            });
+        }
+        public void OnError(SplittrException ex)
+        {
+            if (ex.InnerException is SqlException)
+            {
+                //Code to Notify sql db access failed
+            }
+        }
     }
 }
