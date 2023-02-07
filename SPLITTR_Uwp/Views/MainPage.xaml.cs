@@ -8,10 +8,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using NavigationView = Microsoft.UI.Xaml.Controls.NavigationView;
 using NavigationViewSelectionChangedEventArgs = Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs;
@@ -53,12 +55,27 @@ namespace SPLITTR_Uwp.Views
             _viewModel.BindingUpdateInvoked += _viewModel_BindingUpdateInvoked;
             this.InitializeComponent();
             _view = this;
+            Loading += MainPage_Loading;
         }
+
+       
 
         private void _viewModel_BindingUpdateInvoked()
         {
             Bindings.Update();
         }
+
+        #region NavigationPaneAnimationColor
+
+        private static Brush NavigationItemDefaultSelectedColor { get; set; }
+        private static Brush NavigationPaneIndicatorColor { get; set; }
+        private void MainPage_Loading(FrameworkElement sender, object args)
+        {
+            //Saving Reference of Default NavigationView Item Slected Color 
+            NavigationItemDefaultSelectedColor =(Brush)Resources["NavigationViewItemBackgroundSelected"];
+        }
+
+        #endregion
 
         #region Error Handling MEchanisam
 
@@ -160,9 +177,23 @@ namespace SPLITTR_Uwp.Views
 
 
             _viewModel.PopulateUserRelatedExpenses(selectedUser);
+
+            //Making Group list Selected Index to none
+            GroupList.SelectedIndex = -1;
         }
         private void MainPageNavigationView_OnSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
+            if (UserGroupsList.IsSelected)
+            {
+                Resources["NavigationViewItemBackgroundSelected"] = new SolidColorBrush(Colors.Transparent);
+                Resources["NavigationViewItemBackgroundSelectedPointerOver"] = new SolidColorBrush(Colors.Transparent);
+            }
+            else
+            {
+                //Setting Navigation view Selected item Background to Default
+                Resources["NavigationViewItemBackgroundSelected"] = NavigationItemDefaultSelectedColor;
+                Resources["NavigationViewItemBackgroundSelectedPointerOver"] = NavigationItemDefaultSelectedColor;
+            }
             if (args.SelectedItem is not StackPanel stackpanel)
             {
                 return;
@@ -185,6 +216,8 @@ namespace SPLITTR_Uwp.Views
 
             }
 
+            //Making Group list Selected Index to none
+            GroupList.SelectedIndex = -1;
         }
         private void GroupList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -199,8 +232,6 @@ namespace SPLITTR_Uwp.Views
                 _viewModel.PopulateSpecificGroupExpenses(groupObject);
             }
         }
-
-
 
         #endregion
 
