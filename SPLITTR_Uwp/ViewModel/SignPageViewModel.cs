@@ -15,7 +15,8 @@ using SPLITTR_Uwp.Views;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    public class SignPageViewModel : ObservableObject,IPresenterCallBack<SignUpUserResponseObj>
+   
+    public class SignPageViewModel : ObservableObject
     {
         private readonly IUserDataManager _dataManager;
         private bool _emailPassInputPanelVisibility=false;
@@ -115,14 +116,14 @@ namespace SPLITTR_Uwp.ViewModel
             
             var cts = new CancellationTokenSource();
 
-            var signUpReqObj = new SignUpUserReqObj(SelectedIndex, EmailIdText.Trim().ToLower(), UserName.Trim(), this, cts.Token);
+            var signUpReqObj = new SignUpUserReqObj(SelectedIndex, EmailIdText.Trim().ToLower(), UserName.Trim(), new SignUpVmPresenterCallBack(this), cts.Token);
 
             var signUpUseCaseOBj = InstanceBuilder.CreateInstance<SignUpUser>(signUpReqObj);
 
             signUpUseCaseOBj.Execute();
 
         }
-        public async void OnSuccess(SignUpUserResponseObj result)
+        public async void InvokeOnSignUpSuccessFull(SignUpUserResponseObj result)
         {
            await UiService.RunOnUiThread((() =>
            {
@@ -133,7 +134,7 @@ namespace SPLITTR_Uwp.ViewModel
            await ShowSignUpSuccessFullMessageBoxAsync();
 
         }
-        public async void OnError(SplittrException ex)
+        public async void InvokeOnSignUpFailed(SplittrException ex)
         {
             if (ex.InnerException is UserAlreadyExistException)
             {
@@ -161,6 +162,23 @@ namespace SPLITTR_Uwp.ViewModel
                         LoginButtonOnClicked();
                     }
                 });
+        } 
+        class SignUpVmPresenterCallBack : IPresenterCallBack<SignUpUserResponseObj>
+        {
+            private readonly SignPageViewModel _viewModel;
+            public SignUpVmPresenterCallBack(SignPageViewModel viewModel)
+            {
+                _viewModel = viewModel;
+
+            }
+            public void OnSuccess(SignUpUserResponseObj result)
+            {
+                _viewModel.InvokeOnSignUpSuccessFull(result);
+            }
+            public void OnError(SplittrException ex)
+            {
+                _viewModel.InvokeOnSignUpFailed(ex);
+            }
         }
     }
 }

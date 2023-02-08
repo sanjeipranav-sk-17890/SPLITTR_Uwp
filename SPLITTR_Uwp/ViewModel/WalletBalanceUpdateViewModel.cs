@@ -12,7 +12,9 @@ using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    public class WalletBalanceUpdateViewModel : ObservableObject,IPresenterCallBack<UpdateUserResponseObj>
+   
+
+    public class WalletBalanceUpdateViewModel : ObservableObject
     {
         private string _moneyTextBoxText;
         private bool _invalidInputTextBlockVisibility;
@@ -49,7 +51,7 @@ namespace SPLITTR_Uwp.ViewModel
                 //Should Made Static invoke source if Previous Request Cancelled
                 var cts = new CancellationTokenSource().Token;
 
-                var addWalletAmountRequestObject = new AddWalletAmountRequestObject(this, cts, Store.CurreUserBobj, newWalletBalance);
+                var addWalletAmountRequestObject = new AddWalletAmountRequestObject(new WalletBalanceUpdateVmPresenterCallBack(this), cts, Store.CurreUserBobj, newWalletBalance);
 
                 var addWalletAmountUseCase = InstanceBuilder.CreateInstance<AddWalletAmount>(addWalletAmountRequestObject);
 
@@ -62,7 +64,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         }
 
-        public async void OnSuccess(UpdateUserResponseObj result)
+        public async void InvokeOnWalletBalanceUpdated(UpdateUserResponseObj result)
         {
             await UiService.RunOnUiThread(async () =>
             {
@@ -71,11 +73,25 @@ namespace SPLITTR_Uwp.ViewModel
             }).ConfigureAwait(false);
 
         }
-        public void OnError(SplittrException ex)
+
+        private class WalletBalanceUpdateVmPresenterCallBack : IPresenterCallBack<UpdateUserResponseObj>
         {
-            if (ex.InnerException is SQLiteException)
+            private readonly WalletBalanceUpdateViewModel _viewModel;
+            public WalletBalanceUpdateVmPresenterCallBack(WalletBalanceUpdateViewModel viewModel)
             {
-                ExceptionHandlerService.HandleException(ex);
+                _viewModel = viewModel;
+
+            }
+            public void OnSuccess(UpdateUserResponseObj result)
+            { 
+                _viewModel.InvokeOnWalletBalanceUpdated(result);
+            }
+            public void OnError(SplittrException ex)
+            {
+                if (ex.InnerException is SQLiteException)
+                {
+                    ExceptionHandlerService.HandleException(ex);
+                }
             }
         }
     }

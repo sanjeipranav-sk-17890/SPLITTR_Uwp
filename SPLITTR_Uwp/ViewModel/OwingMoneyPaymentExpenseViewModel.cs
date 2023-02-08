@@ -13,7 +13,9 @@ using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel;
 
-internal class OwingMoneyPaymentExpenseViewModel :ObservableObject,IPresenterCallBack<SettleUpExpenseResponseObj>
+
+
+internal class OwingMoneyPaymentExpenseViewModel :ObservableObject
 {
     
     private bool _settleButtonVisibility;
@@ -44,7 +46,7 @@ internal class OwingMoneyPaymentExpenseViewModel :ObservableObject,IPresenterCal
         }
         var cts = new CancellationTokenSource();
 
-        var settleUpReqObj = new SettleUPExpenseRequestObj(isWalletPayment, Store.CurreUserBobj, _moneyPaymentExpense, this, cts.Token);
+        var settleUpReqObj = new SettleUPExpenseRequestObj(isWalletPayment, Store.CurreUserBobj, _moneyPaymentExpense, new OwingMoneyPaymentExpenseVmPresenterCallBack(this), cts.Token);
 
         var settleUpUseCaseObj = InstanceBuilder.CreateInstance<SettleUpSplit>(settleUpReqObj);
 
@@ -59,7 +61,7 @@ internal class OwingMoneyPaymentExpenseViewModel :ObservableObject,IPresenterCal
     }
 
 
-    public async void OnSuccess(SettleUpExpenseResponseObj result)
+    public async void InvokeOnSettleUPSuccess(SettleUpExpenseResponseObj result)
     {
         await UiService.ShowContentAsync("Splittr Completed SuccessFully", "Payment Complete");
         await UiService.RunOnUiThread(() =>
@@ -68,15 +70,29 @@ internal class OwingMoneyPaymentExpenseViewModel :ObservableObject,IPresenterCal
             PaymentControlVisibility = false;
         });
     }
-    public void OnError(SplittrException ex)
+   class OwingMoneyPaymentExpenseVmPresenterCallBack : IPresenterCallBack<SettleUpExpenseResponseObj>
     {
-        if (ex.InnerException is NotSupportedException)
+        private readonly OwingMoneyPaymentExpenseViewModel _viewModel;
+
+        public OwingMoneyPaymentExpenseVmPresenterCallBack(OwingMoneyPaymentExpenseViewModel viewModel)
         {
-            ExceptionHandlerService.HandleException(ex);
+            _viewModel = viewModel;
+
         }
-        if (ex.InnerException is SQLiteException)
+        public void OnSuccess(SettleUpExpenseResponseObj result)
         {
-            //logic to Show Something Went wrong
+            _viewModel.InvokeOnSettleUPSuccess(result);
+        }
+        public void OnError(SplittrException ex)
+        {
+            if (ex.InnerException is NotSupportedException)
+            {
+                ExceptionHandlerService.HandleException(ex);
+            }
+            if (ex.InnerException is SQLiteException)
+            {
+                //logic to Show Something Went wrong
+            }
         }
     }
 }

@@ -21,7 +21,8 @@ using SPLITTR_Uwp.Core.DataManager;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    internal class GroupCreationPageViewModel : ObservableObject,IViewModel,IPresenterCallBack<GroupCreationResponseObj>,IPresenterCallBack<UserSuggestionResponseObject>
+   
+    internal class GroupCreationPageViewModel : ObservableObject,IViewModel
     {
         
        
@@ -59,7 +60,7 @@ namespace SPLITTR_Uwp.ViewModel
         { 
             //to be Made static Cancel previous Request if Another Made 
             var cts = new CancellationTokenSource().Token;
-            var fetchSuggestionReqObj = new UserSuggestionRequestObject(this, cts, userName);
+            var fetchSuggestionReqObj = new UserSuggestionRequestObject(new GroupCreationPageVmPresenterCallBack(this), cts, userName);
 
             var suggestionFetchUseCase = InstanceBuilder.CreateInstance<UserSuggestion>(fetchSuggestionReqObj);
 
@@ -67,7 +68,7 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
         //User Suggestion Call BAck
-        public async void OnSuccess(UserSuggestionResponseObject response)
+        public async void OnSuggestionRecievd(UserSuggestionResponseObject response)
         {
             await UiService.RunOnUiThread((() =>
             {
@@ -91,39 +92,13 @@ namespace SPLITTR_Uwp.ViewModel
 
             var token = new CancellationTokenSource().Token;
 
-            var groupCreationRequestObject = new GroupCreationRequestObj(token, this, Store.CurreUserBobj, GroupParticipants, groupName);
+            var groupCreationRequestObject = new GroupCreationRequestObj(token, new GroupCreationPageVmPresenterCallBack(this), Store.CurreUserBobj, GroupParticipants, groupName);
 
             var groupCreationUseCase = InstanceBuilder.CreateInstance<GroupCreation>(groupCreationRequestObject);
 
             groupCreationUseCase.Execute();
         }
-
-        public async void OnSuccess(GroupCreationResponseObj result)
-        {
-            await UiService.RunOnUiThread(async () =>
-            {
-                await UiService.ShowContentAsync($"{_groupName} Group Created SuccessFull", "SuccessFully Created !! ");
-
-                //clearing groupAdding PAge controls 
-                GroupParticipants.Clear();
-                GroupName = string.Empty;
-            });
-            Debug.WriteLine("******************************Group Created Successfully *******************************************************");
-        }
-       
-        public void OnError(SplittrException ex)
-        {
-            switch (ex.InnerException)
-            {
-                case ArgumentException or ArgumentNullException:
-                    ExceptionHandlerService.HandleException(ex.InnerException);
-                    break;
-                case SQLiteException:
-                    //Retry Code Logic Here
-                    break;
-            }
-        }
-
+        
         private async void UserBobj_ValueChanged(string property)
         {
             //since this Will be called by Worker thread it needs to invoked by Ui thread so calling dispatcher to user it
@@ -138,6 +113,51 @@ namespace SPLITTR_Uwp.ViewModel
 
         public event Action BindingUpdateInvoked;
 
-        
+
+        class GroupCreationPageVmPresenterCallBack : IPresenterCallBack<GroupCreationResponseObj>, IPresenterCallBack<UserSuggestionResponseObject>
+        {
+            private readonly GroupCreationPageViewModel _viewModel;
+            public GroupCreationPageVmPresenterCallBack(GroupCreationPageViewModel viewModel)
+            {
+                _viewModel = viewModel;
+
+            }
+            public async void OnSuccess(GroupCreationResponseObj result)
+            {
+                await UiService.RunOnUiThread(async () =>
+                {
+                    await UiService.ShowContentAsync($"{result.CreatedGroup.GroupName} Group Created SuccessFull", "SuccessFully Created !! ");
+
+                    //clearing groupAdding PAge controls 
+                    _viewModel.GroupParticipants.Clear();
+                    _viewModel.GroupName = string.Empty;
+                });
+            }
+            void IPresenterCallBack<GroupCreationResponseObj>.OnError(SplittrException ex)
+            {
+                HandleError(ex);
+            }
+            public void OnSuccess(UserSuggestionResponseObject result)
+            {
+                _viewModel.OnSuggestionRecievd(result);
+            }
+            void IPresenterCallBack<UserSuggestionResponseObject>.OnError(SplittrException ex)
+            {
+                HandleError(ex);
+            }
+            private void HandleError(SplittrException ex)
+            {
+                switch (ex.InnerException)
+                {
+                    case ArgumentException or ArgumentNullException:
+                        ExceptionHandlerService.HandleException(ex.InnerException);
+                        break;
+                    case SQLiteException:
+                        //Retry Code Logic Here
+                        break;
+                }
+            }
+
+        }
     }
 }

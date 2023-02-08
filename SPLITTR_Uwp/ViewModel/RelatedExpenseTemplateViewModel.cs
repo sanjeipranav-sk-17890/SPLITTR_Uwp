@@ -15,7 +15,8 @@ using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    internal class RelatedExpenseTemplateViewModel : ObservableObject,IPresenterCallBack<VerifyPaidExpenseResponseObj>
+
+    internal class RelatedExpenseTemplateViewModel : ObservableObject
     {
         
         private readonly IStringManipulator _stringManipulator;
@@ -85,7 +86,7 @@ namespace SPLITTR_Uwp.ViewModel
             }
             var cts = new CancellationTokenSource();
 
-            var verifyExpensePaidRequestObj = new VerifyPaidExpenseRequestObj(ExpenseObj.ExpenseUniqueId, cts.Token, this);
+            var verifyExpensePaidRequestObj = new VerifyPaidExpenseRequestObj(ExpenseObj.ExpenseUniqueId, cts.Token, new RelatedExpenseTemplateVmPresenterCallBack(this));
 
             var verifyExpenseUseCaseObj = InstanceBuilder.CreateInstance<VerifyPaidExpense>(verifyExpensePaidRequestObj);
 
@@ -97,7 +98,7 @@ namespace SPLITTR_Uwp.ViewModel
         {
            CheckExpenseMarkHistory();   
         }
-        public async void OnSuccess(VerifyPaidExpenseResponseObj result)
+        public async void InvokeOnVerifyPaidExpenseCompleted(VerifyPaidExpenseResponseObj result)
         {
             await UiService.RunOnUiThread(() =>
             {
@@ -106,13 +107,25 @@ namespace SPLITTR_Uwp.ViewModel
             });
 
         }
-        public void OnError(SplittrException ex)
+        class RelatedExpenseTemplateVmPresenterCallBack : IPresenterCallBack<VerifyPaidExpenseResponseObj>
         {
-            if (ex.InnerException is SQLiteException)
+            private readonly RelatedExpenseTemplateViewModel _viewModel;
+            public RelatedExpenseTemplateVmPresenterCallBack(RelatedExpenseTemplateViewModel viewModel)
             {
-                ExceptionHandlerService.HandleException(ex);
+                _viewModel = viewModel;
+
             }
-            
+            public void OnSuccess(VerifyPaidExpenseResponseObj result)
+            {
+                _viewModel.InvokeOnVerifyPaidExpenseCompleted(result);
+            }
+            public void OnError(SplittrException ex)
+            {
+                if (ex.InnerException is SQLiteException)
+                {
+                    ExceptionHandlerService.HandleException(ex);
+                }
+            }
         }
     }
 }

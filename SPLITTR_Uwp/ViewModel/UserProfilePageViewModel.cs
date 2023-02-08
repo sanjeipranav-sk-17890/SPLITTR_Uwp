@@ -17,7 +17,9 @@ using SPLITTR_Uwp.ViewModel.Contracts;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    public class UserProfilePageViewModel : ObservableObject,IViewModel,IPresenterCallBack<UpdateUserResponseObj>
+   
+
+    public class UserProfilePageViewModel : ObservableObject,IViewModel
     {
 
 
@@ -122,7 +124,7 @@ namespace SPLITTR_Uwp.ViewModel
             IsUserNameEmptyIndicatorVisible = false;
             var cts = new CancellationTokenSource().Token;
             //useCase classes is updating the UserObj and its related data's
-            var updateUserRequestOBj = new UpdateUserRequestObj(cts,this,Store.CurreUserBobj,_currentUserName,(Currency)_preferedCurrencyIndex);
+            var updateUserRequestOBj = new UpdateUserRequestObj(cts,new UserProfileVmPresenterCallBack(this),Store.CurreUserBobj,_currentUserName,(Currency)_preferedCurrencyIndex);
 
             var updateUserUseCaseObj = InstanceBuilder.CreateInstance<UpdateUser>(updateUserRequestOBj);
 
@@ -133,7 +135,7 @@ namespace SPLITTR_Uwp.ViewModel
         
         public event Action BindingUpdateInvoked;
 
-        public async void OnSuccess(UpdateUserResponseObj result)
+        public async void InvokeOnUserObjectUpdated(UpdateUserResponseObj result)
         { 
 
            await UiService.ShowContentAsync("Account Updated SuccessFully", "SuccessFull!!").ConfigureAwait(false);
@@ -143,11 +145,24 @@ namespace SPLITTR_Uwp.ViewModel
                IsEditUserProfileVisible = false;
            }).ConfigureAwait(false);
         }
-        public void OnError(SplittrException ex)
+        public class UserProfileVmPresenterCallBack : IPresenterCallBack<UpdateUserResponseObj>
         {
-            if (ex.InnerException is SqlException)
+            private readonly UserProfilePageViewModel _viewModel;
+            public UserProfileVmPresenterCallBack(UserProfilePageViewModel viewModel)
             {
-                ExceptionHandlerService.HandleException(ex);
+                _viewModel = viewModel;
+
+            }
+            public void OnSuccess(UpdateUserResponseObj result)
+            {
+                _viewModel.InvokeOnUserObjectUpdated(result);
+            }
+            public void OnError(SplittrException ex)
+            {
+                if (ex.InnerException is SqlException)
+                {
+                    ExceptionHandlerService.HandleException(ex);
+                }
             }
         }
     }

@@ -16,7 +16,8 @@ using SPLITTR_Uwp.ViewModel.Models;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    internal class ExpenseDetailedViewUserControlViewModel :ObservableObject,IPresenterCallBack<RelatedExpenseResponseObj>
+    
+    internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
     {
         
         private double _totalExpenditureAmount;
@@ -40,7 +41,7 @@ namespace SPLITTR_Uwp.ViewModel
             _expense = expenseObj;
 
             var cts = new CancellationTokenSource();
-            var relatedExpenseRequestObj = new RelatedExpenseRequestObj(expenseObj, Store.CurreUserBobj, cts.Token, this);
+            var relatedExpenseRequestObj = new RelatedExpenseRequestObj(expenseObj, Store.CurreUserBobj, cts.Token, new ExpenseDetailedViewPresenterCallBack(this));
 
             var relatedExpenseUseCase = InstanceBuilder.CreateInstance<RelatedExpense>(relatedExpenseRequestObj);
 
@@ -49,7 +50,7 @@ namespace SPLITTR_Uwp.ViewModel
         }
       
       
-        private void PopulateRelatedExpenses(IEnumerable<ExpenseBobj> relatedExpenses)
+        public void PopulateRelatedExpenses(IEnumerable<ExpenseBobj> relatedExpenses)
         {
             //sum of all expenses before split 
             TotalExpenditureAmount = relatedExpenses.Sum(relatedExpense => relatedExpense.StrExpenseAmount) + _expense.StrExpenseAmount;
@@ -82,19 +83,28 @@ namespace SPLITTR_Uwp.ViewModel
             }
             return groupName;
         }
-        public async void OnSuccess(RelatedExpenseResponseObj result)
+        private class ExpenseDetailedViewPresenterCallBack : IPresenterCallBack<RelatedExpenseResponseObj>
         {
-            await UiService.RunOnUiThread(() =>
+            private readonly ExpenseDetailedViewUserControlViewModel _viewModel;
+            public ExpenseDetailedViewPresenterCallBack(ExpenseDetailedViewUserControlViewModel viewModel)
             {
-                PopulateRelatedExpenses(result.RelatedExpenses);
+                _viewModel = viewModel;
 
-            }).ConfigureAwait(false);
-        }
-        public void OnError(SplittrException ex)
-        {
-            if (ex.InnerException is SqlException)
+            }
+            public async void OnSuccess(RelatedExpenseResponseObj result)
             {
-                // Ui Notify to retry 
+                await UiService.RunOnUiThread(() =>
+                {
+                    _viewModel.PopulateRelatedExpenses(result.RelatedExpenses);
+
+                }).ConfigureAwait(false);
+            }
+            public void OnError(SplittrException ex)
+            {
+                if (ex.InnerException is SqlException)
+                {
+                    // Ui Notify to retry 
+                }
             }
         }
     }

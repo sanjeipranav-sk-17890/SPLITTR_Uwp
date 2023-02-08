@@ -17,10 +17,32 @@ using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.Models;
+using SPLITTR_Uwp.ViewModel;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    internal class ExpenseItemViewModel : ObservableObject,IViewModel,IPresenterCallBack<RelatedExpenseResponseObj>
+    internal class ExpenseItemVmPresenterCallBack :IPresenterCallBack<RelatedExpenseResponseObj>
+    {
+        private readonly ExpenseItemViewModel _viewModel;
+        public ExpenseItemVmPresenterCallBack(ExpenseItemViewModel viewModel)
+        {
+            _viewModel = viewModel;
+
+        }
+        public void OnSuccess(RelatedExpenseResponseObj result)
+        {
+           _viewModel.InvokeOnSucess(result);
+        }
+        public void OnError(SplittrException ex)
+        {
+            if (ex.InnerException is SqlException)
+            {
+                //Code to Notify sql db access failed
+            }
+        }
+    }
+    }
+    internal class ExpenseItemViewModel : ObservableObject,IViewModel
     {
        
 
@@ -201,7 +223,8 @@ namespace SPLITTR_Uwp.ViewModel
             return "- " + expenseAmount;
 
         }
-        
+
+        private static CancellationTokenSource Source;
         public void ExpenseObjLoaded(ExpenseViewModel expenseObj)
         {
 
@@ -216,7 +239,7 @@ namespace SPLITTR_Uwp.ViewModel
 
             var cts = new CancellationTokenSource();
 
-            var relatedExpenseReqObj = new RelatedExpenseRequestObj(expenseObj, Store.CurreUserBobj, cts.Token, this);
+            var relatedExpenseReqObj = new RelatedExpenseRequestObj(expenseObj, Store.CurreUserBobj, cts.Token, new ExpenseItemVmPresenterCallBack(this));
 
             var relatedExpenseUseCase = InstanceBuilder.CreateInstance<RelatedExpense>(relatedExpenseReqObj);
 
@@ -239,10 +262,13 @@ namespace SPLITTR_Uwp.ViewModel
             return expenseAmount.ExpenseAmount(Store.CurreUserBobj);
         }
 
-
+        public void InvokeOnSucess(RelatedExpenseResponseObj result)
+        {
+            OnUseCaseSuccess(result);
+        }
         public event Action BindingUpdateInvoked;
 
-        public async void OnSuccess(RelatedExpenseResponseObj result)
+        public async void OnUseCaseSuccess(RelatedExpenseResponseObj result)
         {
             var totalAmount = result.RelatedExpenses.Sum(expense => expense.StrExpenseAmount);
             totalAmount += _expenseVObj.StrExpenseAmount;
@@ -254,12 +280,5 @@ namespace SPLITTR_Uwp.ViewModel
                 ExpenseTotalAmount = formatedExpenseAmount;
             });
         }
-        public void OnError(SplittrException ex)
-        {
-            if (ex.InnerException is SqlException)
-            {
-                //Code to Notify sql db access failed
-            }
-        }
-    }
+       
 }

@@ -15,7 +15,9 @@ using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    internal class OwnerExpenseControlViewModel : ObservableObject,IPresenterCallBack<MarkAsPaidResponseObj>,IPresenterCallBack<CancelExpenseResponseObj>
+   
+
+    internal class OwnerExpenseControlViewModel : ObservableObject
     {
         private bool _expenseCancelButtonVisibility = false;
         
@@ -48,7 +50,7 @@ namespace SPLITTR_Uwp.ViewModel
         {
             
             var cts = new CancellationTokenSource();
-            var cancelExpenseRequestObj = new CancelExpenseRequestObj(this, Store.CurreUserBobj, expense.ExpenseUniqueId, cts.Token);
+            var cancelExpenseRequestObj = new CancelExpenseRequestObj(new OwnerExpenseControlVmPresenterCallBack(this), Store.CurreUserBobj, expense.ExpenseUniqueId, cts.Token);
 
             var cancelExpensesUseCaseObj = InstanceBuilder.CreateInstance<CancelExpense>(cancelExpenseRequestObj);
 
@@ -61,7 +63,7 @@ namespace SPLITTR_Uwp.ViewModel
             
             var cts = new CancellationTokenSource();
 
-            var markAsPaidRequestObj = new MarkAsPaidRequestObj(this, cts.Token, expense.ExpenseUniqueId, Store.CurreUserBobj);
+            var markAsPaidRequestObj = new MarkAsPaidRequestObj(new OwnerExpenseControlVmPresenterCallBack(this), cts.Token, expense.ExpenseUniqueId, Store.CurreUserBobj);
 
             var markAsPaidUseCaseObj = InstanceBuilder.CreateInstance<MarkAsPaid>(markAsPaidRequestObj);
 
@@ -69,7 +71,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         }
 
-        public async void OnSuccess(MarkAsPaidResponseObj result)
+        public async void InvokeOnMarkAsPaidCompleted(MarkAsPaidResponseObj result)
         {
             await UiService.ShowContentAsync($"{result.MarkedPaidExpenseBobj.Description} Paid", "Marked as PAid").ConfigureAwait(false);
             await UiService.RunOnUiThread(() =>
@@ -77,7 +79,7 @@ namespace SPLITTR_Uwp.ViewModel
                 ExpenseCancelButtonVisibility = false;
             });
         }
-        public async void OnSuccess(CancelExpenseResponseObj result)
+        public async void InvokeOnExpenseCancellationCompleted(CancelExpenseResponseObj result)
         {
             await UiService.ShowContentAsync($"{result.CancelledExpense.Description} Cancelled", "Split Cancelled").ConfigureAwait(false);
             
@@ -87,16 +89,43 @@ namespace SPLITTR_Uwp.ViewModel
             });
 
         }
-        public void OnError(SplittrException ex)
+        class OwnerExpenseControlVmPresenterCallBack : IPresenterCallBack<MarkAsPaidResponseObj>, IPresenterCallBack<CancelExpenseResponseObj>
         {
-            if (ex.InnerException is SQLiteException)
+            private readonly OwnerExpenseControlViewModel _viewModel;
+            public OwnerExpenseControlVmPresenterCallBack(OwnerExpenseControlViewModel viewModel)
             {
-               //Some UI Logic to show Something Went Wrong
+                _viewModel = viewModel;
+
             }
-            else if(ex.InnerException is ArgumentException )
+            public void OnSuccess(MarkAsPaidResponseObj result)
             {
-                ExceptionHandlerService.HandleException(ex);
+                _viewModel.InvokeOnMarkAsPaidCompleted(result);
+            }
+            public void OnSuccess(CancelExpenseResponseObj result)
+            {
+                _viewModel.InvokeOnExpenseCancellationCompleted(result);
+            }
+            void IPresenterCallBack<CancelExpenseResponseObj>.OnError(SplittrException ex)
+            {
+                HandleError(ex);
+            }
+            void IPresenterCallBack<MarkAsPaidResponseObj>.OnError(SplittrException ex)
+            {
+                HandleError(ex);
+            }
+            private void HandleError(SplittrException ex)
+            {
+                switch (ex.InnerException)
+                {
+                    case ArgumentException or ArgumentNullException:
+                        ExceptionHandlerService.HandleException(ex.InnerException);
+                        break;
+                    case SQLiteException:
+                        //Retry Code Logic Here
+                        break;
+                }
             }
         }
+
     }
 }

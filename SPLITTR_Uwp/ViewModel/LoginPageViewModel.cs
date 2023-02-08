@@ -14,7 +14,8 @@ using SPLITTR_Uwp.DataRepository;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    public class LoginPageViewModel :ObservableObject,IPresenterCallBack<LoginResponseObj>
+   
+    public class LoginPageViewModel :ObservableObject
     {
         private  int _selectedItem = 0;
         private  bool _loginInformationTextBox=false;
@@ -93,7 +94,7 @@ namespace SPLITTR_Uwp.ViewModel
             {
                 var cts = new CancellationTokenSource();
 
-                var loginReqObj = new LoginRequestObj(UserEmailIdTextBox.Trim().ToLower(), this,cts.Token);
+                var loginReqObj = new LoginRequestObj(UserEmailIdTextBox.Trim().ToLower(), new LoginVmPresenterCalBack(this),cts.Token);
 
                 var loginUseCaseObj = InstanceBuilder.CreateInstance<UserLogin>(loginReqObj);
 
@@ -113,7 +114,7 @@ namespace SPLITTR_Uwp.ViewModel
             //stoping main page animation if the the page is unloaded
             _timer.Stop();
         }
-        public async void OnSuccess(LoginResponseObj result)
+        public async void OnLoginCompleted(LoginResponseObj result)
         {
            await UiService.RunOnUiThread((() =>
            {
@@ -129,11 +130,28 @@ namespace SPLITTR_Uwp.ViewModel
            })).ConfigureAwait(false);
 
         }
-        public void OnError(SplittrException ex)
+        public class LoginVmPresenterCalBack : IPresenterCallBack<LoginResponseObj>
         {
-            if (ex.InnerException is ArgumentNullException)
+            private readonly LoginPageViewModel _viewModel;
+            public LoginVmPresenterCalBack(LoginPageViewModel viewModel)
             {
-                WrongUserCreDentialTextBlockVisibility =true;
+                _viewModel = viewModel;
+
+            }
+            public void OnSuccess(LoginResponseObj result)
+            {
+                _viewModel.OnLoginCompleted(result);
+            }
+            public async void OnError(SplittrException ex)
+            {
+                await UiService.RunOnUiThread((() =>
+                {
+                    if (ex.InnerException is ArgumentNullException)
+                    {
+                        _viewModel.WrongUserCreDentialTextBlockVisibility = true;
+                    }
+                }));
+
             }
         }
     }

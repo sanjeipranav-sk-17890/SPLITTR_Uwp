@@ -25,7 +25,10 @@ using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    public class SplitExpenseViewModel : ObservableObject,IViewModel ,IPresenterCallBack<UserSuggestionResponseObject>,IPresenterCallBack<SplitExpenseResponseObj>
+   
+
+
+    public class SplitExpenseViewModel : ObservableObject,IViewModel
     {
         
         public  ISplitExpenseView View { get; set; }
@@ -109,14 +112,14 @@ namespace SPLITTR_Uwp.ViewModel
 
             //to be Made static Cancel previous Request if Another Made 
             var cts = new CancellationTokenSource().Token;
-            var fetchSuggestionReqObj = new UserSuggestionRequestObject(this, cts, SplittingUsersName.Trim().ToLower());
+            var fetchSuggestionReqObj = new UserSuggestionRequestObject(new SplitExpenseVmPresenterCallBack(this), cts, SplittingUsersName.Trim().ToLower());
 
             var suggestionFetchUseCase = InstanceBuilder.CreateInstance<UserSuggestion>(fetchSuggestionReqObj);
 
             suggestionFetchUseCase.Execute();
             
         }
-        public async void OnSuccess(UserSuggestionResponseObject result)
+        public async void InvokeOnUserSuggestionReceived(UserSuggestionResponseObject result)
         {
             await UiService.RunOnUiThread(() => {
                 foreach (var user in result.UserSuggestions)
@@ -134,7 +137,7 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
         //if the splitting is successfull showing split completed text box and reset the page 
-        public async void OnSuccess(SplitExpenseResponseObj result)
+        public async void InvokeOnSplitExpenseCompleted(SplitExpenseResponseObj result)
         {
 
             await UiService.RunOnUiThread((() =>
@@ -143,17 +146,6 @@ namespace SPLITTR_Uwp.ViewModel
                 ResetPage();
             }), View.Dispatcher);
         }
-        public void OnError(SplittrException ex)
-        {
-            switch (ex.InnerException)
-            {
-                case SQLiteException:
-                case ArgumentException:
-                    ExceptionHandlerService.HandleException(ex);
-                    break;
-            }
-        }
-
 
         private User _dummyUser = new User()
         {
@@ -546,7 +538,7 @@ namespace SPLITTR_Uwp.ViewModel
 
             var ctk = new CancellationTokenSource().Token;
 
-            var splitExpenseRequestObj = new SplitExpenseRequestObj(expenseDescription, Store.CurreUserBobj, _expensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType,ctk,this);
+            var splitExpenseRequestObj = new SplitExpenseRequestObj(expenseDescription, Store.CurreUserBobj, _expensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType,ctk,new SplitExpenseVmPresenterCallBack(this));
 
             var splitExpenseUseCaseObj = InstanceBuilder.CreateInstance<SplitExpenses>(splitExpenseRequestObj);
 
@@ -600,7 +592,45 @@ namespace SPLITTR_Uwp.ViewModel
         /// </summary>
         public event Action BindingUpdateInvoked;
 
+        public class SplitExpenseVmPresenterCallBack : IPresenterCallBack<UserSuggestionResponseObject>, IPresenterCallBack<SplitExpenseResponseObj>
+        {
+            private readonly SplitExpenseViewModel _viewModel;
+            public SplitExpenseVmPresenterCallBack(SplitExpenseViewModel viewModel)
+            {
+                _viewModel = viewModel;
 
+            }
+            public void OnSuccess(UserSuggestionResponseObject result)
+            {
+                _viewModel.InvokeOnUserSuggestionReceived(result);
+            }
+            public void OnSuccess(SplitExpenseResponseObj result)
+            {
+                _viewModel.InvokeOnSplitExpenseCompleted(result);
+            }
+            void IPresenterCallBack<SplitExpenseResponseObj>.OnError(SplittrException ex)
+            {
+                HandleError(ex);
+
+            }
+            void IPresenterCallBack<UserSuggestionResponseObject>.OnError(SplittrException ex)
+            {
+                HandleError(ex);
+            }
+            private void HandleError(SplittrException ex)
+            {
+                switch (ex.InnerException)
+                {
+                    case ArgumentException or ArgumentNullException:
+                        ExceptionHandlerService.HandleException(ex.InnerException);
+                        break;
+                    case SQLiteException:
+                        //Retry Code Logic Here
+                        break;
+                }
+            }
+
+        }
     }
     
 }
