@@ -7,7 +7,7 @@ using SPLITTR_Uwp.Core.ModelBobj.Enum;
 
 namespace SPLITTR_Uwp.ViewModel.Models.ExpenseListObject
 {
-    internal class ExpenseGroupingList :ObservableCollection<ExpenseBobj>
+    public class ExpenseGroupingList :ObservableCollection<ExpenseBobj>
     {
          readonly ExpenseStatus _status;
 

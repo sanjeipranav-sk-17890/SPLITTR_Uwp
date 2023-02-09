@@ -18,18 +18,12 @@ internal interface IMainPageViewModel : INotifyPropertyChanged,IViewModel
 
     ObservableCollection<User> RelatedUsers { get; }
 
-    ObservableCollection<ExpenseGroupingList> ExpensesList { get; }
 
     ObservableCollection<GroupBobj> UserGroups { get; }
 
     bool PaneVisibility { get; set; }
 
     void ViewLoaded();
-    void PopulateAllExpense();
-    void PopulateSpecificGroupExpenses(Group selectedGroup);
-    void PopulateUserRelatedExpenses(User selectedUser);
-    void PopulateUserReceivedExpenses();
-    void PopulateUserRaisedExpenses();
     void LogOutButtonClicked();
     void PersonProfileClicked();
     void AddButtonItemSelected(object sender, RoutedEventArgs e);
