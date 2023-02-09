@@ -4,7 +4,7 @@ using SPLITTR_Uwp.ViewModel.Models.ExpenseListObject;
 
 namespace SPLITTR_Uwp.ViewModel.VmLogic
 {
-    internal interface IExpenseGrouper
+    public interface IExpenseGrouper
     {
         IEnumerable<ExpenseGroupingList> CreateExpenseGroupList(IEnumerable<ExpenseBobj> expenses);
     }

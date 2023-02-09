@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using SPLITTR_Uwp.DataTemplates;
 using NavigationView = Microsoft.UI.Xaml.Controls.NavigationView;
 using NavigationViewSelectionChangedEventArgs = Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs;
 
@@ -30,8 +31,6 @@ namespace SPLITTR_Uwp.Views
         IMainPageViewModel _viewModel;
         private static MainPage _view;
 
-        private string _innerPageTitle = nameof(AllExpense);
-
         private void PageOnPaneButtonOnClick()
         {
             var isMainPaneOpen = MainPageNavigationView.IsPaneOpen;
@@ -41,12 +40,6 @@ namespace SPLITTR_Uwp.Views
         public Frame ChildFrame
         {
             get => InnerFrame;
-        }
-
-        public string InnerPageTitle
-        {
-            get => _innerPageTitle;
-            set => SetField(ref _innerPageTitle, value);
         }
 
         public MainPage()
@@ -147,18 +140,9 @@ namespace SPLITTR_Uwp.Views
             {
                 return;
             }
-            page.ItemsSource = _viewModel.ExpensesList;
+           
             page.PaneButtonOnClick += (PageOnPaneButtonOnClick);
-            //setting binding manually  for title in that Page 
-            Binding binding = new Binding()
-            {
-                Source = this,
-                Path = new PropertyPath(nameof(InnerPageTitle)),
-                Mode = BindingMode.OneWay
-            };
-            BindingOperations.SetBinding(page, ExpensesListAndDetailViewPage.TitleTextProperty, binding);
 
-            //Unsubscribing NavigationServices
             NavigationService.Navigated -= NavigationService_Navigated;
         }
 
@@ -172,15 +156,13 @@ namespace SPLITTR_Uwp.Views
             {
                 return;
             }
-            //Setting Title
-            InnerPageTitle = "Individual Split  " + $" : {selectedUser.UserName}";
+            UserExpensesListControl.FilterExpense(new ExpenseListFilterObj(null, selectedUser, ExpenseListFilterObj.ExpenseFilter.UserExpense)); 
 
-
-            _viewModel.PopulateUserRelatedExpenses(selectedUser);
-
-            //Making Group list Selected Index to none
+                //Making Group list Selected Index to none
             GroupList.SelectedIndex = -1;
         }
+
+        
         private void MainPageNavigationView_OnSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             if (UserGroupsList.IsSelected)
@@ -202,16 +184,13 @@ namespace SPLITTR_Uwp.Views
             switch (stackpanel.Name)
             {
                 case nameof(AllExpense):
-                    InnerPageTitle = "All Expenses";
-                    _viewModel.PopulateAllExpense();
+                    UserExpensesListControl.FilterExpense(new ExpenseListFilterObj(null, null, ExpenseListFilterObj.ExpenseFilter.AllExpenses));
                     break;
                 case nameof(RequestToMe):
-                    InnerPageTitle = "Request To Me";
-                    _viewModel.PopulateUserReceivedExpenses();
+                    UserExpensesListControl.FilterExpense(new ExpenseListFilterObj(null, null, ExpenseListFilterObj.ExpenseFilter.RequestToMe));
                     break;
                 case nameof(RequestedByMe):
-                    InnerPageTitle ="Request By Me";
-                    _viewModel.PopulateUserRaisedExpenses();
+                    UserExpensesListControl.FilterExpense(new ExpenseListFilterObj(null, null, ExpenseListFilterObj.ExpenseFilter.RequestByMe));
                     break;
 
             }
@@ -224,12 +203,9 @@ namespace SPLITTR_Uwp.Views
             if (e.AddedItems.Count > 0)
             {
                 var groupObject = e.AddedItems[0] as GroupBobj;
-                //setting title with Group Name
-                InnerPageTitle = groupObject.GroupName + " Expense";
 
+                UserExpensesListControl.FilterExpense(new ExpenseListFilterObj(groupObject, null, ExpenseListFilterObj.ExpenseFilter.GroupExpense));
 
-                //Calling ViewModel to Populate Group objects
-                _viewModel.PopulateSpecificGroupExpenses(groupObject);
             }
         }
 

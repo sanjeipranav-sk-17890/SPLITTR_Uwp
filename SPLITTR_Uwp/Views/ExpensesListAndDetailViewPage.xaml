@@ -10,8 +10,7 @@
     xmlns:header="using:SPLITTR_Uwp.ViewModel.Models.ExpenseListObject"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     Background="{ThemeResource ApplicationMainThemeAcrylicBrush}"
-    xmlns:template="using:SPLITTR_Uwp.DataTemplates"
-    Loaded="ExpensesListAndDetailViewPage_OnLoaded">
+    xmlns:template="using:SPLITTR_Uwp.DataTemplates">
     <Page.Resources>
         <Style x:Key="CustomGridSplitterStyle" TargetType="controls:GridSplitter">
         <Setter Property="Template">
@@ -27,58 +26,6 @@
             </Setter.Value>
         </Setter>
         </Style>
-        <CollectionViewSource  x:Name="CollectionViewSource" x:Key="GroupedSource" IsSourceGrouped="True"/>
-        <Style x:Key="HideExpensesButtonStyle" x:FieldModifier="public" x:Name="HideExpenseButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Foreground" Value="{ThemeResource SystemAccentColorDark1}" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <FontIcon FontFamily="Segoe MDL2 Assets" VerticalAlignment="{TemplateBinding VerticalAlignment}"  Glyph="&#xE761;" Margin="2 2 4 0" FontSize="20"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="OpenPaneButtonStyle" x:FieldModifier="public" x:Name="OpenPaneButtonStyle" TargetType="Button">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <FontIcon FontFamily="Segoe MDL2 Assets" VerticalAlignment="{TemplateBinding VerticalAlignment}"  Glyph="&#xEA5B;" Margin="2 2 4 0" FontSize="20"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="ClosePaneButtonStyle" x:FieldModifier="public" x:Name="ClosePaneButtonStyle" TargetType="Button">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <FontIcon FontFamily="Segoe MDL2 Assets" VerticalAlignment="{TemplateBinding VerticalAlignment}"  Glyph="&#xEA49;" Margin="2 2 4 0" FontSize="20"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="ShowExpensesButtonStyle" x:Name="ShowExpenseButtonStyle" x:FieldModifier="public" TargetType="Button">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Foreground" Value="{ThemeResource SystemAccentColorDark1}" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <FontIcon FontFamily="Segoe MDL2 Assets" VerticalAlignment="{TemplateBinding VerticalAlignment}"  Glyph="&#xE7B3;" Margin="2 2 4 0" FontSize="20"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style TargetType="ListViewItem" >
-            <Setter Property="MinHeight" Value="0"></Setter>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="CornerRadius" Value="10"></Setter>
-            <Setter Property="Margin" Value="0 2 0 0"></Setter>
-        </Style>
     </Page.Resources>
    
     <Grid>
@@ -88,131 +35,12 @@
             <ColumnDefinition Width="10"></ColumnDefinition>
             <ColumnDefinition MinWidth="400"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-
-        <Grid Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" CornerRadius="5" Padding="3">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <RelativePanel Grid.Row="0">
-
-            <StackPanel Orientation="Horizontal">
-                
-                <Button  x:Name="NavigationPaneControlButton" Click="NavigationPaneName_OnClick" Style="{StaticResource OpenPaneButtonStyle}">
-                    
-                </Button>
-
-                <TextBlock Text="{x:Bind TitleText,Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold" Margin="4 0 0 0" FontSize="18"></TextBlock>
-            </StackPanel>
-                <DropDownButton Content="" FontFamily="Segoe MDL2 Assets"
-                                RelativePanel.AlignRightWithPanel="True"
-                                Background="Transparent" 
-                                BorderBrush="Transparent">
-                    <DropDownButton.Flyout>
-                        <MenuFlyout Placement="Bottom">
-                            <MenuFlyoutItem Text="Date" x:Name="DateMenuItem" Click="SortingFlyoutButton_OnClick">
-                                <MenuFlyoutItem.Icon>
-                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph=""/>
-                                </MenuFlyoutItem.Icon>
-                            </MenuFlyoutItem>
-                            <MenuFlyoutItem Text="Status" x:Name="StatusMenuItem" Click="SortingFlyoutButton_OnClick">
-                                <MenuFlyoutItem.Icon>
-                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph=""/>
-                                </MenuFlyoutItem.Icon>
-                            </MenuFlyoutItem>
-                        </MenuFlyout>
-                    </DropDownButton.Flyout>
-                </DropDownButton>
-            </RelativePanel>
-            <!-- Grouped Expense List View   -->
-            <ListView Grid.Row="1" x:Name="ExpensesLIstView" 
-                      ItemsSource="{x:Bind CollectionViewSource.View , Mode=OneWay}"
-                      SelectionChanged="ExpensesLIstView_OnSelectionChanged"
-                      SelectedIndex="-1"
-                      SelectedItem="{x:Bind _viewModel.SelectedExpenseObj,Mode=TwoWay}">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="vm:ExpenseViewModel">
-                        <template:ExpenseDataTemplateV2 HorizontalAlignment="Stretch"
-                                                        CornerRadius="5"
-                                                        Visibility="{x:Bind Visibility,Mode=OneWay}"></template:ExpenseDataTemplateV2>
-                        <!--<template:ExpenseDataTemplate HorizontalAlignment="Stretch" DateOfExpenseTextBlockVisibility="Visible"
-                                                      ExpenseStatusVisibility="Collapsed" CornerRadius="5"/>-->
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-                <ListView.GroupStyle>
-                    <GroupStyle>
-                        <GroupStyle.HeaderTemplate>
-                            <DataTemplate x:DataType="header:ExpenseGroupingList" >
-                                <Grid HorizontalAlignment="Stretch" Width="{Binding ElementName=ExpensesLIstView,Path=ActualWidth,Mode=OneWay}">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-                                    <StackPanel Orientation="Horizontal"  Grid.Column="0" Margin="10,0">
-                                        <StackPanel.Resources>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Foreground" Value="{ThemeResource AccentTextColorBrush}"></Setter>
-                                            </Style>
-                                        </StackPanel.Resources>
-                                        <Button Click="ExpenseShowButton_OnClick" Style="{ThemeResource ShowExpensesButtonStyle}">
-                                        </Button>
-                                        <TextBlock Text="{x:Bind GroupHeader.GroupName, Mode=OneWay}"   
-                                                   FontWeight="Bold" />
-                                        <TextBlock Text="(" Margin="5 0 0 0"/>
-                                        <TextBlock Text="{x:Bind GroupHeader.NoOfExpenses,Mode=OneWay}" Margin="0"></TextBlock>
-                                        <TextBlock Text=")"/>
-                                    </StackPanel>
-                                    <!--<MenuFlyoutSeparator Grid.Row="1" HorizontalAlignment="Stretch" Margin="10 0 30 0"></MenuFlyoutSeparator>-->
-
-                                </Grid>
-
-                                <!---->
-
-                            </DataTemplate>
-                        </GroupStyle.HeaderTemplate>
-                        <GroupStyle.HeaderContainerStyle>
-                            <Style TargetType="ListViewHeaderItem">
-                                <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
-                                <Setter Property="FontSize" Value="{ThemeResource ListViewHeaderItemThemeFontSize}" />
-                                <Setter Property="Margin" Value="0" />
-                                <Setter Property="Padding" Value="12,8,12,0" />
-                                <Setter Property="HorizontalContentAlignment" Value="Left" />
-                                <Setter Property="VerticalContentAlignment" Value="Center" />
-                                <Setter Property="MinHeight" Value="{ThemeResource ListViewHeaderItemMinHeight}" />
-                                <Setter Property="UseSystemFocusVisuals" Value="True" />
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="ListViewHeaderItem">
-                                            <ContentPresenter x:Name="ContentPresenter"
-                                                    Background="{TemplateBinding Background}"
-                                                    Content="{TemplateBinding Content}"
-                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                    ContentTransitions="{TemplateBinding ContentTransitions}"
-                                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </GroupStyle.HeaderContainerStyle>
-                    </GroupStyle>
-                </ListView.GroupStyle>
-            </ListView>
-            <ListView Visibility="Collapsed" Grid.Row="1" x:Name="DateSortedList"
-                      ItemsSource="{x:Bind DateSortedExpenseList,Mode=OneWay}"
-                      SelectionChanged="ExpensesLIstView_OnSelectionChanged"
-                      SelectedIndex="-1"
-                      SelectedItem="{x:Bind _viewModel.SelectedExpenseObj,Mode=TwoWay}">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="vm:ExpenseViewModel">
-                        <!--<template:ExpenseDataTemplateV2 HorizontalAlignment="Stretch"
-                                                        CornerRadius="5"></template:ExpenseDataTemplateV2>-->
-                        <template:ExpenseDataTemplate HorizontalAlignment="Stretch" DateOfExpenseTextBlockVisibility="Collapsed"  ExpenseStatusVisibility="Visible" CornerRadius="5"/>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-
-        </Grid>
+        <template:UserExpensesListControl CornerRadius="5"
+                                          HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Stretch" Grid.Column="0"
+                                          OnExpenseSelectionChanged="ExpensesLIstView_OnSelectionChanged"
+                                          PaneButtonOnClick="UserExpensesListControl_OnPaneButtonOnClick"
+                                          />
         <!--Column Grid Splitter-->
         <controls:GridSplitter Grid.Column="1" Width="10" ResizeBehavior="BasedOnAlignment"
                                ResizeDirection="Auto" Background="Transparent"  BorderBrush="Transparent" Style="{StaticResource CustomGridSplitterStyle}">

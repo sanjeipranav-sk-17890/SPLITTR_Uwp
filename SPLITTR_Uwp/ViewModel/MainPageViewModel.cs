@@ -41,7 +41,6 @@ namespace SPLITTR_Uwp.ViewModel
 
             }
 
-
             public string UserInitial
             {
                 get => UserViewModel.UserName.GetUserInitial();
@@ -60,108 +59,20 @@ namespace SPLITTR_Uwp.ViewModel
 
             public ObservableCollection<User> RelatedUsers { get; } = new ObservableCollection<User>();
 
-            public ObservableCollection<ExpenseGroupingList> ExpensesList { get; } = new ObservableCollection<ExpenseGroupingList>();
-
-            #region GroupingLogicRegion
-
-            private void GroupingAndPopulateExpensesList(IEnumerable<ExpenseBobj> filteredExpenses)
+            public void ViewLoaded()
             {
-                if (filteredExpenses == null)
+
+                if (Store.CurreUserBobj == null)
                 {
+                    //Setting frame reference to Default windows Frame
+                    NavigationService.Frame = null;
+                    NavigationService.Navigate(typeof(LoginPage), new DrillInNavigationTransitionInfo());
                     return;
                 }
-                var groups = _expenseGrouper.CreateExpenseGroupList(filteredExpenses);
-
-               ExpensesList.Clear();
-                foreach (var group in groups)
-                {
-                   ExpensesList.Add(group);
-                }
-            }
-            #endregion
-
-
-
-            #region RelatedUserLogicRegion
-
-            public void ViewLoaded() 
-            {
-
-                  if (Store.CurreUserBobj == null)
-                  {
-                      //Setting frame reference to Default windows Frame
-                      NavigationService.Frame = null;
-                      NavigationService.Navigate(typeof(LoginPage), new DrillInNavigationTransitionInfo());
-                      return;
-                  }
-                  UserGroups.ClearAndAdd(Store.CurreUserBobj.Groups);
-                  PopulateIndividualSplitUsers();
-                  PopulateAllExpense();
-                  
-            }
-            public void PopulateAllExpense()
-            {
-                ExpensesList.Clear();
-                
-                GroupingAndPopulateExpensesList(Store.CurreUserBobj.Expenses);
-            }
-
-
-            public void PopulateSpecificGroupExpenses(Group selectedGroup)
-            {
-                if (selectedGroup is null)
-                {
-                    return;
-                }
-                ExpensesList.Clear();
-                //filter expenses based on particular group 
-                var groupSpecificExpenses = Store.CurreUserBobj?.Expenses.Where(e => e.GroupUniqueId is not null && e.GroupUniqueId.Equals(selectedGroup.GroupUniqueId));
-                
-                GroupingAndPopulateExpensesList(groupSpecificExpenses);
-            }
-            public void PopulateUserRelatedExpenses(User selectedUser)
-            {
-                if (selectedUser is null)
-                {
-                    return;
-                }
-                ExpensesList.Clear();
-                var userSpecificExpenses = Store.CurreUserBobj?.Expenses.Where(CheckExpenseMatchesUser);
-
-                GroupingAndPopulateExpensesList(userSpecificExpenses);
-
-
-                //filter expenses based on Related User
-                bool CheckExpenseMatchesUser(ExpenseBobj e)
-                {
-                    if (e.SplitRaisedOwner.Equals(selectedUser) || e.CorrespondingUserObj.Equals(selectedUser) && e.GroupUniqueId is null)
-                        return true;
-                    return false;
-                }
+                UserGroups.ClearAndAdd(Store.CurreUserBobj.Groups);
+                PopulateIndividualSplitUsers();
 
             }
-            public void PopulateUserReceivedExpenses()
-            {
-                ExpensesList.Clear();
-
-                var userReceivedExpenses = Store.CurreUserBobj?.Expenses.Where(e => !e.SplitRaisedOwner.Equals(UserViewModel));
-
-                GroupingAndPopulateExpensesList(userReceivedExpenses);
-            }
-            public void PopulateUserRaisedExpenses()
-            {
-                ExpensesList.Clear();
-
-                var userRaisedExpenses = Store.CurreUserBobj?.Expenses.Where(e => e.SplitRaisedOwner.Equals(UserViewModel));
-
-                GroupingAndPopulateExpensesList(userRaisedExpenses);
-            }
-            
-
-
-
-
-
             private void PopulateIndividualSplitUsers()
             {
                 RelatedUsers.Clear();
@@ -184,7 +95,7 @@ namespace SPLITTR_Uwp.ViewModel
                 
             }
 
-            #endregion
+        
 
 
             public async void UserObjUpdated(string property)
@@ -197,10 +108,6 @@ namespace SPLITTR_Uwp.ViewModel
                         //refreshing value assigning
                         case nameof(UserViewModel.Groups):
                             UserGroups.ClearAndAdd(Store.CurreUserBobj.Groups);
-                            break;
-                        case nameof(UserViewModel.Expenses):
-                            PopulateIndividualSplitUsers();
-                            PopulateAllExpense();
                             break;
                     }
                     BindingUpdateInvoked?.Invoke();

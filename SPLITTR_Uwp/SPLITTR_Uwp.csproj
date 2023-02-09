@@ -180,6 +180,9 @@
     <Compile Include="DataTemplates\PaymentWindowExpenseView.xaml.cs">
       <DependentUpon>PaymentWindowExpenseView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataTemplates\UserExpensesListControl.xaml.cs">
+      <DependentUpon>UserExpensesListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\AccentColorService.cs" />
     <Compile Include="Services\StateService.cs" />
     <Compile Include="Services\ThemeHelperService.cs" />
@@ -287,6 +290,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataTemplates\RelatedExpenseTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataTemplates\UserExpensesListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
