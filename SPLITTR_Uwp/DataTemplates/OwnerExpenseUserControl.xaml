@@ -21,7 +21,8 @@
         </Grid.ColumnDefinitions>
         <views:ExpenseDetailedViewUserControl Grid.Row="0" Grid.ColumnSpan="2"
                                               DataContext="{x:Bind DataContext,Mode=OneWay}"
-                                           HorizontalAlignment="Stretch"/>
+                                           HorizontalAlignment="Stretch"
+                                              BackButtonClicked="ExpenseDetailedViewUserControl_OnBackButtonClicked"/>
         <Button Grid.Row="1" Grid.Column="0" 
                 FontSize="15"
                 Click="MarkAsPaidButton_OnClick"

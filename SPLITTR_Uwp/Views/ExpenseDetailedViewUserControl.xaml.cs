@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
@@ -111,6 +113,12 @@ namespace SPLITTR_Uwp.Views
             field = value;
             OnPropertyChanged(propertyName);
             return true;
+        }
+
+        public event Action<object, RoutedEventArgs> BackButtonClicked; 
+        private void ListViewBackButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            BackButtonClicked?.Invoke(this, e);
         }
     }
 }

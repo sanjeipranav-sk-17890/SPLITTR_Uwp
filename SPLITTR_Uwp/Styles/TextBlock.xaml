@@ -176,7 +176,7 @@
                                     </VisualState>
                                     <VisualState x:Name="WideSplitViewLayout">
                                         <VisualState.StateTriggers>
-                                            <AdaptiveTrigger MinWindowWidth="800"/>
+                                            <AdaptiveTrigger MinWindowWidth="1000"/>
                                         </VisualState.StateTriggers>
                                         <VisualState.Setters>
                                             <Setter Target="RootSplitView.DisplayMode" Value="Inline"/>

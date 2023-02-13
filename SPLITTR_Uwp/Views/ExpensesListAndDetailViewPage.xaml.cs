@@ -45,14 +45,50 @@ namespace SPLITTR_Uwp.Views
             {
                 return;
             }
+            TryChangeVisualState();
             _viewModel.SelectedExpenseObj = e.AddedItems[0] as ExpenseViewModel;
             _viewModel.ExpenseSelectionMade();
+        }
+        private void TryChangeVisualState()
+        {
+            if (CurrentState.Equals(nameof(ListAndDetailViewState)))
+            {
+                return;
+            }
+            TrySetLayOutVisualState(nameof(DetailExpenseViewState));
+            PreferedState = nameof(DetailExpenseViewState);
         }
         private void UserExpensesListControl_OnPaneButtonOnClick()
         {
             PaneButtonOnClick?.Invoke();
         }
 
+        private void ExpensesListAndDetailViewPage_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (!(Window.Current.Bounds.Width < 800))
+            {
+                return;
+            }
+            PreferedState ??= nameof(ExpenseListViewState);
+            TrySetLayOutVisualState(PreferedState);
+        }
+        private string PreferedState { get; set; }
+
+        private void OnBackButtonClicked(object sender, RoutedEventArgs arg2)
+        {
+            TrySetLayOutVisualState(nameof(ExpenseListViewState));
+            PreferedState = nameof(ExpenseListViewState);
+        }
+
+        private void TrySetLayOutVisualState(string visualState)
+        {
+            VisualStateManager.GoToState(this,visualState, true);
+
+        }
+        private string CurrentState
+        {
+            get => AdaptiveListAndDetailView.CurrentState.Name;
+        }
     }
 
  

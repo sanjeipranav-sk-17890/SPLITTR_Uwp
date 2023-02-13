@@ -3,6 +3,7 @@ using Windows.UI.Xaml.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.ViewModel.Models;
+using System;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -48,6 +49,12 @@ namespace SPLITTR_Uwp.DataTemplates
             {
                 _viewModel.OnExpenseCancellation(ExpenseObj);
             }
+        }
+        public event Action<object, RoutedEventArgs> BackButtonClicked;
+
+        private void ExpenseDetailedViewUserControl_OnBackButtonClicked(object arg1, RoutedEventArgs arg2)
+        {
+            BackButtonClicked?.Invoke(arg1,arg2);
         }
     }
 }

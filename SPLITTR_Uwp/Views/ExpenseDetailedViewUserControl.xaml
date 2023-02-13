@@ -15,33 +15,63 @@
         <converter:StringFormatConverter x:Key="StringFormater"/>
     </UserControl.Resources>
     <Grid Padding="10">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="ListViewBackButtonVisualState">
+                <VisualState x:Name="NarrowState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ListViewBackButton.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="WideState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="800"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ListViewBackButton.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <RelativePanel Grid.Row="0">
-            <Border RelativePanel.AlignLeftWithPanel="True"
-                    Padding="5"
-                    CornerRadius="4"
-                    BorderThickness="1"
-                    BorderBrush="{ThemeResource AccentTextColorBrush}"
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="ListViewBackButton"   Grid.Column="0" Style="{StaticResource NoPointerAnimation}" Background="Transparent" BorderBrush="Transparent" Click="ListViewBackButton_OnClick">
+                <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="15" Glyph="&#xEA40;" FontWeight="SemiBold"/>
+            </Button>
+            <RelativePanel Grid.Column="1">
+                <Border RelativePanel.AlignLeftWithPanel="True"
+                        Padding="5"
+                        CornerRadius="4"
+                        BorderThickness="1"
+                        BorderBrush="{ThemeResource AccentTextColorBrush}"
                     
-                    Margin="4">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock FontFamily="Segoe MDL2 Assets"
-                               Text=""
-                               Foreground="{ThemeResource ExpenseStatusBrush}"
-                               VerticalAlignment="Center" ></TextBlock>
-                    <TextBlock  Text="{x:Bind ExpenseObj.ExpenseStatus,Mode=OneWay}"
-                            VerticalAlignment="Center"
-                            Foreground="{ThemeResource ExpenseStatusBrush}"/>
-                </StackPanel>
-            </Border>
-            <TextBlock Text="{x:Bind ExpenseObj.CreatedDate,Converter={StaticResource StringFormater},ConverterParameter='{}{0:dd/MM/yyyy}',Mode=OneWay}"
-                       RelativePanel.AlignRightWithPanel="True"
-                       VerticalAlignment="Center"
-                       Margin="0 5 5 0"></TextBlock>
-        </RelativePanel>
+                        Margin="4">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe MDL2 Assets"
+                                   Text=""
+                                   Foreground="{ThemeResource ExpenseStatusBrush}"
+                                   VerticalAlignment="Center" ></TextBlock>
+                        <TextBlock  Text="{x:Bind ExpenseObj.ExpenseStatus,Mode=OneWay}"
+                                    VerticalAlignment="Center"
+                                    Foreground="{ThemeResource ExpenseStatusBrush}"/>
+                    </StackPanel>
+                </Border>
+                <TextBlock Text="{x:Bind ExpenseObj.CreatedDate,Converter={StaticResource StringFormater},ConverterParameter='{}{0:dd/MM/yyyy}',Mode=OneWay}"
+                           RelativePanel.AlignRightWithPanel="True"
+                           VerticalAlignment="Center"
+                           Margin="0 5 5 0"></TextBlock>
+            </RelativePanel>
+
+        </Grid>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
