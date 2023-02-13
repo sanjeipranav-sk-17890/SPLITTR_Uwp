@@ -11,25 +11,20 @@ using Color = Windows.UI.Color;
 
 namespace SPLITTR_Uwp.DataTemplates
 {
-    public sealed partial class NewExpenseTemplate : UserControl,INotifyPropertyChanged
+    public sealed partial class NewExpenseTemplate : UserControl
     {
         
         private SolidColorBrush _expenseTextBoxColor;
         
-        private SolidColorBrush _parsingSuccessColor = new SolidColorBrush(Color.FromArgb(255, 34, 139, 34));
+        private readonly SolidColorBrush _parsingSuccessColor = new SolidColorBrush(Color.FromArgb(255, 34, 139, 34));
 
-        private SolidColorBrush _parsingFailedColor = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+        private readonly SolidColorBrush _parsingFailedColor = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
 
         private ExpenseBobj ExpenseObj
         {
             get => DataContext as ExpenseBobj;
         }
 
-        private SolidColorBrush ExpenseTextBoxColor
-        {
-            get => _expenseTextBoxColor;
-            set => SetField(ref _expenseTextBoxColor, value);
-        }
 
         private string UserInitial
         {
@@ -47,10 +42,10 @@ namespace SPLITTR_Uwp.DataTemplates
             this.DataContextChanged += (s, e) =>
             {
                 Bindings.Update();
-                OnPropertyChanged(nameof(UserInitial));
+                UserInitialProfilePicture.Initials = UserInitial;
             };
-            
-            ExpenseTextBoxColor = _parsingSuccessColor;
+
+            ExpenseAmountTextBox.BorderBrush = _parsingSuccessColor;
 
         }
 
@@ -71,12 +66,12 @@ namespace SPLITTR_Uwp.DataTemplates
 
             if (double.TryParse(expenseAmountText, out var expenseAmount))//if parsing success assign to expense obj
             {
-                ExpenseTextBoxColor = _parsingSuccessColor ;
+                ExpenseAmountTextBox.BorderBrush = _parsingSuccessColor ;
                 ExpenseObj.StrExpenseAmount = expenseAmount;
             }
             else// if parsing failed default 0.0 will only be assigned
             {
-                ExpenseTextBoxColor = _parsingFailedColor;
+                ExpenseAmountTextBox.BorderBrush = _parsingFailedColor;
 
                 if (expenseInputTextBox != null)//parsing failed reset text feild to default
                 {

@@ -25,6 +25,7 @@
                        VerticalAlignment="center"
                        Margin="3 3 0 0"
                        Width="50"
+                       x:Name="UserInitialProfilePicture"
                        BorderBrush="{ThemeResource ApplicationMainThemeColor}"
                        Initials="{x:Bind  UserInitial,Mode=OneWay}"
         ></PersonPicture>
@@ -32,8 +33,7 @@
             <TextBlock HorizontalAlignment="Center"
                        Text="{x:Bind ExpenseObj.CorrespondingUserObj.UserName,Mode=OneWay}"
                        FontSize="15"/>
-            <TextBox BorderBrush="{x:Bind ExpenseTextBoxColor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                     BorderThickness="5"
+            <TextBox BorderThickness="5"
                      x:Name="ExpenseAmountTextBox"
                      Text="0.0"
                      TextAlignment="Center"

@@ -52,19 +52,19 @@
                 />
             </StackPanel>
             <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="35 0 0 0">
-                <TextBlock Foreground="{x:Bind ExpenseStatusForeground,Mode=OneWay}"
-                           Text="" FontFamily="Segoe MDL2 Assets"
+                <TextBlock Text="" FontFamily="Segoe MDL2 Assets"
+                           x:Name="ExpenseStatusIndicatorIcon"
                            FontSize="10" 
+
                            VerticalAlignment="Center"
                            Visibility="{x:Bind ExpenseStatusVisibility,Mode=OneWay}"
                            Margin="10 0 0 0"></TextBlock>
 
                 <TextBlock  
                            x:Name="ExpenseStatusTextBlock"
-                           Text="{x:Bind ExpenseStatus,Mode=OneWay}"
                            FontSize="15"
                            Visibility="{x:Bind ExpenseStatusVisibility,Mode=OneWay}"
-                           Foreground="{x:Bind ExpenseStatusForeground,Mode=OneWay}"
+
                            />
 
             </StackPanel>
@@ -82,7 +82,7 @@
                        Margin="5 0 4 0"
                        Text=""
                        />
-                <TextBlock Text="{x:Bind ExpenseItemTitle,Mode=OneWay}"></TextBlock>
+                <TextBlock x:Name="ExpenseItemTitleTextBox" ></TextBlock>
        
 
             </StackPanel>
@@ -101,15 +101,14 @@
          <StackPanel Grid.Column="2" Grid.Row="0"
                      Orientation="Horizontal"
                      VerticalAlignment="Center">
-             <TextBlock Text="{x:Bind CurrencySymbol,Mode=OneWay}"
-                        Foreground="{ThemeResource SystemAccentColorDark2}"
+             <TextBlock Foreground="{ThemeResource SystemAccentColorDark2}"
+                        x:Name="CurrencySymbolTextBlock"
                         FontWeight="SemiBold"
                         FontSize="20"/>
              <TextBlock  Margin="5 0 0 0"
                          VerticalAlignment="Center"
                          x:Name="ExpenseAmountTextBlock"
-                         Text="{x:Bind FormatedExpenseAmount,Mode=OneWay}"
-                        />
+             />
 
          </StackPanel>
 

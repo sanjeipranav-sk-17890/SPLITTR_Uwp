@@ -11,16 +11,15 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using SPLITTR_Uwp.Services;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace SPLITTR_Uwp.DataTemplates
 {
-    public sealed partial class ExpenseDataTemplate : UserControl, INotifyPropertyChanged
+    public sealed partial class ExpenseDataTemplate : UserControl
     {
-        private string _expenseItemTitle;
-        private Brush _expenseStatusForeground;
-        private string _expenseStatus;
+       
         
         private static ExpenseItemViewModel ViewModel { get; set; }
 
@@ -65,7 +64,9 @@ namespace SPLITTR_Uwp.DataTemplates
 
         public void LoadValuesInUi()
         {
-             ExpenseItemTitle = GetFormatedTitle(ExpenseObj);
+             ExpenseAmountTextBlock.Text = GetFormatedExpenseAmount();
+             CurrencySymbolTextBlock.Text = ExpenseObj?.StrExpenseAmount.ExpenseSymbol(Store.CurreUserBobj) ?? string.Empty;
+             ExpenseItemTitleTextBox.Text = GetFormatedTitle(ExpenseObj);
              ExpensePersonProfileInnerRectangle.Fill = GetRespectiveLogo(ExpenseObj);
              AssignExpenseStatus(ExpenseObj);
         }
@@ -76,13 +77,14 @@ namespace SPLITTR_Uwp.DataTemplates
             {
                 return;
             }
-            ExpenseStatus = ExpenseObj.ExpenseStatus.ToString();
-            ExpenseStatusForeground = ExpenseObj.ExpenseStatus switch
+            ExpenseStatusTextBlock.Text = ExpenseObj.ExpenseStatus.ToString();
+           var  expenseStatusForeground = ExpenseObj.ExpenseStatus switch
             {
                 Core.ModelBobj.Enum.ExpenseStatus.Cancelled => CancelledColorBrush,
                 Core.ModelBobj.Enum.ExpenseStatus.Paid => PaidColorBrush,
                 _ => PendingColorBrush
             };
+            AssignExpenseStatusForeGround(expenseStatusForeground);
 
         }
 
@@ -120,45 +122,15 @@ namespace SPLITTR_Uwp.DataTemplates
 
 
 
-
+        private void AssignExpenseStatusForeGround(Brush expenseStatusIndicatorBrush)
+        {
+            ExpenseStatusTextBlock.Foreground = expenseStatusIndicatorBrush;
+            ExpenseStatusIndicatorIcon.Foreground = expenseStatusIndicatorBrush;
+        }
 
         #endregion
 
         #region UI Binding & Dependency Property
-        public Brush ExpenseStatusForeground
-        {
-            get => _expenseStatusForeground;
-            set => SetField(ref _expenseStatusForeground, value);
-        }
-
-        public string ExpenseItemTitle
-        {
-            get => _expenseItemTitle;
-            set => SetField(ref _expenseItemTitle, value);
-        }
-
-
-        public string ExpenseStatus
-        {
-            get => _expenseStatus;
-            set => SetField(ref _expenseStatus, value);
-        }
-
-        public string FormatedExpenseDescription
-        {
-            get => FormatExpenseObjDescription();
-        }
-
-        public string CurrencySymbol
-        {
-            get => ExpenseObj?.StrExpenseAmount.ExpenseSymbol(Store.CurreUserBobj);
-        }
-
-        public string FormatedExpenseAmount
-        {
-            get => GetFormatedExpenseAmount();
-
-        }
 
         public readonly static DependencyProperty ExpenseStatusVisibilityProperty = DependencyProperty.Register(
             nameof(ExpenseStatusVisibility), typeof(Visibility), typeof(ExpenseDataTemplate), new PropertyMetadata(default(Visibility)));
@@ -193,7 +165,6 @@ namespace SPLITTR_Uwp.DataTemplates
         {
             Bindings.Update();
 
-
             if (ExpenseObj is null)
             {
                 return;
@@ -202,30 +173,17 @@ namespace SPLITTR_Uwp.DataTemplates
             LoadValuesInUi();
         }
 
-        private void ExpenseObj_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private async void ExpenseObj_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            LoadValuesInUi();
-            //OnPropertyChanged(nameof(FormatedExpenseDescription));
-            //OnPropertyChanged(nameof(CurrencySymbol));
-            //OnPropertyChanged(nameof(FormatedExpenseAmount));
-            Bindings.Update();
+            await UiService.RunOnUiThread((() =>
+            {
+                LoadValuesInUi();
+
+                Bindings.Update();
+            }));
+            
         }
 
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        private bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value))
-                return false;
-            field = value;
-            OnPropertyChanged(propertyName);
-            return true;
-        }
 
     }
 }
