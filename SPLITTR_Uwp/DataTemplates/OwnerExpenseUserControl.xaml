@@ -10,36 +10,38 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-    <Grid>
+    <Grid Padding="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <views:ExpenseDetailedViewUserControl Grid.Row="0" Grid.ColumnSpan="2"
+        <views:ExpenseDetailedViewUserControl Grid.Row="0" Grid.ColumnSpan="3"
                                               DataContext="{x:Bind DataContext,Mode=OneWay}"
                                            HorizontalAlignment="Stretch"
                                               BackButtonClicked="ExpenseDetailedViewUserControl_OnBackButtonClicked"/>
-        <Button Grid.Row="1" Grid.Column="0" 
-                FontSize="15"
+        <Button Grid.Row="1" Grid.Column="1" 
+                FontSize="13"
                 Click="MarkAsPaidButton_OnClick"
                 Opacity=".5"
                 Visibility="{x:Bind _viewModel.ExpenseCancelButtonVisibility,Mode=OneWay}"
                 Margin="0 40 0 0"
-                Style="{StaticResource OrangeButtonStyle}"  HorizontalAlignment="Center" Height="40" VerticalAlignment="Top" Background="Green">
+                ToolTipService.ToolTip="Mark As Paid"
+                Style="{StaticResource OrangeButtonStyle}"  HorizontalAlignment="Center" Height="30" VerticalAlignment="Top" Background="Green">
             <Button.Content>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="" VerticalAlignment="Center" />
-                    <TextBlock Text="Mark as Paid" Margin="2 0 0 0"></TextBlock>
+                    <TextBlock TextTrimming="CharacterEllipsis" Text="Mark as Paid" Margin="2 0 0 0"></TextBlock>
                 </StackPanel>
             </Button.Content>
         </Button>
-        <Button Grid.Row="1" Grid.Column="1"
-                FontSize="15"
-                Height="40"
+        <Button Grid.Row="1" Grid.Column="2"
+                FontSize="13"
+                Height="30"
                 Visibility="{x:Bind _viewModel.ExpenseCancelButtonVisibility,Mode=OneWay}"
                 Opacity=".5"
                 Click="CancelButton_OnClick"
@@ -48,8 +50,8 @@
                 Style="{StaticResource OrangeButtonStyle}">
             <Button.Content>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock  Text="Cancel Split" VerticalAlignment="Center" />
                     <TextBlock Text="" FontFamily="Segoe MDL2 Assets" Margin="2 0 0 0"></TextBlock>
+                    <TextBlock  Text="Cancel Split" VerticalAlignment="Center" />
                 </StackPanel>
             </Button.Content>
         </Button>

@@ -13,21 +13,21 @@
     xmlns:template="using:SPLITTR_Uwp.DataTemplates"  SizeChanged="ExpensesListAndDetailViewPage_OnSizeChanged">
     <Page.Resources>
         <Style x:Key="CustomGridSplitterStyle" TargetType="controls:GridSplitter">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="controls:GridSplitter">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="controls:GridSplitter">
                         <Grid x:Name="Root" Width="4" >
-                        <!-- Background -->
-                        <Rectangle  Fill="Transparent" StrokeThickness="0"  />
-                        <!-- Focus Visual -->
-                        <Rectangle x:Name="FocusVisual" Stroke="Transparent" StrokeThickness="1" Opacity="0" IsHitTestVisible="false" />
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+                            <!-- Background -->
+                            <Rectangle  Fill="Transparent" StrokeThickness="0"  />
+                            <!-- Focus Visual -->
+                            <Rectangle x:Name="FocusVisual" Stroke="Transparent" StrokeThickness="1" Opacity="0" IsHitTestVisible="false" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Page.Resources>
-   
+
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -38,12 +38,12 @@
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveListAndDetailView">
                 <VisualState x:Name="ExpenseListViewState">
-                     <VisualState.Setters>
-                         <Setter Target="ExpensesListControl.Visibility" Value="Visible"/>
+                    <VisualState.Setters>
+                        <Setter Target="ExpensesListControl.Visibility" Value="Visible"/>
                         <Setter Target="ExpenseDetailViewGrid.Visibility" Value="Collapsed"/>
-                         <Setter Target="ExpenseDetailViewColumn.Width" Value="0"></Setter>
-                         <Setter Target="ExpenseListColoumn.Width" Value="*"></Setter>
-                     </VisualState.Setters>
+                        <Setter Target="ExpenseDetailViewColumn.Width" Value="0"></Setter>
+                        <Setter Target="ExpenseListColoumn.Width" Value="*"></Setter>
+                    </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="DetailExpenseViewState">
                     <VisualState.Setters>
@@ -111,7 +111,7 @@
                                                               BackButtonClicked="OnBackButtonClicked"/>
                 </StackPanel>
             </ScrollViewer>
-          
+
         </Grid>
 
     </Grid>
