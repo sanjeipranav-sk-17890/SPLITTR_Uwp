@@ -46,20 +46,24 @@ namespace SPLITTR_Uwp.Views
             if (UserListView.Visibility == Visibility.Collapsed)
             {
                 UserListView.Visibility = Visibility.Visible;
-                ArrowImage.Rotation = 90;
+                ShowListViewButton.Visibility = Visibility.Collapsed;
+                HideListViewButton.Visibility = UserListView.Visibility;
 
             }
             else
             {
                 UserListView.Visibility = Visibility.Collapsed;
-                ArrowImage.Rotation = 0;
+                ShowListViewButton.Visibility = Visibility.Visible;
+                HideListViewButton.Visibility = UserListView.Visibility;
 
             }
         }
         private void PerformCloseListView()
         {
             UserListView.Visibility = Visibility.Collapsed;
-            ArrowImage.Rotation = 0;
+            ShowListViewButton.Visibility = Visibility.Visible;
+            HideListViewButton.Visibility = UserListView.Visibility;
+
         }
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {

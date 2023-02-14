@@ -18,7 +18,7 @@ namespace SPLITTR_Uwp.ViewModel
    
     public class SignPageViewModel : ObservableObject
     {
-        private readonly IUserDataManager _dataManager;
+        
         private bool _emailPassInputPanelVisibility=false;
         private string _userName;
         private bool _isValidEmailIdTextBlockVisibility=false;
@@ -34,11 +34,6 @@ namespace SPLITTR_Uwp.ViewModel
 
         public int SelectedIndex { get; set; }
 
-        public SignPageViewModel(IUserDataManager dataManager)
-        {
-            _dataManager = dataManager;
-
-        }
 
         public bool EmailPassInputPanelVisibility
         {
