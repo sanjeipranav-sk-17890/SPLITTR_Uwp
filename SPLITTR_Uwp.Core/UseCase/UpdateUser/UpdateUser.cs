@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using SPLITTR_Uwp.Core.DataManager;
+using SPLITTR_Uwp.Core.DependencyInjector;
 using SPLITTR_Uwp.Core.EventArg;
 
 namespace SPLITTR_Uwp.Core.UseCase.UpdateUser
@@ -11,9 +12,9 @@ namespace SPLITTR_Uwp.Core.UseCase.UpdateUser
 
         private readonly UpdateUserRequestObj _requestObj;
 
-        public UpdateUser(IUserProfileUpdateDataManager dataManager, UpdateUserRequestObj requestObj) : base(requestObj.PresenterCallBack,requestObj.Cts)
+        public UpdateUser( UpdateUserRequestObj requestObj) : base(requestObj.PresenterCallBack,requestObj.Cts)
         {
-            _dataManager = dataManager;
+            _dataManager = SplittrDependencyService.GetInstance<IUserProfileUpdateDataManager>();
             _requestObj = requestObj;
         }
         public override void Action()

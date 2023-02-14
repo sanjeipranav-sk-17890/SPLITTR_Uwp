@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Windows.UI.Xaml;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.Views;
 using Windows.UI.Xaml.Media.Animation;

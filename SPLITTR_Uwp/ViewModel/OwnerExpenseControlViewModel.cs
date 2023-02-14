@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
+using SPLITTR_Uwp.Core.DependencyInjector;
 
 namespace SPLITTR_Uwp.Core.UseCase.SignUpUser
 {
@@ -10,10 +11,10 @@ namespace SPLITTR_Uwp.Core.UseCase.SignUpUser
     {
         private readonly SignUpUserReqObj _requestObj;
         private readonly ISignUpDataManager _dataManager;
-        public SignUpUser(SignUpUserReqObj requestObj,ISignUpDataManager dataManager) : base(requestObj.PresenterCallBack,requestObj.Cts)
+        public SignUpUser(SignUpUserReqObj requestObj) : base(requestObj.PresenterCallBack,requestObj.Cts)
         {
             _requestObj = requestObj;
-            _dataManager = dataManager;
+            _dataManager = SplittrDependencyService.GetInstance<ISignUpDataManager>();
         }
         public override void Action()
         {

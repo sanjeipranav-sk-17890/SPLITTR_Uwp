@@ -1,6 +1,7 @@
 ﻿using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.DataManager;
+using SPLITTR_Uwp.Core.DependencyInjector;
 
 namespace SPLITTR_Uwp.Core.UseCase.CreateGroup;
 
@@ -9,11 +10,11 @@ public class GroupCreation : UseCaseBase<GroupCreationResponseObj>
     private readonly GroupCreationRequestObj _requestObj;
     private IGroupCreationDataManager _dataManager;
 
-    public GroupCreation(GroupCreationRequestObj requestObj, IGroupCreationDataManager dataManager) : base(requestObj.PresenterCallBack, requestObj.Cts)
+    public GroupCreation(GroupCreationRequestObj requestObj) : base(requestObj.PresenterCallBack, requestObj.Cts)
     {
         _requestObj = requestObj;
-        // DataManager  Will Be Instantiated By Core Injector
-        _dataManager = dataManager;
+   
+        _dataManager =SplittrDependencyService.GetInstance<IGroupCreationDataManager>();
     }
     public override void Action()
     {

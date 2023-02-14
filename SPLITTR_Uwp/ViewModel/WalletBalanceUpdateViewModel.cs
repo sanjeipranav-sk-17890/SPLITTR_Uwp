@@ -1,4 +1,4 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Models;

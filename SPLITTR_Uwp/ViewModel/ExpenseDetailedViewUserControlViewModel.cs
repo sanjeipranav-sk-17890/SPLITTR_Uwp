@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;

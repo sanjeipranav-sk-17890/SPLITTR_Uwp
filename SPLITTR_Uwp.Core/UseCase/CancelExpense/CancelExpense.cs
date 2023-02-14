@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DataManager;
+using SPLITTR_Uwp.Core.DependencyInjector;
 
 namespace SPLITTR_Uwp.Core.UseCase.CancelExpense
 {
@@ -11,10 +12,10 @@ namespace SPLITTR_Uwp.Core.UseCase.CancelExpense
     {
         private readonly CancelExpenseRequestObj _requestObj;
         private readonly IExpenseCancellationDataManager _dataManager;
-        public CancelExpense(CancelExpenseRequestObj requestObj,IExpenseCancellationDataManager dataManager) : base(requestObj.CallBack,requestObj.Cts)
+        public CancelExpense(CancelExpenseRequestObj requestObj) : base(requestObj.CallBack,requestObj.Cts)
         {
             _requestObj = requestObj;
-            _dataManager = dataManager;
+            _dataManager = SplittrDependencyService.GetInstance<IExpenseCancellationDataManager>();
         }
         public override void Action()
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using SPLITTR_Uwp.Core.DataManager;
+using SPLITTR_Uwp.Core.DependencyInjector;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.Models;
 
@@ -38,10 +39,10 @@ namespace SPLITTR_Uwp.Core.UseCase.UserSuggestion
         private readonly UserSuggestionRequestObject _requestObj;
 
         private readonly IUserSuggestionDataManager _dataManager;
-        public UserSuggestion( UserSuggestionRequestObject requestObj, IUserSuggestionDataManager dataManager) : base(requestObj.PresenterCallBack,requestObj.Cts)
+        public UserSuggestion( UserSuggestionRequestObject requestObj) : base(requestObj.PresenterCallBack,requestObj.Cts)
         {
             _requestObj = requestObj;
-            _dataManager = dataManager;
+            _dataManager = SplittrDependencyService.GetInstance<IUserSuggestionDataManager>();
         }
         public override void Action()
         {

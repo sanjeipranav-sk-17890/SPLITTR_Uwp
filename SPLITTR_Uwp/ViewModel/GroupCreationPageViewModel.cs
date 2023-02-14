@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.Models;

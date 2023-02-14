@@ -50,34 +50,11 @@ namespace SPLITTR_Uwp.Configuration
             return container;
         }
 
+
         private static void AddServiceDependencies(IServiceCollection container)
         {
-            container.AddSingleton<ISqlDataServices, SqlDataBaseAdapter>()
-                .AddSingleton<IUserDbHandler, UserDbHandler>()
-                .AddSingleton<IExpenseDbHandler, ExpenseDbHandler>()
-                .AddSingleton<IGroupDbHandler, GroupDbHandler>()
-                .AddSingleton<IGroupToUserDbHandler, GroupToUserDbHandler>()
-                .AddSingleton<IUserDataManager, UserDataManager>()
-                .AddSingleton<IGroupDataManager, GroupDataManager>()
-                .AddSingleton<IExpenseDataManager, ExpenseDataManager>()
-                .AddSingleton<IGroupCreationDataManager, GroupCreationDataManager>()
-                .AddSingleton<ICurrencyCalcFactory, CalculatorFactory>()
-                .AddSingleton<IExpenseHistoryManager, ExpenseHistoryManager>()
-                .AddSingleton<IUserProfileUpdateDataManager, UserUpdateDataManager>()
-                .AddSingleton<IAddWalletBalanceDataManager, UserUpdateDataManager>()
-                .AddSingleton<IUserSuggestionDataManager,UserUpdateDataManager>()
-                .AddSingleton<IRelatedExpenseDataManager,RelatedExpenseDataManager>()
-                .AddSingleton<ISplitExpenseDataManager, ExpenseStatusDataManager>()
-                .AddSingleton<IMarkExpensePaidDataManager, ExpenseStatusDataManager>()
-                .AddSingleton<IExpenseCancellationDataManager, ExpenseStatusDataManager>()
-                .AddSingleton<ISettleUpSplitDataManager, SettleUpExpenseDataManager>()
-                .AddSingleton<ISignUpDataManager,AuthenticationManager>()
-                .AddSingleton<IAuthenticationManager,AuthenticationManager>()
-                .AddTransient<IStateService, StateService>()
-                .AddTransient<RupessConverter>()
-                .AddTransient<DollarConverter>()
-                .AddTransient<YenConverter>()
-                .AddTransient<EuroConverter>()
+            
+            container.AddTransient<IStateService, StateService>()
                 .AddTransient<IStringManipulator, Manipulator>()
                 .AddTransient<ISplitExpenseView, SplitExpenseUserControl>()
                 .AddTransient<IExpenseGrouper, ExpenseGrouper>()

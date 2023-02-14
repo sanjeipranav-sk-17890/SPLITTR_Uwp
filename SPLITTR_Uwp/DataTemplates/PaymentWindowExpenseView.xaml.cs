@@ -1,8 +1,8 @@
 ﻿using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel.Models;

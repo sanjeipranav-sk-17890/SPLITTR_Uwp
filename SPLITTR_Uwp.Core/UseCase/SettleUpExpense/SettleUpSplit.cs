@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
+using SPLITTR_Uwp.Core.DependencyInjector;
 
 namespace SPLITTR_Uwp.Core.UseCase.SettleUpExpense
 {
@@ -8,10 +9,10 @@ namespace SPLITTR_Uwp.Core.UseCase.SettleUpExpense
     {
         private readonly SettleUPExpenseRequestObj _requestObj;
         private readonly ISettleUpSplitDataManager _dataManager;
-        public SettleUpSplit(SettleUPExpenseRequestObj requestObj,ISettleUpSplitDataManager dataManager) : base(requestObj.PresenterCallBack,requestObj.Cts)
+        public SettleUpSplit(SettleUPExpenseRequestObj requestObj) : base(requestObj.PresenterCallBack,requestObj.Cts)
         {
             _requestObj = requestObj;
-            _dataManager = dataManager;
+            _dataManager =SplittrDependencyService.GetInstance<ISettleUpSplitDataManager>();
         }
         public override void Action()
         {

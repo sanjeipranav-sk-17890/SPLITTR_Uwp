@@ -1,4 +1,5 @@
 ﻿using SPLITTR_Uwp.Core.DataManager.Contracts;
+using SPLITTR_Uwp.Core.DependencyInjector;
 
 namespace SPLITTR_Uwp.Core.UseCase.VerifyPaidExpense;
 
@@ -6,10 +7,10 @@ public class VerifyPaidExpense : UseCaseBase<VerifyPaidExpenseResponseObj>
 {
     private readonly VerifyPaidExpenseRequestObj _requestObj;
     private readonly IExpenseHistoryManager _dataManager;
-    public VerifyPaidExpense(VerifyPaidExpenseRequestObj requestObj,IExpenseHistoryManager dataManager):base(requestObj.PresenterCallBack,requestObj.Cts)
+    public VerifyPaidExpense(VerifyPaidExpenseRequestObj requestObj):base(requestObj.PresenterCallBack,requestObj.Cts)
     {
         _requestObj = requestObj;
-        _dataManager = dataManager;
+        _dataManager = SplittrDependencyService.GetInstance<IExpenseHistoryManager>();
 
     }
     public override void Action()

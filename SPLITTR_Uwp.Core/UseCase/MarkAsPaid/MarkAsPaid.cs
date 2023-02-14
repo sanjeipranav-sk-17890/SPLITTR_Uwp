@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using SPLITTR_Uwp.Core.DependencyInjector;
 
 namespace SPLITTR_Uwp.Core.UseCase.MarkAsPaid
 {
@@ -11,10 +12,10 @@ namespace SPLITTR_Uwp.Core.UseCase.MarkAsPaid
         private readonly MarkAsPaidRequestObj _requestObj;
         private readonly IMarkExpensePaidDataManager _dataManager;
 
-        public MarkAsPaid(MarkAsPaidRequestObj requestObj,IMarkExpensePaidDataManager dataManager) : base(requestObj.PresenterCallBack,requestObj.Cts)
+        public MarkAsPaid(MarkAsPaidRequestObj requestObj) : base(requestObj.PresenterCallBack,requestObj.Cts)
         {
             _requestObj = requestObj;
-            _dataManager = dataManager;
+            _dataManager =SplittrDependencyService.GetInstance<IMarkExpensePaidDataManager>();
         }
         public override void Action()
         {

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Threading;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;

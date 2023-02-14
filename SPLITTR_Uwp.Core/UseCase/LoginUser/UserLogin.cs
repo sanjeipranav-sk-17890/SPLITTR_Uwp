@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using SPLITTR_Uwp.Core.DependencyInjector;
 
 namespace SPLITTR_Uwp.Core.UseCase.LoginUser
 {
@@ -8,10 +9,10 @@ namespace SPLITTR_Uwp.Core.UseCase.LoginUser
     {
         private readonly LoginRequestObj _requestObj;
         private readonly IAuthenticationManager _dataManager;
-        public UserLogin(LoginRequestObj requestObj,IAuthenticationManager dataManager) : base(requestObj.PresenterCallBack,requestObj.Cts)
+        public UserLogin(LoginRequestObj requestObj) : base(requestObj.PresenterCallBack,requestObj.Cts)
         {
             _requestObj = requestObj;
-            _dataManager = dataManager;
+            _dataManager = SplittrDependencyService.GetInstance<IAuthenticationManager>();
         }
         public override void Action()
         {

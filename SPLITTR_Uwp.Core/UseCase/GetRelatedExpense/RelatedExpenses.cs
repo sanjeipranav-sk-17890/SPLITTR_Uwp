@@ -3,6 +3,7 @@ using System.Text;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.DataManager;
+using SPLITTR_Uwp.Core.DependencyInjector;
 
 namespace SPLITTR_Uwp.Core.UseCase.GetRelatedExpense
 {
@@ -11,10 +12,10 @@ namespace SPLITTR_Uwp.Core.UseCase.GetRelatedExpense
         private readonly RelatedExpenseRequestObj _requestObj;
         private readonly IRelatedExpenseDataManager _dataManager;
 
-        public RelatedExpense(RelatedExpenseRequestObj requestObj,IRelatedExpenseDataManager dataManager) : base(requestObj.PresenterCallBack,requestObj.Cts)
+        public RelatedExpense(RelatedExpenseRequestObj requestObj) : base(requestObj.PresenterCallBack,requestObj.Cts)
         {
             _requestObj = requestObj;
-            _dataManager = dataManager;
+            _dataManager = SplittrDependencyService.GetInstance<IRelatedExpenseDataManager>();
         }
         public override void Action()
         {

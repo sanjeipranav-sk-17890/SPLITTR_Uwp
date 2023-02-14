@@ -5,6 +5,7 @@ using System.Threading;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.DataManager;
+using SPLITTR_Uwp.Core.DependencyInjector;
 using SQLite;
 
 namespace SPLITTR_Uwp.Core.UseCase.SplitExpenses
@@ -56,10 +57,10 @@ namespace SPLITTR_Uwp.Core.UseCase.SplitExpenses
         private readonly ISplitExpenseDataManager _dataManager;
         private readonly SplitExpenseRequestObj _requestObj;
 
-        public SplitExpenses(SplitExpenseRequestObj requestObj, ISplitExpenseDataManager dataManager) : base(requestObj.PresenterCallBack,requestObj.Cts)
+        public SplitExpenses(SplitExpenseRequestObj requestObj) : base(requestObj.PresenterCallBack,requestObj.Cts)
         {
             _requestObj = requestObj;
-            _dataManager = dataManager;
+            _dataManager = SplittrDependencyService.GetInstance<ISplitExpenseDataManager>();
         }
         public override void Action()
         {
