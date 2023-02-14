@@ -59,6 +59,8 @@ namespace SPLITTR_Uwp.DataTemplates
             {
                 return ExpenseObj.Description?.Substring(0, 10) + " ....";
             }
+
+
             return ExpenseObj.Description ?? string.Empty;
         }
 
