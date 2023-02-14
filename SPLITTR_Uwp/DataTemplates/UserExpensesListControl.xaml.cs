@@ -280,9 +280,14 @@ namespace SPLITTR_Uwp.DataTemplates
 
             TitleText = "All Expenses";
 
-            GroupingAndPopulateExpensesList(Store.CurreUserBobj.Expenses);
+            GroupingAndPopulateExpensesList(FilterCurrentUserExpense());
 
             _view.SetCollectionListSource(GroupedExpenses);
+
+            IEnumerable<ExpenseBobj> FilterCurrentUserExpense()
+            {
+                return Store.CurreUserBobj.Expenses.Where(IsNotOwnerExpense);
+            }
         }
 
         #region GroupingLogicRegion
@@ -310,13 +315,33 @@ namespace SPLITTR_Uwp.DataTemplates
             }
             GroupedExpenses.Clear();
             //filter expenses based on particular group 
-            var groupSpecificExpenses = Store.CurreUserBobj?.Expenses.Where(e => e.GroupUniqueId is not null && e.GroupUniqueId.Equals(selectedGroup.GroupUniqueId));
+            var groupSpecificExpenses = Store.CurreUserBobj?.Expenses.Where(ex => IsSelectedGroupExpense(ex,selectedGroup) && IsNotOwnerExpense(ex));
 
             GroupingAndPopulateExpensesList(groupSpecificExpenses);
 
             //Setting ExpenseControl Title
             TitleText = selectedGroup?.GroupName + " Group Expenses";
+
+
+            //Checks Whether Expense belongs to that particular group
+            bool IsSelectedGroupExpense(ExpenseBobj expense, Group selectedGroup)
+            {
+                return expense.GroupUniqueId is not null && expense.GroupUniqueId.Equals(selectedGroup.GroupUniqueId);
+            }
+
+
         }
+
+        /// <summary>
+        /// returns True if corresponding expense obj points to present user 
+        /// </summary>
+        /// <param name="expense"></param>
+        /// <returns></returns>
+        private bool IsNotOwnerExpense(ExpenseBobj expense)
+        {
+            return !expense.CorrespondingUserObj.Equals(expense.SplitRaisedOwner);
+        }
+
         public void PopulateUserRelatedExpenses(User selectedUser)
         {
             if (selectedUser is null)
@@ -345,24 +370,36 @@ namespace SPLITTR_Uwp.DataTemplates
         {
             GroupedExpenses.Clear();
 
-            var userReceivedExpenses = Store.CurreUserBobj?.Expenses.Where(e => !e.SplitRaisedOwner.Equals(Store.CurreUserBobj));
+            var userReceivedExpenses = Store.CurreUserBobj?.Expenses.Where(ex => IsUserRecievedExpense(ex) && IsNotOwnerExpense(ex));
 
             GroupingAndPopulateExpensesList(userReceivedExpenses);
 
             //Setting ExpenseControl Title
             TitleText = "Request To Me";
+
+
+            bool IsUserRecievedExpense(ExpenseBobj expense)
+            {
+                return !expense.SplitRaisedOwner.Equals(Store.CurreUserBobj);
+            }
         }
         public void PopulateUserRaisedExpenses()
         {
             GroupedExpenses.Clear();
 
-            var userRaisedExpenses = Store.CurreUserBobj?.Expenses.Where(e => e.SplitRaisedOwner.Equals(Store.CurreUserBobj));
+            var userRaisedExpenses = Store.CurreUserBobj?.Expenses.Where(ex =>IsUserRaisedExpense(ex) && IsNotOwnerExpense(ex));
 
             GroupingAndPopulateExpensesList(userRaisedExpenses);
             //Setting ExpenseControl Title
             TitleText = "Request By Me";
+
+            bool IsUserRaisedExpense(ExpenseBobj expense)
+            {
+                return expense.SplitRaisedOwner.Equals(Store.CurreUserBobj);
+            }
         }
         #endregion
 
     }
+
 }
