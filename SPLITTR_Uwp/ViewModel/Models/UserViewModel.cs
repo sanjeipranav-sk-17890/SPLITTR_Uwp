@@ -49,6 +49,11 @@ namespace SPLITTR_Uwp.ViewModel.Models
         public void InnerObjValueChanged(string property)
         {
             OnPropertyChanged(property);
+            if (property.Equals(nameof(WalletBalance)))
+            {
+                OnPropertyChanged(nameof(StrWalletBalance));
+            }
+            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

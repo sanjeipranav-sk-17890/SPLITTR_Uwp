@@ -10,7 +10,9 @@
     xmlns:header="using:SPLITTR_Uwp.ViewModel.Models.ExpenseListObject"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     Background="{ThemeResource ApplicationMainThemeAcrylicBrush}"
-    xmlns:template="using:SPLITTR_Uwp.DataTemplates"  SizeChanged="ExpensesListAndDetailViewPage_OnSizeChanged">
+    xmlns:template="using:SPLITTR_Uwp.DataTemplates"
+    xmlns:controls1="using:SPLITTR_Uwp.DataTemplates.Controls"
+    SizeChanged="ExpensesListAndDetailViewPage_OnSizeChanged">
     <Page.Resources>
         <Style x:Key="CustomGridSplitterStyle" TargetType="controls:GridSplitter">
             <Setter Property="Template">
@@ -61,14 +63,15 @@
                         <Setter Target="ExpenseDetailViewGrid.Visibility" Value="Visible" />
                         <Setter Target="ExpensesListControl.Visibility" Value="Visible"/>
                         <Setter Target="ExpenseDetailViewColumn.Width" Value="*"></Setter>
+                        <Setter Target="ExpenseDetailViewColumn.MinWidth" Value="400"></Setter>
                         <Setter Target="ExpenseListColoumn.Width" Value="*"></Setter>
-
+                        <Setter Target="ExpenseListColoumn.MinWidth" Value="400"></Setter>
                     </VisualState.Setters>
                 </VisualState>
 
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        <template:UserExpensesListControl CornerRadius="5"
+        <controls1:UserExpensesListControl CornerRadius="5"
                                           MinWidth="400"
                                           x:Name="ExpensesListControl"
                                           HorizontalAlignment="Stretch"
@@ -96,7 +99,7 @@
             <ScrollViewer HorizontalAlignment="Stretch" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                           VerticalAlignment="Stretch" CornerRadius="5" >
                 <StackPanel Orientation="Vertical">
-                    <template:OwnerExpenseUserControl     HorizontalAlignment="Stretch"
+                    <controls1:OwnerExpenseUserControl     HorizontalAlignment="Stretch"
                                                           VerticalAlignment="Stretch"
                                                           x:Name="DetailedExpenseTemplate"
                                                           DataContext="{x:Bind _viewModel.ControlDataContext,Mode=OneWay}"

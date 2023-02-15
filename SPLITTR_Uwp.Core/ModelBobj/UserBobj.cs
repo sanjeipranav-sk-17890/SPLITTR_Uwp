@@ -24,6 +24,16 @@ namespace SPLITTR_Uwp.Core.ModelBobj
         public ObservableCollection<GroupBobj> Groups { get; } = new ObservableCollection<GroupBobj>();
 
 
+        public override string UserName
+        {
+            get => base.UserName;
+            set
+            {
+                base.UserName = value;
+                OnValueChanged(nameof(UserName));
+            }
+        }
+
         /// <summary>
         /// Gets or Sets the walletBalance in Respective Currency Preference
         /// </summary>
