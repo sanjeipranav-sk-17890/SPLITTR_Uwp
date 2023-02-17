@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Microsoft.Toolkit.Uwp.Helpers;
 using SPLITTR_Uwp.DataTemplates;
 using SPLITTR_Uwp.DataTemplates.Controls;
 using NavigationView = Microsoft.UI.Xaml.Controls.NavigationView;
@@ -49,27 +50,35 @@ namespace SPLITTR_Uwp.Views
             _viewModel.BindingUpdateInvoked += _viewModel_BindingUpdateInvoked;
             this.InitializeComponent();
             _view = this;
-            Loading += MainPage_Loading;
+            Loaded += MainPage_Loaded;
         }
 
-       
+        private void MainPage_Loaded(object sender, RoutedEventArgs e)
+        {
+           PopulateNavigationViewMenuItems();
+        }
 
         private void _viewModel_BindingUpdateInvoked()
         {
             Bindings.Update();
         }
 
-        #region NavigationPaneAnimationColor
+      
 
-        private static Brush NavigationItemDefaultSelectedColor { get; set; }
-        private static Brush NavigationPaneIndicatorColor { get; set; }
-        private void MainPage_Loading(FrameworkElement sender, object args)
+
+        private void PopulateNavigationViewMenuItems()
         {
-            //Saving Reference of Default NavigationView Item Slected Color 
-            NavigationItemDefaultSelectedColor =(Brush)Resources["NavigationViewItemBackgroundSelected"];
-        }
+            foreach (var group in _viewModel.UserGroups)
+            {
+                MainPageNavigationView.MenuItems.Add(new Microsoft.UI.Xaml.Controls.NavigationViewItem()
+                {
+                    Content = group,
+                    Style = UserGroupNavigationItemStyle,
+                });
+            }
+           
 
-        #endregion
+        }
 
         #region Error Handling MEchanisam
 
@@ -159,30 +168,22 @@ namespace SPLITTR_Uwp.Views
             }
             UserExpensesListControl.FilterExpense(new ExpenseListFilterObj(null, selectedUser, ExpenseListFilterObj.ExpenseFilter.UserExpense)); 
 
-                //Making Group list Selected Index to none
-            GroupList.SelectedIndex = -1;
         }
 
-        
         private void MainPageNavigationView_OnSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            if (UserGroupsList.IsSelected)
+
+            if (args?.SelectedItemContainer?.Content is GroupBobj selectedGroup )
             {
-                Resources["NavigationViewItemBackgroundSelected"] = new SolidColorBrush(Colors.Transparent);
-                Resources["NavigationViewItemBackgroundSelectedPointerOver"] = new SolidColorBrush(Colors.Transparent);
+                UserExpensesListControl.FilterExpense(new ExpenseListFilterObj(selectedGroup, null, ExpenseListFilterObj.ExpenseFilter.GroupExpense));
+                return;
             }
-            else
-            {
-                //Setting Navigation view Selected item Background to Default
-                Resources["NavigationViewItemBackgroundSelected"] = NavigationItemDefaultSelectedColor;
-                Resources["NavigationViewItemBackgroundSelectedPointerOver"] = NavigationItemDefaultSelectedColor;
-            }
-            if (args.SelectedItem is not StackPanel stackpanel)
+            if (args.SelectedItem is not StackPanel stackPanel)
             {
                 return;
             }
             //setting Title and Calling respective viewModel To Polulate the Respective Expenses
-            switch (stackpanel.Name)
+            switch (stackPanel.Name)
             {
                 case nameof(AllExpense):
                     UserExpensesListControl.FilterExpense(new ExpenseListFilterObj(null, null, ExpenseListFilterObj.ExpenseFilter.AllExpenses));
@@ -193,23 +194,10 @@ namespace SPLITTR_Uwp.Views
                 case nameof(RequestedByMe):
                     UserExpensesListControl.FilterExpense(new ExpenseListFilterObj(null, null, ExpenseListFilterObj.ExpenseFilter.RequestByMe));
                     break;
-
             }
 
-            //Making Group list Selected Index to none
-            GroupList.SelectedIndex = -1;
         }
-        private void GroupList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.AddedItems.Count > 0)
-            {
-                var groupObject = e.AddedItems[0] as GroupBobj;
-
-                UserExpensesListControl.FilterExpense(new ExpenseListFilterObj(groupObject, null, ExpenseListFilterObj.ExpenseFilter.GroupExpense));
-
-            }
-        }
-
+        
         #endregion
 
         #region DashBoardSplitViewLogicRegion

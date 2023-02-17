@@ -10,7 +10,7 @@
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     d:DesignHeight="100"
     d:DesignWidth="400">
-    <StackPanel Orientation="Vertical" Margin="-20 0 0 0">
+    <StackPanel Orientation="Vertical" Margin="-5 0 0 0">
        
         <StackPanel Orientation="Horizontal">
         <Button  Background="Transparent"
@@ -18,7 +18,6 @@
                  BorderBrush="Transparent"
                  Width="30"
                  Height="30"
-                 Style="{StaticResource NoPointerAnimation}"
                  Click="ButtonBase_OnClick" VerticalContentAlignment="Stretch"
                  VerticalAlignment="Center">
 
@@ -32,7 +31,6 @@
                      Width="30"
                      Height="30"
                      Visibility="Collapsed"
-                     Style="{StaticResource NoPointerAnimation}"
                      Click="ButtonBase_OnClick" VerticalContentAlignment="Stretch"
                      VerticalAlignment="Center">
 
@@ -46,12 +44,18 @@
                        ></TextBlock>
 
         </StackPanel>
-        <ListView ItemsSource="{x:Bind  ItemsSource,Mode=OneWay}"
+        <ListView ItemsSource="{x:Bind  UserCollection,Mode=OneWay}"
                   SelectionMode="{x:Bind SelectionMode,Mode=OneWay}"
                   Visibility="Collapsed"
                   SelectionChanged="UserListView_OnSelectionChanged"
                   Margin="30 2 0 0" 
                   x:Name="UserListView">
+            <ListView.ItemContainerTransitions>
+                <TransitionCollection>
+                    <AddDeleteThemeTransition  />
+                    <EntranceThemeTransition IsStaggeringEnabled="True" />
+                </TransitionCollection>
+            </ListView.ItemContainerTransitions>
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="model:User">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >

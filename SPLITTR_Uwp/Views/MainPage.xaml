@@ -157,7 +157,7 @@
 
         </Grid>
             <!-- Main Navigation View-->
-        <SplitView Grid.Row="1" 
+        <SplitView  Grid.Row="1" 
                    PaneBackground="Transparent"
                    DisplayMode="Inline" 
                    PanePlacement="Right"
@@ -174,16 +174,31 @@
             </SplitView.Pane>
             <SplitView.Content>
                 <controls:NavigationView Style="{StaticResource NarrowWindowNavigationViewStyle}"
-            x:Name="MainPageNavigationView"
-            Grid.Row="1"
-            IsSettingsVisible="False"
-            Margin="-1 0 0 0"  
-            CompactPaneLength="0" OpenPaneLength="230"
-            IsPaneOpen="{x:Bind _viewModel.PaneVisibility,Mode=TwoWay}"
-            IsBackButtonVisible="Collapsed" 
-            IsPaneToggleButtonVisible="False" 
-            SelectionChanged="MainPageNavigationView_OnSelectionChanged" >
-                    <controls:NavigationView.MenuItems>
+                                                 x:Name="MainPageNavigationView"
+                                                 Grid.Row="1"
+                                                 IsSettingsVisible="False"
+                                                 Margin="-1 0 0 0"
+                                                 CompactPaneLength="0" OpenPaneLength="230"
+                                                 IsPaneOpen="{x:Bind _viewModel.PaneVisibility,Mode=TwoWay}"
+                                                 IsBackButtonVisible="Collapsed" 
+                                                 IsPaneToggleButtonVisible="False" 
+                                                 SelectionChanged="MainPageNavigationView_OnSelectionChanged" >
+                    <controls:NavigationView.Resources>
+                        <Style x:Key="UserGroupNavigationItemStyle" x:Name="UserGroupNavigationItemStyle" TargetType="controls:NavigationViewItem">
+                            <Setter Property="ContentTemplate">
+                                <Setter.Value>
+                                    <DataTemplate x:DataType="model:GroupBobj">
+                                        <themeButton:MainPageButtonControl ItemsSource="{x:Bind  GroupParticipants,Mode=OneWay}"
+                                                                           TitleName="{x:Bind GroupName,Mode=OneWay}" 
+                                                                           SelectionMode="None"
+                                                                           HorizontalAlignment="Stretch"
+                                        />
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </controls:NavigationView.Resources>
+                    <controls:NavigationView.MenuItems >
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="AllExpense">
                             <TextBlock Text ="☵"  
                                                FontSize="20"
@@ -220,24 +235,11 @@
                                                       TitleName="Individaul Split"
                                                       SelectionMode="Single"
                                                       UserSelectedFromTheList="UserSelectedFromIndividualSplitList"
-                                                      Margin="15 0 0 0"/>
+                                                      Margin="0 0 0 0"/>
                         <controls:NavigationViewItemHeader  Content="Groups" VerticalContentAlignment="Top" FontSize="15" Foreground="{ThemeResource ApplicationMainThemeColor}">
                         </controls:NavigationViewItemHeader>
-                        <!--User Groups List-->
-                        <controls:NavigationViewItem x:Name="UserGroupsList">
-                            <ListView  ItemsSource="{x:Bind _viewModel.UserGroups,Mode=OneWay}" x:Name="GroupList" SelectionChanged="GroupList_OnSelectionChanged">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate x:DataType="model:GroupBobj">
-                                        <themeButton:MainPageButtonControl ItemsSource="{x:Bind  GroupParticipants,Mode=OneWay}"
-                                                                      TitleName="{x:Bind GroupName,Mode=OneWay}" 
-                                                                      SelectionMode="None"
-                                                                      HorizontalAlignment="Stretch"
-                                     />
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </controls:NavigationViewItem>
-                    </controls:NavigationView.MenuItems>
+                      
+                    </controls:NavigationView.MenuItems >
                     <Grid>
                         <Grid.Resources>
                             <services:ExceptionHandlerService x:Key="ExceptionHandlerService" NotifyErrorMessage="ExceptionHandlerService_OnNotifyErrorMessage"/>

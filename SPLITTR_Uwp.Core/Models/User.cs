@@ -56,7 +56,10 @@ namespace SPLITTR_Uwp.Core.Models
         {
             return base.GetHashCode();
         }
-
+        public override string ToString()
+        {
+            return UserName;
+        }
 
     }
 }

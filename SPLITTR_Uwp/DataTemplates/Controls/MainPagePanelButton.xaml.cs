@@ -5,8 +5,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarSymbols;
+using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.DataRepository;
+using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Models;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
@@ -33,7 +36,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         {
             if (this == obj)
             {
-                PerformOpenListview();// shows or hides listview if passed obj is matched
+                PerformOpenListView();// shows or hides listview if passed obj is matched
             }
             else
             {
@@ -41,29 +44,55 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             }
 
         }
-        private void PerformOpenListview()
+        private void PerformOpenListView()
         {
             if (UserListView.Visibility == Visibility.Collapsed)
             {
-                UserListView.Visibility = Visibility.Visible;
                 ShowListViewButton.Visibility = Visibility.Collapsed;
-                HideListViewButton.Visibility = UserListView.Visibility;
+                HideListViewButton.Visibility = Visibility.Visible;
+               
+                
+                if (UserCollection.Count >0 )
+                {
+                    //Copy to a new Source
+                    var copySource = new List<User>();
+                    copySource.AddRange(UserCollection);
+                    //Clear Old Source
+                    UserCollection.Clear();
 
+                    //Set Visibility to Visible and Show Transition animation for Smooth Addition
+                    UserListView.Visibility = Visibility.Visible;
+                    UserCollection.AddRange(copySource);
+                    copySource.Clear();
+                    return;
+                }
+                UserListView.Visibility = Visibility.Visible;
             }
             else
             {
-                UserListView.Visibility = Visibility.Collapsed;
-                ShowListViewButton.Visibility = Visibility.Visible;
-                HideListViewButton.Visibility = UserListView.Visibility;
-
+                PerformCloseListView();
             }
         }
         private void PerformCloseListView()
         {
-            UserListView.Visibility = Visibility.Collapsed;
             ShowListViewButton.Visibility = Visibility.Visible;
-            HideListViewButton.Visibility = UserListView.Visibility;
+            HideListViewButton.Visibility = Visibility.Collapsed;
 
+            //Copy to a new Source
+            var copySource = new List<User>();
+            copySource.AddRange(UserCollection);
+
+            UserListView.Visibility = Visibility.Visible;
+            //Clear Old Source
+            UserCollection.Clear();
+
+            
+            //Set Visibility to Collapsed and Show Transition animation for Smooth Hideing
+            UserCollection.AddRange(copySource);
+            copySource.Clear();
+         
+
+            UserListView.Visibility = Visibility.Collapsed;
         }
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
@@ -74,6 +103,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
 
         #endregion
 
+        private ObservableCollection<User> UserCollection { get; } = new ObservableCollection<User>();
 
         public readonly static DependencyProperty TitleNameProperty = DependencyProperty.Register(
             nameof(TitleName), typeof(string), typeof(MainPageButtonControl), new PropertyMetadata(default(string)));
@@ -108,6 +138,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             set
             {   
                 var listWithCurrentUserBsObject = AlterInputListWithCurrentUserBobj(value);
+                UserCollection.AddRange(listWithCurrentUserBsObject as IEnumerable<User>);
                 SetValue(ItemsSourceProperty, listWithCurrentUserBsObject);
             }
         }
@@ -131,7 +162,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
                         return (User)_currentUserViewModel;
                     }
                     return user;
-                }));
+                })).ToList();
             }
             return value;
         }
