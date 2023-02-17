@@ -130,13 +130,7 @@ namespace SPLITTR_Uwp.ViewModel
 
             public void LogOutButtonClicked()
             {
-                //Invoking Logout Event Before Clearing Current uSer Cache 
-                _stateService.InvokeCurrentUserLoggedOut(Store.CurreUserBobj);
-
-                //Clearing Reference to Current USer Cache
-                Store.CurreUserBobj = null;
-                NavigationService.Frame = null;
-                NavigationService.Navigate(typeof(LoginPage), new DrillInNavigationTransitionInfo());
+                _stateService.RequestUserLogout();
 
             }
 

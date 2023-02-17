@@ -31,7 +31,7 @@ namespace SPLITTR_Uwp.ViewModel
         }
         public void OnSuccess(RelatedExpenseResponseObj result)
         {
-           _viewModel.InvokeOnSucess(result);
+           _viewModel.OnUseCaseSuccess(result);
         }
         public void OnError(SplittrException ex)
         {
@@ -224,7 +224,6 @@ namespace SPLITTR_Uwp.ViewModel
 
         }
 
-        private static CancellationTokenSource Source;
         public void ExpenseObjLoaded(ExpenseViewModel expenseObj)
         {
 
@@ -237,18 +236,27 @@ namespace SPLITTR_Uwp.ViewModel
             _expenseVObj.PropertyChanged += _expenseVObj_PropertyChanged;
             BindingUpdateInvoked?.Invoke();
 
+            CallRelatedExpenseUseCaseCall();
+        }
+
+        private void CallRelatedExpenseUseCaseCall()
+        {
             var cts = new CancellationTokenSource();
 
-            var relatedExpenseReqObj = new RelatedExpenseRequestObj(expenseObj, Store.CurreUserBobj, cts.Token, new ExpenseItemVmPresenterCallBack(this));
+             var relatedExpenseReqObj = new RelatedExpenseRequestObj(_expenseVObj, Store.CurreUserBobj, cts.Token, new ExpenseItemVmPresenterCallBack(this));
 
-            var relatedExpenseUseCase = InstanceBuilder.CreateInstance<RelatedExpense>(relatedExpenseReqObj);
+             var relatedExpenseUseCase = InstanceBuilder.CreateInstance<RelatedExpense>(relatedExpenseReqObj);
 
-            relatedExpenseUseCase.Execute();
+             relatedExpenseUseCase.Execute();
         }
 
         private void _expenseVObj_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             BindingUpdateInvoked?.Invoke();
+            if (e.PropertyName.Equals(nameof(ExpenseBobj.CurrencyConverter)))
+            {
+                CallRelatedExpenseUseCaseCall();
+            }
         }
 
 
@@ -262,10 +270,6 @@ namespace SPLITTR_Uwp.ViewModel
             return expenseAmount.ExpenseAmount(Store.CurreUserBobj);
         }
 
-        public void InvokeOnSucess(RelatedExpenseResponseObj result)
-        {
-            OnUseCaseSuccess(result);
-        }
         public event Action BindingUpdateInvoked;
 
         public async void OnUseCaseSuccess(RelatedExpenseResponseObj result)

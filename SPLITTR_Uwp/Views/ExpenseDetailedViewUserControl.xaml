@@ -13,6 +13,7 @@
     <UserControl.Resources>
         <SolidColorBrush x:Key="ExpenseStatusBrush" Color="DarkGreen" x:Name="ExpenseStatusBrush"></SolidColorBrush>
         <converter:StringFormatConverter x:Key="StringFormater"/>
+        <converter:ExpenseAmountFormatter x:Key="ExpenseAmountFormatter" />
     </UserControl.Resources>
     <Grid Padding="10">
         <VisualStateManager.VisualStateGroups>
@@ -95,7 +96,7 @@
                        Grid.Row="0"
                        FontWeight="Bold"
                        Margin="10 4 0 0"
-                       Text="{x:Bind _viewModel.TotalExpenditureAmount,Mode=OneWay}"
+                       Text="{x:Bind _viewModel.TotalExpenditureAmount,Converter={StaticResource ExpenseAmountFormatter},Mode=OneWay}"
                        />
             <TextBlock Grid.Row="1"
                        Grid.Column="0"

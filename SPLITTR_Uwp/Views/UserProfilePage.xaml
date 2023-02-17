@@ -71,7 +71,7 @@
                                        Margin="5 0 0 0"
                                        VerticalAlignment="Center"
                                        Style="{StaticResource TextBlockStyle}"
-                                       Text="{x:Bind _viewModel.User.StrWalletBalance,Mode=OneWay}">
+                                       Text="{x:Bind _viewModel.User.StrWalletBalance,Mode=OneWay,Converter={StaticResource AmountFormatter}}">
                             </TextBlock>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">

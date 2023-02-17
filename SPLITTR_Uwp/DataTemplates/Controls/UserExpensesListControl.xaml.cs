@@ -70,7 +70,14 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         public event Action PaneButtonOnClick;
         private void NavigationPaneName_OnClick(object sender, RoutedEventArgs e)
         {
-            NavigationPaneControlButton.Style = NavigationPaneControlButton.Style == OpenPaneButtonStyle ? ClosePaneButtonStyle : OpenPaneButtonStyle;
+            //Changing Appearance of pane button and invoking click event 
+            if (PaneButtonStateGroup.CurrentState is not null && PaneButtonStateGroup.CurrentState.Name == nameof(OpenPaneState))
+            {
+                VisualStateManager.GoToState(this, nameof(ClosePaneState), true);
+                PaneButtonOnClick?.Invoke();
+                return;
+            }
+            VisualStateManager.GoToState(this, nameof(OpenPaneState), true);
             PaneButtonOnClick?.Invoke();
         }
 

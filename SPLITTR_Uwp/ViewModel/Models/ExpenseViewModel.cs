@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using Windows.Graphics.DirectX.Direct3D11;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 
 namespace SPLITTR_Uwp.ViewModel.Models
@@ -49,24 +50,42 @@ namespace SPLITTR_Uwp.ViewModel.Models
         {
             _expense = expense;
             _expense.ValueChanged += InnerObjValueChanged;
+            if (Store.CurreUserBobj is not null)
+            {
+                Store.CurreUserBobj.ValueChanged += UserObjValueChanged;
+            }
         }
 
 
 
-        public void InnerObjValueChanged(string property)
+
+        #region INotifyPropertyChanged Region
+
+        private void UserObjValueChanged(string property)
         {
-           OnPropertyChanged(property);
+            if (property is not null)
+            {
+                OnPropertyChanged(nameof(CurrencyConverter));
+            }
+        }
+
+        private void InnerObjValueChanged(string property)
+        {
+            OnPropertyChanged(property);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected async virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-          await UiService.RunOnUiThread((() =>
+            await UiService.RunOnUiThread((() =>
             {
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }));
         }
+
+        #endregion
+
 
 
     }

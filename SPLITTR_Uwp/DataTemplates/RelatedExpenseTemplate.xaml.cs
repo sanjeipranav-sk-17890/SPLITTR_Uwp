@@ -25,7 +25,7 @@ namespace SPLITTR_Uwp.DataTemplates
             _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<RelatedExpenseTemplateViewModel>(App.Container);
             this.InitializeComponent();
             DataContextChanged += RelatedExpenseTemplate_DataContextChanged;
-            
+        
             
         }
 
@@ -49,6 +49,10 @@ namespace SPLITTR_Uwp.DataTemplates
 
         private void AssignExpenseStatusForeGround()
         {
+            if (ExpenseObj is null)
+            {
+                return;
+            }
             ExpenseStatusBrush.Color = ExpenseObj.ExpenseStatus switch
             {
                 ExpenseStatus.Pending => Windows.UI.Colors.DarkRed,

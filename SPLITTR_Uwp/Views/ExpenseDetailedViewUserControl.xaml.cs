@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Extensions.DependencyInjection;
+using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel;
@@ -67,6 +68,10 @@ namespace SPLITTR_Uwp.Views
 
         private void ExpenseObj_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName.Equals(nameof(ExpenseBobj.CurrencyConverter)))
+            {
+                return;
+            }
             ManipulateUiBasedOnDataContext();
 
         }

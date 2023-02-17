@@ -39,21 +39,50 @@ namespace SPLITTR_Uwp.ViewModel
                 return;
             }
             _expense = expenseObj;
+            _expense.PropertyChanged += Expense_PropertyChanged;
 
+
+            CallRelatedExpenseUseCase();
+
+        }
+
+        private void Expense_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (!e.PropertyName.Equals(nameof(ExpenseBobj.CurrencyConverter)))
+            {
+                return;
+            }
+            CalculateTotalExpenditureBeforeSplit(RelatedExpenses);
+        }
+
+        private void CallRelatedExpenseUseCase()
+        {
             var cts = new CancellationTokenSource();
-            var relatedExpenseRequestObj = new RelatedExpenseRequestObj(expenseObj, Store.CurreUserBobj, cts.Token, new ExpenseDetailedViewPresenterCallBack(this));
+
+            var relatedExpenseRequestObj = new RelatedExpenseRequestObj(_expense, Store.CurreUserBobj, cts.Token, new ExpenseDetailedViewPresenterCallBack(this));
 
             var relatedExpenseUseCase = InstanceBuilder.CreateInstance<RelatedExpense>(relatedExpenseRequestObj);
 
             relatedExpenseUseCase.Execute();
+        }
+
+        private void CalculateTotalExpenditureBeforeSplit(IEnumerable<ExpenseBobj> relatedExpenses)
+        {
+            if (!relatedExpenses.Any()) // Total Expense Calculation if No Related Expenses 
+            {
+                return;
+            }
+
+            //Total Amount Before Split
+            TotalExpenditureAmount = relatedExpenses.Where(relatedExpense => !relatedExpense.ExpenseUniqueId.Equals(_expense.ExpenseUniqueId)).Sum(relatedExpense => relatedExpense.StrExpenseAmount) + _expense.StrExpenseAmount;
 
         }
-      
-      
-        public void PopulateRelatedExpenses(IEnumerable<ExpenseBobj> relatedExpenses)
+
+
+        private void PopulateRelatedExpenses(IEnumerable<ExpenseBobj> relatedExpenses)
         {
             //sum of all expenses before split 
-            TotalExpenditureAmount = relatedExpenses.Sum(relatedExpense => relatedExpense.StrExpenseAmount) + _expense.StrExpenseAmount;
+            CalculateTotalExpenditureBeforeSplit(relatedExpenses);
 
             RelatedExpenses.Clear();
 

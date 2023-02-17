@@ -34,24 +34,48 @@
     </Page.Resources>
 
     <Grid >
+       
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <VisualStateManager.VisualStateGroups>
+            
+            <VisualStateGroup x:Name="DashBoardStateGroup">
+                <VisualState x:Name="CloseDashBoardState">
+                    <VisualState.Setters>
+                        <Setter Target="DashBoardPaneOpenButton.Content">
+                            <Setter.Value>
+                                <Path Fill="{ThemeResource TextFillColorPrimaryBrush}" Data="M12,2.99887 C13.0543909,2.99887 13.9181678,3.81474733 13.9945144,4.84960759 L14,4.99887 L14,11.0013 C14,12.0555955 13.18415,12.9194591 12.1492661,12.9958139 L12,13.0013 L4,13.0013 C2.94563773,13.0013 2.08183483,12.1853589 2.00548573,11.1505537 L2,11.0013 L2,4.99887 C2,3.94450773 2.81587733,3.08070483 3.85073759,3.00435573 L4,2.99887 L12,2.99887 Z M12,3.99887 L9.99847,3.99887 L9.99847,12.0013 L12,12.0013 C12.51285,12.0013 12.9355092,11.6151867 12.9932725,11.1179055 L13,11.0013 L13,4.99887 C13,4.48602929 12.613973,4.06336214 12.1166239,4.00559766 L12,3.99887 Z M8.99848,3.99887 L4,3.99887 C3.48716857,3.99887 3.06449347,4.38490566 3.0067278,4.8822479 L3,4.99887 L3,11.0013 C3,11.5140571 3.38603566,11.9367959 3.8833779,11.9945711 L4,12.0013 L8.99848,12.0013 L8.99848,3.99887 Z M6.28430284,6.08859222 L6.35355,6.14645 L7.85355,7.64645 C8.02712333,7.82001444 8.04640926,8.08943667 7.91140778,8.28430284 L7.85355,8.35355 L6.35355,9.85355 C6.15829,10.0488 5.84171,10.0488 5.64645,9.85355 C5.47287667,9.67998556 5.45359074,9.41056333 5.58859222,9.21569716 L5.64645,9.14645 L6.29289,8.4999975 L4.50185,8.4999975 C4.2257,8.4999975 4.00185,8.27614 4.00185,7.9999975 C4.00185,7.75454194 4.17871914,7.55039009 4.41197236,7.50805333 L4.50185,7.4999975 L6.29289,7.4999975 L5.64645,6.85355 C5.45118,6.65829 5.45118,6.34171 5.64645,6.14645 C5.82001444,5.97287667 6.08943667,5.95359074 6.28430284,6.08859222 Z" Height="20" Stretch="Fill" UseLayoutRounding="False" Width="18"/>
+                            </Setter.Value>
+                        </Setter>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="OpenDashBoardState">
+                    <VisualState.Setters>
+                        <Setter Target="DashBoardPaneOpenButton.Content">
+                            <Setter.Value>
+                                <Path Fill="{ThemeResource TextFillColorPrimaryBrush}"  StrokeThickness="5" Data="M12,2.99872 C13.0543909,2.99872 13.9181678,3.81459733 13.9945144,4.84945759 L14,4.99872 L14,11.0011 C14,12.0554909 13.18415,12.9192678 12.1492661,12.9956144 L12,13.0011 L4,13.0011 C2.94563773,13.0011 2.08183483,12.18525 2.00548573,11.1503661 L2,11.0011 L2,4.99872 C2,3.94435773 2.81587733,3.08055483 3.85073759,3.00420573 L4,2.99872 L12,2.99872 Z M6.00153,3.99872 L4,3.99872 C3.48716857,3.99872 3.06449347,4.38475566 3.0067278,4.8820979 L3,4.99872 L3,11.0011 C3,11.51395 3.38604429,11.9366092 3.88337975,11.9943725 L4,12.0011 L6.00153,12.0011 L6.00153,3.99872 Z M12,3.99872 L7.00152,3.99872 L7.00152,12.0011 L12,12.0011 C12.5523,12.0011 13,11.5534 13,11.0011 L13,4.99872 C13,4.44643 12.5523,3.99872 12,3.99872 Z M10.3536,6.14639 C10.5488,6.34165 10.5488,6.65823 10.3536,6.85349 L9.70711,7.4999375 L11.4983,7.4999375 C11.7744,7.4999375 11.9983,7.7238 11.9983,7.9999375 C11.9983,8.27608 11.7744,8.4999375 11.4983,8.4999375 L9.70711,8.4999375 L10.3536,9.14639 C10.5488,9.34165 10.5488,9.65823 10.3536,9.85349 C10.1583,10.0488 9.84171,10.0488 9.64645,9.85349 L8.14645,8.35349 C7.95118,8.15823 7.95118,7.84165 8.14645,7.64639 L9.64645,6.14639 C9.84171,5.95112 10.1583,5.95112 10.3536,6.14639 Z"
+                                      Height="20" Stretch="Fill" UseLayoutRounding="False" Width="18"/>
+                            </Setter.Value>
+                        </Setter>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
             <VisualStateGroup>
                 <VisualState x:Name="NarrowLayout">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="0"/>
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
+                        <Setter Target="DashBoardSplitView.DisplayMode" Value="Overlay"></Setter>
                         <Setter Target="NavigationViewFooter.Visibility" Value="Collapsed"/>
                         <Setter Target="BottomPanel.Visibility" Value="Visible"/>
                         <Setter Target="TitleBarAddExpenseButton.Visibility" Value="Collapsed"></Setter>
                     </VisualState.Setters>
                 </VisualState>
-                <VisualState x:Name="WideLayout">
+                <VisualState x:Name="MediumWideLayout">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1000"/>
                     </VisualState.StateTriggers>
@@ -59,6 +83,14 @@
                         <Setter Target="TitleBarAddExpenseButton.Visibility" Value="Visible"></Setter>
                         <Setter Target="BottomPanel.Visibility" Value="Collapsed"></Setter>
                         <Setter Target="NavigationViewFooter.Visibility" Value="Visible"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="LargeWideLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1400"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="DashBoardSplitView.DisplayMode" Value="Inline"></Setter>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -80,7 +112,7 @@
                        Height="40"
 
                        Width="80" Tapped="AppIcon_OnClick"></Image>
-                <TextBlock Text="SPLITTR"
+                <TextBlock  Text="SPLITTR"
                            VerticalAlignment="Center"
                            FontWeight="SemiBold"
                            FontSize="20" 
@@ -89,6 +121,12 @@
 
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                <Button Style="{StaticResource AddWalletButtonStyle}" ToolTipService.ToolTip="DashBoard"
+                        VerticalAlignment="Stretch" Click="DashBoardButton_OnClick" x:Name="DashBoardPaneOpenButton" >
+                    <Button.Content>
+                        <Path Fill="{ThemeResource TextFillColorPrimaryBrush}" Data="M12,2.99887 C13.0543909,2.99887 13.9181678,3.81474733 13.9945144,4.84960759 L14,4.99887 L14,11.0013 C14,12.0555955 13.18415,12.9194591 12.1492661,12.9958139 L12,13.0013 L4,13.0013 C2.94563773,13.0013 2.08183483,12.1853589 2.00548573,11.1505537 L2,11.0013 L2,4.99887 C2,3.94450773 2.81587733,3.08070483 3.85073759,3.00435573 L4,2.99887 L12,2.99887 Z M12,3.99887 L9.99847,3.99887 L9.99847,12.0013 L12,12.0013 C12.51285,12.0013 12.9355092,11.6151867 12.9932725,11.1179055 L13,11.0013 L13,4.99887 C13,4.48602929 12.613973,4.06336214 12.1166239,4.00559766 L12,3.99887 Z M8.99848,3.99887 L4,3.99887 C3.48716857,3.99887 3.06449347,4.38490566 3.0067278,4.8822479 L3,4.99887 L3,11.0013 C3,11.5140571 3.38603566,11.9367959 3.8833779,11.9945711 L4,12.0013 L8.99848,12.0013 L8.99848,3.99887 Z M6.28430284,6.08859222 L6.35355,6.14645 L7.85355,7.64645 C8.02712333,7.82001444 8.04640926,8.08943667 7.91140778,8.28430284 L7.85355,8.35355 L6.35355,9.85355 C6.15829,10.0488 5.84171,10.0488 5.64645,9.85355 C5.47287667,9.67998556 5.45359074,9.41056333 5.58859222,9.21569716 L5.64645,9.14645 L6.29289,8.4999975 L4.50185,8.4999975 C4.2257,8.4999975 4.00185,8.27614 4.00185,7.9999975 C4.00185,7.75454194 4.17871914,7.55039009 4.41197236,7.50805333 L4.50185,7.4999975 L6.29289,7.4999975 L5.64645,6.85355 C5.45118,6.65829 5.45118,6.34171 5.64645,6.14645 C5.82001444,5.97287667 6.08943667,5.95359074 6.28430284,6.08859222 Z" Height="20" Stretch="Fill" UseLayoutRounding="False" Width="18"/>
+                    </Button.Content>
+                </Button>
                 <themeButton:ThemeChangerButton/>
                 <Button Style="{StaticResource AddWalletButtonStyle}"
                         RelativePanel.LeftOf="TitleBarAddExpenseButton"  >
@@ -119,7 +157,23 @@
 
         </Grid>
             <!-- Main Navigation View-->
-        <controls:NavigationView Style="{StaticResource NarrowWindowNavigationViewStyle}"
+        <SplitView Grid.Row="1" 
+                   PaneBackground="Transparent"
+                   DisplayMode="Inline" 
+                   PanePlacement="Right"
+                   IsPaneOpen="True"
+                   OpenPaneLength="250" 
+                   x:Name="DashBoardSplitView"
+                   Background="Transparent"
+                   PaneClosed="DashBoardSplitView_OnPaneChanged"
+                   PaneOpened="DashBoardSplitView_OnPaneChanged">
+            <SplitView.Pane >
+                <themeButton:SplittrDashBoard HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Stretch"
+                                              Margin="10 0 0 0"/>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <controls:NavigationView Style="{StaticResource NarrowWindowNavigationViewStyle}"
             x:Name="MainPageNavigationView"
             Grid.Row="1"
             IsSettingsVisible="False"
@@ -129,69 +183,74 @@
             IsBackButtonVisible="Collapsed" 
             IsPaneToggleButtonVisible="False" 
             SelectionChanged="MainPageNavigationView_OnSelectionChanged" >
-            <controls:NavigationView.MenuItems>
-                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="AllExpense">
-                                <TextBlock Text ="☵"  
+                    <controls:NavigationView.MenuItems>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="AllExpense">
+                            <TextBlock Text ="☵"  
                                                FontSize="20"
                                                Foreground="{ThemeResource AccentTextColorBrush}"
                                                ></TextBlock>
-                                <TextBlock Text="All Expenses"
+                            <TextBlock Text="All Expenses"
                                                      VerticalAlignment="Center"
                                                      Margin="10 0 0 0"
                                                      FontSize="15"></TextBlock>
-                     </StackPanel>
-                       
-               
-                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="RequestedByMe">
-                         <Image Source="../Assets/icons/OutgoingIcon.png"   Stretch="UniformToFill" Width="20" />
-                         <TextBlock Text="Request By Me"
+                        </StackPanel>
+
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="RequestedByMe">
+                            <Path Fill="{ThemeResource AccentTextColorBrush}" 
+                                  Width="20"
+                                  Height="20" 
+                                  VerticalAlignment="Center" Stretch="Uniform"
+                                  Data="M2 10C2 11.8026 3.55468 13.653 6.22176 13.9567 5.93668 13.6043 5.69426 13.216 5.50235 12.7996 3.88187 12.333 3 11.1281 3 10V9.5C3 9.22386 3.22386 9 3.5 9H5.20703C5.30564 8.65136 5.43777 8.31679 5.59971 8H3.5C2.67157 8 2 8.67157 2 9.5V10zM9.75 4.25C9.75 4.53525 9.70657 4.81036 9.62596 5.06907 9.14016 5.14664 8.67558 5.28783 8.24104 5.48382 8.55561 5.16743 8.75 4.73141 8.75 4.25 8.75 3.2835 7.9665 2.5 7 2.5 6.0335 2.5 5.25 3.2835 5.25 4.25 5.25 5.2165 6.0335 6 7 6 7.13934 6 7.27488 5.98371 7.40482 5.95294 7.00446 6.226 6.64202 6.55055 6.32704 6.91706 5.13357 6.61687 4.25 5.53662 4.25 4.25 4.25 2.73122 5.48122 1.5 7 1.5 8.51878 1.5 9.75 2.73122 9.75 4.25zM15 10.5C15 12.9853 12.9853 15 10.5 15 8.01472 15 6 12.9853 6 10.5 6 8.01472 8.01472 6 10.5 6 12.9853 6 15 8.01472 15 10.5zM12.8532 10.854L12.8557 10.8514C12.9026 10.804 12.938 10.7495 12.9621 10.6914 12.9861 10.6333 12.9996 10.5697 13 10.503L13 10.5 13 10.497C12.9996 10.4303 12.9861 10.3667 12.9621 10.3086 12.9377 10.2496 12.9015 10.1944 12.8536 10.1464L10.8536 8.14645C10.6583 7.95118 10.3417 7.95118 10.1464 8.14645 9.95118 8.34171 9.95118 8.65829 10.1464 8.85355L11.2929 10H8.5C8.22386 10 8 10.2239 8 10.5 8 10.7761 8.22386 11 8.5 11H11.2929L10.1464 12.1464C9.95118 12.3417 9.95118 12.6583 10.1464 12.8536 10.3417 13.0488 10.6583 13.0488 10.8536 12.8536L12.8532 10.854z"/>
+
+                            <TextBlock Text="Request By Me"
                                     FontSize="15"
                                     Margin="5 0 0 0"
                                     VerticalAlignment="Center"></TextBlock>
-                     </StackPanel>
+                        </StackPanel>
 
-                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="RequestToMe">
-                         <Image Source="../Assets/icons/IncomingArrowV2.png"  Width="20" Stretch="UniformToFill" />
-                         <TextBlock Text="Request To Me"
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="RequestToMe">
+                            <Image Source="../Assets/icons/IncomingArrowV2.png"  Width="20" Stretch="UniformToFill" />
+                            <TextBlock Text="Request To Me"
                                     Margin="05 0 0 0" 
                                     FontSize="15"
                                     VerticalAlignment="Center"></TextBlock>
-                     </StackPanel>
-                     <themeButton:MainPageButtonControl HorizontalAlignment="Left" ItemsSource="{x:Bind _viewModel.RelatedUsers,Mode=OneWay}"
+                        </StackPanel>
+                        <themeButton:MainPageButtonControl HorizontalAlignment="Left" ItemsSource="{x:Bind _viewModel.RelatedUsers,Mode=OneWay}"
                                                       TitleName="Individaul Split"
                                                       SelectionMode="Single"
                                                       UserSelectedFromTheList="UserSelectedFromIndividualSplitList"
                                                       Margin="15 0 0 0"/>
-                     <controls:NavigationViewItemHeader  Content="Groups" VerticalContentAlignment="Top" FontSize="15" Foreground="{ThemeResource ApplicationMainThemeColor}">
-                     </controls:NavigationViewItemHeader>
-                         <!--User Groups List-->
-                       <controls:NavigationViewItem x:Name="UserGroupsList">
-                         <ListView  ItemsSource="{x:Bind _viewModel.UserGroups,Mode=OneWay}" x:Name="GroupList" SelectionChanged="GroupList_OnSelectionChanged">
-                             <ListView.ItemTemplate>
-                                 <DataTemplate x:DataType="model:GroupBobj">
-                                     <themeButton:MainPageButtonControl ItemsSource="{x:Bind  GroupParticipants,Mode=OneWay}"
+                        <controls:NavigationViewItemHeader  Content="Groups" VerticalContentAlignment="Top" FontSize="15" Foreground="{ThemeResource ApplicationMainThemeColor}">
+                        </controls:NavigationViewItemHeader>
+                        <!--User Groups List-->
+                        <controls:NavigationViewItem x:Name="UserGroupsList">
+                            <ListView  ItemsSource="{x:Bind _viewModel.UserGroups,Mode=OneWay}" x:Name="GroupList" SelectionChanged="GroupList_OnSelectionChanged">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:DataType="model:GroupBobj">
+                                        <themeButton:MainPageButtonControl ItemsSource="{x:Bind  GroupParticipants,Mode=OneWay}"
                                                                       TitleName="{x:Bind GroupName,Mode=OneWay}" 
                                                                       SelectionMode="None"
                                                                       HorizontalAlignment="Stretch"
                                      />
-                            </DataTemplate>
-                             </ListView.ItemTemplate>
-                         </ListView>
-                       </controls:NavigationViewItem>
-            </controls:NavigationView.MenuItems>
-                <Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </controls:NavigationViewItem>
+                    </controls:NavigationView.MenuItems>
+                    <Grid>
                         <Grid.Resources>
-                        <services:ExceptionHandlerService x:Key="ExceptionHandlerService" NotifyErrorMessage="ExceptionHandlerService_OnNotifyErrorMessage"/>
-                    </Grid.Resources>
-                    <!--inner frame where other pages load-->
-                <Frame  Height="{Binding ElementName=FrameContainerRelativePanel ,Path=ActualHeight,Mode=OneWay}"
+                            <services:ExceptionHandlerService x:Key="ExceptionHandlerService" NotifyErrorMessage="ExceptionHandlerService_OnNotifyErrorMessage"/>
+                        </Grid.Resources>
+                        <!--inner frame where other pages load-->
+                        <Frame  Height="{Binding ElementName=FrameContainerRelativePanel ,Path=ActualHeight,Mode=OneWay}"
                                 Width="{Binding ElementName=FrameContainerRelativePanel,Path=ActualWidth,Mode=OneWay}" Name="InnerFrame"  Grid.Column="0"  Grid.Row="0"
                                 x:FieldModifier="public"  >
-                       <component:ExpensesListAndDetailViewPage PaneButtonOnClick="{x:Bind PageOnPaneButtonOnClick}"/>
-                    
-                </Frame>
-                    <!--Error showing LAyout-->
-                    <Border  Grid.Row="0"
+                            <component:ExpensesListAndDetailViewPage PaneButtonOnClick="{x:Bind PageOnPaneButtonOnClick}"/>
+
+                        </Frame>
+                        <!--Error showing LAyout-->
+                        <Border  Grid.Row="0"
                              Grid.Column="0"
                              HorizontalAlignment="Left"
                              VerticalAlignment="Bottom"
@@ -201,8 +260,8 @@
                              Background="Black"
                              CornerRadius="10"
                              Margin="20 0 0 40">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBox Foreground="White"
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox Foreground="White"
                                        DataContext="{StaticResource ExceptionHandlerService}"
                                        Margin="5 0 0 0" 
                                        VerticalAlignment="Center"
@@ -211,36 +270,36 @@
                                        IsEnabled="False"
                                      
                                        >
-                                <TextBox.Template>
-                                    <ControlTemplate TargetType="TextBox">
-                                        <TextBlock Foreground="{TemplateBinding Foreground}"
+                                    <TextBox.Template>
+                                        <ControlTemplate TargetType="TextBox">
+                                            <TextBlock Foreground="{TemplateBinding Foreground}"
                                                    Text="{TemplateBinding Text}"
                                                    VerticalAlignment="{TemplateBinding VerticalAlignment}"
                                                    Margin="{TemplateBinding Margin}"></TextBlock>
-                                    </ControlTemplate>
-                                </TextBox.Template>
-                            </TextBox>
-                            <Button Content="❌"
+                                        </ControlTemplate>
+                                    </TextBox.Template>
+                                </TextBox>
+                                <Button Content="❌"
                                     Foreground="Red"
                                     VerticalAlignment="Center"
                                     Background="Transparent" 
                                     BorderBrush="Transparent"
                                     Click="ErrorCloseButton_OnClick"></Button>
-                        </StackPanel>
-                    </Border>
+                            </StackPanel>
+                        </Border>
 
-                </Grid>
+                    </Grid>
 
-            
-            <controls:NavigationView.PaneFooter>
-                <StackPanel x:Name="NavigationViewFooter" >
-                    <StackPanel >
-                        <MenuFlyoutSeparator HorizontalAlignment="left" Width="230"
+
+                    <controls:NavigationView.PaneFooter>
+                        <StackPanel x:Name="NavigationViewFooter" >
+                            <StackPanel >
+                                <MenuFlyoutSeparator HorizontalAlignment="left" Width="230"
 
                                              Margin="-20 0 0 5"></MenuFlyoutSeparator>
-                        <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal">
 
-                            <Button Height="auto" Width="auto"
+                                    <Button Height="auto" Width="auto"
                                     Background="Transparent"
                                     Margin="-4 0 0 0"
                                     HorizontalAlignment="Stretch"
@@ -250,51 +309,56 @@
                                     Click="{x:Bind _viewModel.PersonProfileClicked}"
                                     BorderBrush="Transparent">
 
-                                <StackPanel Orientation="Horizontal">
-                                    <PersonPicture Width="41"
+                                        <StackPanel Orientation="Horizontal">
+                                            <PersonPicture Width="41"
                                                    Height="30"
                                                    Background="Transparent"
                                                    HorizontalAlignment="Left"
                                                    ToolTipService.ToolTip="{x:Bind _viewModel.UserViewModel.UserName,Mode=OneWay }"
                                                    Initials="{x:Bind _viewModel.UserInitial,Mode=OneWay}"
                                     />
-                                    <TextBlock Text="{x:Bind _viewModel.UserViewModel.UserName,Mode=OneWay}"
+                                            <TextBlock Text="{x:Bind _viewModel.UserViewModel.UserName,Mode=OneWay}"
                                                Margin="10,3,0,0"
                                                FontSize="20"
                                                VerticalAlignment="Center"
                                                TextWrapping="Wrap"></TextBlock>
+                                        </StackPanel>
+
+                                    </Button>
+
+
                                 </StackPanel>
 
-                            </Button>
 
-
-                        </StackPanel>
-
-
-                        <Button Background="Transparent"
+                                <Button Background="Transparent"
                                 HorizontalAlignment="Stretch"
                                 HorizontalContentAlignment="Left"
                                 Style="{StaticResource NoPointerAnimation}"
                                 BorderBrush="Transparent"
                                 Click="{x:Bind _viewModel.LogOutButtonClicked}">
-                            <Button.Content>
+                                    <Button.Content>
 
-                                <StackPanel Grid.Row="1"  Orientation="Horizontal">
-                                    <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xEB97;" />
-                                    <TextBlock Text="Logout"
+                                        <StackPanel Grid.Row="1"  Orientation="Horizontal">
+                                            <Path Fill="{ThemeResource AccentTextColorBrush}" Data="M21.9 10.6c-.1-.1-.1-.2-.2-.3l-2-2c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l.3.3H16c-.6 0-1 .4-1 1s.4 1 1 1h2.6l-.3.3c-.4.4-.4 1 0 1.4.2.2.5.3.7.3s.5-.1.7-.3l2-2c.1-.1.2-.2.2-.3.1-.3.1-.5 0-.8z"/>
+                                            <Path Fill="{ThemeResource AccentTextColorBrush}" Margin="-20 0 0 0" Data="M17 14c-.6 0-1 .4-1 1v1c0 .6-.4 1-1 1h-1V8.4c0-1.3-.8-2.4-1.9-2.8L10.5 5H15c.6 0 1 .4 1 1v1c0 .6.4 1 1 1s1-.4 1-1V6c0-1.7-1.3-3-3-3H5c-.1 0-.2 0-.3.1-.1 0-.2.1-.2.1l-.1.1c-.1 0-.2.1-.2.2v.1c-.1 0-.2.1-.2.2V18c0 .4.3.8.6.9l6.6 2.5c.2.1.5.1.7.1.4 0 .8-.1 1.1-.4.5-.4.9-1 .9-1.6V19h1c1.7 0 3-1.3 3-3v-1c.1-.5-.3-1-.9-1zM6 17.3V5.4l5.3 2c.4.2.7.6.7 1v11.1l-6-2.2z"/>
+
+                                            <TextBlock Text="Logout"
                                                FontSize="18"
-                                               Margin="20 0 0 0"
+                                               Margin="15 0 0 0"
                                                />
 
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
 
-                    </StackPanel>
+                            </StackPanel>
 
-                </StackPanel>
-            </controls:NavigationView.PaneFooter>
-        </controls:NavigationView>
+                        </StackPanel>
+                    </controls:NavigationView.PaneFooter>
+                </controls:NavigationView>
+
+            </SplitView.Content>
+        </SplitView>
         <RelativePanel Grid.Row="2"  Grid.Column="0"
                        Background="{ThemeResource ApplicationMainThemeAcrylicBrush}"
                        Name="BottomPanel" Visibility="Collapsed"

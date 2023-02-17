@@ -162,6 +162,9 @@
     <Compile Include="DataRepository\Converters\TimeConverter.cs" />
     <Compile Include="DataRepository\Converters\UserInitialFormater.cs" />
     <Compile Include="DataRepository\Store.cs" />
+    <Compile Include="DataTemplates\Controls\SplittrDashBoard.xaml.cs">
+      <DependentUpon>SplittrDashBoard.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataTemplates\Controls\ThemeChangerButton.xaml.cs">
       <DependentUpon>ThemeChangerButton.xaml</DependentUpon>
     </Compile>
@@ -203,6 +206,7 @@
     <Compile Include="ViewModel\ExpenseListAndDetailedPageViewModel.cs" />
     <Compile Include="ViewModel\OwnerExpenseControlViewModel.cs" />
     <Compile Include="ViewModel\RelatedExpenseTemplateViewModel.cs" />
+    <Compile Include="ViewModel\VmLogic\ViewModelBase.cs" />
     <Compile Include="Views\ExpenseDetailedViewUserControl.xaml.cs">
       <DependentUpon>ExpenseDetailedViewUserControl.xaml</DependentUpon>
     </Compile>
@@ -261,6 +265,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="DataTemplates\Controls\SplittrDashBoard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DataTemplates\Controls\ThemeChangerButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

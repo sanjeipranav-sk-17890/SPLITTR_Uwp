@@ -7,11 +7,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:converter="using:SPLITTR_Uwp.DataRepository.Converters"
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     xmlns:sys="using:System"
     d:DesignWidth="400"
     d:DesignHeight="400"
     Background="Transparent">
+    <UserControl.Resources>
+        <converter:ExpenseAmountFormatter x:Key="AmountFormatter"/>
+    </UserControl.Resources>
     <RelativePanel VerticalAlignment="Stretch" Name="RelativePanel"
                    Background="Transparent" >
         <Grid RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" 
@@ -19,7 +23,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition  Height="Auto"/>
                 <RowDefinition  Height="*"/>
-
             </Grid.RowDefinitions>
 
             <StackPanel VerticalAlignment="Top"
@@ -52,7 +55,7 @@
                        HorizontalAlignment="Center"
                 />
                 <TextBlock
-                           Text="{x:Bind _viewModel.UserViewModel.StrWalletBalance,Mode=OneWay}"
+                           Text="{x:Bind _viewModel.UserViewModel.StrWalletBalance,Converter={StaticResource AmountFormatter},Mode=OneWay}"
                            HorizontalAlignment="Center"
                            FontSize="18"
                            Margin="0 5 0 0"

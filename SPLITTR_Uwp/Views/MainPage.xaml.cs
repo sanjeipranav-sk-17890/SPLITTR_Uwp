@@ -212,8 +212,26 @@ namespace SPLITTR_Uwp.Views
 
         #endregion
 
-       
+        #region DashBoardSplitViewLogicRegion
+        private void DashBoardButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            DashBoardSplitView.IsPaneOpen = !DashBoardSplitView.IsPaneOpen;
+        }
+        private void DashBoardSplitView_OnPaneChanged(SplitView sender, object args)
+        {
+            AssignDashBoardState();
+        }
+        private void AssignDashBoardState()
+        {
+            if (DashBoardSplitView.IsPaneOpen)
+            {
+                VisualStateManager.GoToState(this, nameof(CloseDashBoardState), false);
+                return;
+            }
+            VisualStateManager.GoToState(this, nameof(OpenDashBoardState), false);
+        }
 
+        #endregion
 
     }
 }

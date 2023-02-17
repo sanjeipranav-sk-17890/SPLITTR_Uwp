@@ -42,14 +42,20 @@ public class UserUpdateDataManager : IUserUpdateDataManager
     }
 
 
+    /// <exception cref="UserNameInvalidException">User Name must Be More Than 3 Characters</exception>
     public async void UpdateUserObjAsync(UserBobj userBobj, string newUserName, Currency currencyPreference, IUseCaseCallBack<UpdateUserResponseObj> callBack)
     {
         try
         {
+            if (string.IsNullOrEmpty(newUserName) || newUserName.Length < 3)
+            {
+                throw new UserNameInvalidException("User Name must Be More Than 3 Characters");
+            }
 
             //no db call db call is made if previous value and current value are same
             if (userBobj.UserName.Equals(newUserName.Trim()) && userBobj.CurrencyPreference == currencyPreference)
             {
+                callBack?.OnSuccess(new UpdateUserResponseObj(userBobj));
                 return;
             }
 
@@ -75,7 +81,7 @@ public class UserUpdateDataManager : IUserUpdateDataManager
         {
             callBack?.OnError(new SplittrException(ex, "Db Call Failed"));
         }
-
+        
     }
     public async void UpdateUserObjAsync(UserBobj userBobj, double walletBalance, IUseCaseCallBack<UpdateUserResponseObj> callBack)
     {

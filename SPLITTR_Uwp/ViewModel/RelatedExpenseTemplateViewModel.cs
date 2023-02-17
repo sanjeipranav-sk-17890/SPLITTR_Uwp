@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
@@ -10,6 +11,7 @@ using SPLITTR_Uwp.Core.UseCase.VerifyPaidExpense;
 using SPLITTR_Uwp.Core.Utility;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
+using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.Models;
 using SQLite;
 
@@ -96,15 +98,15 @@ namespace SPLITTR_Uwp.ViewModel
 
         private void ExpenseObj_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-           CheckExpenseMarkHistory();   
+           CheckExpenseMarkHistory();
         }
-        public async void InvokeOnVerifyPaidExpenseCompleted(VerifyPaidExpenseResponseObj result)
+        private async void InvokeOnVerifyPaidExpenseCompleted(VerifyPaidExpenseResponseObj result)
         {
             await UiService.RunOnUiThread(() =>
             {
                 IsExpenseMarkedAsPaid = result.IsExpenseMarkAsPaid;
                 Debug.WriteLine($"{ExpenseObj.ExpenseUniqueId}------,{result.IsExpenseMarkAsPaid}-------------{ExpenseObj.CorrespondingUserObj.UserName}");
-            });
+            }).ConfigureAwait(false);
 
         }
         class RelatedExpenseTemplateVmPresenterCallBack : IPresenterCallBack<VerifyPaidExpenseResponseObj>
