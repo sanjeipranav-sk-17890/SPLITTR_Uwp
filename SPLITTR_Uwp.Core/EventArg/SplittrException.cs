@@ -9,5 +9,9 @@ namespace SPLITTR_Uwp.Core.EventArg
         public SplittrException(Exception ex, string message):base(message,ex)
         {
         }
+        public SplittrException(Exception ex): base()
+        {
+
+        }
     }
 }

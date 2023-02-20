@@ -77,6 +77,10 @@ public class UserUpdateDataManager : IUserUpdateDataManager
 
             callBack?.OnSuccess(new UpdateUserResponseObj(userBobj));
         }
+        catch (UserNameInvalidException ex)
+        {
+            callBack?.OnError(new SplittrException(ex,ex.Message));
+        }
         catch (SQLiteException ex)
         {
             callBack?.OnError(new SplittrException(ex, "Db Call Failed"));

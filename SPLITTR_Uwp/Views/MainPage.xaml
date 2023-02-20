@@ -11,6 +11,7 @@
     mc:Ignorable="d"
     xmlns:themeButton="using:SPLITTR_Uwp.DataTemplates.Controls"
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+    xmlns:toolKitControls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:services="using:SPLITTR_Uwp.Services"
     xmlns:objectModel="using:System.Collections.ObjectModel"
     xmlns:models="using:SPLITTR_Uwp.Core.Models" Loaded="{x:Bind _viewModel.ViewLoaded}"
@@ -30,7 +31,11 @@
             <Setter Property="FontFamily" Value="Segoe UI Variable" />
             <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"></Setter>
         </Style>
-        <!--<SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="{ThemeResource SystemAccentColor}" />-->
+       <Style TargetType="toolKitControls:InAppNotification">
+           <Setter Property="Background" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
+            <Setter Property="Foreground" Value="{ThemeResource ApplicationPageBackgroundThemeBrush}"></Setter>
+       </Style>
+
     </Page.Resources>
 
     <Grid >
@@ -241,9 +246,6 @@
                       
                     </controls:NavigationView.MenuItems >
                     <Grid>
-                        <Grid.Resources>
-                            <services:ExceptionHandlerService x:Key="ExceptionHandlerService" NotifyErrorMessage="ExceptionHandlerService_OnNotifyErrorMessage"/>
-                        </Grid.Resources>
                         <!--inner frame where other pages load-->
                         <Frame  Height="{Binding ElementName=FrameContainerRelativePanel ,Path=ActualHeight,Mode=OneWay}"
                                 Width="{Binding ElementName=FrameContainerRelativePanel,Path=ActualWidth,Mode=OneWay}" Name="InnerFrame"  Grid.Column="0"  Grid.Row="0"
@@ -251,44 +253,15 @@
                             <component:ExpensesListAndDetailViewPage PaneButtonOnClick="{x:Bind PageOnPaneButtonOnClick}"/>
 
                         </Frame>
-                        <!--Error showing LAyout-->
-                        <Border  Grid.Row="0"
-                             Grid.Column="0"
-                             HorizontalAlignment="Left"
-                             VerticalAlignment="Bottom"
-                             Height="40"
-                             Visibility="Collapsed"
-                             x:Name="ErrorShowingContent"
-                             Background="Black"
-                             CornerRadius="10"
-                             Margin="20 0 0 40">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBox Foreground="White"
-                                       DataContext="{StaticResource ExceptionHandlerService}"
-                                       Margin="5 0 0 0" 
-                                       VerticalAlignment="Center"
-                                       Background="Black"
-                                       x:Name="ErrorMEssageTExtBox"
-                                       IsEnabled="False"
-                                     
-                                       >
-                                    <TextBox.Template>
-                                        <ControlTemplate TargetType="TextBox">
-                                            <TextBlock Foreground="{TemplateBinding Foreground}"
-                                                   Text="{TemplateBinding Text}"
-                                                   VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                                                   Margin="{TemplateBinding Margin}"></TextBlock>
-                                        </ControlTemplate>
-                                    </TextBox.Template>
-                                </TextBox>
-                                <Button Content="❌"
-                                    Foreground="Red"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent" 
-                                    BorderBrush="Transparent"
-                                    Click="ErrorCloseButton_OnClick"></Button>
-                            </StackPanel>
-                        </Border>
+                        <!--In AppNotification  -->
+                        <toolKitControls:InAppNotification x:Name="InAppNotification"
+                                                           Grid.Row="0"
+                                                           StackMode="Replace"
+                                                           HorizontalAlignment="Left"
+                                                           FontSize="14"
+                                                           FontWeight="SemiBold"
+                                                           Canvas.ZIndex="100"
+                                                           Grid.Column="0" />
 
                     </Grid>
 

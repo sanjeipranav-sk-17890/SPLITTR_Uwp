@@ -1,38 +1,43 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
+using Microsoft.Toolkit.Uwp.UI;
+using Microsoft.Toolkit.Uwp.UI.Controls;
+using SPLITTR_Uwp.DataTemplates.Controls;
 
 namespace SPLITTR_Uwp.Services
 {
-    internal class ExceptionHandlerService 
+    internal static class ExceptionHandlerService 
     {
- 
-        public event Action<string> NotifyErrorMessage;
+        private static InAppNotification _notificationControl;
 
-
-        private static ExceptionHandlerService _instance;
-
-
-        public ExceptionHandlerService()
+        private static InAppNotification NotificationControl
         {
-            _instance ??= this;
-        }
-
-        public static void HandleException(Exception exception)
-        {
-            if (_instance != null)
+            get
             {
-             _instance?.OnErrorNotifyMessage(exception?.Message);
+                return _notificationControl ??= Window.Current?.Content.FindDescendant("InAppNotification") as InAppNotification;
+
             }
         }
 
-
-        protected async virtual Task OnErrorNotifyMessage(string obj)
+        public async static void HandleException(Exception exception)
         {
+            if (exception == null)
+            {
+                return;
+            }
             await UiService.RunOnUiThread((() =>
             {
-
-                NotifyErrorMessage?.Invoke(obj);
-            }));
+                NotificationControl?.Show(exception.Message,2500);
+            })).ConfigureAwait(false);
+            if (exception.InnerException is not null)
+            {
+                Debug.WriteLine(exception.Message,exception.InnerException.InnerException.StackTrace);
+            }
+          
         }
+
     }
 }

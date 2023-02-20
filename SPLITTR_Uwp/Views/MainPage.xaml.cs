@@ -97,49 +97,6 @@ namespace SPLITTR_Uwp.Views
 
         #endregion
 
-        #region Error Handling MEchanisam
-
-        DispatcherTimer _timer = new DispatcherTimer()
-        {
-            Interval = TimeSpan.FromSeconds(1)
-        };
-        private void ErrorCloseButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            //force stoping the timer if Cross button is clicked on error message
-            if (_timer.IsEnabled)
-            {
-
-                _timer?.Stop();
-                ErrorShowingContent.Visibility = Visibility.Collapsed;
-
-            }
-
-        }
-        private void ExceptionHandlerService_OnNotifyErrorMessage(string message)
-        {
-            //assigning value to error showing pop up box 
-            ErrorMEssageTExtBox.Text = message ?? string.Empty;
-
-            //Enabling visibility of the error box
-            ErrorShowingContent.Opacity = 5;
-            ErrorShowingContent.Visibility = Visibility.Visible;
-
-            _timer.Tick += (sender, e) =>
-            {
-                //using dispatch timer to slowly fading the error box
-                ErrorShowingContent.Opacity -= .2;
-                if (ErrorShowingContent.Opacity < 0)
-                {
-                    _timer.Stop();
-                    ErrorShowingContent.Visibility = Visibility.Collapsed;
-                }
-            };
-            _timer.Start();
-        }
-
-
-
-        #endregion
 
         #region NavigationLogic
 
@@ -238,5 +195,9 @@ namespace SPLITTR_Uwp.Views
 
         #endregion
 
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            ExceptionHandlerService.HandleException(new Exception("This Is Test MEssage"));
+        }
     }
 }
