@@ -236,7 +236,7 @@
                                                       SelectionMode="Single"
                                                       UserSelectedFromTheList="UserSelectedFromIndividualSplitList"
                                                       Margin="0 0 0 0"/>
-                        <controls:NavigationViewItemHeader  Content="Groups" VerticalContentAlignment="Top" FontSize="15" Foreground="{ThemeResource ApplicationMainThemeColor}">
+                        <controls:NavigationViewItemHeader x:Name="GroupListHeader"  Content="Groups" VerticalContentAlignment="Top" FontSize="15" Foreground="{ThemeResource ApplicationMainThemeColor}">
                         </controls:NavigationViewItemHeader>
                       
                     </controls:NavigationView.MenuItems >

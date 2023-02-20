@@ -1,24 +1,19 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.DataTemplates.Controls;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.ViewModel.Contracts;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Windows.UI;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Microsoft.Toolkit.Uwp.Helpers;
-using SPLITTR_Uwp.DataTemplates;
-using SPLITTR_Uwp.DataTemplates.Controls;
 using NavigationView = Microsoft.UI.Xaml.Controls.NavigationView;
+using NavigationViewItemBase = Microsoft.UI.Xaml.Controls.NavigationViewItemBase;
 using NavigationViewSelectionChangedEventArgs = Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -50,35 +45,57 @@ namespace SPLITTR_Uwp.Views
             _viewModel.BindingUpdateInvoked += _viewModel_BindingUpdateInvoked;
             this.InitializeComponent();
             _view = this;
-            Loaded += MainPage_Loaded;
-        }
-
-        private void MainPage_Loaded(object sender, RoutedEventArgs e)
-        {
-           PopulateNavigationViewMenuItems();
+            _viewModel.UserGroups.CollectionChanged += UserGroups_CollectionChanged;
         }
 
         private void _viewModel_BindingUpdateInvoked()
         {
             Bindings.Update();
         }
+        #region NavigationViewGroupsPopulating 
 
-      
 
-
-        private void PopulateNavigationViewMenuItems()
+        private void UserGroups_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            foreach (var group in _viewModel.UserGroups)
+            //filtering GroupBobs From NavigationView Collection
+            var groupNavigationViewItems = MainPageNavigationView.MenuItems
+                .Where(i => i is NavigationViewItemBase { Content: GroupBobj })
+                .Select(menuItem =>
             {
-                MainPageNavigationView.MenuItems.Add(new Microsoft.UI.Xaml.Controls.NavigationViewItem()
-                {
-                    Content = group,
-                    Style = UserGroupNavigationItemStyle,
-                });
+                var navigationViewItem = (NavigationViewItemBase)menuItem;
+                return navigationViewItem.Content as GroupBobj;
+            });
+
+            if (sender is not ObservableCollection<GroupBobj> userGroups)
+            {
+                return;
             }
-           
+            foreach (var group in userGroups)
+            {
+                if (group != null && CheckIfGroupNotExistInNavigationView(group))
+                {
+                    AddGroupToNavigationView(group);
+                }
+
+                //return true if Group obj is Already in NavigationView menu item list
+                bool CheckIfGroupNotExistInNavigationView(GroupBobj group)
+                {
+                    return !groupNavigationViewItems.Contains(group);
+                }
+            }
 
         }
+
+        private void AddGroupToNavigationView(GroupBobj group)
+        {
+            MainPageNavigationView.MenuItems.Add(new Microsoft.UI.Xaml.Controls.NavigationViewItem()
+            {
+                Content = group,
+                Style = UserGroupNavigationItemStyle,
+            });
+        }
+
+        #endregion
 
         #region Error Handling MEchanisam
 
@@ -150,7 +167,7 @@ namespace SPLITTR_Uwp.Views
             {
                 return;
             }
-           
+
             page.PaneButtonOnClick += (PageOnPaneButtonOnClick);
 
             NavigationService.Navigated -= NavigationService_Navigated;
@@ -166,14 +183,14 @@ namespace SPLITTR_Uwp.Views
             {
                 return;
             }
-            UserExpensesListControl.FilterExpense(new ExpenseListFilterObj(null, selectedUser, ExpenseListFilterObj.ExpenseFilter.UserExpense)); 
+            UserExpensesListControl.FilterExpense(new ExpenseListFilterObj(null, selectedUser, ExpenseListFilterObj.ExpenseFilter.UserExpense));
 
         }
 
         private void MainPageNavigationView_OnSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
 
-            if (args?.SelectedItemContainer?.Content is GroupBobj selectedGroup )
+            if (args?.SelectedItemContainer?.Content is GroupBobj selectedGroup)
             {
                 UserExpensesListControl.FilterExpense(new ExpenseListFilterObj(selectedGroup, null, ExpenseListFilterObj.ExpenseFilter.GroupExpense));
                 return;
@@ -197,7 +214,7 @@ namespace SPLITTR_Uwp.Views
             }
 
         }
-        
+
         #endregion
 
         #region DashBoardSplitViewLogicRegion

@@ -262,7 +262,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         private string FormatExpenseAmountWithSymbol(double expenseAmount)
         {
-            //if expense amount is more than 7 digits then triming it to 7 digits and adding Currency Symbol
+            //if expense amount is more than 7 digits then trimming it to 7 digits and adding Currency Symbol
             if (expenseAmount.ToString().Length > 7)
             {
                 return expenseAmount.ExpenseSymbol(Store.CurreUserBobj) + expenseAmount.ToString().Substring(0, 7);
