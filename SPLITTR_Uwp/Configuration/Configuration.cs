@@ -56,7 +56,6 @@ namespace SPLITTR_Uwp.Configuration
             
             container.AddTransient<IStateService, StateService>()
                 .AddTransient<IStringManipulator, Manipulator>()
-                .AddTransient<ISplitExpenseView, SplitExpenseUserControl>()
                 .AddTransient<IExpenseGrouper, ExpenseGrouper>()
                 .AddTransient<UpdateUser>()
                 .AddTransient<AddWalletAmount>()
