@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DbHandler.SqliteConnection;
 using SPLITTR_Uwp.Core.EventArg;
@@ -75,11 +76,10 @@ namespace SPLITTR_Uwp.Core.DataManager
                 requestedOwner.WalletBalance += toBeSettledExpenseObj.ExpenseAmount;
                 toBeSettledExpenseObj.ExpenseStatus = ExpenseStatus.Paid;
 
-
-                await _sqlDataServices.RunInTransaction(() =>
+                await _sqlDataServices.RunInTransaction(async () =>
                 {
-                    _userDataManager.UpdateUserBobjAsync(requestedOwner);
-                    _expenseDataManager.UpdateExpenseAsync(toBeSettledExpenseObj);
+                  await UpdateCreditDetails(toBeSettledExpenseObj, currentUser).ConfigureAwait(false);
+                  await _expenseDataManager.UpdateExpenseAsync(toBeSettledExpenseObj).ConfigureAwait(false);
                 }).ConfigureAwait(false);
 
                 currentUser.Expenses.RemoveAndAdd(toBeSettledExpenseObj);
@@ -97,5 +97,33 @@ namespace SPLITTR_Uwp.Core.DataManager
             }
         }
 
+        private async Task UpdateCreditDetails(ExpenseBobj toBeSettleExpenseBobj, UserBobj currentUser)
+        {
+            var requestOwner = toBeSettleExpenseBobj.SplitRaisedOwner;
+            var correspondingUser = toBeSettleExpenseBobj.CorrespondingUserObj;
+
+            if (currentUser.Equals(requestOwner))//assign to Current USerBobj So Change Notification raised
+            {
+                currentUser.StrLentAmount -= toBeSettleExpenseBobj.ExpenseAmount;
+                requestOwner = currentUser;
+            }
+            else
+            {
+                requestOwner.LentAmount -= toBeSettleExpenseBobj.ExpenseAmount;
+            }
+            if (currentUser.Equals(correspondingUser))
+            {
+                currentUser.StrOwingAmount -= toBeSettleExpenseBobj.ExpenseAmount;
+                correspondingUser = currentUser;
+            }
+            else
+            {
+                correspondingUser.OwingAmount -= toBeSettleExpenseBobj.ExpenseAmount;
+            }
+
+
+            await _userDataManager.UpdateUserBobjAsync(requestOwner).ConfigureAwait(false);
+            await _userDataManager.UpdateUserBobjAsync(correspondingUser).ConfigureAwait(false);
+        }
     }
 }
