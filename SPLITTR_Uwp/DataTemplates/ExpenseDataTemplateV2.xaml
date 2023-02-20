@@ -115,7 +115,7 @@
                             FontSize="10"
                             ToolTipService.ToolTip="{x:Bind _viewModel.GroupName,Mode=OneWay}"
                             CornerRadius="4"
-                            HorizontalAlignment="Stretch"
+                            HorizontalAlignment="Left"
                             Foreground="{ThemeResource AccentTextColorBrush}"
                             DataContext="{x:Bind _viewModel.GroupObject,Mode=OneWay}"></Button>
 

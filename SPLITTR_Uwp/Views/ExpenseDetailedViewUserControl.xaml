@@ -135,7 +135,7 @@
                         Foreground="{ThemeResource AccentTextColorBrush}"
                         
                         VerticalAlignment="Top"/>
-            <TextBlock Margin="5 0 0 0" TextTrimming="CharacterEllipsis">Date Of Expense :</TextBlock>
+                <TextBlock Margin="5 0 0 0"  ToolTipService.ToolTip="Date Of Expense " TextTrimming="CharacterEllipsis">Date Of Expense :</TextBlock>
             </StackPanel>
             <TextBlock Grid.Row="4" 
                        Grid.Column="1"
@@ -146,10 +146,10 @@
                 <TextBlock  
                     FontFamily="Segoe MDL2 Assets" 
                     Text="" 
-                    ToolTipService.ToolTip="Additional Details "
+                    ToolTipService.ToolTip="Note"
                     Foreground="{ThemeResource AccentTextColorBrush}"
                     VerticalAlignment="Top"/>
-                <TextBlock Margin="5 0 0 0">Note :</TextBlock>
+                <TextBlock   ToolTipService.ToolTip="Note" Margin="5 0 0 0">Note :</TextBlock>
 
             </StackPanel>
             <TextBlock Grid.Row="5" 

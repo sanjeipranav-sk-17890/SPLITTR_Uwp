@@ -26,46 +26,17 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             this.InitializeComponent();
             // fetching current user details to avoid showing user as participants in each and every group
             _currentUserViewModel = new UserViewModel(Store.CurreUserBobj);
-            OnArrowButtonClicked += MainPageButtonControl_OnArrowButtonClicked;
+          //  OnArrowButtonClicked += MainPageButtonControl_OnArrowButtonClicked;
         }
 
         #region SingularityOPenLogic
-        private static event Action<MainPageButtonControl> OnArrowButtonClicked;
 
-        private void MainPageButtonControl_OnArrowButtonClicked(MainPageButtonControl obj)
-        {
-            if (this == obj)
-            {
-                PerformOpenListView();// shows or hides listview if passed obj is matched
-            }
-            else
-            {
-                PerformCloseListView();//hides listview if passed obj is not matched
-            }
-
-        }
         private void PerformOpenListView()
         {
             if (UserListView.Visibility == Visibility.Collapsed)
             {
                 ShowListViewButton.Visibility = Visibility.Collapsed;
                 HideListViewButton.Visibility = Visibility.Visible;
-               
-                
-                if (UserCollection.Count >0 )
-                {
-                    //Copy to a new Source
-                    var copySource = new List<User>();
-                    copySource.AddRange(UserCollection);
-                    //Clear Old Source
-                    UserCollection.Clear();
-
-                    //Set Visibility to Visible and Show Transition animation for Smooth Addition
-                    UserListView.Visibility = Visibility.Visible;
-                    UserCollection.AddRange(copySource);
-                    copySource.Clear();
-                    return;
-                }
                 UserListView.Visibility = Visibility.Visible;
             }
             else
@@ -77,47 +48,25 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         {
             ShowListViewButton.Visibility = Visibility.Visible;
             HideListViewButton.Visibility = Visibility.Collapsed;
-
-            //Copy to a new Source
-            var copySource = new List<User>();
-            copySource.AddRange(UserCollection);
-
-            UserListView.Visibility = Visibility.Visible;
-            //Clear Old Source
-            UserCollection.Clear();
-
-            
-            //Set Visibility to Collapsed and Show Transition animation for Smooth Hideing
-            UserCollection.AddRange(copySource);
-            copySource.Clear();
-         
-
             UserListView.Visibility = Visibility.Collapsed;
+
         }
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            //For internal Single open Behaviour
-            OnArrowButtonClicked?.Invoke(this);
+            PerformOpenListView();
         }
 
 
         #endregion
 
-        private ObservableCollection<User> UserCollection { get; } = new ObservableCollection<User>();
 
         public readonly static DependencyProperty TitleNameProperty = DependencyProperty.Register(
             nameof(TitleName), typeof(string), typeof(MainPageButtonControl), new PropertyMetadata(default(string)));
 
         public string TitleName
         {
-            get
-            {
-                return (string)GetValue(TitleNameProperty);
-            }
-            set
-            {
-                SetValue(TitleNameProperty, value);
-            }
+            get => (string)GetValue(TitleNameProperty);
+            set => SetValue(TitleNameProperty, value);
         }
 
         //public readonly static DependencyProperty UserListSourceProperty = DependencyProperty.Register(
@@ -138,7 +87,6 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             set
             {   
                 var listWithCurrentUserBsObject = AlterInputListWithCurrentUserBobj(value);
-                UserCollection.AddRange(listWithCurrentUserBsObject as IEnumerable<User>);
                 SetValue(ItemsSourceProperty, listWithCurrentUserBsObject);
             }
         }
@@ -162,7 +110,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
                         return (User)_currentUserViewModel;
                     }
                     return user;
-                })).ToList();
+                }));
             }
             return value;
         }
@@ -177,8 +125,8 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
              if(e.AddedItems.Any())
              {
                  var selectedUser = (User)e.AddedItems[0];
+                 UserListView.SelectedIndex = -1;// resetting selection index , selection the same user may raise Selection changed again 
                  UserSelectedFromTheList?.Invoke(selectedUser);
-                UserListView.SelectedIndex = -1;// reseting sellection index , selection the same user may raise Selection changed again 
              }
         }
     }

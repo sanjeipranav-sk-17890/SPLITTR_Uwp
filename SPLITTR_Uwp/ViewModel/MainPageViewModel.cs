@@ -109,9 +109,11 @@ namespace SPLITTR_Uwp.ViewModel
                         case nameof(UserViewModel.Groups):
                             UserGroups.ClearAndAdd(Store.CurreUserBobj.Groups);
                             break;
+                        case nameof(UserViewModel.Expenses):
+                            PopulateIndividualSplitUsers();
+                            break;
                     }
                     BindingUpdateInvoked?.Invoke();
-                   //ViewLoaded();
                 }));
 
             }

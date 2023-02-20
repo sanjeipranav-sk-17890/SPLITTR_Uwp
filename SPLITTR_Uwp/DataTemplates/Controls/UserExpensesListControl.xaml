@@ -198,9 +198,11 @@
                       SelectedItem="{x:Bind ViewModel.SelectedExpenseObj,Mode=TwoWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="vm:ExpenseViewModel">
-                        <!--<template:ExpenseDataTemplateV2 HorizontalAlignment="Stretch"
-                                                        CornerRadius="5"></template:ExpenseDataTemplateV2>-->
-                        <template:ExpenseDataTemplate HorizontalAlignment="Stretch" DateOfExpenseTextBlockVisibility="Collapsed"  ExpenseStatusVisibility="Visible" CornerRadius="5"/>
+                        <template:ExpenseDataTemplateV2 HorizontalAlignment="Stretch"
+                                                        CornerRadius="5"
+                                                        Visibility="Visible"></template:ExpenseDataTemplateV2>
+                        <!--<template:ExpenseDataTemplate HorizontalAlignment="Stretch" DateOfExpenseTextBlockVisibility="Visible"
+                                                      ExpenseStatusVisibility="Collapsed" CornerRadius="5"/>-->
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
