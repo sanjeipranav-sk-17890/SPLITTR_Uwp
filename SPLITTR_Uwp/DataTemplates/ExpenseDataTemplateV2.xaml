@@ -100,29 +100,41 @@
                            Text="{x:Bind ExpenseObj.DateOfExpense,Converter={StaticResource StringFormater},ConverterParameter='{}{0:dd}',Mode=OneWay}"
                            HorizontalAlignment="Center"/>
             </StackPanel>
-            <StackPanel Grid.Column="1" Orientation="Horizontal">
+            <Grid Grid.Column="1" VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
                 <Image Source="../Assets/icons/BillImage.png"
                        Stretch="UniformToFill"
-                       MaxHeight="40"></Image>
-                <StackPanel Orientation="Vertical" Margin="5 0 0 0" VerticalAlignment="Center">
-                    <TextBlock Text="{x:Bind ExpenseObj.Description,Mode=OneWay}"
-                               FontSize="15"
-                               TextTrimming="CharacterEllipsis"
-                               TextWrapping="WrapWholeWords"
-                    ></TextBlock>
-                        <Button Style="{StaticResource NoPointerAnimation}" Visibility="{x:Bind _viewModel.IsGroupButtonVisible,Mode=OneWay}"
-                            Content="{x:Bind _viewModel.GroupName,Mode=OneWay}"
-                            FontSize="10"
-                            ToolTipService.ToolTip="{x:Bind _viewModel.GroupName,Mode=OneWay}"
-                            CornerRadius="4"
-                            HorizontalAlignment="Left"
-                            Foreground="{ThemeResource AccentTextColorBrush}"
-                            DataContext="{x:Bind _viewModel.GroupObject,Mode=OneWay}"></Button>
+                       Grid.Column="0" Grid.RowSpan="2"
+                       MaxHeight="40"/>
+                <TextBlock  Text="{x:Bind ExpenseObj.Description,Mode=OneWay}"
+                           FontSize="15"
+                           Grid.Row="0"
+                           Grid.Column="1"
+                           VerticalAlignment="Bottom"
+                           Margin="4 0 0 0"
+                           TextTrimming="CharacterEllipsis"
+                ></TextBlock>
+                <Button Style="{StaticResource NoPointerAnimation}" Visibility="{x:Bind _viewModel.IsGroupButtonVisible,Mode=OneWay}"
+                        Content="{x:Bind _viewModel.GroupName,Mode=OneWay}"
+                        FontSize="10"
+                        Grid.Row="1"
 
-                </StackPanel>
-
-            </StackPanel>
-            <Grid Grid.Column="2" VerticalAlignment="Center">
+                        Grid.Column="1"
+                        ToolTipService.ToolTip="{x:Bind _viewModel.GroupName,Mode=OneWay}"
+                        CornerRadius="4"
+                       Margin="4 0 0 0 "
+                        Foreground="{ThemeResource AccentTextColorBrush}"
+                        DataContext="{x:Bind _viewModel.GroupObject,Mode=OneWay}"></Button>
+            </Grid>
+                
+                <Grid Grid.Column="2" VerticalAlignment="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>

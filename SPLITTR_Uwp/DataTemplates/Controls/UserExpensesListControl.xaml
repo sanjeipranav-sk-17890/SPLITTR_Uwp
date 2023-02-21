@@ -74,7 +74,7 @@
                 <Setter Property="Margin" Value="0 2 0 0"></Setter>
             </Style>
         </Grid.Resources>
-        <Grid Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" CornerRadius="5" Padding="3">
+        <Grid Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" CornerRadius="5" Padding="3"  >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
