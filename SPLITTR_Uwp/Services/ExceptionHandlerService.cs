@@ -30,8 +30,22 @@ namespace SPLITTR_Uwp.Services
             }
             await UiService.RunOnUiThread((() =>
             {
-                NotificationControl?.Show(exception.Message,2500);
+                if (NotificationControl is not null)
+                {
+                   NotificationControl.Dismiss();
+                    NotificationControl.Content = exception.Message;
+                    NotificationControl?.Show(2000);
+                }
+               
             })).ConfigureAwait(false);
+
+            /*/
+             *
+             *If Exception is Internet not available exception show Network connection failed symbol and retry option template
+             *Log Exception And its stack trace in a class File
+             *
+             *
+             */
             if (exception.InnerException is not null)
             {
                 Debug.WriteLine(exception.Message,exception.InnerException.InnerException.StackTrace);

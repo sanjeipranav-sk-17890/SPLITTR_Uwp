@@ -6,6 +6,7 @@ using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.DataManager;
 using SPLITTR_Uwp.Core.DependencyInjector;
+using SPLITTR_Uwp.Core.EventArg;
 using SQLite;
 
 namespace SPLITTR_Uwp.Core.UseCase.SplitExpenses
@@ -66,7 +67,7 @@ namespace SPLITTR_Uwp.Core.UseCase.SplitExpenses
         {
            _dataManager.SplitNewExpensesAsync(_requestObj.ExpenseDescription,_requestObj.CurrentUser,_requestObj.Expenses,_requestObj.ExpenseNote,_requestObj.DateOfExpense,_requestObj.ExpenseAmount,_requestObj.ExpenseSplitType,new UseCaseCallBackBase<SplitExpenseResponseObj>(this)); 
         }
-      
+
     }
 
 }

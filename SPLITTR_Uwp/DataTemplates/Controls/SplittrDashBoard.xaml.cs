@@ -73,17 +73,10 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
                 _viewModel.SaveUserCredentials();
             }
         }
-        //private void DashBoardUserNameTextBox_TexTChanged(object sender, TextChangedEventArgs e)
-        //{  
-        //    if (_viewModel.CurrentUserName is null)
-        //    {
-        //        return;
-        //    }
-        //    _viewModel.SaveUserCredentials();
-        //}
+
         private void UserNameTextBoxLostFocus(object sender, RoutedEventArgs e)
         {
-            if (!UserNameTextBox.Text.Equals(Store.CurreUserBobj.UserName, StringComparison.CurrentCultureIgnoreCase))
+            if (!UserNameTextBox.Text.Equals(Store.CurreUserBobj.UserName))
             {
                 _viewModel.SaveUserCredentials();
             }
@@ -143,6 +136,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             _isVmChanged = true;
             CurrentUserName = Store.CurreUserBobj.UserName;
             PreferredCurrencyIndex = UserVm.CurrencyPreference;
+            _isVmChanged = false;
         }
 
         private bool _isVmChanged;
@@ -150,7 +144,6 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         {
             if (_isVmChanged) // No Call to USe Case if The Property value is Set during Loading or Some Vm Logic
             {
-                _isVmChanged = false;
                 return;
             }
 
@@ -193,8 +186,8 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
                             _viewModel.PreferredCurrencyIndex = Store.CurreUserBobj.CurrencyIndex;
                             _viewModel.CurrentUserName = Store.CurreUserBobj.UserName;
                             _viewModel.PreferredCurrencyIndex = Store.CurreUserBobj.CurrencyIndex;
-
                         }).ConfigureAwait(false);
+                            ExceptionHandlerService.HandleException(ex.InnerException);
                         break;
                     case SqlException:
                         //Sql lite Error Handling Code

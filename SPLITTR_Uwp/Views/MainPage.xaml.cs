@@ -195,9 +195,10 @@ namespace SPLITTR_Uwp.Views
 
         #endregion
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+      
+        private void CloseErrorMessageButton_OnClick(object sender, RoutedEventArgs e)
         {
-            ExceptionHandlerService.HandleException(new Exception("This Is Test MEssage"));
+            InAppNotification.Dismiss(true);
         }
     }
 }

@@ -14,7 +14,10 @@
     xmlns:toolKitControls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:services="using:SPLITTR_Uwp.Services"
     xmlns:objectModel="using:System.Collections.ObjectModel"
-    xmlns:models="using:SPLITTR_Uwp.Core.Models" Loaded="{x:Bind _viewModel.ViewLoaded}"
+    xmlns:models="using:SPLITTR_Uwp.Core.Models"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    Loaded="{x:Bind _viewModel.ViewLoaded}"
 
     Background="{ThemeResource ApplicationMainThemeAcrylicBrush}">
     <Page.Resources>
@@ -33,7 +36,29 @@
         </Style>
        <Style TargetType="toolKitControls:InAppNotification">
            <Setter Property="Background" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
-            <Setter Property="Foreground" Value="{ThemeResource ApplicationPageBackgroundThemeBrush}"></Setter>
+            <Setter Property="Foreground" Value="{ThemeResource ApplicationPageBackgroundThemeBrush}"/>
+           <Setter Property="Template">
+               <Setter.Value>
+                   <ControlTemplate TargetType="toolKitControls:InAppNotification">
+                       <StackPanel Orientation="Horizontal"
+                                   CornerRadius="4" 
+                                   Padding="15 3 3 5"
+                                   Background="{TemplateBinding Background}">
+                           <TextBlock Text="{TemplateBinding Content}"
+                                      VerticalAlignment="Center"
+                                      FontSize="{TemplateBinding FontSize}"
+                                      HorizontalAlignment="Left"
+                                      Foreground="{TemplateBinding Foreground}"/>
+                           <Button Content="❌" x:Name="CloseErrorMessageButton"
+                                   Foreground="Red" 
+                                   Background="Transparent"
+                                   VerticalAlignment="Center"
+                                   CornerRadius="4" Click="CloseErrorMessageButton_OnClick" >
+                           </Button>
+                       </StackPanel>
+                   </ControlTemplate>
+               </Setter.Value>
+           </Setter>
        </Style>
 
     </Page.Resources>
