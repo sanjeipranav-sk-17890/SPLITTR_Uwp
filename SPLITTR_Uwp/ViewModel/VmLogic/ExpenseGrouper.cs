@@ -9,10 +9,10 @@ namespace SPLITTR_Uwp.ViewModel.VmLogic
     internal class ExpenseGrouper : IExpenseGrouper
     {
 
-        private IEnumerable<ExpenseBobj> _emptyList = new List<ExpenseBobj>().DefaultIfEmpty();
-        private ExpenseGroupingList _emptyPaidExpensesGroup;
-        private ExpenseGroupingList _emptyPendingExpensesGroup;
-        private ExpenseGroupingList _emptyCancellledList;
+        private readonly IEnumerable<ExpenseBobj> _emptyList = new List<ExpenseBobj>().DefaultIfEmpty();
+        private readonly ExpenseGroupingList _emptyPaidExpensesGroup;
+        private readonly ExpenseGroupingList _emptyPendingExpensesGroup;
+        private readonly ExpenseGroupingList _emptyCancelledList;
 
 
 
@@ -20,7 +20,7 @@ namespace SPLITTR_Uwp.ViewModel.VmLogic
         {
             _emptyPaidExpensesGroup =  new ExpenseGroupingList(ExpenseStatus.Paid, _emptyList);
             _emptyPendingExpensesGroup = new ExpenseGroupingList(ExpenseStatus.Pending, _emptyList);
-            _emptyCancellledList = new ExpenseGroupingList(ExpenseStatus.Cancelled, _emptyList);
+            _emptyCancelledList = new ExpenseGroupingList(ExpenseStatus.Cancelled, _emptyList);
 
         }
 
@@ -30,14 +30,14 @@ namespace SPLITTR_Uwp.ViewModel.VmLogic
             var groupedExpenses = expenses.GroupBy(e => e.ExpenseStatus).Select(grouped => new ExpenseGroupingList(grouped.Key, grouped)).ToList();
 
 
-            //if list not contains a particualar specific Dummy grouping is added with empty list for Ui Purposes
+            //if list not contains a particular specific Dummy grouping is added with empty list for Ui Purposes
             if (groupedExpenses.Count == 3)
             {
                 return groupedExpenses;
             }
-            if (!groupedExpenses.Contains(_emptyCancellledList))
+            if (!groupedExpenses.Contains(_emptyCancelledList))
             {
-                groupedExpenses.Add(_emptyCancellledList);
+                groupedExpenses.Add(_emptyCancelledList);
             }
             if (!groupedExpenses.Contains(_emptyPaidExpensesGroup))
             {

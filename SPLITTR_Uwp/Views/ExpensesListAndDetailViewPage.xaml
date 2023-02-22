@@ -83,7 +83,10 @@
         <controls:GridSplitter MaxWidth="4"
                                Grid.Column="1" 
                                ResizeBehavior="BasedOnAlignment"
-                               ResizeDirection="Auto" Background="Transparent"  BorderBrush="Transparent" Style="{StaticResource CustomGridSplitterStyle}">
+                               ResizeDirection="Auto"
+                               Background="Transparent" 
+                               BorderBrush="Transparent" 
+                               Style="{StaticResource CustomGridSplitterStyle}">
             <controls:GridSplitter.Element>
                 <Grid Width="4" Background="Transparent" >
 

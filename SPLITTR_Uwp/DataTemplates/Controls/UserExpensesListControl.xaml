@@ -48,7 +48,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <FontIcon FontFamily="Segoe MDL2 Assets" VerticalAlignment="{TemplateBinding VerticalAlignment}"  Glyph="&#xE761;" Margin="2 2 4 0" FontSize="20"/>
+                            <FontIcon Margin="0 2 0 0" FontFamily="Segoe Fluent Icons" Glyph="&#xEDD6;" VerticalAlignment="{TemplateBinding VerticalAlignment}" FontSize="15" />
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -61,7 +61,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <FontIcon FontFamily="Segoe MDL2 Assets" VerticalAlignment="{TemplateBinding VerticalAlignment}"  Glyph="&#xE7B3;" Margin="2 2 4 0" FontSize="20"/>
+                            <FontIcon FontFamily="Segoe Fluent Icons" Margin="0 2 0 0" FontSize="15" Glyph="&#xEDD8;" VerticalAlignment="{TemplateBinding VerticalAlignment}"/>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -144,13 +144,15 @@
                                     <StackPanel Orientation="Horizontal"  Grid.Column="0" Margin="10,0">
                                         <StackPanel.Resources>
                                             <Style TargetType="TextBlock">
-                                                <Setter Property="Foreground" Value="{ThemeResource AccentTextColorBrush}"></Setter>
+                                                <Setter Property="Foreground"  Value="{ThemeResource AccentTextColorBrush}"></Setter>
                                             </Style>
                                         </StackPanel.Resources>
-                                        <Button Click="ExpenseShowButton_OnClick" Style="{ThemeResource ShowExpensesButtonStyle}">
+                                        <Button Click="ExpenseShowButton_OnClick"  Style="{ThemeResource ShowExpensesButtonStyle}">
                                         </Button>
                                         <TextBlock Text="{x:Bind GroupHeader.GroupName, Mode=OneWay}"   
-                                                   FontWeight="Bold" />
+                                                   FontWeight="Bold" Margin="4 0 0 0" 
+                                                   Tapped="ExpenseShowButton_OnClick"
+                                                   />
                                         <TextBlock Text="(" Margin="5 0 0 0"/>
                                         <TextBlock Text="{x:Bind GroupHeader.NoOfExpenses,Mode=OneWay}" Margin="0"></TextBlock>
                                         <TextBlock Text=")"/>
