@@ -1,16 +1,14 @@
-﻿using System;
+﻿using SPLITTR_Uwp.Core.ExtensionMethod;
+using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.DataRepository;
+using SPLITTR_Uwp.ViewModel.Models;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarSymbols;
-using SPLITTR_Uwp.Core.ExtensionMethod;
-using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.DataRepository;
-using SPLITTR_Uwp.Services;
-using SPLITTR_Uwp.ViewModel.Models;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -26,8 +24,10 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             this.InitializeComponent();
             // fetching current user details to avoid showing user as participants in each and every group
             _currentUserViewModel = new UserViewModel(Store.CurreUserBobj);
-          //  OnArrowButtonClicked += MainPageButtonControl_OnArrowButtonClicked;
         }
+
+
+
 
         #region SingularityOPenLogic
 
@@ -69,10 +69,6 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             set => SetValue(TitleNameProperty, value);
         }
 
-        //public readonly static DependencyProperty UserListSourceProperty = DependencyProperty.Register(
-        //    nameof(UserListSource), typeof(IList<User>), typeof(MainPageButtonControl), new PropertyMetadata(default(IList<User>)));
-
-
         public readonly static DependencyProperty SelectionModeProperty = DependencyProperty.Register(
             nameof(SelectionMode), typeof(ListViewSelectionMode), typeof(MainPageButtonControl), new PropertyMetadata(default(ListViewSelectionMode)));
 
@@ -85,34 +81,35 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         {
             get => (IEnumerable)GetValue(ItemsSourceProperty);
             set
-            {   
+            {
                 var listWithCurrentUserBsObject = AlterInputListWithCurrentUserBobj(value);
                 SetValue(ItemsSourceProperty, listWithCurrentUserBsObject);
             }
         }
 
-      
+
 
         //replacing ordinary current  user obj with userVm so Support Change 
         private IEnumerable AlterInputListWithCurrentUserBobj(IEnumerable value)
         {
-            if (value is  ObservableCollection<User> )
+            if (value is ObservableCollection<User>)
             {
                 return value;
             }
-            
-            if (value is IList<User> users)
+
+            if (value is not IList<User> users)
             {
-                return users.Select(((user) =>
-                {
-                    if (user.Equals(_currentUserViewModel))
-                    {
-                        return (User)_currentUserViewModel;
-                    }
-                    return user;
-                }));
+                return value;
             }
-            return value;
+            try
+            {
+                users.RemoveAndAdd(_currentUserViewModel);
+                return users;
+            }
+            catch
+            {
+                return users;
+            }
         }
 
         public readonly static DependencyProperty ItemsSourceProperty =
@@ -122,12 +119,12 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         public event Action<User> UserSelectedFromTheList;
         private void UserListView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-             if(e.AddedItems.Any())
-             {
-                 var selectedUser = (User)e.AddedItems[0];
-                 UserListView.SelectedIndex = -1;// resetting selection index , selection the same user may raise Selection changed again 
-                 UserSelectedFromTheList?.Invoke(selectedUser);
-             }
+            if (e.AddedItems.Any())
+            {
+                var selectedUser = (User)e.AddedItems[0];
+                UserListView.SelectedIndex = -1;// resetting selection index , selection the same user may raise Selection changed again 
+                UserSelectedFromTheList?.Invoke(selectedUser);
+            }
         }
     }
 }

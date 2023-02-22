@@ -471,7 +471,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <PRIResource Include="en\en-US.resw" />
+    <PRIResource Include="en-US\en-US.resw" />
     <None Include="SPLITTR_Uwp_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

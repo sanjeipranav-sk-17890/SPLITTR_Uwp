@@ -32,7 +32,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" Background="{TemplateBinding Background}" BackgroundSizing="{TemplateBinding BackgroundSizing}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" ContentTemplate="{TemplateBinding ContentTemplate}" CornerRadius="{TemplateBinding CornerRadius}" Content="{TemplateBinding Content}" ContentTransitions="{TemplateBinding ContentTransitions}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                        <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw"  Background="{TemplateBinding Background}" BackgroundSizing="{TemplateBinding BackgroundSizing}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" ContentTemplate="{TemplateBinding ContentTemplate}" CornerRadius="{TemplateBinding CornerRadius}" Content="{TemplateBinding Content}" ContentTransitions="{TemplateBinding ContentTransitions}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
                                     <VisualState x:Name="Normal">
@@ -76,10 +76,24 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid Margin="0 0 0 5">
-       <Grid.RowDefinitions>
+    <Grid Margin="0 0 0 5" x:Name="MainContainerGrid">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="ExpenseTitlePointerOverState">
+                <VisualState x:Name="OnPointerOver">
+                        <VisualState.Setters>
+                            <Setter Target="DescriptionTextBox.FontWeight" Value="Bold"></Setter>
+                        </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="OnPointerLeaved">
+                    <VisualState.Setters>
+                        <Setter Target="DescriptionTextBox.FontWeight" Value="Normal"></Setter>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid.RowDefinitions>
            <RowDefinition Height="Auto"/>
-           <RowDefinition Height="*"/>
+           <RowDefinition Height="*"   />
        </Grid.RowDefinitions>
         <Rectangle Grid.Row="0" Height="1" Fill="{ThemeResource SystemAccentColorLight2}"></Rectangle>
         <Grid Grid.Row="1">
@@ -100,7 +114,9 @@
                            Text="{x:Bind ExpenseObj.DateOfExpense,Converter={StaticResource StringFormater},ConverterParameter='{}{0:dd}',Mode=OneWay}"
                            HorizontalAlignment="Center"/>
             </StackPanel>
-            <Grid Grid.Column="1" VerticalAlignment="Center">
+            <Grid Grid.Column="1" VerticalAlignment="Center"
+                  PointerEntered="ExpenseDataTemplateV2_PointerEntered"
+                  PointerExited="ExpenseDataTemplateV2_PointerExited">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"></RowDefinition>
@@ -115,21 +131,22 @@
                        MaxHeight="40"/>
                 <TextBlock  Text="{x:Bind ExpenseObj.Description,Mode=OneWay}"
                            FontSize="15"
+                           x:Name="DescriptionTextBox"
                            Grid.Row="0"
                            Grid.Column="1"
                            VerticalAlignment="Bottom"
-                           Margin="4 0 0 0"
+                           Margin="4 0 0 0" 
                            TextTrimming="CharacterEllipsis"
-                ></TextBlock>
+                >
+                </TextBlock>
                 <Button Style="{StaticResource NoPointerAnimation}" Visibility="{x:Bind _viewModel.IsGroupButtonVisible,Mode=OneWay}"
                         Content="{x:Bind _viewModel.GroupName,Mode=OneWay}"
                         FontSize="10"
                         Grid.Row="1"
-
                         Grid.Column="1"
                         ToolTipService.ToolTip="{x:Bind _viewModel.GroupName,Mode=OneWay}"
                         CornerRadius="4"
-                       Margin="4 0 0 0 "
+                        Margin="4 0 0 0 "
                         Foreground="{ThemeResource AccentTextColorBrush}"
                         DataContext="{x:Bind _viewModel.GroupObject,Mode=OneWay}"></Button>
             </Grid>

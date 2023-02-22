@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Windows.UI.Core;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace SPLITTR_Uwp.Services
@@ -19,9 +23,17 @@ namespace SPLITTR_Uwp.Services
             }
         }
 
-        public static T CreateInstance<T>(params object[] args)
+        public static Task RunOnUIContextAsync(this CoreDispatcher dispatcher,Action function)
         {
-           return ActivatorUtilities.CreateInstance<T>(App.Container,parameters:args);
+            if (!dispatcher.HasThreadAccess)
+            {
+                return dispatcher?.RunAsync(CoreDispatcherPriority.Normal, (() =>
+                {
+                    function?.Invoke();
+                })).AsTask();
+            }
+            function?.Invoke();
+            return Task.CompletedTask;
         }
     }
 

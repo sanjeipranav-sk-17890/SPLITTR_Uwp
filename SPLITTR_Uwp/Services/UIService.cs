@@ -53,11 +53,10 @@ namespace SPLITTR_Uwp.Services
 
             if (dispatcher != null)
             {
-                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                await dispatcher.RunOnUIContextAsync(() =>
                 {
                     function?.Invoke();
                 });
-
             }
         }
 
