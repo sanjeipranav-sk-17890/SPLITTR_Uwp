@@ -113,8 +113,14 @@
                        TextWrapping="Wrap"
                        ></TextBlock>
             <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="5">
-                <TextBox   IsReadOnly="True" Text="Individual Expense" Visibility="{x:Bind IndividualSplitIconVisibility,Mode=OneWay}"/>
-                <TextBox IsReadOnly="True"  Text="{x:Bind GroupName,Mode=OneWay}" Visibility="{x:Bind GroupNameVisibility,Mode=OneWay}"></TextBox>
+                <TextBlock   IsTextSelectionEnabled="True" 
+                             FontSize="20"
+                             Text="Individual Expense" Visibility="{x:Bind IndividualSplitIconVisibility,Mode=OneWay}"/>
+                <TextBlock IsTextSelectionEnabled="True"
+                           Text="{x:Bind GroupName,Mode=OneWay}" ToolTipService.ToolTip="Group Name"
+                           Visibility="{x:Bind GroupNameVisibility,Mode=OneWay}"
+                           FontSize="20"
+                           ></TextBlock>
             </StackPanel>
             <ListView Grid.Row="3"
                       Grid.ColumnSpan="2"

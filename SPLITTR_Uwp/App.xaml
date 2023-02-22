@@ -21,7 +21,7 @@
             <ResourceDictionary Source="Styles/_Colors.xaml"></ResourceDictionary>
             <ResourceDictionary Source="/Styles/_FontSizes.xaml" />
             <ResourceDictionary Source="/Styles/_Thickness.xaml" />
-            <ResourceDictionary Source="/Styles/TextBlock.xaml" />
+            <ResourceDictionary Source="/Styles/_controlStyle.xaml" />
             <ResourceDictionary Source="/Styles/Page.xaml"/>
         </controls:XamlControlsResources.MergedDictionaries>
         </controls:XamlControlsResources>

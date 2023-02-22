@@ -141,7 +141,7 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
-                                    <StackPanel Orientation="Horizontal"  Grid.Column="0" Margin="10,0">
+                                    <StackPanel Orientation="Horizontal" Tapped="ExpenseShowButton_OnClick" Grid.Column="0" Margin="10,0">
                                         <StackPanel.Resources>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Foreground"  Value="{ThemeResource AccentTextColorBrush}"></Setter>
@@ -151,8 +151,7 @@
                                         </Button>
                                         <TextBlock Text="{x:Bind GroupHeader.GroupName, Mode=OneWay}"   
                                                    FontWeight="Bold" Margin="4 0 0 0" 
-                                                   Tapped="ExpenseShowButton_OnClick"
-                                                   />
+                                        />
                                         <TextBlock Text="(" Margin="5 0 0 0"/>
                                         <TextBlock Text="{x:Bind GroupHeader.NoOfExpenses,Mode=OneWay}" Margin="0"></TextBlock>
                                         <TextBlock Text=")"/>

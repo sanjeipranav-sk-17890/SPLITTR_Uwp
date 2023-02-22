@@ -105,11 +105,12 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
 
             foreach (var expense in expenseGroup)
             {
-                if (expense is ExpenseViewModel expenseVm)
+                if (expense is not ExpenseViewModel expenseVm)
                 {
-                    expenseVm.Visibility = !expenseVm.Visibility;
-                    expenseVisibility = expenseVm.Visibility;
+                    continue;
                 }
+                expenseVm.Visibility = !expenseVm.Visibility;
+                expenseVisibility = expenseVm.Visibility;
             }
             AssignButtonStyleBasedOnVisibility(expenseVisibility, sideButton);
 

@@ -40,15 +40,12 @@ namespace SPLITTR_Uwp.Services
             })).ConfigureAwait(false);
 
             /*/
-             *
              *If Exception is Internet not available exception show Network connection failed symbol and retry option template
              *Log Exception And its stack trace in a class File
-             *
-             *
              */
             if (exception.InnerException is not null)
             {
-                Debug.WriteLine(exception.Message,exception.InnerException.InnerException.StackTrace);
+                Debug.WriteLine(exception.Message,exception.InnerException.StackTrace);
             }
           
         }
