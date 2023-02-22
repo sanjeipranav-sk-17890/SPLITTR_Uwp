@@ -510,7 +510,7 @@
                                         </Grid>
                                     </Grid>
                                 </SplitView.Pane>
-                                <Grid x:Name="ContentGrid" Background="{ThemeResource NavigationViewContentBackground}" BorderBrush="{ThemeResource NavigationViewContentGridBorderBrush}" BorderThickness="{ThemeResource NavigationViewContentGridBorderThickness}" Margin="{ThemeResource NavigationViewContentMargin}">
+                                <Grid x:Name="ContentGrid"  Background="{ThemeResource NavigationViewContentBackground}" BorderBrush="Transparent" BorderThickness="{ThemeResource NavigationViewContentGridBorderThickness}" Margin="{ThemeResource NavigationViewContentMargin}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>

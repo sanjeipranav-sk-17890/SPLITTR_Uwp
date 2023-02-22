@@ -140,15 +140,17 @@
                 >
                 </TextBlock>
                 <Button Style="{StaticResource NoPointerAnimation}" Visibility="{x:Bind _viewModel.IsGroupButtonVisible,Mode=OneWay}"
-                        Content="{x:Bind _viewModel.GroupName,Mode=OneWay}"
-                        FontSize="10"
                         Grid.Row="1"
                         Grid.Column="1"
                         ToolTipService.ToolTip="{x:Bind _viewModel.GroupName,Mode=OneWay}"
                         CornerRadius="4"
                         Margin="4 0 0 0 "
-                        Foreground="{ThemeResource AccentTextColorBrush}"
-                        DataContext="{x:Bind _viewModel.GroupObject,Mode=OneWay}"></Button>
+                        DataContext="{x:Bind _viewModel.GroupObject,Mode=OneWay}">
+                    <TextBlock Foreground="{ThemeResource AccentTextColorBrush}" 
+                               Text="{x:Bind _viewModel.GroupName,Mode=OneWay}"
+                               TextTrimming="CharacterEllipsis"
+                               FontSize="10"/>
+                </Button>
             </Grid>
                 
                 <Grid Grid.Column="2" VerticalAlignment="Center">
