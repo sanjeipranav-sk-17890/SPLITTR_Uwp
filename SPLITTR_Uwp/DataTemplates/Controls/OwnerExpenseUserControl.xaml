@@ -34,10 +34,17 @@
                 ToolTipService.ToolTip="Mark As Paid"
                 Style="{StaticResource OrangeButtonStyle}"  HorizontalAlignment="Center" Height="30" VerticalAlignment="Top" Background="Green">
             <Button.Content>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="" VerticalAlignment="Center" />
-                    <TextBlock TextTrimming="CharacterEllipsis" Text="Mark as Paid" Margin="2 0 0 0"></TextBlock>
-                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock FontFamily="Segoe MDL2 Assets"
+                               Text="" HorizontalAlignment="Left"
+                               VerticalAlignment="Center" Grid.Column="0" />
+                    <TextBlock TextTrimming="CharacterEllipsis"  Grid.Column="1" Text="Mark as Paid" Margin="2 0 0 0"/>
+                </Grid>
+              
             </Button.Content>
         </Button>
         <Button Grid.Row="1" Grid.Column="2"
@@ -46,14 +53,25 @@
                 Visibility="{x:Bind _viewModel.ExpenseCancelButtonVisibility,Mode=OneWay}"
                 Opacity=".5"
                 Click="CancelButton_OnClick"
-                Margin="0 40 0 0"
+                Margin="10 40 0 0"
                 VerticalAlignment="Top" HorizontalAlignment="Center"
                 Style="{StaticResource OrangeButtonStyle}">
             <Button.Content>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="" FontFamily="Segoe MDL2 Assets" Margin="2 0 0 0"></TextBlock>
-                    <TextBlock  Text="Cancel Split" VerticalAlignment="Center" />
-                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="" 
+                               FontFamily="Segoe MDL2 Assets" 
+                               Margin="2 0 0 0" 
+                               Grid.Column="0" 
+                               VerticalAlignment="Center"></TextBlock>
+                    <TextBlock  Text="Cancel Split" 
+                                VerticalAlignment="Center" 
+                                Grid.Column="1" 
+                                TextTrimming="CharacterEllipsis" />
+                </Grid>
             </Button.Content>
         </Button>
 
