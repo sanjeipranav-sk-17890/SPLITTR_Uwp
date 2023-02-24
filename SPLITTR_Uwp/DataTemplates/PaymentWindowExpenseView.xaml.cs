@@ -76,7 +76,7 @@ namespace SPLITTR_Uwp.DataTemplates
             set => SetProperty(ref _currencySymbol, value);
         }
 
-        public UserViewModel CurrentUser { get; set; }
+        public UserVobj CurrentUser { get; set; }
 
         public void ExpenseObjLoaded(ExpenseViewModel expenseObj)
         {
@@ -90,7 +90,7 @@ namespace SPLITTR_Uwp.DataTemplates
         public PaymentWindowExpenseViewModel()
         {
             
-            CurrentUser = new UserViewModel(Store.CurreUserBobj);
+            CurrentUser = new UserVobj(Store.CurreUserBobj);
 
         }
         private void InitializeValues(ExpenseViewModel expenseObj)

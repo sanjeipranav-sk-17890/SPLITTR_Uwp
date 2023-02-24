@@ -12,7 +12,7 @@ internal interface IMainPageViewModel : INotifyPropertyChanged,IViewModel
 {
     string UserInitial { get; set; }
 
-    UserViewModel UserViewModel { get; }
+    UserVobj UserVobj { get; }
 
     bool IsUpdateWalletBalanceTeachingTipOpen { get; set; }
 
@@ -28,6 +28,5 @@ internal interface IMainPageViewModel : INotifyPropertyChanged,IViewModel
     void PersonProfileClicked();
     void AddButtonItemSelected(object sender, RoutedEventArgs e);
     void AddWalletBalanceButtonClicked();
-
-    
+    void ViewDisposed();
 }

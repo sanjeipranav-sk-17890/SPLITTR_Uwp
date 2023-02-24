@@ -15,65 +15,38 @@ using SPLITTR_Uwp.ViewModel.Models;
 
 namespace SPLITTR_Uwp.Views
 {
-    public sealed partial class ExpenseDetailedViewUserControl : UserControl,INotifyPropertyChanged
+    public sealed partial class ExpenseDetailedViewUserControl : UserControl
     {
         public ExpenseViewModel ExpenseObj
         {
             get => DataContext as ExpenseViewModel;
         }
 
-        public string GroupName
-        {
-            get => GetGroupName();
-        }
-
-        private string GetGroupName()
-        {
-            return ExpenseObj is null ? string.Empty : _viewModel.FetchGroupName(ExpenseObj.GroupUniqueId);
-        }
-
-        private bool GroupNameVisibility
-        {
-            get => !string.IsNullOrEmpty(GroupName);
-        }
-
-        private bool IndividualSplitIconVisibility
-        {
-            get => !GroupNameVisibility;
-        }
-
         private readonly ExpenseDetailedViewUserControlViewModel _viewModel;
 
         public ExpenseDetailedViewUserControl()
         {
-            this.InitializeComponent();
-            DataContextChanged += ExpenseDetailedViewUserControl_DataContextChanged;
             _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<ExpenseDetailedViewUserControlViewModel>(App.Container);
+            InitializeComponent();
+            DataContextChanged += ExpenseDetailedViewUserControl_DataContextChanged;
+            Unloaded += (sender, args) => _viewModel.ViewDisposed();
         }
 
         private void ExpenseDetailedViewUserControl_DataContextChanged(Windows.UI.Xaml.FrameworkElement sender, Windows.UI.Xaml.DataContextChangedEventArgs args)
         {
-            Bindings.Update();
-
 
             if (ExpenseObj is null)
             {
                 return;
             }
             ExpenseObj.PropertyChanged += ExpenseObj_PropertyChanged;
-
-
             ManipulateUiBasedOnDataContext();
+            Bindings.Update();
         }
 
         private void ExpenseObj_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName.Equals(nameof(ExpenseBobj.CurrencyConverter)))
-            {
-                return;
-            }
             ManipulateUiBasedOnDataContext();
-
         }
 
         private void ManipulateUiBasedOnDataContext()
@@ -82,9 +55,10 @@ namespace SPLITTR_Uwp.Views
             //UnderGoing VM logic to Fetch Related Expenses 
             _viewModel.ExpenseObjLoaded(ExpenseObj);
 
-            OnPropertyChanged(nameof(GroupName));
-            OnPropertyChanged(nameof(GroupNameVisibility));
-            OnPropertyChanged(nameof(IndividualSplitIconVisibility));
+            GroupNameTextBlock.Visibility = ExpenseObj.GroupUniqueId is null ? Visibility.Visible: Visibility.Collapsed;
+
+            IndividualSplitIndicatorTextBlock.Visibility = ExpenseObj.GroupUniqueId is null ? Visibility.Collapsed : Visibility.Visible;
+
             AssignExpenseStatusForeGround();
 
         }
@@ -97,27 +71,6 @@ namespace SPLITTR_Uwp.Views
                 _ =>Windows.UI.Colors.DarkGreen
             };
 
-        }
-
-
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private async void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            await UiService.RunOnUiThread(() =>
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            });
-        }
-        private bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value))
-                return false;
-            field = value;
-            OnPropertyChanged(propertyName);
-            return true;
         }
 
         public event Action<object, RoutedEventArgs> BackButtonClicked; 

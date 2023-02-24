@@ -38,7 +38,7 @@
                 <TextBlock Text="Hello !!"
                        Foreground="{StaticResource ApplicationMainThemeColor}" 
                        Style="{StaticResource TextBlockStyle}" />
-                <TextBlock Text="{x:Bind _viewModel.UserViewModel.UserName,Mode=OneWay}"
+                <TextBlock Text="{x:Bind _viewModel.UserVobj.UserName,Mode=OneWay}"
                        Margin="5 0 0 0"
                        Style="{StaticResource TextBlockStyle}"
                         ></TextBlock>
@@ -55,7 +55,7 @@
                        HorizontalAlignment="Center"
                 />
                 <TextBlock
-                           Text="{x:Bind _viewModel.UserViewModel.StrWalletBalance,Converter={StaticResource AmountFormatter},Mode=OneWay}"
+                           Text="{x:Bind _viewModel.UserVobj.StrWalletBalance,Converter={StaticResource AmountFormatter},Mode=OneWay}"
                            HorizontalAlignment="Center"
                            FontSize="18"
                            Margin="0 5 0 0"

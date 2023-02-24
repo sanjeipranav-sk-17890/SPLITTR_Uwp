@@ -14,6 +14,7 @@ using SPLITTR_Uwp.Services;
 using static SPLITTR_Uwp.ViewModel.UserProfilePageViewModel;
 using System.Threading;
 using SPLITTR_Uwp.Core.EventArg;
+using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.VmLogic;
@@ -92,8 +93,10 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         private readonly IStateService _stateService;
         private string _userCurrencyPreference;
         private string _currentUserName;
+        private int _preferredCurrencyIndex;
 
-        public UserViewModel UserVm { get; }
+
+        public UserVobj UserVm { get; }
 
         public string UserCurrencyPreference
         {
@@ -107,7 +110,11 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             set => SetProperty(ref _currentUserName, value);
         }
 
-        public int PreferredCurrencyIndex { get; set; }
+        public int PreferredCurrencyIndex
+        {
+            get => _preferredCurrencyIndex;
+            set => SetProperty(ref _preferredCurrencyIndex, value);
+        }
 
         public List<string> CurrencyList { get; } = new List<string>()
         {
@@ -117,10 +124,13 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         public SplittrDashBoardVm(IStateService stateService)
         {
             _stateService = stateService;
-            UserVm = new UserViewModel(Store.CurreUserBobj);
+            UserVm = new UserVobj(Store.CurreUserBobj);
             UserVm.PropertyChanged += UserVm_PropertyChanged;
+         
+            
         }
 
+        
 
         private void UserVm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
@@ -135,7 +145,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             UserCurrencyPreference = Store.CurreUserBobj.CurrencyPreference.ToString();
             _isVmChanged = true;
             CurrentUserName = Store.CurreUserBobj.UserName;
-            PreferredCurrencyIndex = UserVm.CurrencyPreference;
+            PreferredCurrencyIndex = UserVm.CurrencyIndex;
             _isVmChanged = false;
         }
 

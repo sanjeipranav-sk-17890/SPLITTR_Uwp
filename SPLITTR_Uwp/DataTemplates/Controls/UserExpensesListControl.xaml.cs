@@ -249,23 +249,25 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         {
             _view = view;
             _expenseGrouper = expenseGrouper;
-            Store.CurreUserBobj.ValueChanged += CurreUserBobj_ValueChanged;
+          
         }
 
-        private async void CurreUserBobj_ValueChanged(string property)
-        {
-            await UiService.RunOnUiThread((() =>
-            {
-                switch (property)
-                {
-                    case nameof(UserViewModel.Expenses):
-                        PopuLateExpenses();
-                        break;
-                }
-                BindingUpdateInvoked?.Invoke();
-                //ViewLoaded();
-            }));
-        }
+
+        //Todo Expense Fetch USeCase Here 
+        //private async void CurreUserBobj_ValueChanged(string property)
+        //{
+        //    await UiService.RunOnUiThread((() =>
+        //    {
+        //        switch (property)
+        //        {
+        //            case nameof(UserVobj.Expenses):
+        //                PopuLateExpenses();
+        //                break;
+        //        }
+        //        BindingUpdateInvoked?.Invoke();
+        //        //ViewLoaded();
+        //    }));
+        //}
 
         public event Action BindingUpdateInvoked;
 

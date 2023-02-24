@@ -8,6 +8,7 @@ using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.DataManager;
+using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.CreateGroup;
 using SQLite;
@@ -49,12 +50,13 @@ namespace SPLITTR_Uwp.Core.DataManager
                 //saving group Data to Data Repos
                 await _groupDataManager.CreateGroupAsync(newGroup).ConfigureAwait(false);
 
-                //adding New Group obj to group UserBobj which will raise valueChanged event
-                currentUser.Groups.Add(newGroup);
-
                 //Passing Response to UseCase CallBack
                 var responseObj = CreateResponseObject(newGroup);
+
                 callBack?.OnSuccess(responseObj);
+
+                //Invoking Notifications
+                SplittrNotification.InvokeGroupCreated(new GroupCreatedEventArgs(newGroup));
             }
             catch (ArgumentException ex)
             {

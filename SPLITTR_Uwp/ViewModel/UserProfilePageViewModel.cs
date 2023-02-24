@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
+using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.UpdateUser;
 using SPLITTR_Uwp.Services;
@@ -23,22 +24,27 @@ namespace SPLITTR_Uwp.ViewModel
     {
 
 
-        public UserViewModel User { get; }
+        public UserVobj User { get; }
 
 
         public UserProfilePageViewModel()
         {
-            User = new UserViewModel(Store.CurreUserBobj);
-            Store.CurreUserBobj.ValueChanged += UserBobj_ValueChanged;
+            User = new UserVobj(Store.CurreUserBobj);
+            SplittrNotification.UserObjUpdated += SplittrNotification_UserObjUpdated;
         }
 
-        private async void UserBobj_ValueChanged(string property)
+        private async void SplittrNotification_UserObjUpdated(UserBobjUpdatedEventArgs obj)
         {
             await UiService.RunOnUiThread((() =>
             {
                 BindingUpdateInvoked?.Invoke();
 
-            }));
+            })).ConfigureAwait(false);
+        }
+
+        public void ViewDisposed()
+        {
+            SplittrNotification.UserObjUpdated -= SplittrNotification_UserObjUpdated;
         }
 
 
@@ -97,7 +103,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         public int PreferendCurrencyIndex
         {
-            get => User.CurrencyPreference;
+            get => User.CurrencyIndex;
             set => _preferedCurrencyIndex = value;
         }
 

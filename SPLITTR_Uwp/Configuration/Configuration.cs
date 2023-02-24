@@ -21,7 +21,9 @@ using SPLITTR_Uwp.Core.UseCase.CreateGroup;
 using SPLITTR_Uwp.Core.UseCase.UpdateUser;
 using SPLITTR_Uwp.Core.UseCase.AddWalletAmount;
 using SPLITTR_Uwp.Core.UseCase.CancelExpense;
+using SPLITTR_Uwp.Core.UseCase.GetGroupDetails;
 using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
+using SPLITTR_Uwp.Core.UseCase.GetUserGroups;
 using SPLITTR_Uwp.Core.UseCase.LoginUser;
 using SPLITTR_Uwp.Core.UseCase.MarkAsPaid;
 using SPLITTR_Uwp.Core.UseCase.SettleUpExpense;
@@ -68,6 +70,8 @@ namespace SPLITTR_Uwp.Configuration
                 .AddTransient<UserLogin>()
                 .AddTransient<SignUpUser>()
                 .AddTransient<VerifyPaidExpense>()
+                .AddTransient<GroupDetailById>()
+                .AddTransient<GetUserGroups>()
                 .AddTransient<UserSuggestion>();
         }
 

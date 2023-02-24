@@ -3,6 +3,7 @@ using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.UpdateUser;
 using SPLITTR_Uwp.Core.UseCase.UserSuggestion;
@@ -67,15 +68,16 @@ public class UserUpdateDataManager : IUserUpdateDataManager
             //changing each currency converter in Expense so setting and fetching value can be made in corresponing currency formats
             ExpenseBobj.CurrencyConverter = currencyConverter;
 
-
             //updating IConverter so fetching wallet  amount will be fetched in requered currency preference 
             userBobj.CurrencyConverter = currencyConverter;
             userBobj.CurrencyPreference = currencyPreference;
 
-            //since it is updating on db in background We are waiting until it is completed
             await _userDataManager.UpdateUserBobjAsync(userBobj).ConfigureAwait(false);
 
             callBack?.OnSuccess(new UpdateUserResponseObj(userBobj));
+
+            //Raising Notification for Currency Preference change
+            SplittrNotification.InvokePreferenceChanged(new CurrencyPreferenceChangedEventArgs(currencyPreference));
         }
         catch (UserNameInvalidException ex)
         {

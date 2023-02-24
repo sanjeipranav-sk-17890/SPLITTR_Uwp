@@ -171,9 +171,6 @@
     <Compile Include="DataTemplates\ExpenseDataTemplate.xaml.cs">
       <DependentUpon>ExpenseDataTemplate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataTemplates\ExpenseDataTemplateV2.xaml.cs">
-      <DependentUpon>ExpenseDataTemplateV2.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DataTemplates\NewExpenseTemplate.xaml.cs">
       <DependentUpon>NewExpenseTemplate.xaml</DependentUpon>
     </Compile>
@@ -217,7 +214,7 @@
     <Compile Include="ViewModel\MainPageViewModel.cs" />
     <Compile Include="ViewModel\Models\ExpenseListObject\ExpenseGroupingList.cs" />
     <Compile Include="ViewModel\Models\ExpenseViewModel.cs" />
-    <Compile Include="ViewModel\Models\UserViewModel.cs" />
+    <Compile Include="ViewModel\Models\UserVobj.cs" />
     <Compile Include="ViewModel\SignPageViewModel.cs" />
     <Compile Include="ViewModel\SplitExpenseViewModel.cs" />
     <Compile Include="ViewModel\UserProfilePageViewModel.cs" />
@@ -274,10 +271,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataTemplates\ExpenseDataTemplate.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DataTemplates\ExpenseDataTemplateV2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

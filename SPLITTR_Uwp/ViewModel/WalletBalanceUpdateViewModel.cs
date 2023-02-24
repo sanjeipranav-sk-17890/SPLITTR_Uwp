@@ -21,11 +21,11 @@ namespace SPLITTR_Uwp.ViewModel
 
         public event Action CloseButtonClicked;
 
-        public UserViewModel UserViewModel { get; }
+        public UserVobj UserVobj { get; }
 
         public WalletBalanceUpdateViewModel()
         {
-            UserViewModel = new UserViewModel(Store.CurreUserBobj);
+            UserVobj = new UserVobj(Store.CurreUserBobj);
         }
 
         public string MoneyTextBoxText

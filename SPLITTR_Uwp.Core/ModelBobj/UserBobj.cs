@@ -16,23 +16,9 @@ namespace SPLITTR_Uwp.Core.ModelBobj
       
 
         public ICurrencyConverter CurrencyConverter { get; set; }
-        public event Action<string> ValueChanged;
-
-
+        
         public ObservableCollection<ExpenseBobj> Expenses { get; } = new ObservableCollection<ExpenseBobj>();
 
-        public ObservableCollection<GroupBobj> Groups { get; } = new ObservableCollection<GroupBobj>();
-
-
-        public override string UserName
-        {
-            get => base.UserName;
-            set
-            {
-                base.UserName = value;
-                OnValueChanged(nameof(UserName));
-            }
-        }
 
         /// <summary>
         /// Gets or Sets the walletBalance in Respective Currency Preference
@@ -40,72 +26,44 @@ namespace SPLITTR_Uwp.Core.ModelBobj
         public virtual double StrWalletBalance
         {
             get => CurrencyConverter.ConvertCurrency(base.WalletBalance);
-            set
-            {
-                base.WalletBalance = CurrencyConverter.ConvertToEntityCurrency(value);
-                OnValueChanged(nameof(StrWalletBalance));
-            }
+            set => base.WalletBalance = CurrencyConverter.ConvertToEntityCurrency(value);
 
         }
 
-        public Currency CurrencyPreference
+        public virtual Currency CurrencyPreference
         {
             get => (Currency)CurrencyIndex;
-            set
-            {
-                CurrencyIndex = (int)value;
-                OnValueChanged(nameof(CurrencyPreference));
-            }
+            set => CurrencyIndex = (int)value;
         }
 
         public virtual double StrLentAmount
         {
             get => CurrencyConverter.ConvertCurrency(base.LentAmount);
-            set
-            {
-                LentAmount = CurrencyConverter.ConvertToEntityCurrency(value);
-                OnValueChanged(nameof(StrLentAmount));
-            }
+            set => LentAmount = CurrencyConverter.ConvertToEntityCurrency(value);
         }
 
         public virtual double StrOwingAmount
         {
             get => CurrencyConverter.ConvertCurrency(base.OwingAmount);
-            set
-            {
-                OwingAmount = CurrencyConverter.ConvertToEntityCurrency(value);
-                OnValueChanged(nameof(StrOwingAmount));
-            }
-        }
-
-        protected void OnValueChanged(string property)
-        {
-            ValueChanged?.Invoke(property);
+            set => OwingAmount = CurrencyConverter.ConvertToEntityCurrency(value);
         }
 
 
-        public UserBobj(User user, ICollection<ExpenseBobj> expenses, ICollection<GroupBobj> groups, ICurrencyConverter currencyConverter)
+
+        public UserBobj(User user, ICollection<ExpenseBobj> expenses, ICurrencyConverter currencyConverter)
             : base(user.EmailId, user.UserName, user.WalletBalance, user.CurrencyIndex,user.OwingAmount,user.LentAmount)
         {
             CurrencyConverter = currencyConverter;
             Expenses.AddRange(expenses);
-            Groups.AddRange(groups);
-
-            Groups.CollectionChanged += GroupCollectionChanged;
+            
             Expenses.CollectionChanged += ExpenseCollectionChanged;
         }
         private void ExpenseCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-          OnValueChanged(nameof(Expenses));
+          // OnValueChanged(nameof(Expenses));
         }
 
-        private void GroupCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            //calling value changed  event when collection is modified
-            OnValueChanged(nameof(Groups));
-        }
-
-        protected UserBobj(UserBobj userBobj) : this(userBobj, userBobj.Expenses, userBobj.Groups, userBobj.CurrencyConverter)
+        protected UserBobj(UserBobj userBobj) : this(userBobj, userBobj.Expenses, userBobj.CurrencyConverter)
         {
 
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.Linq;
@@ -8,11 +9,14 @@ using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.DataManager;
+using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.GetGroupDetails;
 using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Models;
+using static SPLITTR_Uwp.Services.UiService;
 
 namespace SPLITTR_Uwp.ViewModel
 {
@@ -32,6 +36,9 @@ namespace SPLITTR_Uwp.ViewModel
 
         //Storing Reference Of passed Expense ,utilized to make Ui manupulation
         private ExpenseViewModel _expense;
+
+        private string _expenseOccuredGroupName = string.Empty;
+
         public void ExpenseObjLoaded(ExpenseViewModel expenseObj)
         {
             if (expenseObj is null)
@@ -39,21 +46,48 @@ namespace SPLITTR_Uwp.ViewModel
                 return;
             }
             _expense = expenseObj;
-            _expense.PropertyChanged += Expense_PropertyChanged;
 
+            SplittrNotification.CurrencyPreferenceChanged += SplittrNotification_CurrencyPreferenceChanged;
+
+            GetGroupName(expenseObj);
 
             CallRelatedExpenseUseCase();
-
         }
 
-        private void Expense_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private  void SplittrNotification_CurrencyPreferenceChanged(CurrencyPreferenceChangedEventArgs obj)
         {
-            if (!e.PropertyName.Equals(nameof(ExpenseBobj.CurrencyConverter)))
+          
+            CalculateTotalExpenditureBeforeSplit(RelatedExpenses);
+         
+        }
+
+        public void ViewDisposed()
+        {
+            SplittrNotification.CurrencyPreferenceChanged -= SplittrNotification_CurrencyPreferenceChanged;
+        }
+
+        private void GetGroupName(ExpenseViewModel expenseObj)
+        {
+            if (expenseObj?.GroupUniqueId == null)
             {
                 return;
             }
-            CalculateTotalExpenditureBeforeSplit(RelatedExpenses);
+            var getGroupDetail = new GroupDetailByIdRequest(expenseObj.GroupUniqueId,
+                CancellationToken.None,
+                new ExpenseDetailedViewPresenterCallBack(this),
+                Store.CurreUserBobj);
+
+            var getGroupDetailUseCaseObj = InstanceBuilder.CreateInstance<GroupDetailById>(getGroupDetail);
+
+            getGroupDetailUseCaseObj.Execute();
         }
+
+        public string ExpenseOccuredGroupName
+        {
+            get => _expenseOccuredGroupName;
+            set => SetProperty(ref _expenseOccuredGroupName, value);
+        }
+
 
         private void CallRelatedExpenseUseCase()
         {
@@ -66,7 +100,7 @@ namespace SPLITTR_Uwp.ViewModel
             relatedExpenseUseCase.Execute();
         }
 
-        private void CalculateTotalExpenditureBeforeSplit(IEnumerable<ExpenseBobj> relatedExpenses)
+        private async void CalculateTotalExpenditureBeforeSplit(IEnumerable<ExpenseBobj> relatedExpenses)
         {
             if (!relatedExpenses.Any()) // Total Expense Calculation if No Related Expenses 
             {
@@ -74,7 +108,13 @@ namespace SPLITTR_Uwp.ViewModel
             }
 
             //Total Amount Before Split
-            TotalExpenditureAmount = relatedExpenses.Where(relatedExpense => !relatedExpense.ExpenseUniqueId.Equals(_expense.ExpenseUniqueId)).Sum(relatedExpense => relatedExpense.StrExpenseAmount) + _expense.StrExpenseAmount;
+            var expenditureAmountBeforeSplit = relatedExpenses.Where(relatedExpense => !relatedExpense.ExpenseUniqueId.Equals(_expense.ExpenseUniqueId)).Sum(relatedExpense => relatedExpense.StrExpenseAmount) + _expense.StrExpenseAmount;
+
+            await RunOnUiThread(() =>
+            {
+                TotalExpenditureAmount = expenditureAmountBeforeSplit;
+
+            }).ConfigureAwait(false);
 
         }
 
@@ -94,25 +134,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         }
 
-
-        public string FetchGroupName(string groupUniqueId)
-        {
-            if (groupUniqueId is null)
-            {
-                return string.Empty;
-            }
-            var groupName=string.Empty;
-            foreach (var userGroup in Store.CurreUserBobj.Groups)
-            {
-                if (groupUniqueId.Equals(userGroup.GroupUniqueId))
-                {
-                  groupName= userGroup.GroupName;
-                }
-                
-            }
-            return groupName;
-        }
-        private class ExpenseDetailedViewPresenterCallBack : IPresenterCallBack<RelatedExpenseResponseObj>
+        private class ExpenseDetailedViewPresenterCallBack : IPresenterCallBack<RelatedExpenseResponseObj>,IPresenterCallBack<GroupDetailByIdResponse>
         {
             private readonly ExpenseDetailedViewUserControlViewModel _viewModel;
             public ExpenseDetailedViewPresenterCallBack(ExpenseDetailedViewUserControlViewModel viewModel)
@@ -122,11 +144,22 @@ namespace SPLITTR_Uwp.ViewModel
             }
             public async void OnSuccess(RelatedExpenseResponseObj result)
             {
-                await UiService.RunOnUiThread(() =>
+                await RunOnUiThread(() =>
                 {
                     _viewModel.PopulateRelatedExpenses(result.RelatedExpenses);
 
                 }).ConfigureAwait(false);
+            }
+            public async void OnSuccess(GroupDetailByIdResponse result)
+            {
+                if (result?.RequestedGroup != null)
+                {
+                   await  RunOnUiThread((() =>
+                   {
+                       _viewModel.ExpenseOccuredGroupName = result.RequestedGroup.GroupName;
+
+                   })).ConfigureAwait(false);
+                }
             }
             public void OnError(SplittrException ex)
             {

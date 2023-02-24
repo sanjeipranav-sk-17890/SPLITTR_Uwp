@@ -10,7 +10,7 @@ namespace SPLITTR_Uwp.Services
 {
     internal static class ExtensionHelper
     {
-        public static void ClearAndAdd<T>(this ObservableCollection<T>destination,  ICollection<T> source)
+        public static void ClearAndAdd<T>(this ObservableCollection<T>destination,  IEnumerable<T> source)
         {
             destination?.Clear();
             if(source is null)

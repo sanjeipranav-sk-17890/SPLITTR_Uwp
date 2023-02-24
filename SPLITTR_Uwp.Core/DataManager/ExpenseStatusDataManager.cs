@@ -95,6 +95,7 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager, IMarkExpensePa
         if (currentUser.Equals(requestOwner))//assign to Current USerBobj So Change Notification raised
         {
             currentUser.StrLentAmount -= expenseStatusChangeBobj.ExpenseAmount;
+            requestOwner = currentUser;
         }
         else
         {
@@ -103,6 +104,7 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager, IMarkExpensePa
         if (currentUser.Equals(correspondingUser))
         {
             currentUser.StrOwingAmount -= expenseStatusChangeBobj.ExpenseAmount;
+            correspondingUser = currentUser;
         }
         else
         {

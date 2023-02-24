@@ -18,18 +18,19 @@ using SQLite;
 using SPLITTR_Uwp.Core.UseCase.CreateGroup;
 using SPLITTR_Uwp.Core.UseCase.UserSuggestion;
 using SPLITTR_Uwp.Core.DataManager;
+using SPLITTR_Uwp.Core.SplittrNotifications;
 
 namespace SPLITTR_Uwp.ViewModel
 {
    
     internal class GroupCreationPageViewModel : ObservableObject,IViewModel
     {
-        
+       
        
         private string _groupName;
 
 
-        public UserViewModel User { get;}
+        public UserVobj User { get;}
         public string GroupName
         {
             get => _groupName;
@@ -47,8 +48,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         public GroupCreationPageViewModel()
         {
-            Store.CurreUserBobj.ValueChanged += UserBobj_ValueChanged;
-            User = new UserViewModel(Store.CurreUserBobj);
+            User = new UserVobj(Store.CurreUserBobj);
         }
 
 
@@ -99,17 +99,19 @@ namespace SPLITTR_Uwp.ViewModel
             groupCreationUseCase.Execute();
         }
         
-        private async void UserBobj_ValueChanged(string property)
-        {
-            //since this Will be called by Worker thread it needs to invoked by Ui thread so calling dispatcher to user it
+
+        //ToDo 
+        //private async void UserBobj_ValueChanged(string property)
+        //{
+        //    //since this Will be called by Worker thread it needs to invoked by Ui thread so calling dispatcher to user it
             
-          await UiService.RunOnUiThread((() =>
-            {
-                      BindingUpdateInvoked?.Invoke();
+        //  await UiService.RunOnUiThread((() =>
+        //    {
+        //              BindingUpdateInvoked?.Invoke();
 
-            }));
+        //    }));
 
-        }
+        //}
 
         public event Action BindingUpdateInvoked;
 

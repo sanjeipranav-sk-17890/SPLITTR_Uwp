@@ -17,13 +17,13 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
     public sealed partial class MainPageButtonControl : UserControl
     {
 
-        private readonly UserViewModel _currentUserViewModel;
+        private readonly UserVobj _currentUserVobj;
 
         public MainPageButtonControl()
         {
             this.InitializeComponent();
             // fetching current user details to avoid showing user as participants in each and every group
-            _currentUserViewModel = new UserViewModel(Store.CurreUserBobj);
+            _currentUserVobj = new UserVobj(Store.CurreUserBobj);
         }
 
 
@@ -103,7 +103,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             }
             try
             {
-                users.RemoveAndAdd(_currentUserViewModel);
+                users.RemoveAndAdd(_currentUserVobj);
                 return users;
             }
             catch

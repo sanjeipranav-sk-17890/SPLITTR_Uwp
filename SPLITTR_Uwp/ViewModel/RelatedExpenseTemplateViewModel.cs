@@ -6,6 +6,7 @@ using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.VerifyPaidExpense;
 using SPLITTR_Uwp.Core.Utility;
@@ -72,11 +73,28 @@ namespace SPLITTR_Uwp.ViewModel
 
         public void DataContextLoaded(ExpenseViewModel expense)
         {
-            if (expense == null) { return;}
+            if (expense == null)
+            {
+                return;
+            }
             ExpenseObj = expense;
             ExpenseObj.PropertyChanged += ExpenseObj_PropertyChanged;
-
+            SplittrNotification.CurrencyPreferenceChanged += SplittrNotification_CurrencyPreferenceChanged;
             CheckExpenseMarkHistory();
+        }
+
+        private async void SplittrNotification_CurrencyPreferenceChanged(CurrencyPreferenceChangedEventArgs obj)
+        {
+            await UiService.RunOnUiThread((() =>
+            {
+                OnPropertyChanged(nameof(ExpenditureAmount));
+                OnPropertyChanged(nameof(CurrencySymbol));
+            })).ConfigureAwait(false);
+        }
+
+        public void ViewDisposed()
+        {
+            SplittrNotification.CurrencyPreferenceChanged -= SplittrNotification_CurrencyPreferenceChanged;
         }
         private void CheckExpenseMarkHistory()
         {

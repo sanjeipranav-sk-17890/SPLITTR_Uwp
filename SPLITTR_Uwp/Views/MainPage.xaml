@@ -314,10 +314,10 @@
                                                    Height="30"
                                                    Background="Transparent"
                                                    HorizontalAlignment="Left"
-                                                   ToolTipService.ToolTip="{x:Bind _viewModel.UserViewModel.UserName,Mode=OneWay }"
+                                                   ToolTipService.ToolTip="{x:Bind _viewModel.UserVobj.UserName,Mode=OneWay }"
                                                    Initials="{x:Bind _viewModel.UserInitial,Mode=OneWay}"
                                     />
-                                            <TextBlock Text="{x:Bind _viewModel.UserViewModel.UserName,Mode=OneWay}"
+                                            <TextBlock Text="{x:Bind _viewModel.UserVobj.UserName,Mode=OneWay}"
                                                Margin="10,3,0,0"
                                                FontSize="20"
                                                VerticalAlignment="Center"
@@ -375,7 +375,7 @@
                                            Height="30"
                                            Background="Transparent"
                                            HorizontalAlignment="Left"
-                                           ToolTipService.ToolTip="{x:Bind _viewModel.UserViewModel.UserName ,Mode=OneWay}"
+                                           ToolTipService.ToolTip="{x:Bind _viewModel.UserVobj.UserName ,Mode=OneWay}"
                                            Initials="{x:Bind _viewModel.UserInitial,Mode=OneWay}"
                             />
                 </Button>

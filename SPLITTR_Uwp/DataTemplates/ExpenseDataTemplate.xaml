@@ -4,113 +4,202 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:SPLITTR_Uwp.DataTemplates"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:converter="using:SPLITTR_Uwp.DataRepository.Converters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d"
     d:DesignHeight="100"
-    d:DesignWidth="500"
-    xmlns:converter="using:SPLITTR_Uwp.DataRepository.Converters"
-    BorderBrush="Black"
-    BorderThickness="20"
-    Visibility="{x:Bind ExpenseObj.Visibility,Mode=OneWay}"
->
+    d:DesignWidth="500">
     <UserControl.Resources>
-        <ImageBrush  ImageSource="../Assets/icons/GroupExpenseLogo.png" x:Key="GroupExpenseLogo" x:Name="GroupExpenseLogo" Opacity="0.8"   Stretch="Uniform"></ImageBrush>
-        <ImageBrush  ImageSource="../Assets/icons/IndividualSplitIcon.png" x:Key="IndividualSplitIcon" x:Name="IndividaulExpenseLogo" Opacity="0.7" Stretch="Uniform"></ImageBrush>
-        <SolidColorBrush Color="IndianRed" x:Key="PendingColorBrush" x:Name="PendingColorBrush"/>
-        <SolidColorBrush Color="ForestGreen" x:Key="PaidColorBrush" x:Name="PaidColorBrush"/>
-        <SolidColorBrush Color="DarkOrange" x:Key="CancelledColorBrush" x:Name="CancelledColorBrush"/>
         <converter:StringFormatConverter x:Key="StringFormater" />
-
+        <converter:BoolToRowSpanConverter x:Key="RowSpanConverter"/>
+        <!--Overriding Pointer over animation -->
+        <Style x:Key="NoPointerAnimation" TargetType="Button">
+            <Setter Property="Background" Value="{ThemeResource ButtonBackground}"/>
+            <Setter Property="BackgroundSizing" Value="OuterBorderEdge"/>
+            <Setter Property="Foreground" Value="{ThemeResource ButtonForeground}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
+            <Setter Property="Padding" Value="{StaticResource ButtonPadding}"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}"/>
+            <Setter Property="FocusVisualMargin" Value="-3"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw"  Background="{TemplateBinding Background}" BackgroundSizing="{TemplateBinding BackgroundSizing}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" ContentTemplate="{TemplateBinding ContentTemplate}" CornerRadius="{TemplateBinding CornerRadius}" Content="{TemplateBinding Content}" ContentTransitions="{TemplateBinding ContentTransitions}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <Storyboard>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPressed}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPressed}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPressed}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerDownThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundDisabled}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushDisabled}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundDisabled}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </ContentPresenter>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
-    <Grid CornerRadius="10" Background="{ThemeResource SystemAccentColorLight3}">
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="6*"/>
-            <ColumnDefinition Width="2*"/>
-        </Grid.ColumnDefinitions>
+    <Grid Margin="0 0 0 5" x:Name="MainContainerGrid">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="ExpenseTitlePointerOverState">
+                <VisualState x:Name="OnPointerOver">
+                        <VisualState.Setters>
+                            <Setter Target="DescriptionTextBox.FontWeight" Value="Bold"></Setter>
+                        </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="OnPointerLeaved">
+                    <VisualState.Setters>
+                        <Setter Target="DescriptionTextBox.FontWeight" Value="Normal"></Setter>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid  Grid.Column="0"  Grid.Row="0"  Padding="5" >
-            <Rectangle  Fill="{StaticResource GroupExpenseLogo}" x:Name="ExpensePersonProfileInnerRectangle" ></Rectangle>
-        </Grid>
-        <Grid Grid.Column="1"  Grid.Row="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="3*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="2*"/>
-            </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0" Orientation="Horizontal">
-                <TextBlock   x:Name="ExpenseTitleOwnerTitle" Text="{x:Bind ExpenseObj.Description,Mode=OneWay}"
-                             FontSize="20" 
-                             
-                             VerticalAlignment="Center"
-                             Margin="10 5 0 0" 
-                />
-            </StackPanel>
-            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="35 0 0 0">
-                <TextBlock Text="" FontFamily="Segoe MDL2 Assets"
-                           x:Name="ExpenseStatusIndicatorIcon"
-                           FontSize="10" 
-
-                           VerticalAlignment="Center"
-                           Visibility="{x:Bind ExpenseStatusVisibility,Mode=OneWay}"
-                           Margin="10 0 0 0"></TextBlock>
-
-                <TextBlock  
-                           x:Name="ExpenseStatusTextBlock"
+           <RowDefinition Height="Auto"/>
+           <RowDefinition Height="*"   />
+       </Grid.RowDefinitions>
+        <Rectangle Grid.Row="0" Height="1" Fill="{ThemeResource SystemAccentColorLight2}"></Rectangle>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel VerticalAlignment="Center" Margin="5">
+                <TextBlock Foreground="{ThemeResource AccentTextColorBrush}"
                            FontSize="15"
-                           Visibility="{x:Bind ExpenseStatusVisibility,Mode=OneWay}"
-
-                           />
-
+                           FontFamily="Leelawadee UI"
+                           Text="{x:Bind ExpenseObj.DateOfExpense,Converter={StaticResource StringFormater},ConverterParameter='{}{0:MMM}',Mode=OneWay}"
+                           HorizontalAlignment="Center"></TextBlock>
+                <TextBlock Foreground="{ThemeResource AccentTextColorBrush}"
+                           FontSize="22"
+                           Text="{x:Bind ExpenseObj.DateOfExpense,Converter={StaticResource StringFormater},ConverterParameter='{}{0:dd}',Mode=OneWay}"
+                           HorizontalAlignment="Center"/>
             </StackPanel>
-           
+            <Grid Grid.Column="1" VerticalAlignment="Center"
+                  PointerEntered="ExpenseDataTemplateV2_PointerEntered"
+                  PointerExited="ExpenseDataTemplateV2_PointerExited">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Image Source="../Assets/icons/BillImage.png"
+                       Stretch="UniformToFill"
+                       Grid.Column="0" Grid.RowSpan="2"
+                       MaxHeight="40"/>
+                <TextBlock  Text="{x:Bind ExpenseObj.Description,Mode=OneWay}"
+                           FontSize="15"
+                           x:Name="DescriptionTextBox"
+                           Grid.Row="0"
+                           Grid.Column="1"
+                           VerticalAlignment="Bottom"
+                           Margin="4 0 0 0" 
+                           TextTrimming="CharacterEllipsis"
+                >
+                </TextBlock>
+                <Button Style="{StaticResource NoPointerAnimation}" Visibility="{x:Bind _viewModel.IsGroupButtonVisible,Mode=OneWay}"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        ToolTipService.ToolTip="{x:Bind _viewModel.GroupName,Mode=OneWay}"
+                        CornerRadius="4"
+                        Margin="4 0 0 0 "
+                        DataContext="{x:Bind _viewModel.GroupObject,Mode=OneWay}">
+                    <TextBlock Foreground="{ThemeResource AccentTextColorBrush}" 
+                               Text="{x:Bind _viewModel.GroupName,Mode=OneWay}"
+                               TextTrimming="CharacterEllipsis"
+                               FontSize="10"/>
+                </Button>
+            </Grid>
+                
+                <Grid Grid.Column="2" VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+               
+                    <TextBlock Text="{x:Bind _viewModel.SplitOwnerTitle,Mode=OneWay}" Grid.Row="0" Grid.Column="0"
+                               FontSize="12"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Foreground="{ThemeResource AccentTextColorBrush}"/>
+                    <TextBlock Text="{x:Bind _viewModel.ExpenseTotalAmount,Mode=OneWay}"
+                               HorizontalAlignment="Center"
+                               Grid.Row="1" Grid.Column="0"
+                               Margin="0 5 0 0"
+                               VerticalAlignment="Top"
+                               FontWeight="SemiBold"/>
+
+                    <TextBlock Text="{x:Bind _viewModel.OwingSplitTitle,Mode=OneWay}"
+                               TextWrapping="Wrap"
+                               Grid.Row="0" Grid.Column="1"
+                               Grid.RowSpan="{x:Bind _viewModel.OwingAmountTextBlockVisibility,Mode=OneWay,Converter={StaticResource RowSpanConverter}}"
+                               FontSize="12"
+                               Margin="10 5 5 5"
+                               HorizontalAlignment="Center"
+                               Foreground="{ThemeResource AccentTextColorBrush}"
+                               MaxWidth="70">
+                    </TextBlock>
+                    <TextBlock Visibility="{x:Bind _viewModel.OwingAmountTextBlockVisibility,Mode=OneWay}"
+                               FontWeight="SemiBold"
+                               Grid.Row="1" 
+                               Grid.Column="1"
+                               VerticalAlignment="Top"
+                               Margin="5 5 0 0"
+                               Foreground="{x:Bind _viewModel.OwingExpenseForeground,Mode=OneWay}"
+                               HorizontalAlignment="Center"
+                               Text="{x:Bind _viewModel.OwingSplitAmount,Mode=OneWay}"></TextBlock>
+                
+            </Grid>
+            
+
         </Grid>
-       
-        <Grid Grid.Row="1" Grid.ColumnSpan="3" x:Name="AdditionalDataGrid" Visibility="Visible" >
-             <Grid.ColumnDefinitions>
-                 <ColumnDefinition/>
-                 <ColumnDefinition/>
-             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal">
-            <TextBlock x:Name="ExpenseHeadingTypeTextBox"
-                       Foreground="{ThemeResource SystemAccentColorLight1}"
-                       Margin="5 0 4 0"
-                       Text=""
-                       />
-                <TextBlock x:Name="ExpenseItemTitleTextBox" ></TextBlock>
-       
 
-            </StackPanel>
-            <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <TextBlock Foreground="{ThemeResource SystemAccentColorDark2}"
-                           Text=""
-                           FontSize="10"
-                           Margin="0 0 5 0"
-                           ToolTipService.ToolTip="Expense Date"
-                           FontFamily="Segoe MDL2 Assets"
-                           Visibility="Visible"
-                           VerticalAlignment="Center"/>
-                <TextBlock Text="{x:Bind ExpenseObj.DateOfExpense,Converter={StaticResource StringFormater},ConverterParameter='{}{0:dd/MM/yyy (ddd)}',Mode=OneWay}"/>
-            </StackPanel>
-        </Grid>
-         <StackPanel Grid.Column="2" Grid.Row="0"
-                     Orientation="Horizontal"
-                     VerticalAlignment="Center">
-             <TextBlock Foreground="{ThemeResource SystemAccentColorDark2}"
-                        x:Name="CurrencySymbolTextBlock"
-                        FontWeight="SemiBold"
-                        FontSize="20"/>
-             <TextBlock  Margin="5 0 0 0"
-                         VerticalAlignment="Center"
-                         x:Name="ExpenseAmountTextBlock"
-             />
-
-         </StackPanel>
 
     </Grid>
 </UserControl>

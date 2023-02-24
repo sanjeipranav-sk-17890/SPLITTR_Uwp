@@ -50,24 +50,13 @@ namespace SPLITTR_Uwp.ViewModel.Models
         {
             _expense = expense;
             _expense.ValueChanged += InnerObjValueChanged;
-            if (Store.CurreUserBobj is not null)
-            {
-                Store.CurreUserBobj.ValueChanged += UserObjValueChanged;
-            }
+            
         }
 
 
 
 
         #region INotifyPropertyChanged Region
-
-        private void UserObjValueChanged(string property)
-        {
-            if (property is not null)
-            {
-                OnPropertyChanged(nameof(CurrencyConverter));
-            }
-        }
 
         private void InnerObjValueChanged(string property)
         {

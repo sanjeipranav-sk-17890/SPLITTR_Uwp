@@ -115,10 +115,14 @@
             <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="5">
                 <TextBlock   IsTextSelectionEnabled="True" 
                              FontSize="20"
-                             Text="Individual Expense" Visibility="{x:Bind IndividualSplitIconVisibility,Mode=OneWay}"/>
+                             x:Name="GroupNameTextBlock"
+                             Text="Individual Expense"
+                             Visibility="Collapsed"/>
                 <TextBlock IsTextSelectionEnabled="True"
-                           Text="{x:Bind GroupName,Mode=OneWay}" ToolTipService.ToolTip="Group Name"
-                           Visibility="{x:Bind GroupNameVisibility,Mode=OneWay}"
+                           Text="{x:Bind _viewModel.ExpenseOccuredGroupName,Mode=OneWay}" 
+                           ToolTipService.ToolTip="Group Name"
+                           x:Name="IndividualSplitIndicatorTextBlock"
+                           Visibility="Collapsed"
                            FontSize="20"
                            ></TextBlock>
             </StackPanel>

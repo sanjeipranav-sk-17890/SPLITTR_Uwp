@@ -32,6 +32,12 @@ namespace SPLITTR_Uwp.Views
         {
             var isMainPaneOpen = MainPageNavigationView.IsPaneOpen;
             MainPageNavigationView.IsPaneOpen = !isMainPaneOpen;
+            Unloaded += MainPage_Unloaded;
+        }
+
+        private void MainPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            _viewModel.ViewDisposed();
         }
 
         public Frame ChildFrame
