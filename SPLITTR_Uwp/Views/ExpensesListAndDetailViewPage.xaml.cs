@@ -46,7 +46,7 @@ namespace SPLITTR_Uwp.Views
                 return;
             }
             TryChangeVisualState();
-            _viewModel.SelectedExpenseObj = e.AddedItems[0] as ExpenseViewModel;
+            _viewModel.SelectedExpenseObj = e.AddedItems[0] as ExpenseVobj;
             _viewModel.ExpenseSelectionMade();
         }
         private void TryChangeVisualState()

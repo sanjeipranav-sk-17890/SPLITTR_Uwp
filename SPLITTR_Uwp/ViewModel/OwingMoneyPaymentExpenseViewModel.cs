@@ -35,7 +35,7 @@ internal class OwingMoneyPaymentExpenseViewModel :ObservableObject
     }
 
 
-    private ExpenseViewModel _moneyPaymentExpense = null;
+    private ExpenseVobj _moneyPaymentExpense = null;
     public void PaymentWindowXamlRoot_SettleUpButtonClicked(bool isWalletPayment)
     {
 
@@ -55,7 +55,7 @@ internal class OwingMoneyPaymentExpenseViewModel :ObservableObject
     }
 
 
-    public void PaymetForExpenseButtonClicked(ExpenseViewModel expenseObj)
+    public void PaymetForExpenseButtonClicked(ExpenseVobj expenseObj)
     {
         _moneyPaymentExpense = expenseObj;
     }

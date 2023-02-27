@@ -26,7 +26,7 @@ namespace SPLITTR_Uwp.ViewModel
         
         private double _totalExpenditureAmount;
 
-        public ObservableCollection<ExpenseViewModel> RelatedExpenses { get; } = new ObservableCollection<ExpenseViewModel>();
+        public ObservableCollection<ExpenseVobj> RelatedExpenses { get; } = new ObservableCollection<ExpenseVobj>();
 
         public double TotalExpenditureAmount
         {
@@ -35,11 +35,11 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
         //Storing Reference Of passed Expense ,utilized to make Ui manupulation
-        private ExpenseViewModel _expense;
+        private ExpenseVobj _expense;
 
         private string _expenseOccuredGroupName = string.Empty;
 
-        public void ExpenseObjLoaded(ExpenseViewModel expenseObj)
+        public void ExpenseObjLoaded(ExpenseVobj expenseObj)
         {
             if (expenseObj is null)
             {
@@ -66,7 +66,7 @@ namespace SPLITTR_Uwp.ViewModel
             SplittrNotification.CurrencyPreferenceChanged -= SplittrNotification_CurrencyPreferenceChanged;
         }
 
-        private void GetGroupName(ExpenseViewModel expenseObj)
+        private void GetGroupName(ExpenseVobj expenseObj)
         {
             if (expenseObj?.GroupUniqueId == null)
             {
@@ -128,7 +128,7 @@ namespace SPLITTR_Uwp.ViewModel
 
             RelatedExpenses.Add(_expense);
 
-            var expenseVMobjs = relatedExpenses.Select(ex => new ExpenseViewModel(ex));
+            var expenseVMobjs = relatedExpenses.Select(ex => new ExpenseVobj(ex));
 
             RelatedExpenses.AddRange(expenseVMobjs);
 

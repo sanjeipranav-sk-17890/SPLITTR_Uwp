@@ -10,7 +10,7 @@ namespace SPLITTR_Uwp.Core.DataManager.Contracts
     public interface IExpenseCancellationDataManager
     {
         /// <exception cref="ArgumentException">Exception thrown if Owner of Passed Expense Did'nt match Current User</exception>
-        void CancelExpense(string expenseToBeCancelledId, UserBobj currentUser,IUseCaseCallBack<CancelExpenseResponseObj> callBack);
+        void CancelExpense(ExpenseBobj expenseToBeCancelledId, UserBobj currentUser,IUseCaseCallBack<CancelExpenseResponseObj> callBack);
     }
 
 }

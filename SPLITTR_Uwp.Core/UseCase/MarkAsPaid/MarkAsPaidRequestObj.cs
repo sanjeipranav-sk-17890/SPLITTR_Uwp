@@ -8,19 +8,20 @@ namespace SPLITTR_Uwp.Core.UseCase.MarkAsPaid
 {
     public class MarkAsPaidRequestObj : IRequestObj<MarkAsPaidResponseObj>
     {
-        public MarkAsPaidRequestObj(IPresenterCallBack<MarkAsPaidResponseObj> presenterCallBack, CancellationToken cts, string expenseIdToBeMarkedAsPaid, UserBobj userBobj)
+        public MarkAsPaidRequestObj(IPresenterCallBack<MarkAsPaidResponseObj> presenterCallBack, CancellationToken cts, UserBobj userBobj, ExpenseBobj expenseToBeMarkedAsPaid)
         {
             PresenterCallBack = presenterCallBack;
             Cts = cts;
-            ExpenseIdToBeMarkedAsPaid = expenseIdToBeMarkedAsPaid;
+            ExpenseToBeMarkedAsPaid = expenseToBeMarkedAsPaid;
             CurrentUser = userBobj;
+            ExpenseToBeMarkedAsPaid = expenseToBeMarkedAsPaid;
         }
 
         public CancellationToken Cts { get; }
 
         public IPresenterCallBack<MarkAsPaidResponseObj> PresenterCallBack { get; }
 
-        public string ExpenseIdToBeMarkedAsPaid { get; }
+        public ExpenseBobj ExpenseToBeMarkedAsPaid { get; }
 
         public UserBobj CurrentUser { get; }
 

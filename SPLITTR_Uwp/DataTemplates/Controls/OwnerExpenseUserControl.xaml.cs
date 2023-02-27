@@ -13,9 +13,9 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
     {
        
 
-        public ExpenseViewModel ExpenseObj
+        public ExpenseVobj ExpenseObj
         {
-            get=> this.DataContext as ExpenseViewModel;
+            get=> this.DataContext as ExpenseVobj;
         }
 
         private OwnerExpenseControlViewModel _viewModel;

@@ -14,7 +14,7 @@ namespace SPLITTR_Uwp.Core.UseCase.SettleUpExpense
             _requestObj = requestObj;
             _dataManager =SplittrDependencyService.GetInstance<ISettleUpSplitDataManager>();
         }
-        public override void Action()
+       protected override void Action()
         {
             _dataManager.SettleUpExpenses(_requestObj.SettleExpense,_requestObj.CurrentUser,new UseCaseCallBackBase<SettleUpExpenseResponseObj>(this),_requestObj.IsWalletTransaction);
         }

@@ -17,7 +17,7 @@ namespace SPLITTR_Uwp.Core.UseCase.GetRelatedExpense
             _requestObj = requestObj;
             _dataManager = SplittrDependencyService.GetInstance<IRelatedExpenseDataManager>();
         }
-        public override void Action()
+       protected override void Action()
         {
            _dataManager.GetRelatedExpenses(_requestObj.ReferenceExpense,_requestObj.CurrentUser,new UseCaseCallBackBase<RelatedExpenseResponseObj>(this));
         }

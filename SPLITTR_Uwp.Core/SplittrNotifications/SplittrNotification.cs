@@ -66,9 +66,12 @@ namespace SPLITTR_Uwp.Core.SplittrNotifications
     {
         public ExpenseStatus ExpenseStatus { get; }
 
-        public ExpenseStatusChangedEventArgs(ExpenseStatus expenseStatus)
+        public ExpenseBobj StatusChangedExpense { get; }
+
+        public ExpenseStatusChangedEventArgs(ExpenseStatus expenseStatus, ExpenseBobj statusChangedExpense)
         {
             ExpenseStatus = expenseStatus;
+            StatusChangedExpense = statusChangedExpense;
         }
 
     }

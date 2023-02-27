@@ -21,7 +21,7 @@ namespace SPLITTR_Uwp.Core.UseCase.GetUserGroups
             _requestObj = requestObj;
             _groupDataManager = SplittrDependencyService.GetInstance<IGroupDataManager>();
         }
-        public override void Action()
+       protected override void Action()
         {
             _groupDataManager.GetUserParticipatingGroups(_requestObj.CurrentUser,new GetUserGroupUcCallBack(this));
         }

@@ -109,12 +109,9 @@ namespace SPLITTR_Uwp.Core.DataManager
 
             var user = await FetchUserUsingMailId(emailId).ConfigureAwait(false);
 
-            //Passing In userDataManager as Method injection to Avoid Circular Dependency in IServiceCollection 
-            var expenses =await _expenseDataManager.GetUserExpensesAsync(_currentUser,this).ConfigureAwait(false);
-
             var currencyCal = _currencyCalc.GetCurrencyCalculator((Currency)user.CurrencyIndex);
 
-            return new UserBobj(user, expenses.ToList(),currencyCal);
+            return new UserBobj(user,currencyCal);
 
         }
     }

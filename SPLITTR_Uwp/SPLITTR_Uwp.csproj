@@ -213,7 +213,7 @@
     <Compile Include="ViewModel\LoginPageViewModel.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />
     <Compile Include="ViewModel\Models\ExpenseListObject\ExpenseGroupingList.cs" />
-    <Compile Include="ViewModel\Models\ExpenseViewModel.cs" />
+    <Compile Include="ViewModel\Models\ExpenseVobj.cs" />
     <Compile Include="ViewModel\Models\UserVobj.cs" />
     <Compile Include="ViewModel\SignPageViewModel.cs" />
     <Compile Include="ViewModel\SplitExpenseViewModel.cs" />

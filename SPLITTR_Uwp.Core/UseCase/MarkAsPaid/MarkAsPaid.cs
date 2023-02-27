@@ -17,14 +17,14 @@ namespace SPLITTR_Uwp.Core.UseCase.MarkAsPaid
             _requestObj = requestObj;
             _dataManager =SplittrDependencyService.GetInstance<IMarkExpensePaidDataManager>();
         }
-        public override void Action()
+       protected override void Action()
         {
-           _dataManager.MarkExpenseAsPaid(_requestObj.ExpenseIdToBeMarkedAsPaid,_requestObj.CurrentUser,new UseCaseCallBackBase<MarkAsPaidResponseObj>(this));
+           _dataManager.MarkExpenseAsPaid(_requestObj.ExpenseToBeMarkedAsPaid,_requestObj.CurrentUser,new UseCaseCallBackBase<MarkAsPaidResponseObj>(this));
         }
     }
     public interface IMarkExpensePaidDataManager
     {
-        void MarkExpenseAsPaid(string expenseToBeMarkedAsPaid, UserBobj currentUser,IUseCaseCallBack<MarkAsPaidResponseObj> callBack);
+        void MarkExpenseAsPaid(ExpenseBobj expenseToBeMarkedAsPaid, UserBobj currentUser,IUseCaseCallBack<MarkAsPaidResponseObj> callBack);
 
     }
 }

@@ -22,7 +22,7 @@ namespace SPLITTR_Uwp.DataTemplates
 
         private void OwingMoneyPayemtExpenseTemplate_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-            if (DataContext is not ExpenseViewModel expense)
+            if (DataContext is not ExpenseVobj expense)
             {
                 return;
             }
@@ -33,7 +33,7 @@ namespace SPLITTR_Uwp.DataTemplates
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
 
-            if (DataContext is not ExpenseViewModel expenseObj)
+            if (DataContext is not ExpenseVobj expenseObj)
             {
                 return;
             }

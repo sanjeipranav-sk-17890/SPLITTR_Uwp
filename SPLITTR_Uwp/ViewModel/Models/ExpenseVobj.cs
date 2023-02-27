@@ -4,33 +4,29 @@ using System.Runtime.CompilerServices;
 using Windows.Graphics.DirectX.Direct3D11;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 
 namespace SPLITTR_Uwp.ViewModel.Models
 {
-    public class ExpenseViewModel : ExpenseBobj,INotifyPropertyChanged
+    public class ExpenseVobj : ExpenseBobj,INotifyPropertyChanged
     {
-        private readonly ExpenseBobj _expense;
+       
         private bool _visibility = true;
 
-        [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override  string Note
-        {
-            get => _expense.Note;
-        }
-
-        [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override double ExpenseAmount
-        {
-            get => _expense.StrExpenseAmount;
-           
-        }
-
-        [System.Diagnostics.DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override  ExpenseStatus ExpenseStatus
         {
-            get => _expense.ExpenseStatus;
+            get => base.ExpenseStatus;
+            set
+            {
+                if (base.ExpenseStatus == value)
+                {
+                    return;
+                }
+                base.ExpenseStatus = value;
+                OnPropertyChanged();
+            } 
         }
 
         public bool Visibility
@@ -46,15 +42,18 @@ namespace SPLITTR_Uwp.ViewModel.Models
         }
 
 
-        public ExpenseViewModel(ExpenseBobj expense) : base(expense)
+        public ExpenseVobj(ExpenseBobj expense) : base(expense)
         {
-            _expense = expense;
-            _expense.ValueChanged += InnerObjValueChanged;
-            
+            SplittrNotification.ExpenseStatusChanged += SplittrNotification_ExpenseStatusChanged;
         }
 
-
-
+        private void SplittrNotification_ExpenseStatusChanged(ExpenseStatusChangedEventArgs obj)
+        {
+            if (obj?.StatusChangedExpense?.ExpenseUniqueId.Equals(ExpenseUniqueId) is true)
+            {
+                ExpenseStatus = obj.StatusChangedExpense.ExpenseStatus;
+            }
+        }
 
         #region INotifyPropertyChanged Region
 
@@ -74,8 +73,6 @@ namespace SPLITTR_Uwp.ViewModel.Models
         }
 
         #endregion
-
-
 
     }
 }

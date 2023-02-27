@@ -63,7 +63,7 @@ namespace SPLITTR_Uwp.Core.UseCase.SplitExpenses
             _requestObj = requestObj;
             _dataManager = SplittrDependencyService.GetInstance<ISplitExpenseDataManager>();
         }
-        public override void Action()
+       protected override void Action()
         {
            _dataManager.SplitNewExpensesAsync(_requestObj.ExpenseDescription,_requestObj.CurrentUser,_requestObj.Expenses,_requestObj.ExpenseNote,_requestObj.DateOfExpense,_requestObj.ExpenseAmount,_requestObj.ExpenseSplitType,new UseCaseCallBackBase<SplitExpenseResponseObj>(this)); 
         }

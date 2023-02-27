@@ -17,7 +17,7 @@ public class AddWalletAmount : UseCaseBase<UpdateUserResponseObj>
         _requestObj = requestObject;
         _dataManager = SplittrDependencyService.GetInstance<IAddWalletBalanceDataManager>();
     }
-    public override void Action()
+   protected override void Action()
     {
         _dataManager.UpdateUserObjAsync(_requestObj.CurrentUser, _requestObj.WalletBalance,new UseCaseCallBackBase<UpdateUserResponseObj>(this));
     }

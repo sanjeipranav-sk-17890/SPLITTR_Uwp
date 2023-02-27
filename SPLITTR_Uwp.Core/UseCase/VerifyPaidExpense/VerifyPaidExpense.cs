@@ -13,7 +13,7 @@ public class VerifyPaidExpense : UseCaseBase<VerifyPaidExpenseResponseObj>
         _dataManager = SplittrDependencyService.GetInstance<IExpenseHistoryManager>();
 
     }
-    public override void Action()
+   protected override void Action()
     {
         _dataManager.IsExpenseMarkedAsPaid(_requestObj.ExpenseUniqueId,new UseCaseCallBackBase<VerifyPaidExpenseResponseObj>(this));
     }

@@ -56,6 +56,7 @@ namespace SPLITTR_Uwp.Core.DependencyInjector
                 .AddSingleton<IExpenseCancellationDataManager, ExpenseStatusDataManager>()
                 .AddSingleton<ISettleUpSplitDataManager, SettleUpExpenseDataManager>()
                 .AddSingleton<ISignUpDataManager, AuthenticationManager>()
+                .AddSingleton<IExpenseFetchDataManager,ExpenseFetchDataManager>()
                 .AddSingleton<IAuthenticationManager, AuthenticationManager>()
                 .AddTransient<RupessConverter>()
                 .AddTransient<DollarConverter>()

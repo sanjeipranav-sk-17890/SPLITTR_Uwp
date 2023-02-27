@@ -44,7 +44,7 @@ namespace SPLITTR_Uwp.Core.UseCase.UserSuggestion
             _requestObj = requestObj;
             _dataManager = SplittrDependencyService.GetInstance<IUserSuggestionDataManager>();
         }
-        public override void Action()
+       protected override void Action()
         {
           _dataManager.GetUsersSuggestionAsync(_requestObj.UserName,this);   
         }

@@ -17,9 +17,9 @@ namespace SPLITTR_Uwp.DataTemplates
 
         public event Action<bool> SettleUpButtonClicked;
 
-        private ExpenseViewModel ExpenseObj
+        private ExpenseVobj ExpenseObj
         {
-            get => DataContext as ExpenseViewModel;
+            get => DataContext as ExpenseVobj;
         }
 
         public PaymentWindowExpenseView()
@@ -78,7 +78,7 @@ namespace SPLITTR_Uwp.DataTemplates
 
         public UserVobj CurrentUser { get; set; }
 
-        public void ExpenseObjLoaded(ExpenseViewModel expenseObj)
+        public void ExpenseObjLoaded(ExpenseVobj expenseObj)
         {
             if (expenseObj is null)
             {
@@ -93,7 +93,7 @@ namespace SPLITTR_Uwp.DataTemplates
             CurrentUser = new UserVobj(Store.CurreUserBobj);
 
         }
-        private void InitializeValues(ExpenseViewModel expenseObj)
+        private void InitializeValues(ExpenseVobj expenseObj)
         {
             CurrentUserInitial = expenseObj.CorrespondingUserObj.UserName.GetUserInitial();
             OwingUserInitial = expenseObj.SplitRaisedOwner.UserName.GetUserInitial();

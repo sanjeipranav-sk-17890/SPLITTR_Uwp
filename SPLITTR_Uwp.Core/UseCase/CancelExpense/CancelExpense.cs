@@ -17,9 +17,9 @@ namespace SPLITTR_Uwp.Core.UseCase.CancelExpense
             _requestObj = requestObj;
             _dataManager = SplittrDependencyService.GetInstance<IExpenseCancellationDataManager>();
         }
-        public override void Action()
+       protected override void Action()
         {
-            _dataManager.CancelExpense(_requestObj.ExpenseToBeCancelledId,_requestObj.CurrentUser,new UseCaseCallBackBase<CancelExpenseResponseObj>(this));
+            _dataManager.CancelExpense(_requestObj.ExpenseToBeCancelled,_requestObj.CurrentUser,new UseCaseCallBackBase<CancelExpenseResponseObj>(this));
         }
     }
 }

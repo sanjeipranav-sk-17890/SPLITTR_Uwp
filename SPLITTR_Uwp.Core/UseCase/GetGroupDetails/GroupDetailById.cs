@@ -35,7 +35,7 @@ namespace SPLITTR_Uwp.Core.UseCase.GetGroupDetails
             return true;
         }
 
-        public override void Action()
+       protected override void Action()
         {
             _groupDataManager.GetUserParticipatingGroups(_requestObj.CurrentUser, new GroupDetailUsCallBack(this));
         }

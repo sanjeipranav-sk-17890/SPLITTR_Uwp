@@ -37,7 +37,7 @@ public abstract class UseCaseBase<T> : IUseCaseBase
             }
         },_cts);
     }
-    public abstract void Action();
+    protected abstract void Action();
       
     public virtual bool GetIfAvailableFromCache()
     {

@@ -30,7 +30,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         #region NotifiablePRoperties
 
-        private ExpenseViewModel _expenseVObj;
+        private ExpenseVobj _expenseVObj;
         private Group _groupObject;
         private string _expenseTotalAmount;
         private string _groupName;
@@ -132,7 +132,7 @@ namespace SPLITTR_Uwp.ViewModel
             return IsCurrentUser(_expenseVObj.SplitRaisedOwner) ? $"You lent {_expenseVObj.CorrespondingUserObj.UserName}" : $"{_expenseVObj.SplitRaisedOwner.UserName} lent you";
         }
 
-        private bool IsCurrentUserRaisedExpense(ExpenseViewModel expenseVObj)
+        private bool IsCurrentUserRaisedExpense(ExpenseVobj expenseVObj)
         {
             return expenseVObj.SplitRaisedOwner.Equals(expenseVObj.CorrespondingUserObj);
         }
@@ -206,7 +206,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         #endregion
 
-        public void ExpenseObjLoaded(ExpenseViewModel expenseObj)
+        public void ExpenseObjLoaded(ExpenseVobj expenseObj)
         {
 
             if (expenseObj is null)

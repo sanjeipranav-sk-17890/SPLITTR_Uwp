@@ -13,11 +13,14 @@ using SPLITTR_Uwp.ViewModel.Models;
 using SPLITTR_Uwp.ViewModel.VmLogic;
 using SPLITTR_Uwp.Views;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
+using SPLITTR_Uwp.Core.UseCase.GetUserExpenses;
+using static SPLITTR_Uwp.Services.UiService;
 
 namespace SPLITTR_Uwp.ViewModel
 {
@@ -74,17 +77,34 @@ namespace SPLITTR_Uwp.ViewModel
             //Calling UseCase For Fetching Current USer Groups
             FetchUserGroups();
 
-            PopulateIndividualSplitUsers();
+            CallUseCaseToFetchCurrentUserExpenses();
 
             //Listening For Group Creation Notification
             SplittrNotification.GroupCreated += SplittrNotification_GroupCreated;
 
+            //Listening For New ExpensesSplit
+            SplittrNotification.ExpensesSplited += SplittrNotification_ExpensesSplited; ;
+
+        }
+
+        private void SplittrNotification_ExpensesSplited(ExpenseSplittedEventArgs obj)
+        {
+           CallUseCaseToFetchCurrentUserExpenses();
+        }
+
+        private void CallUseCaseToFetchCurrentUserExpenses()
+        {
+            var getExpensesRequestObj = new GetExpensesByIdRequest(CancellationToken.None, new MainViewVmPresenterCb(this), Store.CurreUserBobj);
+
+            var getExpenseUseCase = InstanceBuilder.CreateInstance<GetExpensesByUserId>(getExpensesRequestObj);
+
+            getExpenseUseCase.Execute();
         }
 
         private async void SplittrNotification_GroupCreated(GroupCreatedEventArgs obj)
         { 
             //Adding New Ly Created Group To Navigation View
-           await UiService.RunOnUiThread((() =>
+           await RunOnUiThread((() =>
            {
                if (obj?.CreatedGroup is not null)
                {
@@ -96,10 +116,11 @@ namespace SPLITTR_Uwp.ViewModel
         public void ViewDisposed()
         {
             //Unsubscribing For Group Creation Notification
-            SplittrNotification.GroupCreated += SplittrNotification_GroupCreated;
+            SplittrNotification.GroupCreated -= SplittrNotification_GroupCreated;
+
+            SplittrNotification.ExpensesSplited -= SplittrNotification_ExpensesSplited;
+
         }
-
-
 
 
         private void FetchUserGroups()
@@ -112,10 +133,10 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
 
-        private void PopulateIndividualSplitUsers()
+        private void PopulateIndividualSplitUsers(IEnumerable<ExpenseBobj> currentUserExpenses)
         {
             RelatedUsers.Clear();
-            foreach (var expense in Store.CurreUserBobj.Expenses)
+            foreach (var expense in currentUserExpenses)
             {
                 // Adds user object to Individual Split users  list Excluding Current User 
                 if (expense.GroupUniqueId is not null)
@@ -133,29 +154,6 @@ namespace SPLITTR_Uwp.ViewModel
             }
 
         }
-
-
-        //ToDo Expense Fetch UseCase Call And Then Populate Individual User LIst From Result
-
-        //public async void UserObjUpdated(string property)
-        //{
-        //    //since this Will be called by Worker thread it needs to invoked by Ui thread so calling dispatcher to user it
-        //    await UiService.RunOnUiThread((() =>
-        //    {
-        //        switch (property)
-        //        {
-        //            //refreshing value assigning
-        //            case nameof(UserVobj.Groups):
-        //                UserGroups.ClearAndAdd(Store.CurreUserBobj.Groups);
-        //                break;
-        //            case nameof(UserVobj.Expenses):
-        //                PopulateIndividualSplitUsers();
-        //                break;
-        //        }
-        //        BindingUpdateInvoked?.Invoke();
-        //    }));
-
-        //}
 
 
         #region NavigationLogicRegion
@@ -209,7 +207,7 @@ namespace SPLITTR_Uwp.ViewModel
 
 
 
-        class MainViewVmPresenterCb : IPresenterCallBack<GetUserGroupResponse>
+        class MainViewVmPresenterCb : IPresenterCallBack<GetUserGroupResponse>,IPresenterCallBack<GetExpensesByIdResponse>
         {
             private readonly MainPageViewModel _viewModel;
 
@@ -220,10 +218,21 @@ namespace SPLITTR_Uwp.ViewModel
             }
             public async void OnSuccess(GetUserGroupResponse result)
             {
-                await UiService.RunOnUiThread((() =>
+                await RunOnUiThread((() =>
                 {
                     _viewModel.UserGroups.ClearAndAdd(result.UserParticipatingGroups);
 
+                })).ConfigureAwait(false);
+            }
+            public async void OnSuccess(GetExpensesByIdResponse result)
+            {
+                if (result == null)
+                {
+                    return;
+                }
+                await RunOnUiThread((() =>
+                {
+                 _viewModel.PopulateIndividualSplitUsers(result.CurrentUserExpenses);
                 })).ConfigureAwait(false);
             }
             public void OnError(SplittrException ex)

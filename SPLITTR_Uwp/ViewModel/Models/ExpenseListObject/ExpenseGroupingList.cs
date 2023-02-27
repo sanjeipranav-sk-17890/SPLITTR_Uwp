@@ -26,7 +26,7 @@ namespace SPLITTR_Uwp.ViewModel.Models.ExpenseListObject
                 {
                     continue;
                 }
-                Add(new ExpenseViewModel(expense));
+                Add(new ExpenseVobj(expense));
             }
             base.CollectionChanged += ExpenseGroupingList_CollectionChanged;
 

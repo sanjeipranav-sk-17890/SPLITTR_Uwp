@@ -13,13 +13,9 @@ namespace SPLITTR_Uwp.Core.ModelBobj
 {
     public class UserBobj : User
     {
-      
-
+        
         public ICurrencyConverter CurrencyConverter { get; set; }
         
-        public ObservableCollection<ExpenseBobj> Expenses { get; } = new ObservableCollection<ExpenseBobj>();
-
-
         /// <summary>
         /// Gets or Sets the walletBalance in Respective Currency Preference
         /// </summary>
@@ -50,20 +46,13 @@ namespace SPLITTR_Uwp.Core.ModelBobj
 
 
 
-        public UserBobj(User user, ICollection<ExpenseBobj> expenses, ICurrencyConverter currencyConverter)
+        public UserBobj(User user, ICurrencyConverter currencyConverter)
             : base(user.EmailId, user.UserName, user.WalletBalance, user.CurrencyIndex,user.OwingAmount,user.LentAmount)
         {
             CurrencyConverter = currencyConverter;
-            Expenses.AddRange(expenses);
-            
-            Expenses.CollectionChanged += ExpenseCollectionChanged;
-        }
-        private void ExpenseCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-          // OnValueChanged(nameof(Expenses));
         }
 
-        protected UserBobj(UserBobj userBobj) : this(userBobj, userBobj.Expenses, userBobj.CurrencyConverter)
+        protected UserBobj(UserBobj userBobj) : this(userBobj, userBobj.CurrencyConverter)
         {
 
         }

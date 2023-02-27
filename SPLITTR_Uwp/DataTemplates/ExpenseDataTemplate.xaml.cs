@@ -27,9 +27,9 @@ namespace SPLITTR_Uwp.DataTemplates
     {
         private readonly ExpenseItemViewModel _viewModel;
 
-        public ExpenseViewModel ExpenseObj
+        public ExpenseVobj ExpenseObj
         {
-            get => this.DataContext as ExpenseViewModel;
+            get => this.DataContext as ExpenseVobj;
         }
 
         public ExpenseDataTemplate()

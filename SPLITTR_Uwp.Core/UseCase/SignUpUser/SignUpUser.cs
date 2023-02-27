@@ -16,7 +16,7 @@ namespace SPLITTR_Uwp.Core.UseCase.SignUpUser
             _requestObj = requestObj;
             _dataManager = SplittrDependencyService.GetInstance<ISignUpDataManager>();
         }
-        public override void Action()
+       protected override void Action()
         {
          _dataManager.CreateNewUser(_requestObj.UserName,_requestObj.EmailId,_requestObj.CurrencyPreference,new UseCaseCallBackBase<SignUpUserResponseObj>(this));  
         }

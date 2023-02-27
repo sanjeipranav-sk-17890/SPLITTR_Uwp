@@ -12,7 +12,7 @@ namespace SPLITTR_Uwp.ViewModel
        
         private bool _ownerExpenseUserControlVisibility;
         private bool _owingMoneyPaymentControlVisibility;
-        private ExpenseViewModel _controlDataContext;
+        private ExpenseVobj _controlDataContext;
 
         public bool OwnerExpenseUserControlVisibility
         {
@@ -26,9 +26,9 @@ namespace SPLITTR_Uwp.ViewModel
             set => SetProperty(ref _owingMoneyPaymentControlVisibility, value);
         }
 
-        public ExpenseViewModel SelectedExpenseObj { get; set; }
+        public ExpenseVobj SelectedExpenseObj { get; set; }
 
-        public ExpenseViewModel ControlDataContext
+        public ExpenseVobj ControlDataContext
         {
             get => _controlDataContext;
             set => SetProperty(ref _controlDataContext, value);

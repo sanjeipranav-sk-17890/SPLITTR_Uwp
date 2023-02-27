@@ -63,7 +63,7 @@ namespace SPLITTR_Uwp.ViewModel
             }
         }
 
-        private ExpenseViewModel ExpenseObj { get; set; }
+        private ExpenseVobj ExpenseObj { get; set; }
 
         public bool IsExpenseMarkedAsPaid
         {
@@ -71,7 +71,7 @@ namespace SPLITTR_Uwp.ViewModel
             set => SetProperty(ref _isExpenseMarkedAsPaid, value);
         }
 
-        public void DataContextLoaded(ExpenseViewModel expense)
+        public void DataContextLoaded(ExpenseVobj expense)
         {
             if (expense == null)
             {

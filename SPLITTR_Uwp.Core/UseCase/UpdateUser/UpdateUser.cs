@@ -17,7 +17,7 @@ namespace SPLITTR_Uwp.Core.UseCase.UpdateUser
             _dataManager = SplittrDependencyService.GetInstance<IUserProfileUpdateDataManager>();
             _requestObj = requestObj;
         }
-        public override void Action()
+       protected override void Action()
         {
             _dataManager.UpdateUserObjAsync(_requestObj.CurrentUser,_requestObj.NewUserName,_requestObj.CurrencyPreference,new UseCaseCallBackBase<UpdateUserResponseObj>(this));
         }

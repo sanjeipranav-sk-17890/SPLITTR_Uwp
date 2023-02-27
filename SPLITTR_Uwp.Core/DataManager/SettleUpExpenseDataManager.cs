@@ -53,7 +53,7 @@ namespace SPLITTR_Uwp.Core.DataManager
             {
                 ValidateInputs(settleExpenseRef, currentUser);
 
-                var toBeSettledExpenseObj = currentUser.Expenses.FirstOrDefault(ex => ex.ExpenseUniqueId.Equals(settleExpenseRef.ExpenseUniqueId));
+                var toBeSettledExpenseObj = settleExpenseRef;
 
                 if (toBeSettledExpenseObj is null)
                 {
@@ -82,10 +82,7 @@ namespace SPLITTR_Uwp.Core.DataManager
                   await _expenseDataManager.UpdateExpenseAsync(toBeSettledExpenseObj).ConfigureAwait(false);
                 }).ConfigureAwait(false);
 
-                currentUser.Expenses.RemoveAndAdd(toBeSettledExpenseObj);
-
                 callBack?.OnSuccess(new SettleUpExpenseResponseObj(toBeSettledExpenseObj));
-
             }
             catch (NotSupportedException ex)
             {

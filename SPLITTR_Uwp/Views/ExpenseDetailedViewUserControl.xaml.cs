@@ -17,9 +17,9 @@ namespace SPLITTR_Uwp.Views
 {
     public sealed partial class ExpenseDetailedViewUserControl : UserControl
     {
-        public ExpenseViewModel ExpenseObj
+        public ExpenseVobj ExpenseObj
         {
-            get => DataContext as ExpenseViewModel;
+            get => DataContext as ExpenseVobj;
         }
 
         private readonly ExpenseDetailedViewUserControlViewModel _viewModel;

@@ -16,6 +16,7 @@ using SPLITTR_Uwp.Core.UseCase.MarkAsPaid;
 using SQLite;
 using SPLITTR_Uwp.Core.UseCase.CancelExpense;
 using System.Security.Cryptography;
+using SPLITTR_Uwp.Core.SplittrNotifications;
 
 namespace SPLITTR_Uwp.Core.DataManager;
 
@@ -26,11 +27,11 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager, IMarkExpensePa
     private readonly IUserDataManager _userDataManager;
 
 
-    public async void CancelExpense(string expenseToBeCancelledId, UserBobj currentUser, IUseCaseCallBack<CancelExpenseResponseObj> callBack)
+    public async void CancelExpense(ExpenseBobj expenseToBeCancelled, UserBobj currentUser, IUseCaseCallBack<CancelExpenseResponseObj> callBack)
     {
         try
         {
-            var cancelledExpenseObj = await ChangeExpenseStatus(expenseToBeCancelledId, currentUser, ExpenseStatus.Cancelled).ConfigureAwait(false);
+            var cancelledExpenseObj = await ChangeExpenseStatus(expenseToBeCancelled, currentUser, ExpenseStatus.Cancelled).ConfigureAwait(false);
 
             callBack?.OnSuccess(new CancelExpenseResponseObj(cancelledExpenseObj));
         }
@@ -50,13 +51,13 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager, IMarkExpensePa
 
 
 
-    public async void MarkExpenseAsPaid(string expenseToBeMarkedAsPaid, UserBobj currentUser, IUseCaseCallBack<MarkAsPaidResponseObj> callBack)
+    public async void MarkExpenseAsPaid(ExpenseBobj expenseToBeMarkedAsPaid, UserBobj currentUser, IUseCaseCallBack<MarkAsPaidResponseObj> callBack)
     {
         try
         {
             var paidExpenseObj = await ChangeExpenseStatus(expenseToBeMarkedAsPaid, currentUser, ExpenseStatus.Paid).ConfigureAwait(false);
             //storing record about that expense in dataService
-            _expenseHistoryManager.RecordExpenseMarkedAsPaid(expenseToBeMarkedAsPaid);
+            _expenseHistoryManager.RecordExpenseMarkedAsPaid(expenseToBeMarkedAsPaid.ExpenseUniqueId);
 
             callBack?.OnSuccess(new MarkAsPaidResponseObj(paidExpenseObj));
         }
@@ -68,10 +69,10 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager, IMarkExpensePa
 
     }
 
-    private async Task<ExpenseBobj> ChangeExpenseStatus(string expenseId, UserBobj currentUser, ExpenseStatus status)
+    private async Task<ExpenseBobj> ChangeExpenseStatus(ExpenseBobj statusChangeExpense, UserBobj currentUser, ExpenseStatus status)
     {
         //Fetching expense obj with matching id
-        var expenseStatusChangeBobj = currentUser.Expenses.First(ex => ex.ExpenseUniqueId.Equals(expenseId));
+        var expenseStatusChangeBobj = statusChangeExpense;
 
         expenseStatusChangeBobj.ExpenseStatus = status;
 
@@ -79,9 +80,6 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager, IMarkExpensePa
 
         //Updating User Lent and Owing Amount
         await UpdateCreditDetails(expenseStatusChangeBobj, currentUser).ConfigureAwait(false);
-
-        //Invoking Valued changed on UserObj so  Calculation based on that expense will update
-        currentUser.Expenses.RemoveAndAdd(expenseStatusChangeBobj);
 
         return expenseStatusChangeBobj;
 
@@ -217,11 +215,11 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager, IMarkExpensePa
 
             await UpdateDebitDetails(expenses, currentUser);
 
-            //adds expenseObjs into 
-            currentUser.Expenses.AddRange(expenses);
-
             //Calling Process Success Call back
             callBack?.OnSuccess(new SplitExpenseResponseObj(expenses));
+
+            //Invoking New ExpensesHas been Split
+            SplittrNotification.InvokeExpensesSplit(new ExpenseSplittedEventArgs(expenses));
         }
         catch (ArgumentException ex)
         {

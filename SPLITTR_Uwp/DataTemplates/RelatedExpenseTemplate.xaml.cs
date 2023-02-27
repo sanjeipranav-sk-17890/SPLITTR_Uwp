@@ -15,9 +15,9 @@ namespace SPLITTR_Uwp.DataTemplates
 
         private readonly RelatedExpenseTemplateViewModel _viewModel;
 
-        private ExpenseViewModel ExpenseObj
+        private ExpenseVobj ExpenseObj
         {
-            get => DataContext as ExpenseViewModel;
+            get => DataContext as ExpenseVobj;
         }
 
         public RelatedExpenseTemplate()

@@ -14,7 +14,7 @@ namespace SPLITTR_Uwp.Core.UseCase.LoginUser
             _requestObj = requestObj;
             _dataManager = SplittrDependencyService.GetInstance<IAuthenticationManager>();
         }
-        public override void Action()
+       protected override void Action()
         {
             _dataManager.Authenticate(_requestObj.UserEmailId,new UseCaseCallBackBase<LoginResponseObj>(this));
         }

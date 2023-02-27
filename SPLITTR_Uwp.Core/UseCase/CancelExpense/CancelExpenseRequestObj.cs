@@ -8,11 +8,11 @@ namespace SPLITTR_Uwp.Core.UseCase.CancelExpense
 {
     public class CancelExpenseRequestObj : IRequestObj<CancelExpenseResponseObj>
     {
-        public CancelExpenseRequestObj(IPresenterCallBack<CancelExpenseResponseObj> callBack, UserBobj currentUser, string expenseToBeCancelledId, CancellationToken cts)
+        public CancelExpenseRequestObj(IPresenterCallBack<CancelExpenseResponseObj> callBack, UserBobj currentUser, ExpenseBobj expenseToBeCancelled, CancellationToken cts)
         {
             CallBack = callBack;
             CurrentUser = currentUser;
-            ExpenseToBeCancelledId = expenseToBeCancelledId;
+            ExpenseToBeCancelled = expenseToBeCancelled;
             PresenterCallBack = callBack;
             Cts = cts;
         }
@@ -21,7 +21,7 @@ namespace SPLITTR_Uwp.Core.UseCase.CancelExpense
 
         public IPresenterCallBack<CancelExpenseResponseObj> PresenterCallBack { get; }
 
-        public string ExpenseToBeCancelledId { get; }
+        public ExpenseBobj ExpenseToBeCancelled { get; }
 
         public UserBobj CurrentUser { get; }
 

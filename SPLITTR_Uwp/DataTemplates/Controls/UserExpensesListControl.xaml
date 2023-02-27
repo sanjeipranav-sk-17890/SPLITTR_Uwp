@@ -94,7 +94,7 @@
                                   Height="16" Stretch="Fill" UseLayoutRounding="False" Width="16"/>
                         </Button.Content>
                     </Button>
-                <TextBlock Text="{x:Bind ViewModel.TitleText,Mode=OneWay}"
+                <TextBlock Text="{x:Bind _viewModel.TitleText,Mode=OneWay}"
                            TextTrimming="CharacterEllipsis"
                            Grid.Row="1"
                            RelativePanel.RightOf="NavigationPaneControlButton"
@@ -132,9 +132,9 @@
                       SelectionChanged="ExpensesLIstView_OnSelectionChanged"
                       SelectedIndex="-1"
                       Grid.ColumnSpan="2"
-                      SelectedItem="{x:Bind ViewModel.SelectedExpenseObj,Mode=TwoWay}">
+                      SelectedItem="{x:Bind _viewModel.SelectedExpenseObj,Mode=TwoWay}">
                 <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="vm:ExpenseViewModel">
+                    <DataTemplate x:DataType="vm:ExpenseVobj">
                         <template:ExpenseDataTemplate HorizontalAlignment="Stretch"
                                                         CornerRadius="5"
                                                         Visibility="{x:Bind Visibility,Mode=OneWay}"></template:ExpenseDataTemplate>
@@ -205,13 +205,13 @@
             <ListView Visibility="Collapsed" 
                       Grid.Row="1" 
                       x:Name="DateSortedList"
-                      ItemsSource="{x:Bind ViewModel.DateSortedExpenseList,Mode=OneWay}"
+                      ItemsSource="{x:Bind _viewModel.DateSortedExpenseList,Mode=OneWay}"
                       SelectionChanged="ExpensesLIstView_OnSelectionChanged"
                       SelectedIndex="-1"
                       Grid.ColumnSpan="2"
-                      SelectedItem="{x:Bind ViewModel.SelectedExpenseObj,Mode=TwoWay}">
+                      SelectedItem="{x:Bind _viewModel.SelectedExpenseObj,Mode=TwoWay}">
                 <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="vm:ExpenseViewModel">
+                    <DataTemplate x:DataType="vm:ExpenseVobj">
                         <template:ExpenseDataTemplate HorizontalAlignment="Stretch"
                                                         CornerRadius="5"
                                                         Visibility="Visible"></template:ExpenseDataTemplate>

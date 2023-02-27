@@ -16,7 +16,7 @@ public class GroupCreation : UseCaseBase<GroupCreationResponseObj>
    
         _dataManager =SplittrDependencyService.GetInstance<IGroupCreationDataManager>();
     }
-    public override void Action()
+   protected override void Action()
     {
         _dataManager.CreateSplittrGroup(_requestObj.GroupParticiPants, _requestObj.CurrentUser, _requestObj.GroupName,new UseCaseCallBackBase<GroupCreationResponseObj>(this));
     }
