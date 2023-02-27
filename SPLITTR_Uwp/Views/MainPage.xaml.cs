@@ -48,15 +48,9 @@ namespace SPLITTR_Uwp.Views
         public MainPage()
         {
             _viewModel = ActivatorUtilities.CreateInstance<MainPageViewModel>(App.Container, this);
-            _viewModel.BindingUpdateInvoked += _viewModel_BindingUpdateInvoked;
             this.InitializeComponent();
             _view = this;
             _viewModel.UserGroups.CollectionChanged += UserGroups_CollectionChanged;
-        }
-
-        private void _viewModel_BindingUpdateInvoked()
-        {
-            Bindings.Update();
         }
         #region NavigationViewGroupsPopulating 
 
@@ -132,6 +126,7 @@ namespace SPLITTR_Uwp.Views
             }
 
             page.PaneButtonOnClick += (PageOnPaneButtonOnClick);
+            page.OnGroupInfoIconClicked += GroupInfoButton_onClick;
 
             NavigationService.Navigated -= NavigationService_Navigated;
         }
@@ -205,6 +200,15 @@ namespace SPLITTR_Uwp.Views
         private void CloseErrorMessageButton_OnClick(object sender, RoutedEventArgs e)
         {
             InAppNotification.Dismiss(true);
+        }
+        private void GroupInfoButton_onClick(Group obj)
+        {
+           //Setting Navigation View corresponding group item is selected true
+           var groupNavigationViewItem = MainPageNavigationView.MenuItems.FirstOrDefault(i => i is NavigationViewItemBase { Content:Group group} && group.GroupUniqueId.Equals(obj?.GroupUniqueId));
+           if (groupNavigationViewItem is NavigationViewItemBase navigationViewItem)
+           {
+               navigationViewItem.IsSelected = true;
+           }
         }
     }
 }

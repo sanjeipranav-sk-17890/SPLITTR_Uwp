@@ -5,6 +5,7 @@
     xmlns:local="using:SPLITTR_Uwp.DataTemplates"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
     xmlns:views="using:SPLITTR_Uwp.Views"
     mc:Ignorable="d"
     d:DesignHeight="300"
@@ -33,6 +34,9 @@
                 MinWidth="98"
                 ToolTipService.ToolTip="Mark As Paid"
                 Style="{StaticResource OrangeButtonStyle}"  HorizontalAlignment="Center" Height="30" VerticalAlignment="Top" Background="Green">
+            <ui:Effects.Shadow>
+                <ui:AttachedDropShadow Opacity="1"  BlurRadius="4"  Offset="4" IsMasked="True"/>
+            </ui:Effects.Shadow>
             <Button.Content>
                 <Grid>
                     <Grid.ColumnDefinitions>

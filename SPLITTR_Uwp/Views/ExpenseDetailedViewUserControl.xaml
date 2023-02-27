@@ -129,6 +129,7 @@
             <ListView Grid.Row="3"
                       Grid.ColumnSpan="2"
                       Grid.Column="0"
+                      SelectionMode="None"
                       ItemsSource="{x:Bind _viewModel.RelatedExpenses,Mode=OneWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate  >

@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Navigation;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
+using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.DataTemplates;
 using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.ViewModel.Models;
@@ -23,7 +24,7 @@ namespace SPLITTR_Uwp.Views
     /// </summary>
     public sealed partial class ExpensesListAndDetailViewPage : Page
     {
-        private ExpenseListAndDetailedPageViewModel _viewModel;
+        private readonly ExpenseListAndDetailedPageViewModel _viewModel;
         public ExpensesListAndDetailViewPage()
         {
             this.InitializeComponent();
@@ -36,6 +37,7 @@ namespace SPLITTR_Uwp.Views
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {    //clearing previous subscriptions 
             PaneButtonOnClick = null;
+            OnGroupInfoIconClicked = null;
         }
 
 
@@ -88,6 +90,12 @@ namespace SPLITTR_Uwp.Views
         private string CurrentState
         {
             get => AdaptiveListAndDetailView.CurrentState.Name;
+        }
+
+        public event Action<Group> OnGroupInfoIconClicked;
+        private void ExpensesListControl_OnOnGroupInfoButtonClicked(Group obj)
+        {
+            OnGroupInfoIconClicked?.Invoke(obj);
         }
     }
 

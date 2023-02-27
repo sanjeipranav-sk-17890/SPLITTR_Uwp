@@ -176,7 +176,7 @@
                                        HorizontalAlignment="Stretch"/>
                                 <PasswordBox FontSize="24" 
                                      HorizontalAlignment="Stretch"
-                                     BorderThickness="1" PasswordRevealMode="Peek" IsPasswordRevealButtonEnabled="True"
+                                     BorderThickness="1" PasswordRevealMode="Peek"
                                       />
                                 <Button Background="{ThemeResource ApplicationMainThemeColor}"
                                     HorizontalAlignment="Stretch"

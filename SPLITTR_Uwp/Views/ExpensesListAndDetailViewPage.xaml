@@ -73,7 +73,7 @@
         </VisualStateManager.VisualStateGroups>
         <controls1:UserExpensesListControl CornerRadius="5"
                                           MinWidth="400"
-                                          x:Name="ExpensesListControl"
+                                          x:Name="ExpensesListControl" OnGroupInfoButtonClicked="ExpensesListControl_OnOnGroupInfoButtonClicked"
                                           HorizontalAlignment="Stretch"
                                           VerticalAlignment="Stretch" Grid.Column="0"
                                           OnExpenseSelectionChanged="ExpensesLIstView_OnSelectionChanged"

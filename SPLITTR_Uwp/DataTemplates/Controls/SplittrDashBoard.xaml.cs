@@ -157,9 +157,8 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
                 return;
             }
 
-            var cts = new CancellationTokenSource().Token;
             //useCase classes is updating the UserObj and its related data's
-            var updateUserRequestOBj = new UpdateUserRequestObj(cts, new SplittrDashBoardPresenterCallBack(this), Store.CurreUserBobj, _currentUserName.Trim(), (Currency)PreferredCurrencyIndex);
+            var updateUserRequestOBj = new UpdateUserRequestObj(CancellationToken.None, new SplittrDashBoardPresenterCallBack(this), Store.CurreUserBobj, _currentUserName.Trim(), (Currency)PreferredCurrencyIndex);
 
             var updateUserUseCaseObj = InstanceBuilder.CreateInstance<UpdateUser>(updateUserRequestOBj);
 

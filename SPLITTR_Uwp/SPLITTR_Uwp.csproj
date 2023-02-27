@@ -139,7 +139,7 @@
       <Version>6.2.12</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
-      <Version>7.1.2</Version>
+      <Version>7.1.3</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
       <Version>2.8.1</Version>
@@ -183,6 +183,7 @@
     <Compile Include="DataTemplates\Controls\UserExpensesListControl.xaml.cs">
       <DependentUpon>UserExpensesListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GroupInfoButton_OnClick.cs" />
     <Compile Include="Services\AccentColorService.cs" />
     <Compile Include="Services\StateService.cs" />
     <Compile Include="Services\ThemeHelperService.cs" />

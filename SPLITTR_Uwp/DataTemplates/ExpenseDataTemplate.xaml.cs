@@ -18,6 +18,8 @@ using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.ViewModel.Models;
 using System.Reflection;
 using Windows.UI.Text;
+using SPLITTR_Uwp.Core.ModelBobj;
+using SPLITTR_Uwp.Core.Models;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -63,8 +65,15 @@ namespace SPLITTR_Uwp.DataTemplates
             _viewModel.ExpenseObjLoaded(ExpenseObj);
             Bindings.Update();
         }
-       
-        
 
+
+        public event Action<Group> OnGroupInfoButtonClicked;
+        private void GroupInfoButtonOnClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button { DataContext: Group } groupInfoBtn)
+            {
+                OnGroupInfoButtonClicked?.Invoke(groupInfoBtn.DataContext as Group);
+            }
+        }
     }
 }

@@ -21,15 +21,9 @@ namespace SPLITTR_Uwp.Views
             _viewModel = ActivatorUtilities.CreateInstance<GroupCreationPageViewModel>(App.Container);
             this.InitializeComponent();
             _viewModel.GroupParticipants.CollectionChanged += GroupParticipants_CollectionChanged;
-            _viewModel.BindingUpdateInvoked += _viewModel_BindingUpdateInvoked;
+        
 
         }
-
-        private void _viewModel_BindingUpdateInvoked()
-        {
-            Bindings.Update();
-        }
-
         private void GroupParticipants_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             var groupParticipants = sender as ObservableCollection<User>;

@@ -56,7 +56,7 @@ namespace SPLITTR_Uwp.Configuration
         private static void AddServiceDependencies(IServiceCollection container)
         {
             
-            container.AddTransient<IStateService, StateService>()
+            container.AddSingleton<IStateService, StateService>()
                 .AddTransient<IStringManipulator, Manipulator>()
                 .AddTransient<IExpenseGrouper, ExpenseGrouper>()
                 .AddTransient<UpdateUser>()

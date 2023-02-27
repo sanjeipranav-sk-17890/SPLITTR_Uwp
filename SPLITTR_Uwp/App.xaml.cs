@@ -74,15 +74,15 @@ namespace SPLITTR_Uwp
 
 
             }
-                //Initializing The DI Container
-                _container =   GetServiceProvider();
+            //Initializing The DI Container
+            _container =   GetServiceProvider();
 
             if (e.PrelaunchActivated == false)
             {
                 if (rootFrame.Content == null)
                 {
-                    rootFrame.Navigate(typeof(LoginPage), e.Arguments);
-
+                    var stateManager = Container.GetService(typeof(IStateService)) as IStateService;
+                    stateManager?.VerifySessionIfAvailable();
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();
@@ -96,6 +96,8 @@ namespace SPLITTR_Uwp
             
             //Setting Appliations title bar to Requeired theme color
             AccentColorService.Register(Window.Current.CoreWindow);
+
+
         }
 
         /// <summary>

@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:splittrUwp="using:SPLITTR_Uwp"
     mc:Ignorable="d"
     d:DesignHeight="100"
     d:DesignWidth="500">
@@ -141,6 +142,7 @@
                 </TextBlock>
                 <Button Style="{StaticResource NoPointerAnimation}" Visibility="{x:Bind _viewModel.IsGroupButtonVisible,Mode=OneWay}"
                         Grid.Row="1"
+                        Click="{x:Bind GroupInfoButtonOnClick}"
                         Grid.Column="1"
                         ToolTipService.ToolTip="{x:Bind _viewModel.GroupName,Mode=OneWay}"
                         CornerRadius="4"

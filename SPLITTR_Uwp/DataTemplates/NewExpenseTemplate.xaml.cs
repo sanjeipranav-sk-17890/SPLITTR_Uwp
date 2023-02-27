@@ -13,9 +13,7 @@ namespace SPLITTR_Uwp.DataTemplates
 {
     public sealed partial class NewExpenseTemplate : UserControl
     {
-        
-        private SolidColorBrush _expenseTextBoxColor;
-        
+
         private readonly SolidColorBrush _parsingSuccessColor = new SolidColorBrush(Color.FromArgb(255, 34, 139, 34));
 
         private readonly SolidColorBrush _parsingFailedColor = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));

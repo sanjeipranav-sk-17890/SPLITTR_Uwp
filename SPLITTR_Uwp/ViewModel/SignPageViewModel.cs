@@ -95,7 +95,7 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
 
-        public async void OnSignUpButtonClicked()
+        public  void OnSignUpButtonClicked()
         {
             if (string.IsNullOrEmpty(EmailIdText) ||
                 !EmailIdText.ContainsString(new string[]

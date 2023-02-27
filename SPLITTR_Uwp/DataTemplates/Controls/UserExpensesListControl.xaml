@@ -137,6 +137,7 @@
                     <DataTemplate x:DataType="vm:ExpenseVobj">
                         <template:ExpenseDataTemplate HorizontalAlignment="Stretch"
                                                         CornerRadius="5"
+                                                        OnGroupInfoButtonClicked="ExpenseDataTemplate_OnOnGroupInfoButtonClicked"
                                                         Visibility="{x:Bind Visibility,Mode=OneWay}"></template:ExpenseDataTemplate>
                         <!--<template:ExpenseDataTemplate HorizontalAlignment="Stretch" DateOfExpenseTextBlockVisibility="Visible"
                                                       ExpenseStatusVisibility="Collapsed" CornerRadius="5"/>-->
@@ -214,6 +215,7 @@
                     <DataTemplate x:DataType="vm:ExpenseVobj">
                         <template:ExpenseDataTemplate HorizontalAlignment="Stretch"
                                                         CornerRadius="5"
+                                                        OnGroupInfoButtonClicked="ExpenseDataTemplate_OnOnGroupInfoButtonClicked"
                                                         Visibility="Visible"></template:ExpenseDataTemplate>
                         <!--<template:ExpenseDataTemplate HorizontalAlignment="Stretch" DateOfExpenseTextBlockVisibility="Visible"
                                                       ExpenseStatusVisibility="Collapsed" CornerRadius="5"/>-->

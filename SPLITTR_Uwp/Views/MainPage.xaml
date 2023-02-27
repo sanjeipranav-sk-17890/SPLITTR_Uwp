@@ -2,7 +2,6 @@
     x:Class="SPLITTR_Uwp.Views.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SPLITTR_Uwp.Views"
     xmlns:view="using:SPLITTR_Uwp.Views"
     xmlns:model="using:SPLITTR_Uwp.Core.ModelBobj"
     xmlns:component="using:SPLITTR_Uwp.Views"
@@ -11,16 +10,13 @@
     mc:Ignorable="d"
     xmlns:themeButton="using:SPLITTR_Uwp.DataTemplates.Controls"
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+    xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
     xmlns:toolKitControls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    xmlns:services="using:SPLITTR_Uwp.Services"
-    xmlns:objectModel="using:System.Collections.ObjectModel"
-    xmlns:models="using:SPLITTR_Uwp.Core.Models"
-    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
-    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     Loaded="{x:Bind _viewModel.ViewLoaded}"
 
     Background="{ThemeResource ApplicationMainThemeAcrylicBrush}">
     <Page.Resources>
+        <ui:AttachedDropShadow x:Name="AttachedDropShadow" Offset="8" Opacity="1" ></ui:AttachedDropShadow>
         <Style x:Key="AddWalletButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderBrush" Value="Transparent" />
@@ -275,7 +271,10 @@
                         <Frame  Height="{Binding ElementName=FrameContainerRelativePanel ,Path=ActualHeight,Mode=OneWay}"
                                 Width="{Binding ElementName=FrameContainerRelativePanel,Path=ActualWidth,Mode=OneWay}" Name="InnerFrame"  Grid.Column="0"  Grid.Row="0"
                                 x:FieldModifier="public"  >
-                            <component:ExpensesListAndDetailViewPage PaneButtonOnClick="{x:Bind PageOnPaneButtonOnClick}"/>
+                            <component:ExpensesListAndDetailViewPage 
+                                PaneButtonOnClick="{x:Bind PageOnPaneButtonOnClick}" 
+                                OnGroupInfoIconClicked="{x:Bind GroupInfoButton_onClick}"
+                                />
 
                         </Frame>
                         <!--In AppNotification  -->
@@ -395,6 +394,7 @@
                 <controls:TeachingTip IsOpen="{x:Bind _viewModel.IsUpdateWalletBalanceTeachingTipOpen,Mode=TwoWay}"
                                                   PreferredPlacement="RightTop"
                                                   PlacementMargin="20" 
+                                                  ui:Effects.Shadow="{StaticResource AttachedDropShadow}"
                                                   x:Name="WalletBalanceUpdateTeachingTip"
                                                   IsLightDismissEnabled="True">
                     <controls:TeachingTip.Content>

@@ -24,7 +24,7 @@ using static SPLITTR_Uwp.Services.UiService;
 
 namespace SPLITTR_Uwp.ViewModel
 {
-    internal class MainPageViewModel : ObservableObject, IMainPageViewModel, IViewModel
+    internal class MainPageViewModel : ObservableObject, IMainPageViewModel
     {
 
 
@@ -202,8 +202,6 @@ namespace SPLITTR_Uwp.ViewModel
         {
             IsUpdateWalletBalanceTeachingTipOpen = !IsUpdateWalletBalanceTeachingTipOpen;
         }
-
-        public event Action BindingUpdateInvoked;
 
 
 

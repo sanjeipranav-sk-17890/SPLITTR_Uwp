@@ -52,24 +52,8 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             {
                 return;
             }
-            switch (requestObj.FilterType)
-            {
-                case ExpenseListFilterObj.ExpenseFilter.RequestByMe:
-                    ListControl._viewModel.PopulateUserRaisedExpenses();
-                    break;
-                case ExpenseListFilterObj.ExpenseFilter.RequestToMe:
-                    ListControl._viewModel.PopulateUserReceivedExpenses();
-                    break;
-                case ExpenseListFilterObj.ExpenseFilter.AllExpenses:
-                    ListControl._viewModel.OnExpenseListControlLoaded();
-                    break;
-                case ExpenseListFilterObj.ExpenseFilter.GroupExpense:
-                    ListControl._viewModel.PopulateSpecificGroupExpenses(requestObj.Group);
-                    break;
-                case ExpenseListFilterObj.ExpenseFilter.UserExpense:
-                    ListControl._viewModel.PopulateUserRelatedExpenses(requestObj.User);
-                    break;
-            }
+            ListControl._viewModel.FilterExpensesToBeShown(requestObj);
+
         }
 
         
@@ -161,22 +145,24 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             //if Showing list view is Date Time sorted then No Need to change list view 
             if (selectedItem == DateMenuItem && (DateSortedList.Visibility != Visibility.Visible))
             {
-                //Sorts Expenses Bases On Date and Add it to Observable Collection
-                   _viewModel.SortExpenseBasedOnDate(_viewModel.GroupedExpenses);
-
-                //Setting visibility of dateListview and Hiding Grouped Listview
+                //Setting visibility of dateListView and Hiding Grouped ListView
                 ExpensesLIstView.Visibility = Visibility.Collapsed;
                 DateSortedList.Visibility = Visibility.Visible;
 
             }
-            if (selectedItem == StatusMenuItem && (ExpensesLIstView.Visibility != Visibility.Visible))
+            if (selectedItem != StatusMenuItem || (ExpensesLIstView.Visibility == Visibility.Visible))
             {
-
-                ExpensesLIstView.Visibility = Visibility.Visible;
-                DateSortedList.Visibility = Visibility.Collapsed;
-
+                return;
             }
+            ExpensesLIstView.Visibility = Visibility.Visible;
+            DateSortedList.Visibility = Visibility.Collapsed;
 
+        }
+
+        public event Action<Group> OnGroupInfoButtonClicked ;
+        private void ExpenseDataTemplate_OnOnGroupInfoButtonClicked(Group obj)
+        {
+            OnGroupInfoButtonClicked?.Invoke(obj);
         }
     }
 
@@ -213,8 +199,11 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
 
     }
 
-    public class ExpensesListControlViewModel :ObservableObject,IViewModel
+    public class ExpensesListControlViewModel :ObservableObject
     {
+
+        #region BindableProperties
+
         private readonly IExpenseListControl _view;
         private readonly IExpenseGrouper _expenseGrouper;
         private string _titleText;
@@ -223,7 +212,17 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
 
         public ObservableCollection<ExpenseGroupingList> GroupedExpenses { get; } = new ObservableCollection<ExpenseGroupingList>();
 
-        private List<ExpenseBobj> _userExpensesCache;
+        private List<ExpenseVobj> _userExpensesCache;
+
+        public string TitleText
+        {
+            get => _titleText;
+            set => SetProperty(ref _titleText, value);
+        }
+        public ExpenseVobj SelectedExpenseObj { get; set; }
+
+
+        #endregion
 
         public void SortExpenseBasedOnDate(ObservableCollection<ExpenseGroupingList> groupedExpenses)
         {
@@ -240,17 +239,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             {
                 DateSortedExpenseList.Add(expense);
             }
-
         }
-
-        public ExpenseVobj SelectedExpenseObj { get; set; }
-
-        public string TitleText
-        {
-            get => _titleText;
-            set => SetProperty(ref _titleText, value);
-        }
-
 
 
         public ExpensesListControlViewModel(IExpenseListControl view, IExpenseGrouper expenseGrouper)
@@ -258,8 +247,69 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             _view = view;
             _expenseGrouper = expenseGrouper;
 
-            SplittrNotification.ExpensesSplited += SplittrNotification_ExpensesSplited;
+            SplittrNotification.ExpensesSplited += SplittrNotification_ExpensesSplitted;
             SplittrNotification.ExpenseStatusChanged += SplittrNotification_ExpenseStatusChanged;
+        }
+
+
+        #region SortingAndGroupingRequest
+
+        private ExpenseListFilterObj _preferedFilter;
+
+        public void FilterExpensesToBeShown(ExpenseListFilterObj filterObj)
+        {
+            if (filterObj == null)
+            {
+                CallUseCaseToFetchCurrentUserExpense();
+                return;
+            }
+            _preferedFilter = filterObj;
+            switch (filterObj.FilterType)
+            {
+                case ExpenseListFilterObj.ExpenseFilter.RequestByMe:
+                    PopulateUserRaisedExpenses();
+                    break;
+                case ExpenseListFilterObj.ExpenseFilter.RequestToMe:
+                    PopulateUserReceivedExpenses();
+                    break;
+                case ExpenseListFilterObj.ExpenseFilter.AllExpenses:
+                    CallUseCaseToFetchCurrentUserExpense();
+                    break;
+                case ExpenseListFilterObj.ExpenseFilter.GroupExpense:
+                    PopulateSpecificGroupExpenses(filterObj.Group);
+                    break;
+                case ExpenseListFilterObj.ExpenseFilter.UserExpense:
+                    PopulateUserRelatedExpenses(filterObj.User);
+                    break;
+            
+            }
+
+            //After Grouping Expenses Based on Request Also Populating Date Sorted ListView Based On Newly Grouped Expenses
+            SortExpenseBasedOnDate(GroupedExpenses);
+        }
+        
+        #endregion
+
+
+
+
+        #region NotificationListering
+
+        private async void SplittrNotification_ExpensesSplitted(ExpenseSplittedEventArgs obj)
+        {
+            if (obj?.NewExpenses is null)
+            {
+                return;
+            }
+            //Populating Existing Cache
+            _userExpensesCache?.AddRange(obj.NewExpenses.Select(ex => new ExpenseVobj(ex)));
+
+            await RunOnUiThread((() =>
+            {
+                //grouping and Populating Newly added expenses Groups
+                FilterExpensesToBeShown(_preferedFilter);
+
+            })).ConfigureAwait(false);
         }
 
         private async void SplittrNotification_ExpenseStatusChanged(ExpenseStatusChangedEventArgs obj)
@@ -267,40 +317,23 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             await RunOnUiThread((() =>
             {
                 //grouping and Populating Newly added expenses Groups
-                PopuLateExpenses(_userExpensesCache);
+                FilterExpensesToBeShown(_preferedFilter);
 
             })).ConfigureAwait(false);
         }
 
-        private async void SplittrNotification_ExpensesSplited(ExpenseSplittedEventArgs obj)
-        {
-            if (obj?.NewExpenses is null)
-            {
-                return;
-            }
-            //Populating Existing Cache
-            _userExpensesCache?.AddRange(obj.NewExpenses);
+        #endregion
 
-            await RunOnUiThread((() =>
-            {
-                //grouping and Populating Newly added expenses Groups
-                PopuLateExpenses(_userExpensesCache);
-
-            })).ConfigureAwait(false);
-        }
 
         public void ViewDisposed()
         {
-            SplittrNotification.ExpensesSplited -= SplittrNotification_ExpensesSplited;
+            SplittrNotification.ExpensesSplited -= SplittrNotification_ExpensesSplitted;
             SplittrNotification.ExpenseStatusChanged -= SplittrNotification_ExpenseStatusChanged;
         }
 
-        public event Action BindingUpdateInvoked;
-
         public void OnExpenseListControlLoaded()
         {
-            CallUseCaseToFetchCurrentUserExpense();
-   
+            FilterExpensesToBeShown(_preferedFilter);
         }
         private void CallUseCaseToFetchCurrentUserExpense()
         {
@@ -436,8 +469,9 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         }
         #endregion
 
+        #region PresenterCallBack
 
-        class ExpenseListVmPresenterCb : IPresenterCallBack<GetExpensesByIdResponse>
+        private class ExpenseListVmPresenterCb : IPresenterCallBack<GetExpensesByIdResponse>
         {
             private readonly ExpensesListControlViewModel _viewModel;
 
@@ -451,11 +485,11 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
                 {
                     return;
                 }
-                _viewModel._userExpensesCache = result.CurrentUserExpenses.ToList();
+                _viewModel._userExpensesCache = result.CurrentUserExpenses.Select(ex => new ExpenseVobj(ex)).ToList();
                 await RunOnUiThread((() =>
                 {
                     _viewModel.PopuLateExpenses(result.CurrentUserExpenses);
-
+                    _viewModel.SortExpenseBasedOnDate(_viewModel.GroupedExpenses);
                 })).ConfigureAwait(false);
             }
             public void OnError(SplittrException ex)
@@ -463,6 +497,11 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
                 ExceptionHandlerService.HandleException(ex);
             }
         }
+
+
+        #endregion
+
+
     }
 
 }
