@@ -3,21 +3,17 @@ using SPLITTR_Uwp.Core.ModelBobj;
 
 namespace SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
 
-public class RelatedExpenseRequestObj :IRequestObj<RelatedExpenseResponseObj>
+public class RelatedExpenseRequestObj :SplittrRequestBase<RelatedExpenseResponseObj>
 {
-    public RelatedExpenseRequestObj(ExpenseBobj referenceExpense, UserBobj currentUser, CancellationToken cts, IPresenterCallBack<RelatedExpenseResponseObj> presenterCallBack)
+    public RelatedExpenseRequestObj(ExpenseBobj referenceExpense, UserBobj currentUser, CancellationToken cts, IPresenterCallBack<RelatedExpenseResponseObj> presenterCallBack) :base(cts, presenterCallBack)
     {
         ReferenceExpense = referenceExpense;
         CurrentUser = currentUser;
-        Cts = cts;
-        PresenterCallBack = presenterCallBack;
+        
     }
 
     public ExpenseBobj ReferenceExpense { get; }
 
     public UserBobj CurrentUser { get; }
 
-    public CancellationToken Cts { get; }
-
-    public IPresenterCallBack<RelatedExpenseResponseObj> PresenterCallBack { get; }
 }

@@ -2,18 +2,12 @@
 
 namespace SPLITTR_Uwp.Core.UseCase.VerifyPaidExpense;
 
-public class VerifyPaidExpenseRequestObj : IRequestObj<VerifyPaidExpenseResponseObj>
+public class VerifyPaidExpenseRequestObj : SplittrRequestBase<VerifyPaidExpenseResponseObj>
 {
     public string ExpenseUniqueId { get; }
 
-    public VerifyPaidExpenseRequestObj(string expenseUniqueId, CancellationToken cts, IPresenterCallBack<VerifyPaidExpenseResponseObj> presenterCallBack)
+    public VerifyPaidExpenseRequestObj(string expenseUniqueId, CancellationToken cts, IPresenterCallBack<VerifyPaidExpenseResponseObj> presenterCallBack) : base(cts, presenterCallBack)
     {
         ExpenseUniqueId = expenseUniqueId;
-        Cts = cts;
-        PresenterCallBack = presenterCallBack;
     }
-
-    public CancellationToken Cts { get; }
-
-    public IPresenterCallBack<VerifyPaidExpenseResponseObj> PresenterCallBack { get; }
 }

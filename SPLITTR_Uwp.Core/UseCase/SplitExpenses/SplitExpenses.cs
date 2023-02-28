@@ -7,9 +7,9 @@ using SPLITTR_Uwp.Core.ModelBobj;
 
 namespace SPLITTR_Uwp.Core.UseCase.SplitExpenses;
 
-public class SplitExpenseRequestObj : IRequestObj<SplitExpenseResponseObj>
+public class SplitExpenseRequestObj : SplittrRequestBase<SplitExpenseResponseObj>
 {
-    public SplitExpenseRequestObj(string expenseDescription, UserBobj currentUser, IEnumerable<ExpenseBobj> expenses, string expenseNote, DateTime dateOfExpense, double expenseAmount, int expenseSplitType, CancellationToken cts, IPresenterCallBack<SplitExpenseResponseObj> presenterCallBack)
+    public SplitExpenseRequestObj(string expenseDescription, UserBobj currentUser, IEnumerable<ExpenseBobj> expenses, string expenseNote, DateTime dateOfExpense, double expenseAmount, int expenseSplitType, CancellationToken cts, IPresenterCallBack<SplitExpenseResponseObj> presenterCallBack) : base(cts, presenterCallBack)
     {
         ExpenseDescription = expenseDescription;
         CurrentUser = currentUser;
@@ -18,8 +18,7 @@ public class SplitExpenseRequestObj : IRequestObj<SplitExpenseResponseObj>
         DateOfExpense = dateOfExpense;
         ExpenseAmount = expenseAmount;
         ExpenseSplitType = expenseSplitType;
-        Cts = cts;
-        PresenterCallBack = presenterCallBack;
+
     }
 
     public  string ExpenseDescription { get;  }
@@ -36,9 +35,6 @@ public class SplitExpenseRequestObj : IRequestObj<SplitExpenseResponseObj>
 
     public int ExpenseSplitType { get; }
 
-    public CancellationToken Cts { get; }
-
-    public IPresenterCallBack<SplitExpenseResponseObj> PresenterCallBack { get; }
 }
 public class SplitExpenseResponseObj
 {

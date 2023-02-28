@@ -43,18 +43,12 @@ public class GetUserGroups :UseCaseBase<GetUserGroupResponse>
     }
 }
 
-public class GetUserGroupReq :IRequestObj<GetUserGroupResponse>
+public class GetUserGroupReq :SplittrRequestBase<GetUserGroupResponse>
 {
-    public GetUserGroupReq(CancellationToken cts, IPresenterCallBack<GetUserGroupResponse> presenterCallBack, User currentUser)
+    public GetUserGroupReq(CancellationToken cts, IPresenterCallBack<GetUserGroupResponse> presenterCallBack, User currentUser) :base(cts, presenterCallBack)
     {
-        Cts = cts;
-        PresenterCallBack = presenterCallBack;
         CurrentUser = currentUser;
     }
-
-    public CancellationToken Cts { get; }
-
-    public IPresenterCallBack<GetUserGroupResponse> PresenterCallBack { get; }
 
     public User CurrentUser { get;}
 

@@ -43,18 +43,13 @@ public class GetExpensesByUserId :UseCaseBase<GetExpensesByIdResponse>
         
 
 }
-public class GetExpensesByIdRequest : IRequestObj<GetExpensesByIdResponse>
+public class GetExpensesByIdRequest : SplittrRequestBase<GetExpensesByIdResponse>
 {
-    public CancellationToken Cts { get; }
-
-    public IPresenterCallBack<GetExpensesByIdResponse> PresenterCallBack { get; }
 
     public User CurrentUser { get; }
 
-    public GetExpensesByIdRequest(CancellationToken cts, IPresenterCallBack<GetExpensesByIdResponse> presenterCallBack, User currentUser)
+    public GetExpensesByIdRequest(CancellationToken cts, IPresenterCallBack<GetExpensesByIdResponse> presenterCallBack, User currentUser) : base(cts, presenterCallBack)
     {
-        Cts = cts;
-        PresenterCallBack = presenterCallBack;
         CurrentUser = currentUser;
     }
 }

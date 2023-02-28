@@ -73,19 +73,13 @@ public class GroupDetailById : UseCaseBase<GroupDetailByIdResponse>
 
 }
 
-public class GroupDetailByIdRequest : IRequestObj<GroupDetailByIdResponse>
+public class GroupDetailByIdRequest : SplittrRequestBase<GroupDetailByIdResponse>
 {
-    public GroupDetailByIdRequest(string groupUniqueId, CancellationToken cts, IPresenterCallBack<GroupDetailByIdResponse> presenterCallBack, User currentUser)
+    public GroupDetailByIdRequest(string groupUniqueId, CancellationToken cts, IPresenterCallBack<GroupDetailByIdResponse> presenterCallBack, User currentUser) : base(cts, presenterCallBack)
     {
         GroupUniqueId = groupUniqueId;
-        Cts = cts;
-        PresenterCallBack = presenterCallBack;
         CurrentUser = currentUser;
     }
-
-    public CancellationToken Cts { get; }
-
-    public IPresenterCallBack<GroupDetailByIdResponse> PresenterCallBack { get; }
 
     public string GroupUniqueId { get; }
 

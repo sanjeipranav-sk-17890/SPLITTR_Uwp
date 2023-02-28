@@ -2,20 +2,14 @@
 
 namespace SPLITTR_Uwp.Core.UseCase.SignUpUser;
 
-public class SignUpUserReqObj : IRequestObj<SignUpUserResponseObj>
+public class SignUpUserReqObj : SplittrRequestBase<SignUpUserResponseObj>
 {
-    public SignUpUserReqObj(int currencyPreference, string emailId, string userName, IPresenterCallBack<SignUpUserResponseObj> presenterCallBack, CancellationToken cts)
+    public SignUpUserReqObj(int currencyPreference, string emailId, string userName, IPresenterCallBack<SignUpUserResponseObj> presenterCallBack, CancellationToken cts) : base(cts,presenterCallBack)
     {
         CurrencyPreference = currencyPreference;
         EmailId = emailId;
         UserName = userName;
-        PresenterCallBack = presenterCallBack;
-        Cts = cts;
     }
-
-    public CancellationToken Cts { get; }
-
-    public IPresenterCallBack<SignUpUserResponseObj> PresenterCallBack { get; }
 
     public string UserName { get;}
 

@@ -7,18 +7,12 @@ using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.UseCase.UserSuggestion;
 
-public class UserSuggestionRequestObject : IRequestObj<UserSuggestionResponseObject>
+public class UserSuggestionRequestObject : SplittrRequestBase<UserSuggestionResponseObject>
 {
-    public UserSuggestionRequestObject(IPresenterCallBack<UserSuggestionResponseObject> presenterCallBack, CancellationToken cts, string userName)
+    public UserSuggestionRequestObject(IPresenterCallBack<UserSuggestionResponseObject> presenterCallBack, CancellationToken cts, string userName) : base(cts,presenterCallBack)
     {
-        PresenterCallBack = presenterCallBack;
-        Cts = cts;
         UserName = userName;
     }
-
-    public CancellationToken Cts { get; }
-
-    public IPresenterCallBack<UserSuggestionResponseObject> PresenterCallBack { get; }
 
     public string UserName { get; }
 }

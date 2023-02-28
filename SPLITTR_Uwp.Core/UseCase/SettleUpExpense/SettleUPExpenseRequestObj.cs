@@ -3,20 +3,14 @@ using SPLITTR_Uwp.Core.ModelBobj;
 
 namespace SPLITTR_Uwp.Core.UseCase.SettleUpExpense;
 
-public class SettleUPExpenseRequestObj : IRequestObj<SettleUpExpenseResponseObj>
+public class SettleUPExpenseRequestObj : SplittrRequestBase<SettleUpExpenseResponseObj>
 {
-    public SettleUPExpenseRequestObj(bool isWalletTransaction, UserBobj currentUser, ExpenseBobj settleExpense, IPresenterCallBack<SettleUpExpenseResponseObj> presenterCallBack, CancellationToken cts)
+    public SettleUPExpenseRequestObj(bool isWalletTransaction, UserBobj currentUser, ExpenseBobj settleExpense, IPresenterCallBack<SettleUpExpenseResponseObj> presenterCallBack, CancellationToken cts) : base(cts,presenterCallBack)
     {
         IsWalletTransaction = isWalletTransaction;
         CurrentUser = currentUser;
         SettleExpense = settleExpense;
-        PresenterCallBack = presenterCallBack;
-        Cts = cts;
     }
-
-    public CancellationToken Cts { get; }
-
-    public IPresenterCallBack<SettleUpExpenseResponseObj> PresenterCallBack { get; }
 
     public ExpenseBobj SettleExpense { get; }
 

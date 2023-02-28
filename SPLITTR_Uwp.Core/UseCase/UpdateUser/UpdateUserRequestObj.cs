@@ -4,20 +4,14 @@ using SPLITTR_Uwp.Core.ModelBobj.Enum;
 
 namespace SPLITTR_Uwp.Core.UseCase.UpdateUser;
 
-public class UpdateUserRequestObj :IRequestObj<UpdateUserResponseObj>
+public class UpdateUserRequestObj :SplittrRequestBase<UpdateUserResponseObj>
 {
-    public UpdateUserRequestObj(CancellationToken cts, IPresenterCallBack<UpdateUserResponseObj> presenterCallBack, UserBobj currentUser, string newUserName, Currency currencyPreference)
+    public UpdateUserRequestObj(CancellationToken cts, IPresenterCallBack<UpdateUserResponseObj> presenterCallBack, UserBobj currentUser, string newUserName, Currency currencyPreference):base(cts, presenterCallBack)
     {
-        Cts = cts;
-        PresenterCallBack = presenterCallBack;
         CurrentUser = currentUser;
         NewUserName = newUserName;
         CurrencyPreference = currencyPreference;
     }
-
-    public CancellationToken Cts { get; }
-
-    public IPresenterCallBack<UpdateUserResponseObj> PresenterCallBack { get; }
 
     public UserBobj CurrentUser { get; }
 

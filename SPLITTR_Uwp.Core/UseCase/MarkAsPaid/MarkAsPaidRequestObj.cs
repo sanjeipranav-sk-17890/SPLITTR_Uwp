@@ -3,21 +3,14 @@ using SPLITTR_Uwp.Core.ModelBobj;
 
 namespace SPLITTR_Uwp.Core.UseCase.MarkAsPaid;
 
-public class MarkAsPaidRequestObj : IRequestObj<MarkAsPaidResponseObj>
+public class MarkAsPaidRequestObj : SplittrRequestBase<MarkAsPaidResponseObj>
 {
-    public MarkAsPaidRequestObj(IPresenterCallBack<MarkAsPaidResponseObj> presenterCallBack, CancellationToken cts, UserBobj userBobj, ExpenseBobj expenseToBeMarkedAsPaid)
+    public MarkAsPaidRequestObj(IPresenterCallBack<MarkAsPaidResponseObj> presenterCallBack, CancellationToken cts, UserBobj userBobj, ExpenseBobj expenseToBeMarkedAsPaid) : base(cts,presenterCallBack)
     {
-        PresenterCallBack = presenterCallBack;
-        Cts = cts;
         ExpenseToBeMarkedAsPaid = expenseToBeMarkedAsPaid;
         CurrentUser = userBobj;
         ExpenseToBeMarkedAsPaid = expenseToBeMarkedAsPaid;
     }
-
-    public CancellationToken Cts { get; }
-
-    public IPresenterCallBack<MarkAsPaidResponseObj> PresenterCallBack { get; }
-
     public ExpenseBobj ExpenseToBeMarkedAsPaid { get; }
 
     public UserBobj CurrentUser { get; }

@@ -4,19 +4,14 @@ using SPLITTR_Uwp.Core.UseCase.UpdateUser;
 
 namespace SPLITTR_Uwp.Core.UseCase.AddWalletAmount;
 
-public class AddWalletAmountRequestObject : IRequestObj<UpdateUserResponseObj>
+public class AddWalletAmountRequestObject : SplittrRequestBase<UpdateUserResponseObj>
 {
-    public AddWalletAmountRequestObject(IPresenterCallBack<UpdateUserResponseObj> presenterCallBack, CancellationToken cts, UserBobj currentUser, double walletBalance)
+    public AddWalletAmountRequestObject(IPresenterCallBack<UpdateUserResponseObj> presenterCallBack, CancellationToken cts, UserBobj currentUser, double walletBalance) : base(cts,presenterCallBack)
     {
-        PresenterCallBack = presenterCallBack;
-        Cts = cts;
         CurrentUser = currentUser;
         WalletBalance = walletBalance;
     }
 
-    public CancellationToken Cts { get; }
-
-    public IPresenterCallBack<UpdateUserResponseObj> PresenterCallBack { get; }
 
     public UserBobj CurrentUser { get; }
 

@@ -2,18 +2,12 @@
 
 namespace SPLITTR_Uwp.Core.UseCase.LoginUser;
 
-public class LoginRequestObj :IRequestObj<LoginResponseObj>
+public class LoginRequestObj :SplittrRequestBase<LoginResponseObj>
 {
-    public LoginRequestObj(string userEmailId, IPresenterCallBack<LoginResponseObj> presenterCallBack, CancellationToken cts)
+    public LoginRequestObj(string userEmailId, IPresenterCallBack<LoginResponseObj> presenterCallBack, CancellationToken cts) : base(cts,presenterCallBack)
     {
         UserEmailId = userEmailId;
-        PresenterCallBack = presenterCallBack;
-        Cts = cts;
     }
-
-    public CancellationToken Cts { get; }
-
-    public IPresenterCallBack<LoginResponseObj> PresenterCallBack { get; }
 
     public string UserEmailId { get;}
 }
