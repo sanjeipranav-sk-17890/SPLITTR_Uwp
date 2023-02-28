@@ -8,97 +8,96 @@ using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.UseCase.GetUserGroups;
 
-namespace SPLITTR_Uwp.Core.UseCase.GetGroupDetails
+namespace SPLITTR_Uwp.Core.UseCase.GetGroupDetails;
+
+public class GroupDetailById : UseCaseBase<GroupDetailByIdResponse>
 {
-    public class GroupDetailById : UseCaseBase<GroupDetailByIdResponse>
+    private readonly GroupDetailByIdRequest _requestObj;
+    private readonly IGroupDataManager _groupDataManager;
+
+    private readonly static ConcurrentDictionary<string, GroupBobj> _groupBobjCache = new ConcurrentDictionary<string, GroupBobj>();
+
+
+    public GroupDetailById(GroupDetailByIdRequest requestObj) : base(requestObj.PresenterCallBack, requestObj.Cts)
     {
-        private readonly GroupDetailByIdRequest _requestObj;
-        private readonly IGroupDataManager _groupDataManager;
-
-        private readonly static ConcurrentDictionary<string, GroupBobj> _groupBobjCache = new ConcurrentDictionary<string, GroupBobj>();
-
-
-        public GroupDetailById(GroupDetailByIdRequest requestObj) : base(requestObj.PresenterCallBack, requestObj.Cts)
-        {
-            _requestObj = requestObj;
-            _groupDataManager = SplittrDependencyService.GetInstance<IGroupDataManager>();
-        }
-
-        public override bool GetIfAvailableFromCache()
-        {
-            if (!_groupBobjCache.ContainsKey(_requestObj.GroupUniqueId))
-            {
-                return false;
-            }
-            PresenterCallBack?.OnSuccess(new GroupDetailByIdResponse(_groupBobjCache[_requestObj.GroupUniqueId]));
-            return true;
-        }
-
-       protected override void Action()
-        {
-            _groupDataManager.GetUserParticipatingGroups(_requestObj.CurrentUser, new GroupDetailUsCallBack(this));
-        }
-
-       private class GroupDetailUsCallBack : IUseCaseCallBack<GetUserGroupResponse>
-        {
-            private readonly GroupDetailById _useCase;
-
-            public GroupDetailUsCallBack(GroupDetailById useCase)
-            {
-                _useCase = useCase;
-            }
-
-            public void OnSuccess(GetUserGroupResponse responseObj)
-            {
-                foreach (var group in responseObj?.UserParticipatingGroups)
-                {
-                    _groupBobjCache.AddOrUpdate(group.GroupUniqueId, group, (s, bobj) => bobj);
-                }
-                try
-                {
-                    var requestedGroup = _groupBobjCache[_useCase._requestObj.GroupUniqueId];
-                    _useCase?.PresenterCallBack?.OnSuccess(new GroupDetailByIdResponse(requestedGroup));
-                }
-                catch (KeyNotFoundException ex)
-                {
-                    _useCase?.PresenterCallBack?.OnError(new SplittrException(ex, "No Such Group Found With That Key"));
-                }
-
-            }
-            public void OnError(SplittrException error)
-            {
-                _useCase?.PresenterCallBack?.OnError(error);
-            }
-        }
-
+        _requestObj = requestObj;
+        _groupDataManager = SplittrDependencyService.GetInstance<IGroupDataManager>();
     }
 
-    public class GroupDetailByIdRequest : IRequestObj<GroupDetailByIdResponse>
+    public override bool GetIfAvailableFromCache()
     {
-        public GroupDetailByIdRequest(string groupUniqueId, CancellationToken cts, IPresenterCallBack<GroupDetailByIdResponse> presenterCallBack, User currentUser)
+        if (!_groupBobjCache.ContainsKey(_requestObj.GroupUniqueId))
         {
-            GroupUniqueId = groupUniqueId;
-            Cts = cts;
-            PresenterCallBack = presenterCallBack;
-            CurrentUser = currentUser;
+            return false;
+        }
+        PresenterCallBack?.OnSuccess(new GroupDetailByIdResponse(_groupBobjCache[_requestObj.GroupUniqueId]));
+        return true;
+    }
+
+    protected override void Action()
+    {
+        _groupDataManager.GetUserParticipatingGroups(_requestObj.CurrentUser, new GroupDetailUsCallBack(this));
+    }
+
+    private class GroupDetailUsCallBack : IUseCaseCallBack<GetUserGroupResponse>
+    {
+        private readonly GroupDetailById _useCase;
+
+        public GroupDetailUsCallBack(GroupDetailById useCase)
+        {
+            _useCase = useCase;
         }
 
-        public CancellationToken Cts { get; }
-
-        public IPresenterCallBack<GroupDetailByIdResponse> PresenterCallBack { get; }
-
-        public string GroupUniqueId { get; }
-
-        public User CurrentUser { get; }
-
-    }
-    public class GroupDetailByIdResponse
-    {
-        public GroupDetailByIdResponse(GroupBobj requestedGroup)
+        public void OnSuccess(GetUserGroupResponse responseObj)
         {
-            RequestedGroup = requestedGroup;
-        }
+            foreach (var group in responseObj?.UserParticipatingGroups)
+            {
+                _groupBobjCache.AddOrUpdate(group.GroupUniqueId, group, (s, bobj) => bobj);
+            }
+            try
+            {
+                var requestedGroup = _groupBobjCache[_useCase._requestObj.GroupUniqueId];
+                _useCase?.PresenterCallBack?.OnSuccess(new GroupDetailByIdResponse(requestedGroup));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _useCase?.PresenterCallBack?.OnError(new SplittrException(ex, "No Such Group Found With That Key"));
+            }
 
-        public GroupBobj RequestedGroup { get; }
+        }
+        public void OnError(SplittrException error)
+        {
+            _useCase?.PresenterCallBack?.OnError(error);
+        }
     }
+
+}
+
+public class GroupDetailByIdRequest : IRequestObj<GroupDetailByIdResponse>
+{
+    public GroupDetailByIdRequest(string groupUniqueId, CancellationToken cts, IPresenterCallBack<GroupDetailByIdResponse> presenterCallBack, User currentUser)
+    {
+        GroupUniqueId = groupUniqueId;
+        Cts = cts;
+        PresenterCallBack = presenterCallBack;
+        CurrentUser = currentUser;
+    }
+
+    public CancellationToken Cts { get; }
+
+    public IPresenterCallBack<GroupDetailByIdResponse> PresenterCallBack { get; }
+
+    public string GroupUniqueId { get; }
+
+    public User CurrentUser { get; }
+
+}
+public class GroupDetailByIdResponse
+{
+    public GroupDetailByIdResponse(GroupBobj requestedGroup)
+    {
+        RequestedGroup = requestedGroup;
+    }
+
+    public GroupBobj RequestedGroup { get; }
 }

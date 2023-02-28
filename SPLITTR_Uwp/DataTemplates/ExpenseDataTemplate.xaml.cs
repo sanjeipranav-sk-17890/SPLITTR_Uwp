@@ -9,57 +9,56 @@ using SPLITTR_Uwp.ViewModel.Models;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace SPLITTR_Uwp.DataTemplates
+namespace SPLITTR_Uwp.DataTemplates;
+
+public sealed partial class ExpenseDataTemplate : UserControl
 {
-    public sealed partial class ExpenseDataTemplate : UserControl
+    private readonly ExpenseItemViewModel _viewModel;
+
+    public ExpenseVobj ExpenseObj
     {
-        private readonly ExpenseItemViewModel _viewModel;
+        get => DataContext as ExpenseVobj;
+    }
 
-        public ExpenseVobj ExpenseObj
+    public ExpenseDataTemplate()
+    {
+        _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<ExpenseItemViewModel>(App.Container);
+        InitializeComponent();
+        DataContextChanged += ExpenseDataTemplateV2_DataContextChanged;
+        Unloaded += ExpenseDataTemplate_Unloaded;
+    }
+
+    private void ExpenseDataTemplate_Unloaded(object sender, RoutedEventArgs e)
+    {
+        _viewModel.ViewDisposed();
+    }
+
+    private void ExpenseDataTemplateV2_PointerExited(object sender, PointerRoutedEventArgs e)
+    {
+        VisualStateManager.GoToState(this, nameof(OnPointerLeaved), false);
+    }
+    private void ExpenseDataTemplateV2_PointerEntered(object sender, PointerRoutedEventArgs e)
+    {
+        VisualStateManager.GoToState(this, nameof(OnPointerOver), false);
+    }
+
+    private void ExpenseDataTemplateV2_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+    {
+        if (ExpenseObj is null)
         {
-            get => DataContext as ExpenseVobj;
+            return;
         }
-
-        public ExpenseDataTemplate()
-        {
-            _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<ExpenseItemViewModel>(App.Container);
-            InitializeComponent();
-            DataContextChanged += ExpenseDataTemplateV2_DataContextChanged;
-            Unloaded += ExpenseDataTemplate_Unloaded;
-        }
-
-        private void ExpenseDataTemplate_Unloaded(object sender, RoutedEventArgs e)
-        {
-           _viewModel.ViewDisposed();
-        }
-
-        private void ExpenseDataTemplateV2_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            VisualStateManager.GoToState(this, nameof(OnPointerLeaved), false);
-        }
-        private void ExpenseDataTemplateV2_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            VisualStateManager.GoToState(this, nameof(OnPointerOver), false);
-        }
-
-        private void ExpenseDataTemplateV2_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
-        {
-            if (ExpenseObj is null)
-            {
-                return;
-            }
-            _viewModel.ExpenseObjLoaded(ExpenseObj);
-            Bindings.Update();
-        }
+        _viewModel.ExpenseObjLoaded(ExpenseObj);
+        Bindings.Update();
+    }
 
 
-        public event Action<Group> OnGroupInfoButtonClicked;
-        private void GroupInfoButtonOnClick(object sender, RoutedEventArgs e)
+    public event Action<Group> OnGroupInfoButtonClicked;
+    private void GroupInfoButtonOnClick(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { DataContext: Group } groupInfoBtn)
         {
-            if (sender is Button { DataContext: Group } groupInfoBtn)
-            {
-                OnGroupInfoButtonClicked?.Invoke(groupInfoBtn.DataContext as Group);
-            }
+            OnGroupInfoButtonClicked?.Invoke(groupInfoBtn.DataContext as Group);
         }
     }
 }

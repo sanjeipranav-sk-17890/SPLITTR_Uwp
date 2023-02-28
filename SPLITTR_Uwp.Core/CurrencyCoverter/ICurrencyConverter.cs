@@ -1,8 +1,7 @@
-﻿namespace SPLITTR_Uwp.Core.CurrencyCoverter
+﻿namespace SPLITTR_Uwp.Core.CurrencyCoverter;
+
+public interface ICurrencyConverter
 {
-    public interface ICurrencyConverter
-    {
-        double ConvertCurrency(double expense);
-        double ConvertToEntityCurrency(double expense);
-    }
+    double ConvertCurrency(double expense);
+    double ConvertToEntityCurrency(double expense);
 }

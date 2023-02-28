@@ -4,76 +4,75 @@ using SPLITTR_Uwp.Core.CurrencyCoverter;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
 
-namespace SPLITTR_Uwp.Core.ModelBobj
+namespace SPLITTR_Uwp.Core.ModelBobj;
+
+public class ExpenseBobj : Expense
 {
-    public class ExpenseBobj : Expense
-    {
         
 
-        public static ICurrencyConverter CurrencyConverter { get; set; }
+    public static ICurrencyConverter CurrencyConverter { get; set; }
 
-        public User CorrespondingUserObj { get; set; }
+    public User CorrespondingUserObj { get; set; }
 
-        public virtual ExpenseStatus ExpenseStatus
+    public virtual ExpenseStatus ExpenseStatus
+    {
+        get => (ExpenseStatus)ExpenseStatusindex;
+        set
         {
-            get => (ExpenseStatus)ExpenseStatusindex;
-            set
-            {
-                ExpenseStatusindex = (int)value;
-                OnValueChanged(nameof(ExpenseStatus));
-            }
+            ExpenseStatusindex = (int)value;
+            OnValueChanged(nameof(ExpenseStatus));
         }
-
-        public User SplitRaisedOwner { get; set; }
-
-
-        public virtual event Action<string> ValueChanged;
-
-
-        public  double StrExpenseAmount
-        {
-            get => CurrencyConverter.ConvertCurrency(base.ExpenseAmount);
-            set => base.ExpenseAmount = CurrencyConverter.ConvertToEntityCurrency(value);
-        }
-
-        protected void OnValueChanged(string property)
-        {
-            ValueChanged?.Invoke(property);
-        }
-
-        private ExpenseBobj(Expense expense) : base(expense.Description,expense.ExpenseAmount ,expense.RequestedOwner,dateOfExpense: expense.DateOfExpense,createdDate:expense.CreatedDate ,expense.Note, expense.GroupUniqueId, expense.ExpenseStatusindex, expense.ExpenseUniqueId, expense.UserEmailId, expense.ParentExpenseId)
-        {
-
-        }
-
-        public ExpenseBobj(User correspondingUser,User splitRaisedOwner, Expense expense) : this(expense)
-        {
-            CorrespondingUserObj = correspondingUser;
-            SplitRaisedOwner = splitRaisedOwner;
-
-        }
-        public ExpenseBobj(ExpenseBobj expenseBobj) : this(expenseBobj.CorrespondingUserObj,expenseBobj.SplitRaisedOwner, expenseBobj)
-        {
-
-        }
-        public ExpenseBobj(ICurrencyConverter currencyConverter)
-        {
-            CurrencyConverter = currencyConverter;
-        }
-
     }
-    public class ExpenseDateSorter : IComparer<ExpenseBobj>
+
+    public User SplitRaisedOwner { get; set; }
+
+
+    public virtual event Action<string> ValueChanged;
+
+
+    public  double StrExpenseAmount
+    {
+        get => CurrencyConverter.ConvertCurrency(base.ExpenseAmount);
+        set => base.ExpenseAmount = CurrencyConverter.ConvertToEntityCurrency(value);
+    }
+
+    protected void OnValueChanged(string property)
+    {
+        ValueChanged?.Invoke(property);
+    }
+
+    private ExpenseBobj(Expense expense) : base(expense.Description,expense.ExpenseAmount ,expense.RequestedOwner,dateOfExpense: expense.DateOfExpense,createdDate:expense.CreatedDate ,expense.Note, expense.GroupUniqueId, expense.ExpenseStatusindex, expense.ExpenseUniqueId, expense.UserEmailId, expense.ParentExpenseId)
     {
 
-        public int Compare(ExpenseBobj x, ExpenseBobj y)
-        {
-            if (x is null || y is null)
-            {
-                return 0;
-            }
+    }
 
-            return DateTime.Compare(x.CreatedDate, y.CreatedDate);
-        }
+    public ExpenseBobj(User correspondingUser,User splitRaisedOwner, Expense expense) : this(expense)
+    {
+        CorrespondingUserObj = correspondingUser;
+        SplitRaisedOwner = splitRaisedOwner;
 
     }
+    public ExpenseBobj(ExpenseBobj expenseBobj) : this(expenseBobj.CorrespondingUserObj,expenseBobj.SplitRaisedOwner, expenseBobj)
+    {
+
+    }
+    public ExpenseBobj(ICurrencyConverter currencyConverter)
+    {
+        CurrencyConverter = currencyConverter;
+    }
+
+}
+public class ExpenseDateSorter : IComparer<ExpenseBobj>
+{
+
+    public int Compare(ExpenseBobj x, ExpenseBobj y)
+    {
+        if (x is null || y is null)
+        {
+            return 0;
+        }
+
+        return DateTime.Compare(x.CreatedDate, y.CreatedDate);
+    }
+
 }

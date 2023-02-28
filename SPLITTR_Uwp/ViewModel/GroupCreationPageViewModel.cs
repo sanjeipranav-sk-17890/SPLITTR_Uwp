@@ -15,131 +15,129 @@ using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Models;
 using SQLite;
 
-namespace SPLITTR_Uwp.ViewModel
+namespace SPLITTR_Uwp.ViewModel;
+
+internal class GroupCreationPageViewModel : ObservableObject
 {
-   
-    internal class GroupCreationPageViewModel : ObservableObject
+       
+       
+    private string _groupName;
+
+
+    public UserVobj User { get;}
+    public string GroupName
     {
-       
-       
-        private string _groupName;
+        get => _groupName;
+        set => SetProperty(ref _groupName, value);
+    }
+
+    public string GetCurrentUserInitial
+    {
+        get => User.UserName.GetUserInitial();
+    }
+
+    public ObservableCollection<User> UserSuggestionList { get; } = new ObservableCollection<User>();
+
+    public ObservableCollection<User> GroupParticipants { get; } = new ObservableCollection<User>();
+
+    public GroupCreationPageViewModel()
+    {
+        User = new UserVobj(Store.CurrentUserBobj);
+    }
 
 
-        public UserVobj User { get;}
-        public string GroupName
+    private readonly User _dummyUser = new User
+    {
+        UserName = "No results Found"
+    };
+    public void PopulateSuggestionList(string userName)
+    { 
+        //to be Made static Cancel previous Request if Another Made 
+        var cts = new CancellationTokenSource().Token;
+        var fetchSuggestionReqObj = new UserSuggestionRequestObject(new GroupCreationPageVmPresenterCallBack(this), cts, userName);
+
+        var suggestionFetchUseCase = InstanceBuilder.CreateInstance<UserSuggestion>(fetchSuggestionReqObj);
+
+        suggestionFetchUseCase.Execute();
+    }
+
+    //User Suggestion Call BAck
+    public async void OnSuggestionRecievd(UserSuggestionResponseObject response)
+    {
+        await UiService.RunOnUiThread(() =>
         {
-            get => _groupName;
-            set => SetProperty(ref _groupName, value);
-        }
-
-        public string GetCurrentUserInitial
-        {
-            get => User.UserName.GetUserInitial();
-        }
-
-        public ObservableCollection<User> UserSuggestionList { get; } = new ObservableCollection<User>();
-
-        public ObservableCollection<User> GroupParticipants { get; } = new ObservableCollection<User>();
-
-        public GroupCreationPageViewModel()
-        {
-            User = new UserVobj(Store.CurrentUserBobj);
-        }
-
-
-        private readonly User _dummyUser = new User
-        {
-            UserName = "No results Found"
-        };
-        public void PopulateSuggestionList(string userName)
-        { 
-            //to be Made static Cancel previous Request if Another Made 
-            var cts = new CancellationTokenSource().Token;
-            var fetchSuggestionReqObj = new UserSuggestionRequestObject(new GroupCreationPageVmPresenterCallBack(this), cts, userName);
-
-            var suggestionFetchUseCase = InstanceBuilder.CreateInstance<UserSuggestion>(fetchSuggestionReqObj);
-
-            suggestionFetchUseCase.Execute();
-        }
-
-        //User Suggestion Call BAck
-        public async void OnSuggestionRecievd(UserSuggestionResponseObject response)
-        {
-            await UiService.RunOnUiThread(() =>
+            foreach (var suggestedUser in response.UserSuggestions)
             {
-                foreach (var suggestedUser in response.UserSuggestions)
-                {
-                    if (GroupParticipants.Contains(suggestedUser)) continue; //suggestion is not showed if the user is already added to group participants
-                    UserSuggestionList.Add(suggestedUser);
-                }
-                if (!UserSuggestionList.Any())
-                {
-                    UserSuggestionList.Add(_dummyUser);
-                }
+                if (GroupParticipants.Contains(suggestedUser)) continue; //suggestion is not showed if the user is already added to group participants
+                UserSuggestionList.Add(suggestedUser);
+            }
+            if (!UserSuggestionList.Any())
+            {
+                UserSuggestionList.Add(_dummyUser);
+            }
 
+        });
+    }
+
+    //Group Creation Success Call Back
+    public void GroupCreateButtonClicked(object sender, RoutedEventArgs e)
+    {
+        var groupName = _groupName.Trim();
+
+        var token = new CancellationTokenSource().Token;
+
+        var groupCreationRequestObject = new GroupCreationRequestObj(token, new GroupCreationPageVmPresenterCallBack(this), Store.CurrentUserBobj, GroupParticipants, groupName);
+
+        var groupCreationUseCase = InstanceBuilder.CreateInstance<GroupCreation>(groupCreationRequestObject);
+
+        groupCreationUseCase.Execute();
+    }
+
+
+
+    private class GroupCreationPageVmPresenterCallBack : IPresenterCallBack<GroupCreationResponseObj>, IPresenterCallBack<UserSuggestionResponseObject>
+    {
+        private readonly GroupCreationPageViewModel _viewModel;
+        public GroupCreationPageVmPresenterCallBack(GroupCreationPageViewModel viewModel)
+        {
+            _viewModel = viewModel;
+
+        }
+        public async void OnSuccess(GroupCreationResponseObj result)
+        {
+            await UiService.RunOnUiThread(async () =>
+            {
+                await UiService.ShowContentAsync($"{result.CreatedGroup.GroupName} Group Created SuccessFull", "SuccessFully Created !! ");
+
+                //clearing groupAdding PAge controls 
+                _viewModel.GroupParticipants.Clear();
+                _viewModel.GroupName = string.Empty;
             });
         }
-
-        //Group Creation Success Call Back
-        public void GroupCreateButtonClicked(object sender, RoutedEventArgs e)
+        void IPresenterCallBack<GroupCreationResponseObj>.OnError(SplittrException ex)
         {
-            var groupName = _groupName.Trim();
-
-            var token = new CancellationTokenSource().Token;
-
-            var groupCreationRequestObject = new GroupCreationRequestObj(token, new GroupCreationPageVmPresenterCallBack(this), Store.CurrentUserBobj, GroupParticipants, groupName);
-
-            var groupCreationUseCase = InstanceBuilder.CreateInstance<GroupCreation>(groupCreationRequestObject);
-
-            groupCreationUseCase.Execute();
+            HandleError(ex);
+        }
+        public void OnSuccess(UserSuggestionResponseObject result)
+        {
+            _viewModel.OnSuggestionRecievd(result);
+        }
+        void IPresenterCallBack<UserSuggestionResponseObject>.OnError(SplittrException ex)
+        {
+            HandleError(ex);
+        }
+        private void HandleError(SplittrException ex)
+        {
+            switch (ex.InnerException)
+            {
+                case ArgumentException or ArgumentNullException:
+                    ExceptionHandlerService.HandleException(ex.InnerException);
+                    break;
+                case SQLiteException:
+                    //Retry Code Logic Here
+                    break;
+            }
         }
 
-
-
-        private class GroupCreationPageVmPresenterCallBack : IPresenterCallBack<GroupCreationResponseObj>, IPresenterCallBack<UserSuggestionResponseObject>
-        {
-            private readonly GroupCreationPageViewModel _viewModel;
-            public GroupCreationPageVmPresenterCallBack(GroupCreationPageViewModel viewModel)
-            {
-                _viewModel = viewModel;
-
-            }
-            public async void OnSuccess(GroupCreationResponseObj result)
-            {
-                await UiService.RunOnUiThread(async () =>
-                {
-                    await UiService.ShowContentAsync($"{result.CreatedGroup.GroupName} Group Created SuccessFull", "SuccessFully Created !! ");
-
-                    //clearing groupAdding PAge controls 
-                    _viewModel.GroupParticipants.Clear();
-                    _viewModel.GroupName = string.Empty;
-                });
-            }
-            void IPresenterCallBack<GroupCreationResponseObj>.OnError(SplittrException ex)
-            {
-                HandleError(ex);
-            }
-            public void OnSuccess(UserSuggestionResponseObject result)
-            {
-                _viewModel.OnSuggestionRecievd(result);
-            }
-            void IPresenterCallBack<UserSuggestionResponseObject>.OnError(SplittrException ex)
-            {
-                HandleError(ex);
-            }
-            private void HandleError(SplittrException ex)
-            {
-                switch (ex.InnerException)
-                {
-                    case ArgumentException or ArgumentNullException:
-                        ExceptionHandlerService.HandleException(ex.InnerException);
-                        break;
-                    case SQLiteException:
-                        //Retry Code Logic Here
-                        break;
-                }
-            }
-
-        }
     }
 }

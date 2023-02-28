@@ -23,72 +23,68 @@ using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.VmLogic;
 
-namespace SPLITTR_Uwp.Configuration
+namespace SPLITTR_Uwp.Configuration;
+
+public static class Configuration
 {
-
-    public static class Configuration
+    /// <summary>
+    /// Adding SplittrUwp Dependencies to Service Collection 
+    /// </summary>
+    public static IServiceCollection AddDependencies(this IServiceCollection container)
     {
-        /// <summary>
-        /// Adding SplittrUwp Dependencies to Service Collection 
-        /// </summary>
-        public static IServiceCollection AddDependencies(this IServiceCollection container)
-        {
-            //Storing Apps local storage for db file location
-            var connectionString= Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SPLITTR.db3");
-            ConfigurationManager.AppSettings.Set("ConnectionString",connectionString);
+        //Storing Apps local storage for db file location
+        var connectionString= Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SPLITTR.db3");
+        ConfigurationManager.AppSettings.Set("ConnectionString",connectionString);
 
-            AddViewModels(container);
-            AddServiceDependencies(container);
+        AddViewModels(container);
+        AddServiceDependencies(container);
 
-            return container;
-        }
-
-
-        private static void AddServiceDependencies(IServiceCollection container)
-        {
-            
-            container.AddSingleton<IStateService, StateService>()
-                .AddTransient<IStringManipulator, Manipulator>()
-                .AddTransient<IExpenseGrouper, ExpenseGrouper>()
-                .AddTransient<UpdateUser>()
-                .AddTransient<AddWalletAmount>()
-                .AddTransient<GroupCreation>()
-                .AddTransient<SplitExpenses>()
-                .AddTransient<RelatedExpense>()
-                .AddTransient<MarkAsPaid>()
-                .AddTransient<SettleUpSplit>()
-                .AddTransient<CancelExpense>()
-                .AddTransient<UserLogin>()
-                .AddTransient<SignUpUser>()
-                .AddTransient<VerifyPaidExpense>()
-                .AddTransient<GroupDetailById>()
-                .AddTransient<GetUserGroups>()
-                .AddTransient<UserSuggestion>();
-        }
-
-        /// <summary>
-        /// Adding ViewModel's of the Splitter into the container 
-        /// </summary>
-        private static void AddViewModels(IServiceCollection container)
-        {
-            container.AddTransient<LoginPageViewModel>();
-            container.AddTransient<SignPageViewModel>();
-            container.AddTransient<UserProfilePageViewModel>();
-            container.AddTransient<SplitExpenseViewModel>();
-            container.AddTransient<IMainPageViewModel,MainPageViewModel>();
-            container.AddTransient<MainPageViewModel>();
-            container.AddTransient<ExpenseListAndDetailedPageViewModel>();
-            container.AddTransient<OwnerExpenseControlViewModel>();
-            container.AddTransient<WalletBalanceUpdateViewModel>();
-            container.AddTransient<GroupCreationPageViewModel>();
-            container.AddTransient<RelatedExpenseTemplateViewModel>();
-            container.AddTransient<PaymentWindowExpenseViewModel>();
-            container.AddTransient<ExpenseDetailedViewUserControlViewModel>();
-            container.AddTransient<OwingMoneyPaymentExpenseViewModel>();
-
-        }
-
+        return container;
     }
 
+
+    private static void AddServiceDependencies(IServiceCollection container)
+    {
+            
+        container.AddSingleton<IStateService, StateService>()
+            .AddTransient<IStringManipulator, Manipulator>()
+            .AddTransient<IExpenseGrouper, ExpenseGrouper>()
+            .AddTransient<UpdateUser>()
+            .AddTransient<AddWalletAmount>()
+            .AddTransient<GroupCreation>()
+            .AddTransient<SplitExpenses>()
+            .AddTransient<RelatedExpense>()
+            .AddTransient<MarkAsPaid>()
+            .AddTransient<SettleUpSplit>()
+            .AddTransient<CancelExpense>()
+            .AddTransient<UserLogin>()
+            .AddTransient<SignUpUser>()
+            .AddTransient<VerifyPaidExpense>()
+            .AddTransient<GroupDetailById>()
+            .AddTransient<GetUserGroups>()
+            .AddTransient<UserSuggestion>();
+    }
+
+    /// <summary>
+    /// Adding ViewModel's of the Splitter into the container 
+    /// </summary>
+    private static void AddViewModels(IServiceCollection container)
+    {
+        container.AddTransient<LoginPageViewModel>();
+        container.AddTransient<SignPageViewModel>();
+        container.AddTransient<UserProfilePageViewModel>();
+        container.AddTransient<SplitExpenseViewModel>();
+        container.AddTransient<IMainPageViewModel,MainPageViewModel>();
+        container.AddTransient<MainPageViewModel>();
+        container.AddTransient<ExpenseListAndDetailedPageViewModel>();
+        container.AddTransient<OwnerExpenseControlViewModel>();
+        container.AddTransient<WalletBalanceUpdateViewModel>();
+        container.AddTransient<GroupCreationPageViewModel>();
+        container.AddTransient<RelatedExpenseTemplateViewModel>();
+        container.AddTransient<PaymentWindowExpenseViewModel>();
+        container.AddTransient<ExpenseDetailedViewUserControlViewModel>();
+        container.AddTransient<OwingMoneyPaymentExpenseViewModel>();
+
+    }
 
 }

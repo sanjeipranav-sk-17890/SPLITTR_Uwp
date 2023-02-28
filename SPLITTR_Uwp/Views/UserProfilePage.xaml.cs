@@ -5,32 +5,31 @@ using SPLITTR_Uwp.ViewModel;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace SPLITTR_Uwp.Views
+namespace SPLITTR_Uwp.Views;
+
+/// <summary>
+/// An empty page that can be used on its own or navigated to within a Frame.
+/// </summary>
+public sealed partial class UserProfilePage : Page
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class UserProfilePage : Page
+    private UserProfilePageViewModel _viewModel;
+    public UserProfilePage()
     {
-        private UserProfilePageViewModel _viewModel;
-        public UserProfilePage()
-        {
-            _viewModel = App.Container.GetService<UserProfilePageViewModel>();
-            InitializeComponent();
-            _viewModel.BindingUpdateInvoked += _viewModel_BindingUpdateInvoked;
-            Unloaded += UserProfilePage_Unloaded;
-        }
+        _viewModel = App.Container.GetService<UserProfilePageViewModel>();
+        InitializeComponent();
+        _viewModel.BindingUpdateInvoked += _viewModel_BindingUpdateInvoked;
+        Unloaded += UserProfilePage_Unloaded;
+    }
 
-        private void UserProfilePage_Unloaded(object sender, RoutedEventArgs e)
-        {
-            _viewModel.ViewDisposed();
-        }
+    private void UserProfilePage_Unloaded(object sender, RoutedEventArgs e)
+    {
+        _viewModel.ViewDisposed();
+    }
 
-        private void _viewModel_BindingUpdateInvoked()
-        {
-           Bindings.Update();
-        }
+    private void _viewModel_BindingUpdateInvoked()
+    {
+        Bindings.Update();
+    }
 
         
-    }
 }

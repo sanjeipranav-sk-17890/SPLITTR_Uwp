@@ -12,119 +12,118 @@ using SPLITTR_Uwp.ViewModel.Models;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace SPLITTR_Uwp.DataTemplates.Controls
+namespace SPLITTR_Uwp.DataTemplates.Controls;
+
+public sealed partial class MainPageButtonControl : UserControl
 {
-    public sealed partial class MainPageButtonControl : UserControl
+
+    private readonly UserVobj _currentUserVobj;
+
+    public MainPageButtonControl()
     {
+        InitializeComponent();
+        // fetching current user details to avoid showing user as participants in each and every group
+        _currentUserVobj = new UserVobj(Store.CurrentUserBobj);
+    }
 
-        private readonly UserVobj _currentUserVobj;
 
-        public MainPageButtonControl()
+
+
+    #region SingularityOPenLogic
+
+    private void PerformOpenListView()
+    {
+        if (UserListView.Visibility == Visibility.Collapsed)
         {
-            InitializeComponent();
-            // fetching current user details to avoid showing user as participants in each and every group
-            _currentUserVobj = new UserVobj(Store.CurrentUserBobj);
+            ShowListViewButton.Visibility = Visibility.Collapsed;
+            HideListViewButton.Visibility = Visibility.Visible;
+            UserListView.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            PerformCloseListView();
+        }
+    }
+    private void PerformCloseListView()
+    {
+        ShowListViewButton.Visibility = Visibility.Visible;
+        HideListViewButton.Visibility = Visibility.Collapsed;
+        UserListView.Visibility = Visibility.Collapsed;
+
+    }
+    private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+    {
+        PerformOpenListView();
+    }
+
+
+    #endregion
+
+
+    public readonly static DependencyProperty TitleNameProperty = DependencyProperty.Register(
+        nameof(TitleName), typeof(string), typeof(MainPageButtonControl), new PropertyMetadata(default(string)));
+
+    public string TitleName
+    {
+        get => (string)GetValue(TitleNameProperty);
+        set => SetValue(TitleNameProperty, value);
+    }
+
+    public readonly static DependencyProperty SelectionModeProperty = DependencyProperty.Register(
+        nameof(SelectionMode), typeof(ListViewSelectionMode), typeof(MainPageButtonControl), new PropertyMetadata(default(ListViewSelectionMode)));
+
+    public ListViewSelectionMode SelectionMode
+    {
+        get => (ListViewSelectionMode)GetValue(SelectionModeProperty);
+        set => SetValue(SelectionModeProperty, value);
+    }
+    public IEnumerable ItemsSource
+    {
+        get => (IEnumerable)GetValue(ItemsSourceProperty);
+        set
+        {
+            var listWithCurrentUserBsObject = AlterInputListWithCurrentUserBobj(value);
+            SetValue(ItemsSourceProperty, listWithCurrentUserBsObject);
+        }
+    }
+
+
+
+    //replacing ordinary current  user obj with userVm so Support Change 
+    private IEnumerable AlterInputListWithCurrentUserBobj(IEnumerable value)
+    {
+        if (value is ObservableCollection<User>)
+        {
+            return value;
         }
 
-
-
-
-        #region SingularityOPenLogic
-
-        private void PerformOpenListView()
+        if (value is not IList<User> users)
         {
-            if (UserListView.Visibility == Visibility.Collapsed)
-            {
-                ShowListViewButton.Visibility = Visibility.Collapsed;
-                HideListViewButton.Visibility = Visibility.Visible;
-                UserListView.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                PerformCloseListView();
-            }
+            return value;
         }
-        private void PerformCloseListView()
+        try
         {
-            ShowListViewButton.Visibility = Visibility.Visible;
-            HideListViewButton.Visibility = Visibility.Collapsed;
-            UserListView.Visibility = Visibility.Collapsed;
-
+            users.RemoveAndAdd(_currentUserVobj);
+            return users;
         }
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        catch
         {
-            PerformOpenListView();
+            return users;
         }
+    }
 
+    public readonly static DependencyProperty ItemsSourceProperty =
+        DependencyProperty.Register(nameof(ItemsSource), typeof(IEnumerable),
+            typeof(MainPageButtonControl), new PropertyMetadata(null));
 
-        #endregion
-
-
-        public readonly static DependencyProperty TitleNameProperty = DependencyProperty.Register(
-            nameof(TitleName), typeof(string), typeof(MainPageButtonControl), new PropertyMetadata(default(string)));
-
-        public string TitleName
+    public event Action<User> UserSelectedFromTheList;
+    private void UserListView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.AddedItems.Any())
         {
-            get => (string)GetValue(TitleNameProperty);
-            set => SetValue(TitleNameProperty, value);
-        }
-
-        public readonly static DependencyProperty SelectionModeProperty = DependencyProperty.Register(
-            nameof(SelectionMode), typeof(ListViewSelectionMode), typeof(MainPageButtonControl), new PropertyMetadata(default(ListViewSelectionMode)));
-
-        public ListViewSelectionMode SelectionMode
-        {
-            get => (ListViewSelectionMode)GetValue(SelectionModeProperty);
-            set => SetValue(SelectionModeProperty, value);
-        }
-        public IEnumerable ItemsSource
-        {
-            get => (IEnumerable)GetValue(ItemsSourceProperty);
-            set
-            {
-                var listWithCurrentUserBsObject = AlterInputListWithCurrentUserBobj(value);
-                SetValue(ItemsSourceProperty, listWithCurrentUserBsObject);
-            }
-        }
-
-
-
-        //replacing ordinary current  user obj with userVm so Support Change 
-        private IEnumerable AlterInputListWithCurrentUserBobj(IEnumerable value)
-        {
-            if (value is ObservableCollection<User>)
-            {
-                return value;
-            }
-
-            if (value is not IList<User> users)
-            {
-                return value;
-            }
-            try
-            {
-                users.RemoveAndAdd(_currentUserVobj);
-                return users;
-            }
-            catch
-            {
-                return users;
-            }
-        }
-
-        public readonly static DependencyProperty ItemsSourceProperty =
-            DependencyProperty.Register(nameof(ItemsSource), typeof(IEnumerable),
-                typeof(MainPageButtonControl), new PropertyMetadata(null));
-
-        public event Action<User> UserSelectedFromTheList;
-        private void UserListView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.AddedItems.Any())
-            {
-                var selectedUser = (User)e.AddedItems[0];
-                UserListView.SelectedIndex = -1;// resetting selection index , selection the same user may raise Selection changed again 
-                UserSelectedFromTheList?.Invoke(selectedUser);
-            }
+            var selectedUser = (User)e.AddedItems[0];
+            UserListView.SelectedIndex = -1;// resetting selection index , selection the same user may raise Selection changed again 
+            UserSelectedFromTheList?.Invoke(selectedUser);
         }
     }
 }

@@ -2,12 +2,11 @@
 using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.ModelBobj;
 
-namespace SPLITTR_Uwp.Core.DataManager.Contracts
+namespace SPLITTR_Uwp.Core.DataManager.Contracts;
+
+public interface IExpenseDataManager
 {
-    public interface IExpenseDataManager
-    {
-        Task InsertExpenseAsync(IEnumerable<ExpenseBobj> expenseBobjs);
-        Task UpdateExpenseAsync(ExpenseBobj expenseBobj);
+    Task InsertExpenseAsync(IEnumerable<ExpenseBobj> expenseBobjs);
+    Task UpdateExpenseAsync(ExpenseBobj expenseBobj);
         
-    }
 }

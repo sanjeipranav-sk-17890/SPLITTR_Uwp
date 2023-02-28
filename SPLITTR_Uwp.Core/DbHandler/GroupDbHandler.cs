@@ -1,30 +1,29 @@
 ﻿using System;
 using System.Threading.Tasks;
+using SPLITTR_Uwp.Core.Adapters.SqlAdapter;
 using SPLITTR_Uwp.Core.DbHandler.Contracts;
-using SPLITTR_Uwp.Core.DbHandler.SqliteConnection;
 using SPLITTR_Uwp.Core.Models;
 
-namespace SPLITTR_Uwp.Core.DbHandler
+namespace SPLITTR_Uwp.Core.DbHandler;
+
+public class GroupDbHandler :IGroupDbHandler
 {
-    public class GroupDbHandler :IGroupDbHandler
+    private readonly ISqlDataAdapter _sqlDbAccess;
+
+    public GroupDbHandler(ISqlDataAdapter sqlDbAccess)
     {
-        private readonly ISqlDataServices _sqlDbAccess;
+        _sqlDbAccess = sqlDbAccess;
+        _sqlDbAccess.CreateTable<Group>();
+    }
 
-        public GroupDbHandler(ISqlDataServices sqlDbAccess)
-        {
-            _sqlDbAccess = sqlDbAccess;
-            _sqlDbAccess.CreateTable<Group>();
-        }
+    public Task<Group> GetGroupObjByGroupId(string groupId)
+    {
+        return _sqlDbAccess.FetchTable<Group>().Where(g => g.GroupUniqueId.Equals(groupId)).FirstOrDefaultAsync() ??
+               throw new NotSupportedException("Group Not Found by GroupId");
+    }
 
-        public Task<Group> GetGroupObjByGroupId(string groupId)
-        {
-           return _sqlDbAccess.FetchTable<Group>().Where(g => g.GroupUniqueId.Equals(groupId)).FirstOrDefaultAsync() ??
-                throw new NotSupportedException("Group Not Found by GroupId");
-        }
-
-        public Task<int> InsertGroupAsync(Group group)
-        {
-            return _sqlDbAccess.InsertObj(group);
-        }
+    public Task<int> InsertGroupAsync(Group group)
+    {
+        return _sqlDbAccess.InsertObj(group);
     }
 }

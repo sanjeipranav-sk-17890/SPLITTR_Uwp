@@ -20,6 +20,7 @@
    </ItemGroup>
 
    <ItemGroup>
+     <Folder Include="Adapters\NetAdapter\" />
      <Folder Include="UseCase\GetRelatedExpense\" />
    </ItemGroup>
 </Project>

@@ -9,95 +9,94 @@ using SPLITTR_Uwp.ViewModel.Models;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace SPLITTR_Uwp.DataTemplates
+namespace SPLITTR_Uwp.DataTemplates;
+
+public sealed partial class PaymentWindowExpenseView : UserControl
 {
-    public sealed partial class PaymentWindowExpenseView : UserControl
+    private readonly PaymentWindowExpenseViewModel _viewModel;
+
+    public event Action<bool> SettleUpButtonClicked;
+
+    private ExpenseVobj ExpenseObj
     {
-        private readonly PaymentWindowExpenseViewModel _viewModel;
+        get => DataContext as ExpenseVobj;
+    }
 
-        public event Action<bool> SettleUpButtonClicked;
+    public PaymentWindowExpenseView()
+    {
+        InitializeComponent();
+        _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<PaymentWindowExpenseViewModel>(App.Container);
+        DataContextChanged += PaymentWindowExpenseView_DataContextChanged;
+    }
 
-        private ExpenseVobj ExpenseObj
+
+    private void PaymentWindowExpenseView_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+    {
+        if (ExpenseObj is null)
         {
-            get => DataContext as ExpenseVobj;
+            return;
+        }
+        Bindings.Update();
+        _viewModel.ExpenseObjLoaded(ExpenseObj);
+    }
+    private void RadioButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        SettlePaymentButton.IsEnabled = true;
+    }
+
+    private void SettlePaymentButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        SettleUpButtonClicked?.Invoke(WalletPaymentRadioButton.IsChecked?? false);
+    }
+
+}
+internal class PaymentWindowExpenseViewModel : ObservableObject
+{
+       
+    private string _currentUserInitial;
+    private string _owingUserInitial;
+    private string _currencySymbol;
+
+    public string CurrentUserInitial
+    {
+        get => _currentUserInitial;
+        set => SetProperty(ref _currentUserInitial, value);
+    }
+
+    public bool IsWalletPayment { get; set; }
+    public string OwingUserInitial
+    {
+        get => _owingUserInitial;
+        set => SetProperty(ref _owingUserInitial, value);
+    }
+
+    public string CurrencySymbol
+    {
+        get => _currencySymbol;
+        set => SetProperty(ref _currencySymbol, value);
+    }
+
+    public UserVobj CurrentUser { get; set; }
+
+    public void ExpenseObjLoaded(ExpenseVobj expenseObj)
+    {
+        if (expenseObj is null)
+        {
+            return;
         }
 
-        public PaymentWindowExpenseView()
-        {
-            InitializeComponent();
-            _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<PaymentWindowExpenseViewModel>(App.Container);
-            DataContextChanged += PaymentWindowExpenseView_DataContextChanged;
-        }
-
-
-        private void PaymentWindowExpenseView_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
-        {
-            if (ExpenseObj is null)
-            {
-                return;
-            }
-            Bindings.Update();
-            _viewModel.ExpenseObjLoaded(ExpenseObj);
-        }
-        private void RadioButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            SettlePaymentButton.IsEnabled = true;
-        }
-
-        private void SettlePaymentButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            SettleUpButtonClicked?.Invoke(WalletPaymentRadioButton.IsChecked?? false);
-        }
+        InitializeValues(expenseObj);
+    }
+    public PaymentWindowExpenseViewModel()
+    {
+            
+        CurrentUser = new UserVobj(Store.CurrentUserBobj);
 
     }
-    internal class PaymentWindowExpenseViewModel : ObservableObject
+    private void InitializeValues(ExpenseVobj expenseObj)
     {
-       
-        private string _currentUserInitial;
-        private string _owingUserInitial;
-        private string _currencySymbol;
-
-        public string CurrentUserInitial
-        {
-            get => _currentUserInitial;
-            set => SetProperty(ref _currentUserInitial, value);
-        }
-
-        public bool IsWalletPayment { get; set; }
-        public string OwingUserInitial
-        {
-            get => _owingUserInitial;
-            set => SetProperty(ref _owingUserInitial, value);
-        }
-
-        public string CurrencySymbol
-        {
-            get => _currencySymbol;
-            set => SetProperty(ref _currencySymbol, value);
-        }
-
-        public UserVobj CurrentUser { get; set; }
-
-        public void ExpenseObjLoaded(ExpenseVobj expenseObj)
-        {
-            if (expenseObj is null)
-            {
-                return;
-            }
-
-            InitializeValues(expenseObj);
-        }
-        public PaymentWindowExpenseViewModel()
-        {
-            
-            CurrentUser = new UserVobj(Store.CurrentUserBobj);
-
-        }
-        private void InitializeValues(ExpenseVobj expenseObj)
-        {
-            CurrentUserInitial = expenseObj.CorrespondingUserObj.UserName.GetUserInitial();
-            OwingUserInitial = expenseObj.SplitRaisedOwner.UserName.GetUserInitial();
-            CurrencySymbol = expenseObj.StrExpenseAmount.ExpenseSymbol(Store.CurrentUserBobj);
-        }
+        CurrentUserInitial = expenseObj.CorrespondingUserObj.UserName.GetUserInitial();
+        OwingUserInitial = expenseObj.SplitRaisedOwner.UserName.GetUserInitial();
+        CurrencySymbol = expenseObj.StrExpenseAmount.ExpenseSymbol(Store.CurrentUserBobj);
     }
 }

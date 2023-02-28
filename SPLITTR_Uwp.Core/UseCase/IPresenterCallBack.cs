@@ -1,10 +1,9 @@
 ﻿using SPLITTR_Uwp.Core.EventArg;
 
-namespace SPLITTR_Uwp.Core.UseCase
+namespace SPLITTR_Uwp.Core.UseCase;
+
+public interface IPresenterCallBack<in T>
 {
-    public interface IPresenterCallBack<in T>
-    {
-        void OnSuccess(T result);
-        void OnError(SplittrException ex);
-    }
+    void OnSuccess(T result);
+    void OnError(SplittrException ex);
 }

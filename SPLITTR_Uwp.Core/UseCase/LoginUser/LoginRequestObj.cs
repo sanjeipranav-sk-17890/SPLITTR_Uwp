@@ -1,20 +1,19 @@
 ﻿using System.Threading;
 
-namespace SPLITTR_Uwp.Core.UseCase.LoginUser
+namespace SPLITTR_Uwp.Core.UseCase.LoginUser;
+
+public class LoginRequestObj :IRequestObj<LoginResponseObj>
 {
-    public class LoginRequestObj :IRequestObj<LoginResponseObj>
+    public LoginRequestObj(string userEmailId, IPresenterCallBack<LoginResponseObj> presenterCallBack, CancellationToken cts)
     {
-        public LoginRequestObj(string userEmailId, IPresenterCallBack<LoginResponseObj> presenterCallBack, CancellationToken cts)
-        {
-            UserEmailId = userEmailId;
-            PresenterCallBack = presenterCallBack;
-            Cts = cts;
-        }
-
-        public CancellationToken Cts { get; }
-
-        public IPresenterCallBack<LoginResponseObj> PresenterCallBack { get; }
-
-        public string UserEmailId { get;}
+        UserEmailId = userEmailId;
+        PresenterCallBack = presenterCallBack;
+        Cts = cts;
     }
+
+    public CancellationToken Cts { get; }
+
+    public IPresenterCallBack<LoginResponseObj> PresenterCallBack { get; }
+
+    public string UserEmailId { get;}
 }

@@ -18,172 +18,171 @@ using SPLITTR_Uwp.ViewModel.Models;
 using SPLITTR_Uwp.Views;
 using static SPLITTR_Uwp.Services.UiService;
 
-namespace SPLITTR_Uwp.ViewModel
+namespace SPLITTR_Uwp.ViewModel;
+
+internal class MainPageViewModel : ObservableObject, IMainPageViewModel
 {
-    internal class MainPageViewModel : ObservableObject, IMainPageViewModel
+
+    private readonly IStateService _stateService;
+    private string _userInitial;
+    private bool _isUpdateWalletBalanceTeachingTipOpen;
+
+
+    public MainPageViewModel(IStateService stateService)
+    {
+        _stateService = stateService;
+        UserVobj = new UserVobj(Store.CurrentUserBobj);
+    }
+
+    public string UserInitial
+    {
+        get => UserVobj.UserName.GetUserInitial();
+        set => SetProperty(ref _userInitial, value);
+    }
+
+    public UserVobj UserVobj { get; }
+
+    public bool IsUpdateWalletBalanceTeachingTipOpen
+    {
+        get => _isUpdateWalletBalanceTeachingTipOpen;
+        set => SetProperty(ref _isUpdateWalletBalanceTeachingTipOpen, value);
+    }
+
+    public ObservableCollection<GroupBobj> UserGroups { get; } = new ObservableCollection<GroupBobj>();
+
+    public ObservableCollection<User> RelatedUsers { get; } = new ObservableCollection<User>();
+
+    public void ViewLoaded()
     {
 
-        private readonly IStateService _stateService;
-        private string _userInitial;
-        private bool _isUpdateWalletBalanceTeachingTipOpen;
-
-
-        public MainPageViewModel(IStateService stateService)
+        if (Store.CurrentUserBobj == null)
         {
-            _stateService = stateService;
-            UserVobj = new UserVobj(Store.CurrentUserBobj);
+            //Setting frame reference to Default windows Frame
+            NavigationService.Frame = null;
+            NavigationService.Navigate(typeof(LoginPage), new DrillInNavigationTransitionInfo());
+            return;
         }
 
-        public string UserInitial
+        //Calling UseCase For Fetching Current USer Groups
+        FetchUserGroups();
+
+        CallUseCaseToFetchCurrentUserExpenses();
+
+        //Listening For Group Creation Notification
+        SplittrNotification.GroupCreated += SplittrNotification_GroupCreated;
+
+        //Listening For New ExpensesSplit
+        SplittrNotification.ExpensesSplitted += SplittrNotificationExpensesSplitted; ;
+
+    }
+
+    private void SplittrNotificationExpensesSplitted(ExpenseSplittedEventArgs obj)
+    {
+        CallUseCaseToFetchCurrentUserExpenses();
+    }
+
+    private void CallUseCaseToFetchCurrentUserExpenses()
+    {
+        var getExpensesRequestObj = new GetExpensesByIdRequest(CancellationToken.None, new MainViewVmPresenterCb(this), Store.CurrentUserBobj);
+
+        var getExpenseUseCase = InstanceBuilder.CreateInstance<GetExpensesByUserId>(getExpensesRequestObj);
+
+        getExpenseUseCase.Execute();
+    }
+
+    private async void SplittrNotification_GroupCreated(GroupCreatedEventArgs obj)
+    { 
+        //Adding New Ly Created Group To Navigation View
+        await RunOnUiThread(() =>
         {
-            get => UserVobj.UserName.GetUserInitial();
-            set => SetProperty(ref _userInitial, value);
-        }
-
-        public UserVobj UserVobj { get; }
-
-        public bool IsUpdateWalletBalanceTeachingTipOpen
-        {
-            get => _isUpdateWalletBalanceTeachingTipOpen;
-            set => SetProperty(ref _isUpdateWalletBalanceTeachingTipOpen, value);
-        }
-
-        public ObservableCollection<GroupBobj> UserGroups { get; } = new ObservableCollection<GroupBobj>();
-
-        public ObservableCollection<User> RelatedUsers { get; } = new ObservableCollection<User>();
-
-        public void ViewLoaded()
-        {
-
-            if (Store.CurrentUserBobj == null)
+            if (obj?.CreatedGroup is not null)
             {
-                //Setting frame reference to Default windows Frame
-                NavigationService.Frame = null;
-                NavigationService.Navigate(typeof(LoginPage), new DrillInNavigationTransitionInfo());
+                UserGroups.Add(obj.CreatedGroup);
+            }
+        }).ConfigureAwait(false);
+           
+    }
+    public void ViewDisposed()
+    {
+        //Unsubscribing For Group Creation Notification
+        SplittrNotification.GroupCreated -= SplittrNotification_GroupCreated;
+
+        SplittrNotification.ExpensesSplitted -= SplittrNotificationExpensesSplitted;
+
+    }
+
+
+    private void FetchUserGroups()
+    {
+        var getUSerGroupReqObj = new GetUserGroupReq(CancellationToken.None, new MainViewVmPresenterCb(this), Store.CurrentUserBobj);
+
+        var getGroupsUseCase = InstanceBuilder.CreateInstance<GetUserGroups>(getUSerGroupReqObj);
+
+        getGroupsUseCase.Execute();
+    }
+
+
+    private void PopulateIndividualSplitUsers(IEnumerable<ExpenseBobj> currentUserExpenses)
+    {
+        RelatedUsers.Clear();
+        foreach (var expense in currentUserExpenses)
+        {
+            // Adds user object to Individual Split users  list Excluding Current User 
+            if (expense.GroupUniqueId is not null)
+            {
+                continue;
+            }
+            if (!expense.SplitRaisedOwner.Equals(Store.CurrentUserBobj) && !RelatedUsers.Contains(expense.SplitRaisedOwner))
+            {
+                RelatedUsers.Add(expense.SplitRaisedOwner);
+            }
+            if (!expense.CorrespondingUserObj.Equals(Store.CurrentUserBobj) && !RelatedUsers.Contains(expense.CorrespondingUserObj))
+            {
+                RelatedUsers.Add(expense.CorrespondingUserObj);
+            }
+        }
+
+    }
+
+    public void LogOutRequested()
+    {
+        _stateService.RequestUserLogout();
+
+    }
+
+
+
+    private class MainViewVmPresenterCb : IPresenterCallBack<GetUserGroupResponse>,IPresenterCallBack<GetExpensesByIdResponse>
+    {
+        private readonly MainPageViewModel _viewModel;
+
+        public MainViewVmPresenterCb(MainPageViewModel viewModel)
+        {
+            _viewModel = viewModel;
+
+        }
+        public async void OnSuccess(GetUserGroupResponse result)
+        {
+            await RunOnUiThread(() =>
+            {
+                _viewModel.UserGroups.ClearAndAdd(result.UserParticipatingGroups);
+
+            }).ConfigureAwait(false);
+        }
+        public async void OnSuccess(GetExpensesByIdResponse result)
+        {
+            if (result == null)
+            {
                 return;
             }
-
-            //Calling UseCase For Fetching Current USer Groups
-            FetchUserGroups();
-
-            CallUseCaseToFetchCurrentUserExpenses();
-
-            //Listening For Group Creation Notification
-            SplittrNotification.GroupCreated += SplittrNotification_GroupCreated;
-
-            //Listening For New ExpensesSplit
-            SplittrNotification.ExpensesSplited += SplittrNotification_ExpensesSplited; ;
-
-        }
-
-        private void SplittrNotification_ExpensesSplited(ExpenseSplittedEventArgs obj)
-        {
-           CallUseCaseToFetchCurrentUserExpenses();
-        }
-
-        private void CallUseCaseToFetchCurrentUserExpenses()
-        {
-            var getExpensesRequestObj = new GetExpensesByIdRequest(CancellationToken.None, new MainViewVmPresenterCb(this), Store.CurrentUserBobj);
-
-            var getExpenseUseCase = InstanceBuilder.CreateInstance<GetExpensesByUserId>(getExpensesRequestObj);
-
-            getExpenseUseCase.Execute();
-        }
-
-        private async void SplittrNotification_GroupCreated(GroupCreatedEventArgs obj)
-        { 
-            //Adding New Ly Created Group To Navigation View
-           await RunOnUiThread(() =>
-           {
-               if (obj?.CreatedGroup is not null)
-               {
-                   UserGroups.Add(obj.CreatedGroup);
-               }
-           }).ConfigureAwait(false);
-           
-        }
-        public void ViewDisposed()
-        {
-            //Unsubscribing For Group Creation Notification
-            SplittrNotification.GroupCreated -= SplittrNotification_GroupCreated;
-
-            SplittrNotification.ExpensesSplited -= SplittrNotification_ExpensesSplited;
-
-        }
-
-
-        private void FetchUserGroups()
-        {
-            var getUSerGroupReqObj = new GetUserGroupReq(CancellationToken.None, new MainViewVmPresenterCb(this), Store.CurrentUserBobj);
-
-            var getGroupsUseCase = InstanceBuilder.CreateInstance<GetUserGroups>(getUSerGroupReqObj);
-
-            getGroupsUseCase.Execute();
-        }
-
-
-        private void PopulateIndividualSplitUsers(IEnumerable<ExpenseBobj> currentUserExpenses)
-        {
-            RelatedUsers.Clear();
-            foreach (var expense in currentUserExpenses)
+            await RunOnUiThread(() =>
             {
-                // Adds user object to Individual Split users  list Excluding Current User 
-                if (expense.GroupUniqueId is not null)
-                {
-                    continue;
-                }
-                if (!expense.SplitRaisedOwner.Equals(Store.CurrentUserBobj) && !RelatedUsers.Contains(expense.SplitRaisedOwner))
-                {
-                    RelatedUsers.Add(expense.SplitRaisedOwner);
-                }
-                if (!expense.CorrespondingUserObj.Equals(Store.CurrentUserBobj) && !RelatedUsers.Contains(expense.CorrespondingUserObj))
-                {
-                    RelatedUsers.Add(expense.CorrespondingUserObj);
-                }
-            }
-
+                _viewModel.PopulateIndividualSplitUsers(result.CurrentUserExpenses);
+            }).ConfigureAwait(false);
         }
-
-        public void LogOutRequested()
+        public void OnError(SplittrException ex)
         {
-            _stateService.RequestUserLogout();
-
-        }
-
-
-
-        private class MainViewVmPresenterCb : IPresenterCallBack<GetUserGroupResponse>,IPresenterCallBack<GetExpensesByIdResponse>
-        {
-            private readonly MainPageViewModel _viewModel;
-
-            public MainViewVmPresenterCb(MainPageViewModel viewModel)
-            {
-                _viewModel = viewModel;
-
-            }
-            public async void OnSuccess(GetUserGroupResponse result)
-            {
-                await RunOnUiThread(() =>
-                {
-                    _viewModel.UserGroups.ClearAndAdd(result.UserParticipatingGroups);
-
-                }).ConfigureAwait(false);
-            }
-            public async void OnSuccess(GetExpensesByIdResponse result)
-            {
-                if (result == null)
-                {
-                    return;
-                }
-                await RunOnUiThread(() =>
-                {
-                    _viewModel.PopulateIndividualSplitUsers(result.CurrentUserExpenses);
-                }).ConfigureAwait(false);
-            }
-            public void OnError(SplittrException ex)
-            {
-                ExceptionHandlerService.HandleException(ex);
-            }
+            ExceptionHandlerService.HandleException(ex);
         }
     }
 }

@@ -7,54 +7,53 @@ using SPLITTR_Uwp.ViewModel.Models;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace SPLITTR_Uwp.DataTemplates.Controls
+namespace SPLITTR_Uwp.DataTemplates.Controls;
+
+public sealed partial class OwnerExpenseUserControl : UserControl
 {
-    public sealed partial class OwnerExpenseUserControl : UserControl
+
+
+    private ExpenseVobj ExpenseObj
     {
+        get=> DataContext as ExpenseVobj;
+    }
 
+    private readonly OwnerExpenseControlViewModel _viewModel;
 
-        private ExpenseVobj ExpenseObj
-        {
-            get=> DataContext as ExpenseVobj;
-        }
+    public OwnerExpenseUserControl()
+    {
+        InitializeComponent();
+        DataContextChanged += OwnerExpenseUserControl_DataContextChanged;
+        _viewModel = ActivatorUtilities.CreateInstance<OwnerExpenseControlViewModel>(App.Container);
+    }
 
-        private readonly OwnerExpenseControlViewModel _viewModel;
+    private void OwnerExpenseUserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+    {
+        Bindings.Update();
+        if (ExpenseObj is null)
+        {
+            return;
+        }
+        _viewModel.DataContextLoaded(ExpenseObj);
+    }
+    private void MarkAsPaidButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (ExpenseObj is not null)
+        {
+            _viewModel.OnExpenseMarkedAsPaid(ExpenseObj);
+        }
+    }
+    private void CancelButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (ExpenseObj is not null)
+        {
+            _viewModel.OnExpenseCancellation(ExpenseObj);
+        }
+    }
+    public event Action<object, RoutedEventArgs> BackButtonClicked;
 
-        public OwnerExpenseUserControl()
-        {
-            InitializeComponent();
-            DataContextChanged += OwnerExpenseUserControl_DataContextChanged;
-            _viewModel = ActivatorUtilities.CreateInstance<OwnerExpenseControlViewModel>(App.Container);
-        }
-
-        private void OwnerExpenseUserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
-        {
-            Bindings.Update();
-            if (ExpenseObj is null)
-            {
-                return;
-            }
-            _viewModel.DataContextLoaded(ExpenseObj);
-        }
-        private void MarkAsPaidButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (ExpenseObj is not null)
-            {
-                _viewModel.OnExpenseMarkedAsPaid(ExpenseObj);
-            }
-        }
-        private void CancelButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (ExpenseObj is not null)
-            {
-                _viewModel.OnExpenseCancellation(ExpenseObj);
-            }
-        }
-        public event Action<object, RoutedEventArgs> BackButtonClicked;
-
-        private void ExpenseDetailedViewUserControl_OnBackButtonClicked(object arg1, RoutedEventArgs arg2)
-        {
-            BackButtonClicked?.Invoke(arg1,arg2);
-        }
+    private void ExpenseDetailedViewUserControl_OnBackButtonClicked(object arg1, RoutedEventArgs arg2)
+    {
+        BackButtonClicked?.Invoke(arg1,arg2);
     }
 }

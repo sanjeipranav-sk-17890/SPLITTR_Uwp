@@ -1,7 +1,6 @@
-﻿namespace SPLITTR_Uwp.Core.Utility
+﻿namespace SPLITTR_Uwp.Core.Utility;
+
+public interface IStringManipulator
 {
-    public interface IStringManipulator
-    {
-        public string GetUserInitial(string userName);
-    }
+    public string GetUserInitial(string userName);
 }

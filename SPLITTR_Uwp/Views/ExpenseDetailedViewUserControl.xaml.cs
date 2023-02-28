@@ -10,70 +10,69 @@ using SPLITTR_Uwp.ViewModel.Models;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace SPLITTR_Uwp.Views
+namespace SPLITTR_Uwp.Views;
+
+public sealed partial class ExpenseDetailedViewUserControl : UserControl
 {
-    public sealed partial class ExpenseDetailedViewUserControl : UserControl
+    public ExpenseVobj ExpenseObj
     {
-        public ExpenseVobj ExpenseObj
+        get => DataContext as ExpenseVobj;
+    }
+
+    private readonly ExpenseDetailedViewUserControlViewModel _viewModel;
+
+    public ExpenseDetailedViewUserControl()
+    {
+        _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<ExpenseDetailedViewUserControlViewModel>(App.Container);
+        InitializeComponent();
+        DataContextChanged += ExpenseDetailedViewUserControl_DataContextChanged;
+        Unloaded += (sender, args) => _viewModel.ViewDisposed();
+    }
+
+    private void ExpenseDetailedViewUserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+    {
+
+        if (ExpenseObj is null)
         {
-            get => DataContext as ExpenseVobj;
+            return;
         }
+        ExpenseObj.PropertyChanged += ExpenseObj_PropertyChanged;
+        ManipulateUiBasedOnDataContext();
+        Bindings.Update();
+    }
 
-        private readonly ExpenseDetailedViewUserControlViewModel _viewModel;
+    private void ExpenseObj_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        ManipulateUiBasedOnDataContext();
+    }
 
-        public ExpenseDetailedViewUserControl()
+    private void ManipulateUiBasedOnDataContext()
+    {
+
+        //UnderGoing VM logic to Fetch Related Expenses 
+        _viewModel.ExpenseObjLoaded(ExpenseObj);
+
+        GroupNameTextBlock.Visibility = ExpenseObj.GroupUniqueId is null ? Visibility.Visible: Visibility.Collapsed;
+
+        IndividualSplitIndicatorTextBlock.Visibility = ExpenseObj.GroupUniqueId is null ? Visibility.Collapsed : Visibility.Visible;
+
+        AssignExpenseStatusForeGround();
+
+    }
+    private  void AssignExpenseStatusForeGround()
+    {
+        ExpenseStatusBrush.Color = ExpenseObj.ExpenseStatus switch
         {
-            _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<ExpenseDetailedViewUserControlViewModel>(App.Container);
-            InitializeComponent();
-            DataContextChanged += ExpenseDetailedViewUserControl_DataContextChanged;
-            Unloaded += (sender, args) => _viewModel.ViewDisposed();
-        }
+            ExpenseStatus.Pending => Colors.DarkRed,
+            ExpenseStatus.Cancelled => Colors.Orange,
+            _ =>Colors.DarkGreen
+        };
 
-        private void ExpenseDetailedViewUserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
-        {
+    }
 
-            if (ExpenseObj is null)
-            {
-                return;
-            }
-            ExpenseObj.PropertyChanged += ExpenseObj_PropertyChanged;
-            ManipulateUiBasedOnDataContext();
-            Bindings.Update();
-        }
-
-        private void ExpenseObj_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            ManipulateUiBasedOnDataContext();
-        }
-
-        private void ManipulateUiBasedOnDataContext()
-        {
-
-            //UnderGoing VM logic to Fetch Related Expenses 
-            _viewModel.ExpenseObjLoaded(ExpenseObj);
-
-            GroupNameTextBlock.Visibility = ExpenseObj.GroupUniqueId is null ? Visibility.Visible: Visibility.Collapsed;
-
-            IndividualSplitIndicatorTextBlock.Visibility = ExpenseObj.GroupUniqueId is null ? Visibility.Collapsed : Visibility.Visible;
-
-            AssignExpenseStatusForeGround();
-
-        }
-        private  void AssignExpenseStatusForeGround()
-        {
-            ExpenseStatusBrush.Color = ExpenseObj.ExpenseStatus switch
-            {
-                ExpenseStatus.Pending => Colors.DarkRed,
-                ExpenseStatus.Cancelled => Colors.Orange,
-                _ =>Colors.DarkGreen
-            };
-
-        }
-
-        public event Action<object, RoutedEventArgs> BackButtonClicked; 
-        private void ListViewBackButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            BackButtonClicked?.Invoke(this, e);
-        }
+    public event Action<object, RoutedEventArgs> BackButtonClicked; 
+    private void ListViewBackButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        BackButtonClicked?.Invoke(this, e);
     }
 }

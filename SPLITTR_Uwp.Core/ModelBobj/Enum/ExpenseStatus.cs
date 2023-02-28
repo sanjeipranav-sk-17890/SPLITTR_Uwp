@@ -1,10 +1,8 @@
-﻿namespace SPLITTR_Uwp.Core.ModelBobj.Enum
+﻿namespace SPLITTR_Uwp.Core.ModelBobj.Enum;
+
+public enum ExpenseStatus
 {
-   
-    public enum ExpenseStatus
-    {
-        Paid,
-        Pending,
-        Cancelled
-    }
+    Paid,
+    Pending,
+    Cancelled
 }

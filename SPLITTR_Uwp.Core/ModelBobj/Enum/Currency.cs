@@ -1,10 +1,9 @@
-﻿namespace SPLITTR_Uwp.Core.ModelBobj.Enum
+﻿namespace SPLITTR_Uwp.Core.ModelBobj.Enum;
+
+public enum Currency
 {
-    public enum Currency
-    {
-        Rupee,
-        Dollar,
-        Euro,
-        Yen
-    }
+    Rupee,
+    Dollar,
+    Euro,
+    Yen
 }

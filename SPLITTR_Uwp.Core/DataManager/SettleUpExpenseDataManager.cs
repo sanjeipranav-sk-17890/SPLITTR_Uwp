@@ -1,121 +1,119 @@
 ﻿using System;
 using System.Threading.Tasks;
+using SPLITTR_Uwp.Core.Adapters.SqlAdapter;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
-using SPLITTR_Uwp.Core.DbHandler.SqliteConnection;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.SettleUpExpense;
 
-namespace SPLITTR_Uwp.Core.DataManager
+namespace SPLITTR_Uwp.Core.DataManager;
+
+public class SettleUpExpenseDataManager : ISettleUpSplitDataManager
 {
+    private readonly IUserDataManager _userDataManager;
+    private readonly ISqlDataAdapter _sqlDataAdapter;
+    private readonly IExpenseDataManager _expenseDataManager;
 
-    public class SettleUpExpenseDataManager : ISettleUpSplitDataManager
+    public SettleUpExpenseDataManager(IUserDataManager userDataManager, ISqlDataAdapter sqlDataAdapter, IExpenseDataManager expenseDataManager)
     {
-        private readonly IUserDataManager _userDataManager;
-        private readonly ISqlDataServices _sqlDataServices;
-        private readonly IExpenseDataManager _expenseDataManager;
+        _userDataManager = userDataManager;
+        _sqlDataAdapter = sqlDataAdapter;
+        _expenseDataManager = expenseDataManager;
 
-        public SettleUpExpenseDataManager(IUserDataManager userDataManager, ISqlDataServices sqlDataServices, IExpenseDataManager expenseDataManager)
+    }
+
+
+    private void ValidateInputs(ExpenseBobj settleExpenseRef, UserBobj currentUser)
+    {
+
+        if (settleExpenseRef is null || currentUser is null)
         {
-            _userDataManager = userDataManager;
-            _sqlDataServices = sqlDataServices;
-            _expenseDataManager = expenseDataManager;
-
+            throw new ArgumentException("One Or more Passed Argument is Null");
         }
-
-
-        private void ValidateInputs(ExpenseBobj settleExpenseRef, UserBobj currentUser)
+        //current user cannot pay their own Expense 
+        if (settleExpenseRef.SplitRaisedOwner.Equals(currentUser))
         {
-
-            if (settleExpenseRef is null || currentUser is null)
-            {
-                throw new ArgumentException("One Or more Passed Argument is Null");
-            }
-            //current user cannot pay their own Expense 
-            if (settleExpenseRef.SplitRaisedOwner.Equals(currentUser))
-            {
-                throw new NotSupportedException();
-            }
+            throw new NotSupportedException();
         }
+    }
 
-        /// <exception cref="NotSupportedException">thrown if Insufficient Wallet Balance</exception>
-        public async void SettleUpExpenses(ExpenseBobj settleExpenseRef, UserBobj currentUser, IUseCaseCallBack<SettleUpExpenseResponseObj> callBack, bool isWalletTransaction = false)
+    /// <exception cref="NotSupportedException">thrown if Insufficient Wallet Balance</exception>
+    public async void SettleUpExpenses(ExpenseBobj settleExpenseRef, UserBobj currentUser, IUseCaseCallBack<SettleUpExpenseResponseObj> callBack, bool isWalletTransaction = false)
+    {
+
+        try
         {
+            ValidateInputs(settleExpenseRef, currentUser);
 
-            try
+            var toBeSettledExpenseObj = settleExpenseRef;
+
+            if (toBeSettledExpenseObj is null)
             {
-                ValidateInputs(settleExpenseRef, currentUser);
+                return;
+            }
+            var requestedOwner = toBeSettledExpenseObj.SplitRaisedOwner;
 
-                var toBeSettledExpenseObj = settleExpenseRef;
-
-                if (toBeSettledExpenseObj is null)
+            if (isWalletTransaction)
+            {
+                if (currentUser.StrWalletBalance < toBeSettledExpenseObj.StrExpenseAmount)
                 {
-                    return;
-                }
-                var requestedOwner = toBeSettledExpenseObj.SplitRaisedOwner;
-
-                if (isWalletTransaction)
-                {
-                    if (currentUser.StrWalletBalance < toBeSettledExpenseObj.StrExpenseAmount)
-                    {
-                        throw new NotSupportedException("Insufficient Wallet Balance");
-
-                    }
-                    currentUser.WalletBalance -= toBeSettledExpenseObj.ExpenseAmount;
-
-                    await _userDataManager.UpdateUserBobjAsync(currentUser).ConfigureAwait(false);
+                    throw new NotSupportedException("Insufficient Wallet Balance");
 
                 }
-                requestedOwner.WalletBalance += toBeSettledExpenseObj.ExpenseAmount;
-                toBeSettledExpenseObj.ExpenseStatus = ExpenseStatus.Paid;
+                currentUser.WalletBalance -= toBeSettledExpenseObj.ExpenseAmount;
 
-                await _sqlDataServices.RunInTransaction(async () =>
-                {
-                  await UpdateCreditDetails(toBeSettledExpenseObj, currentUser).ConfigureAwait(false);
-                  await _expenseDataManager.UpdateExpenseAsync(toBeSettledExpenseObj).ConfigureAwait(false);
-                }).ConfigureAwait(false);
+                await _userDataManager.UpdateUserBobjAsync(currentUser).ConfigureAwait(false);
 
-                callBack?.OnSuccess(new SettleUpExpenseResponseObj(toBeSettledExpenseObj));
             }
-            catch (NotSupportedException ex)
+            requestedOwner.WalletBalance += toBeSettledExpenseObj.ExpenseAmount;
+            toBeSettledExpenseObj.ExpenseStatus = ExpenseStatus.Paid;
+
+            await _sqlDataAdapter.RunInTransaction(async () =>
             {
-                callBack?.OnError(new SplittrException(ex, "Insufficient Wallet Balance"));
-            }
-            catch (Exception ex)
-            {
-                callBack?.OnError(new SplittrException(ex, ex.Message));
-            }
+                await UpdateCreditDetails(toBeSettledExpenseObj, currentUser).ConfigureAwait(false);
+                await _expenseDataManager.UpdateExpenseAsync(toBeSettledExpenseObj).ConfigureAwait(false);
+            }).ConfigureAwait(false);
+
+            callBack?.OnSuccess(new SettleUpExpenseResponseObj(toBeSettledExpenseObj));
         }
-
-        private async Task UpdateCreditDetails(ExpenseBobj toBeSettleExpenseBobj, UserBobj currentUser)
+        catch (NotSupportedException ex)
         {
-            var requestOwner = toBeSettleExpenseBobj.SplitRaisedOwner;
-            var correspondingUser = toBeSettleExpenseBobj.CorrespondingUserObj;
-
-            if (currentUser.Equals(requestOwner))//assign to Current USerBobj So Change Notification raised
-            {
-                currentUser.StrLentAmount -= toBeSettleExpenseBobj.ExpenseAmount;
-                requestOwner = currentUser;
-            }
-            else
-            {
-                requestOwner.LentAmount -= toBeSettleExpenseBobj.ExpenseAmount;
-            }
-            if (currentUser.Equals(correspondingUser))
-            {
-                currentUser.StrOwingAmount -= toBeSettleExpenseBobj.ExpenseAmount;
-                correspondingUser = currentUser;
-            }
-            else
-            {
-                correspondingUser.OwingAmount -= toBeSettleExpenseBobj.ExpenseAmount;
-            }
-
-
-            await _userDataManager.UpdateUserBobjAsync(requestOwner).ConfigureAwait(false);
-            await _userDataManager.UpdateUserBobjAsync(correspondingUser).ConfigureAwait(false);
+            callBack?.OnError(new SplittrException(ex, "Insufficient Wallet Balance"));
         }
+        catch (Exception ex)
+        {
+            callBack?.OnError(new SplittrException(ex, ex.Message));
+        }
+    }
+
+    private async Task UpdateCreditDetails(ExpenseBobj toBeSettleExpenseBobj, UserBobj currentUser)
+    {
+        var requestOwner = toBeSettleExpenseBobj.SplitRaisedOwner;
+        var correspondingUser = toBeSettleExpenseBobj.CorrespondingUserObj;
+
+        if (currentUser.Equals(requestOwner))//assign to Current USerBobj So Change Notification raised
+        {
+            currentUser.StrLentAmount -= toBeSettleExpenseBobj.ExpenseAmount;
+            requestOwner = currentUser;
+        }
+        else
+        {
+            requestOwner.LentAmount -= toBeSettleExpenseBobj.ExpenseAmount;
+        }
+        if (currentUser.Equals(correspondingUser))
+        {
+            currentUser.StrOwingAmount -= toBeSettleExpenseBobj.ExpenseAmount;
+            correspondingUser = currentUser;
+        }
+        else
+        {
+            correspondingUser.OwingAmount -= toBeSettleExpenseBobj.ExpenseAmount;
+        }
+
+
+        await _userDataManager.UpdateUserBobjAsync(requestOwner).ConfigureAwait(false);
+        await _userDataManager.UpdateUserBobjAsync(correspondingUser).ConfigureAwait(false);
     }
 }

@@ -10,89 +10,86 @@ using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Models;
 using SQLite;
 
-namespace SPLITTR_Uwp.ViewModel
+namespace SPLITTR_Uwp.ViewModel;
+
+public class WalletBalanceUpdateViewModel : ObservableObject
 {
-   
+    private string _moneyTextBoxText;
+    private bool _invalidInputTextBlockVisibility;
 
-    public class WalletBalanceUpdateViewModel : ObservableObject
+    public event Action OnViewDismiss;
+
+    public UserVobj UserVobj { get; }
+
+    public WalletBalanceUpdateViewModel()
     {
-        private string _moneyTextBoxText;
-        private bool _invalidInputTextBlockVisibility;
+        UserVobj = new UserVobj(Store.CurrentUserBobj);
+    }
 
-        public event Action OnViewDismiss;
+    public string MoneyTextBoxText
+    {
+        get => _moneyTextBoxText;
+        set => SetProperty(ref _moneyTextBoxText, value);
+    }
 
-        public UserVobj UserVobj { get; }
+    public bool InvalidInputTextBlockVisibility
+    {
+        get => _invalidInputTextBlockVisibility;
+        set => SetProperty(ref _invalidInputTextBlockVisibility, value);
+    }
 
-        public WalletBalanceUpdateViewModel()
+
+    public  void AddMoneyToWalletButtonClicked()
+    {
+        //Wallet adding money should be non negative and a number
+        if (double.TryParse(MoneyTextBoxText, out var newWalletBalance) && newWalletBalance > -1)
         {
-            UserVobj = new UserVobj(Store.CurrentUserBobj);
-        }
-
-        public string MoneyTextBoxText
-        {
-            get => _moneyTextBoxText;
-            set => SetProperty(ref _moneyTextBoxText, value);
-        }
-
-        public bool InvalidInputTextBlockVisibility
-        {
-            get => _invalidInputTextBlockVisibility;
-            set => SetProperty(ref _invalidInputTextBlockVisibility, value);
-        }
-
-
-        public  void AddMoneyToWalletButtonClicked()
-        {
-            //Wallet adding money should be non negative and a number
-            if (double.TryParse(MoneyTextBoxText, out var newWalletBalance) && newWalletBalance > -1)
-            {
-                InvalidInputTextBlockVisibility = false;
+            InvalidInputTextBlockVisibility = false;
                 
-                //Should Made Static invoke source if Previous Request Cancelled
-                var cts = new CancellationTokenSource().Token;
+            //Should Made Static invoke source if Previous Request Cancelled
+            var cts = new CancellationTokenSource().Token;
 
-                var addWalletAmountRequestObject = new AddWalletAmountRequestObject(new WalletBalanceUpdateVmPresenterCallBack(this), cts, Store.CurrentUserBobj, newWalletBalance);
+            var addWalletAmountRequestObject = new AddWalletAmountRequestObject(new WalletBalanceUpdateVmPresenterCallBack(this), cts, Store.CurrentUserBobj, newWalletBalance);
 
-                var addWalletAmountUseCase = InstanceBuilder.CreateInstance<AddWalletAmount>(addWalletAmountRequestObject);
+            var addWalletAmountUseCase = InstanceBuilder.CreateInstance<AddWalletAmount>(addWalletAmountRequestObject);
 
-                addWalletAmountUseCase.Execute();
-            }
-            else
-            {
-                InvalidInputTextBlockVisibility = true;
-            }
-
+            addWalletAmountUseCase.Execute();
+        }
+        else
+        {
+            InvalidInputTextBlockVisibility = true;
         }
 
-        private async void InvokeOnWalletBalanceUpdated(UpdateUserResponseObj result)
+    }
+
+    private async void InvokeOnWalletBalanceUpdated(UpdateUserResponseObj result)
+    {
+        await UiService.RunOnUiThread(async () =>
         {
-            await UiService.RunOnUiThread(async () =>
-            {
-                await UiService.ShowContentAsync("Amount Added to Wallet SuccessFully", "Payment SuccessFull!!");
-                MoneyTextBoxText = string.Empty;
-                OnViewDismiss?.Invoke();
-            }).ConfigureAwait(false);
+            await UiService.ShowContentAsync("Amount Added to Wallet SuccessFully", "Payment SuccessFull!!");
+            MoneyTextBoxText = string.Empty;
+            OnViewDismiss?.Invoke();
+        }).ConfigureAwait(false);
+
+    }
+
+    private class WalletBalanceUpdateVmPresenterCallBack : IPresenterCallBack<UpdateUserResponseObj>
+    {
+        private readonly WalletBalanceUpdateViewModel _viewModel;
+        public WalletBalanceUpdateVmPresenterCallBack(WalletBalanceUpdateViewModel viewModel)
+        {
+            _viewModel = viewModel;
 
         }
-
-        private class WalletBalanceUpdateVmPresenterCallBack : IPresenterCallBack<UpdateUserResponseObj>
+        public void OnSuccess(UpdateUserResponseObj result)
+        { 
+            _viewModel.InvokeOnWalletBalanceUpdated(result);
+        }
+        public void OnError(SplittrException ex)
         {
-            private readonly WalletBalanceUpdateViewModel _viewModel;
-            public WalletBalanceUpdateVmPresenterCallBack(WalletBalanceUpdateViewModel viewModel)
+            if (ex.InnerException is SQLiteException)
             {
-                _viewModel = viewModel;
-
-            }
-            public void OnSuccess(UpdateUserResponseObj result)
-            { 
-                _viewModel.InvokeOnWalletBalanceUpdated(result);
-            }
-            public void OnError(SplittrException ex)
-            {
-                if (ex.InnerException is SQLiteException)
-                {
-                    ExceptionHandlerService.HandleException(ex);
-                }
+                ExceptionHandlerService.HandleException(ex);
             }
         }
     }

@@ -16,284 +16,282 @@ using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Models;
 
-namespace SPLITTR_Uwp.ViewModel
+namespace SPLITTR_Uwp.ViewModel;
+
+internal class ExpenseItemViewModel : ObservableObject
 {
-  
-    internal class ExpenseItemViewModel : ObservableObject
+
+    #region NotifiablePRoperties
+
+    private ExpenseVobj _expenseVObj;
+    private Group _groupObject;
+    private string _expenseTotalAmount;
+    private string _groupName;
+    private bool _isGroupButtonVisible;
+    private string _splitOwnerTitle;
+    private bool _owingAmountTextBlockVisibility;
+    private string _owingSplitAmount;
+    private string _owingSplitTitle;
+    private Brush _owingExpenseForeground;
+
+
+
+
+    public bool IsGroupButtonVisible
     {
-
-        #region NotifiablePRoperties
-
-        private ExpenseVobj _expenseVObj;
-        private Group _groupObject;
-        private string _expenseTotalAmount;
-        private string _groupName;
-        private bool _isGroupButtonVisible;
-        private string _splitOwnerTitle;
-        private bool _owingAmountTextBlockVisibility;
-        private string _owingSplitAmount;
-        private string _owingSplitTitle;
-        private Brush _owingExpenseForeground;
+        get => _isGroupButtonVisible;
+        set => SetProperty(ref _isGroupButtonVisible, value);
+    }
 
 
+    public string GroupName
+    {
+        get => _groupName;
+        set => SetProperty(ref _groupName, value);
+
+    }
+
+    public Group GroupObject
+    {
+        get => _groupObject;
+        set => SetProperty(ref _groupObject, value);
+    }
+
+    public string ExpenseTotalAmount
+    {
+        get => _expenseTotalAmount;
+        set => SetProperty(ref _expenseTotalAmount, value);
+    }
+
+    public string SplitOwnerTitle
+    {
+        get => _splitOwnerTitle;
+        set => SetProperty(ref _splitOwnerTitle, value);
+    }
+
+    public bool OwingAmountTextBlockVisibility
+    {
+        get => _owingAmountTextBlockVisibility;
+        set => SetProperty(ref _owingAmountTextBlockVisibility, value);
+    }
+
+    public string OwingSplitAmount
+    {
+        get => _owingSplitAmount;
+        set => SetProperty(ref _owingSplitAmount, value);
+    }
 
 
-        public bool IsGroupButtonVisible
-        {
-            get => _isGroupButtonVisible;
-            set => SetProperty(ref _isGroupButtonVisible, value);
-        }
+    public string OwingSplitTitle
+    {
+        get => _owingSplitTitle;
+        set => SetProperty(ref _owingSplitTitle, value);
+    }
 
 
-        public string GroupName
-        {
-            get => _groupName;
-            set => SetProperty(ref _groupName, value);
+    public Brush OwingExpenseForeground
+    {
+        get => _owingExpenseForeground;
+        set => SetProperty(ref _owingExpenseForeground, value);
+    }
+    #endregion
 
-        }
-
-        public Group GroupObject
-        {
-            get => _groupObject;
-            set => SetProperty(ref _groupObject, value);
-        }
-
-        public string ExpenseTotalAmount
-        {
-            get => _expenseTotalAmount;
-            set => SetProperty(ref _expenseTotalAmount, value);
-        }
-
-        public string SplitOwnerTitle
-        {
-            get => _splitOwnerTitle;
-            set => SetProperty(ref _splitOwnerTitle, value);
-        }
-
-        public bool OwingAmountTextBlockVisibility
-        {
-            get => _owingAmountTextBlockVisibility;
-            set => SetProperty(ref _owingAmountTextBlockVisibility, value);
-        }
-
-        public string OwingSplitAmount
-        {
-            get => _owingSplitAmount;
-            set => SetProperty(ref _owingSplitAmount, value);
-        }
-
-
-        public string OwingSplitTitle
-        {
-            get => _owingSplitTitle;
-            set => SetProperty(ref _owingSplitTitle, value);
-        }
-
-
-        public Brush OwingExpenseForeground
-        {
-            get => _owingExpenseForeground;
-            set => SetProperty(ref _owingExpenseForeground, value);
-        }
-        #endregion
-
-        #region ViewDataCalCulationgMethods
+    #region ViewDataCalCulationgMethods
 
         
 
        
 
-        private Brush SetOwingExpenseForeGround()
-        {
+    private Brush SetOwingExpenseForeGround()
+    {
 
-            if (_expenseVObj is not null && IsCurrentUser(_expenseVObj.SplitRaisedOwner))
-            {
-                return new SolidColorBrush(Colors.DarkSeaGreen);
-            }
-            return new SolidColorBrush(Colors.DarkOrange);
+        if (_expenseVObj is not null && IsCurrentUser(_expenseVObj.SplitRaisedOwner))
+        {
+            return new SolidColorBrush(Colors.DarkSeaGreen);
+        }
+        return new SolidColorBrush(Colors.DarkOrange);
+    }
+
+    private string GetOwingExpenseAmountTitle()
+    {
+        if (_expenseVObj is null)
+        {
+            return string.Empty;
+        }
+        if (IsCurrentUserRaisedExpense(_expenseVObj))
+        {
+            return "You borrow Nothing";
+        }
+        return IsCurrentUser(_expenseVObj.SplitRaisedOwner) ? $"You lent {_expenseVObj.CorrespondingUserObj.UserName}" : $"{_expenseVObj.SplitRaisedOwner.UserName} lent you";
+    }
+
+    private bool IsCurrentUserRaisedExpense(ExpenseVobj expenseVObj)
+    {
+        return expenseVObj.SplitRaisedOwner.Equals(expenseVObj.CorrespondingUserObj);
+    }
+
+
+    private void SetExpenseOwnerTitle()
+    {
+        if (_expenseVObj is null)
+        {
+            SplitOwnerTitle = string.Empty;
+            return;
+        }
+        if (IsCurrentUser(_expenseVObj.SplitRaisedOwner))
+        {
+            SplitOwnerTitle = "You Paid";
+            return;
+        }
+        SplitOwnerTitle = _expenseVObj.SplitRaisedOwner.UserName + " Paid";
+    }
+
+    private bool IsCurrentUser(User user)
+    {
+        return Store.CurrentUserBobj.Equals(user);
+    }
+
+    private void CallGroupNameByGroupIdUseCase(string groupUniqueId)
+    {
+        if (groupUniqueId is null)
+        {
+            GroupName = string.Empty;
+            return;
         }
 
-        private string GetOwingExpenseAmountTitle()
-        {
-            if (_expenseVObj is null)
-            {
-                return string.Empty;
-            }
-            if (IsCurrentUserRaisedExpense(_expenseVObj))
-            {
-                return "You borrow Nothing";
-            }
-            return IsCurrentUser(_expenseVObj.SplitRaisedOwner) ? $"You lent {_expenseVObj.CorrespondingUserObj.UserName}" : $"{_expenseVObj.SplitRaisedOwner.UserName} lent you";
-        }
+        var getGroupDetail = new GroupDetailByIdRequest(groupUniqueId,
+            CancellationToken.None,
+            new ExpenseItemVmPresenterCallBack(this),
+            Store.CurrentUserBobj);
 
-        private bool IsCurrentUserRaisedExpense(ExpenseVobj expenseVObj)
-        {
-            return expenseVObj.SplitRaisedOwner.Equals(expenseVObj.CorrespondingUserObj);
-        }
+        var getGroupDetailUseCaseObj = InstanceBuilder.CreateInstance<GroupDetailById>(getGroupDetail);
 
-
-        private void SetExpenseOwnerTitle()
-        {
-            if (_expenseVObj is null)
-            {
-                SplitOwnerTitle = string.Empty;
-                return;
-            }
-            if (IsCurrentUser(_expenseVObj.SplitRaisedOwner))
-            {
-                SplitOwnerTitle = "You Paid";
-                return;
-            }
-            SplitOwnerTitle = _expenseVObj.SplitRaisedOwner.UserName + " Paid";
-        }
-
-        private bool IsCurrentUser(User user)
-        {
-            return Store.CurrentUserBobj.Equals(user);
-        }
-
-        private void CallGroupNameByGroupIdUseCase(string groupUniqueId)
-        {
-            if (groupUniqueId is null)
-            {
-                GroupName = string.Empty;
-                return;
-            }
-
-            var getGroupDetail = new GroupDetailByIdRequest(groupUniqueId,
-                CancellationToken.None,
-                new ExpenseItemVmPresenterCallBack(this),
-                Store.CurrentUserBobj);
-
-            var getGroupDetailUseCaseObj = InstanceBuilder.CreateInstance<GroupDetailById>(getGroupDetail);
-
-            getGroupDetailUseCaseObj.Execute();
+        getGroupDetailUseCaseObj.Execute();
             
-        }
+    }
 
-        private void SetViewDataBasesOnExpense()
+    private void SetViewDataBasesOnExpense()
+    {
+
+        //Changing visibility for Group Name Indicator
+        IsGroupButtonVisible = _expenseVObj?.GroupUniqueId is not null;
+
+        OwingAmountTextBlockVisibility = !IsCurrentUserRaisedExpense(_expenseVObj);
+
+        OwingSplitAmount = _expenseVObj is null ? string.Empty : FormatExpenseAmountWithSymbol(_expenseVObj.StrExpenseAmount);
+
+        OwingSplitTitle = GetOwingExpenseAmountTitle();
+
+        OwingExpenseForeground = SetOwingExpenseForeGround();
+
+        SetExpenseOwnerTitle();
+    }
+
+    private string FormatExpenseAmountWithSymbol(double expenseAmount)
+    {
+        //if expense amount is more than 7 digits then trimming it to 7 digits and adding Currency Symbol
+        if (expenseAmount.ToString(CultureInfo.InvariantCulture).Length > 7)
         {
-
-            //Changing visibility for Group Name Indicator
-            IsGroupButtonVisible = _expenseVObj?.GroupUniqueId is not null;
-
-            OwingAmountTextBlockVisibility = !IsCurrentUserRaisedExpense(_expenseVObj);
-
-            OwingSplitAmount = _expenseVObj is null ? string.Empty : FormatExpenseAmountWithSymbol(_expenseVObj.StrExpenseAmount);
-
-            OwingSplitTitle = GetOwingExpenseAmountTitle();
-
-            OwingExpenseForeground = SetOwingExpenseForeGround();
-
-            SetExpenseOwnerTitle();
+            return expenseAmount.ExpenseSymbol(Store.CurrentUserBobj) + expenseAmount.ToString().Substring(0, 7);
         }
+        return expenseAmount.ExpenseAmount(Store.CurrentUserBobj);
+    }
 
-        private string FormatExpenseAmountWithSymbol(double expenseAmount)
+    #endregion
+
+    public void ExpenseObjLoaded(ExpenseVobj expenseObj)
+    {
+
+        if (expenseObj is null)
         {
-            //if expense amount is more than 7 digits then trimming it to 7 digits and adding Currency Symbol
-            if (expenseAmount.ToString(CultureInfo.InvariantCulture).Length > 7)
-            {
-                return expenseAmount.ExpenseSymbol(Store.CurrentUserBobj) + expenseAmount.ToString().Substring(0, 7);
-            }
-            return expenseAmount.ExpenseAmount(Store.CurrentUserBobj);
+            return;
         }
+        _expenseVObj = expenseObj;
 
-        #endregion
+        //Subscribing For Currency Preference Changed Notification
+        SplittrNotification.CurrencyPreferenceChanged += SplittrNotification_CurrencyPreferenceChanged;
 
-        public void ExpenseObjLoaded(ExpenseVobj expenseObj)
-        {
+        SetViewDataBasesOnExpense();
 
-            if (expenseObj is null)
-            {
-                return;
-            }
-            _expenseVObj = expenseObj;
+        CallGroupNameByGroupIdUseCase(expenseObj?.GroupUniqueId);
 
-            //Subscribing For Currency Preference Changed Notification
-            SplittrNotification.CurrencyPreferenceChanged += SplittrNotification_CurrencyPreferenceChanged;
-
-            SetViewDataBasesOnExpense();
-
-            CallGroupNameByGroupIdUseCase(expenseObj?.GroupUniqueId);
-
-            CallRelatedExpenseUseCaseCall();
-        }
+        CallRelatedExpenseUseCaseCall();
+    }
 
       
 
-        private async void SplittrNotification_CurrencyPreferenceChanged(CurrencyPreferenceChangedEventArgs obj)
-        {
-            //Recalculating Expense Total Based on new Currency Preference
-            CallRelatedExpenseUseCaseCall();
+    private async void SplittrNotification_CurrencyPreferenceChanged(CurrencyPreferenceChangedEventArgs obj)
+    {
+        //Recalculating Expense Total Based on new Currency Preference
+        CallRelatedExpenseUseCaseCall();
 
+        await UiService.RunOnUiThread(() =>
+        {
+            //Reassign Owing Amount Based On New Index
+            OwingSplitAmount = _expenseVObj is null ? string.Empty : FormatExpenseAmountWithSymbol(_expenseVObj.StrExpenseAmount);
+
+        }).ConfigureAwait(false);
+    }
+
+    public void ViewDisposed()
+    {
+        SplittrNotification.CurrencyPreferenceChanged -= SplittrNotification_CurrencyPreferenceChanged;
+    }
+
+    private void CallRelatedExpenseUseCaseCall()
+    {
+        var cts = new CancellationTokenSource();
+
+        var relatedExpenseReqObj = new RelatedExpenseRequestObj(_expenseVObj, Store.CurrentUserBobj, cts.Token, new ExpenseItemVmPresenterCallBack(this));
+
+        var relatedExpenseUseCase = InstanceBuilder.CreateInstance<RelatedExpense>(relatedExpenseReqObj);
+
+        relatedExpenseUseCase.Execute();
+    }
+
+
+
+    private async void OnRelatedExpensesRecievedSuccess(RelatedExpenseResponseObj result)
+    {
+        var totalAmount = result.RelatedExpenses.Sum(expense => expense.StrExpenseAmount);
+        totalAmount += _expenseVObj.StrExpenseAmount;
+
+        var formatedExpenseAmount = FormatExpenseAmountWithSymbol(totalAmount);
+
+        await UiService.RunOnUiThread(() =>
+        {
+            ExpenseTotalAmount = formatedExpenseAmount;
+        }).ConfigureAwait(false);
+    }
+
+
+    private class ExpenseItemVmPresenterCallBack : IPresenterCallBack<RelatedExpenseResponseObj>,IPresenterCallBack<GroupDetailByIdResponse>
+    {
+        private readonly ExpenseItemViewModel _viewModel;
+        public ExpenseItemVmPresenterCallBack(ExpenseItemViewModel viewModel)
+        {
+            _viewModel = viewModel;
+
+        }
+        public void OnSuccess(RelatedExpenseResponseObj result)
+        {
+            _viewModel.OnRelatedExpensesRecievedSuccess(result);
+        }
+        public async void OnSuccess(GroupDetailByIdResponse result)
+        {
             await UiService.RunOnUiThread(() =>
             {
-                //Reassign Owing Amount Based On New Index
-                OwingSplitAmount = _expenseVObj is null ? string.Empty : FormatExpenseAmountWithSymbol(_expenseVObj.StrExpenseAmount);
+
+                _viewModel.GroupName = result?.RequestedGroup?.GroupName;
+                _viewModel.GroupObject = result?.RequestedGroup;
 
             }).ConfigureAwait(false);
         }
-
-        public void ViewDisposed()
+        public void OnError(SplittrException ex)
         {
-            SplittrNotification.CurrencyPreferenceChanged -= SplittrNotification_CurrencyPreferenceChanged;
-        }
-
-        private void CallRelatedExpenseUseCaseCall()
-        {
-            var cts = new CancellationTokenSource();
-
-             var relatedExpenseReqObj = new RelatedExpenseRequestObj(_expenseVObj, Store.CurrentUserBobj, cts.Token, new ExpenseItemVmPresenterCallBack(this));
-
-             var relatedExpenseUseCase = InstanceBuilder.CreateInstance<RelatedExpense>(relatedExpenseReqObj);
-
-             relatedExpenseUseCase.Execute();
-        }
-
-
-
-        private async void OnRelatedExpensesRecievedSuccess(RelatedExpenseResponseObj result)
-        {
-            var totalAmount = result.RelatedExpenses.Sum(expense => expense.StrExpenseAmount);
-            totalAmount += _expenseVObj.StrExpenseAmount;
-
-            var formatedExpenseAmount = FormatExpenseAmountWithSymbol(totalAmount);
-
-            await UiService.RunOnUiThread(() =>
+            if (ex.InnerException is SqlException)
             {
-                ExpenseTotalAmount = formatedExpenseAmount;
-            }).ConfigureAwait(false);
-        }
-
-
-        private class ExpenseItemVmPresenterCallBack : IPresenterCallBack<RelatedExpenseResponseObj>,IPresenterCallBack<GroupDetailByIdResponse>
-        {
-            private readonly ExpenseItemViewModel _viewModel;
-            public ExpenseItemVmPresenterCallBack(ExpenseItemViewModel viewModel)
-            {
-                _viewModel = viewModel;
-
-            }
-            public void OnSuccess(RelatedExpenseResponseObj result)
-            {
-                _viewModel.OnRelatedExpensesRecievedSuccess(result);
-            }
-            public async void OnSuccess(GroupDetailByIdResponse result)
-            {
-               await UiService.RunOnUiThread(() =>
-               {
-
-                   _viewModel.GroupName = result?.RequestedGroup?.GroupName;
-                   _viewModel.GroupObject = result?.RequestedGroup;
-
-               }).ConfigureAwait(false);
-            }
-            public void OnError(SplittrException ex)
-            {
-                if (ex.InnerException is SqlException)
-                {
-                    //Code to Notify sql db access failed
-                }
+                //Code to Notify sql db access failed
             }
         }
     }

@@ -2,10 +2,9 @@
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.ViewModel.Models.ExpenseListObject;
 
-namespace SPLITTR_Uwp.ViewModel.VmLogic
+namespace SPLITTR_Uwp.ViewModel.VmLogic;
+
+public interface IExpenseGrouper
 {
-    public interface IExpenseGrouper
-    {
-        IEnumerable<ExpenseGroupingList> CreateExpenseGroupList(IEnumerable<ExpenseBobj> expenses);
-    }
+    IEnumerable<ExpenseGroupingList> CreateExpenseGroupList(IEnumerable<ExpenseBobj> expenses);
 }
