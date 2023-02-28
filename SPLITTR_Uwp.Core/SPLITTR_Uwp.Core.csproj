@@ -15,12 +15,12 @@
    <ItemGroup>
      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
      <PackageReference Include="sqlite-net-sqlcipher" Version="1.8.116" />
      <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
    </ItemGroup>
 
    <ItemGroup>
-     <Folder Include="Adapters\NetAdapter\" />
      <Folder Include="UseCase\GetRelatedExpense\" />
    </ItemGroup>
 </Project>
