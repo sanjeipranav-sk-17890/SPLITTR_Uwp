@@ -14,7 +14,7 @@ namespace SPLITTR_Uwp.Views
         private SignPageViewModel _viewModel;
         public SignUpPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             _viewModel = App.Container.GetRequiredService<SignPageViewModel>();
 
         }

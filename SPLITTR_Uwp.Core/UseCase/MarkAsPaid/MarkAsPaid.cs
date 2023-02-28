@@ -1,9 +1,5 @@
-﻿using SPLITTR_Uwp.Core.ModelBobj;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using SPLITTR_Uwp.Core.DependencyInjector;
+﻿using SPLITTR_Uwp.Core.DependencyInjector;
+using SPLITTR_Uwp.Core.ModelBobj;
 
 namespace SPLITTR_Uwp.Core.UseCase.MarkAsPaid
 {

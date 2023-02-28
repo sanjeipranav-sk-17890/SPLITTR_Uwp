@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using SPLITTR_Uwp.Core.EventArg;
+﻿using SPLITTR_Uwp.Core.EventArg;
 
 namespace SPLITTR_Uwp.Core.UseCase
 {

@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
@@ -62,7 +61,7 @@ namespace SPLITTR_Uwp.Services
             }
 
             // Don't open the same page multiple times
-            if (Frame.Content?.GetType() != pageType || (parameter != null && !parameter.Equals(_lastParamUsed)))
+            if (Frame.Content?.GetType() != pageType || parameter != null && !parameter.Equals(_lastParamUsed))
             {
                 var navigationResult = Frame.Navigate(pageType, parameter, infoOverride);
                 if (navigationResult)
@@ -72,10 +71,7 @@ namespace SPLITTR_Uwp.Services
 
                 return navigationResult;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         public static bool Navigate<T>(object parameter = null, NavigationTransitionInfo infoOverride = null)

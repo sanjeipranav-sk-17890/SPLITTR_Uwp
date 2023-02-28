@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Animation;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.UseCase;
@@ -19,12 +18,12 @@ namespace SPLITTR_Uwp.ViewModel
     public class SignPageViewModel : ObservableObject
     {
         
-        private bool _emailPassInputPanelVisibility=false;
+        private bool _emailPassInputPanelVisibility;
         private string _userName;
-        private bool _isValidEmailIdTextBlockVisibility=false;
-        private bool _userAlreadyExistTextBlockVisibility=false;
+        private bool _isValidEmailIdTextBlockVisibility;
+        private bool _userAlreadyExistTextBlockVisibility;
 
-        public List<string> _currencyList = new List<string>()
+        public List<string> _currencyList = new List<string>
         {
             "Rupees ₹",
             "Dollar $",
@@ -70,15 +69,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         private void UserNameValueChanged()
         {
-            if (_userName.Length > 3)
-            {
-                EmailPassInputPanelVisibility = true;
-
-            }
-            else
-            {
-                 EmailPassInputPanelVisibility = false;
-            }
+            EmailPassInputPanelVisibility = _userName.Length > 3;
         }
 
 
@@ -90,7 +81,8 @@ namespace SPLITTR_Uwp.ViewModel
             }
             else
             {
-                NavigationService.Navigate<LoginPage>(infoOverride: new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
+                NavigationService.Navigate<LoginPage>(infoOverride: new SlideNavigationTransitionInfo
+                    { Effect = SlideNavigationTransitionEffect.FromLeft });
             }
         }
 
@@ -98,7 +90,7 @@ namespace SPLITTR_Uwp.ViewModel
         public  void OnSignUpButtonClicked()
         {
             if (string.IsNullOrEmpty(EmailIdText) ||
-                !EmailIdText.ContainsString(new string[]
+                !EmailIdText.ContainsString(new[]
                 {
                     "@gmail", "@yahoo", "@zoho", "@bitsathy"
                 }))
@@ -118,18 +110,18 @@ namespace SPLITTR_Uwp.ViewModel
             signUpUseCaseOBj.Execute();
 
         }
-        public async void InvokeOnSignUpSuccessFull(SignUpUserResponseObj result)
+        private async void InvokeOnSignUpSuccessFull(SignUpUserResponseObj result)
         {
-           await UiService.RunOnUiThread((() =>
+           await UiService.RunOnUiThread(() =>
            {
                UserAlreadyExistTextBlockVisibility = false;
                IsValidEmailIdTextBlockVisibility = false;
 
-           } ));
-           await ShowSignUpSuccessFullMessageBoxAsync();
+           });
+           await ShowSignUpSuccessFullMessageBoxAsync().ConfigureAwait(false);
 
         }
-        public async void InvokeOnSignUpFailed(SplittrException ex)
+        private async void InvokeOnSignUpFailed(SplittrException ex)
         {
             if (ex.InnerException is UserAlreadyExistException)
             {
@@ -140,11 +132,11 @@ namespace SPLITTR_Uwp.ViewModel
 
             }
         }
-        private async  Task ShowSignUpSuccessFullMessageBoxAsync()
+        private Task ShowSignUpSuccessFullMessageBoxAsync()
         {
             IUICommand msgBoxResult;
 
-            await UiService.RunOnUiThread(
+            return UiService.RunOnUiThread(
                 async () =>
                 {
                     MessageDialog msg = new MessageDialog("Account Created SuccessFully", "Signed Up SuccessFully!!");
@@ -157,8 +149,8 @@ namespace SPLITTR_Uwp.ViewModel
                         LoginButtonOnClicked();
                     }
                 });
-        } 
-        class SignUpVmPresenterCallBack : IPresenterCallBack<SignUpUserResponseObj>
+        }
+        private class SignUpVmPresenterCallBack : IPresenterCallBack<SignUpUserResponseObj>
         {
             private readonly SignPageViewModel _viewModel;
             public SignUpVmPresenterCallBack(SignPageViewModel viewModel)

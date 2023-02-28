@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
-using Windows.UI.Popups;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 

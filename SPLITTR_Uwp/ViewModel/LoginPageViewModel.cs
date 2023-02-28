@@ -1,15 +1,14 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Text.RegularExpressions;
+using System.Threading;
+using Windows.UI.Xaml;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.EventArg;
-using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.LoginUser;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.Views;
-using System;
-using System.Threading;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media.Animation;
 
 namespace SPLITTR_Uwp.ViewModel
 {
@@ -17,9 +16,9 @@ namespace SPLITTR_Uwp.ViewModel
     public class LoginPageViewModel : ObservableObject
     {
         private readonly IStateService _stateManager;
-        private int _selectedItem = 0;
-        private bool _loginInformationTextBox = false;
-        private bool _wrongUserCredentialTextBlockVisibility = false;
+        private int _selectedItem;
+        private bool _loginInformation;
+        private bool _wrongUserCredentialVisibility;
 
         public int SelectedItem
         {
@@ -28,27 +27,27 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
 
-        public bool LoginInformationTextBox
+        public bool LoginInformation
         {
-            get => _loginInformationTextBox;
-            set => SetProperty(ref _loginInformationTextBox, value);
+            get => _loginInformation;
+            set => SetProperty(ref _loginInformation, value);
         }
 
-        public bool WrongUserCreDentialTextBlockVisibility
+        public bool WrongUserCredentialVisibility
         {
-            get => _wrongUserCredentialTextBlockVisibility;
-            set => SetProperty(ref _wrongUserCredentialTextBlockVisibility, value);
+            get => _wrongUserCredentialVisibility;
+            set => SetProperty(ref _wrongUserCredentialVisibility, value);
         }
 
-        public string UserEmailIdTextBox { get; set; }
+        public string LoginUserEmail { get; set; }
 
-        private DispatcherTimer _timer;
+        private readonly DispatcherTimer _timer;
 
         public LoginPageViewModel(IStateService stateManager)
         {
             _stateManager = stateManager;
             //Firing a event for every 0.5 seconds
-            _timer = new DispatcherTimer()
+            _timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromSeconds(2)
             };
@@ -67,34 +66,30 @@ namespace SPLITTR_Uwp.ViewModel
                 _change *= -1;
             }
         }
+        private bool ValidateEmail(string email)
+        {
+            var regex = new Regex("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
+            return regex.IsMatch(email);
+        }
 
         public  void LoginButtonPressed()
         {
-            //===============================================/
-            //By PAss To Be Deleted
 
-            // UserEmailIdTextBox = "saran@gmail.com";
-            //===============================================//
-
-            if (string.IsNullOrWhiteSpace(UserEmailIdTextBox))
+            if (string.IsNullOrWhiteSpace(LoginUserEmail))
             {
-                LoginInformationTextBox = true;
-                WrongUserCreDentialTextBlockVisibility = false;
+                LoginInformation = true;
+                WrongUserCredentialVisibility = false;
                 return;
             }
-            if (!UserEmailIdTextBox.ContainsString(new string[]
-                {
-                    "@gmail", "@yahoo", "@zoho", "@bitsathy"
-                }))
+            if (!ValidateEmail(LoginUserEmail))
             {
-                LoginInformationTextBox = false;
-                WrongUserCreDentialTextBlockVisibility = true;
+                LoginInformation = false;
+                WrongUserCredentialVisibility = true;
             }
             else
             {
-                var cts = new CancellationTokenSource();
-
-                var loginReqObj = new LoginRequestObj(UserEmailIdTextBox.Trim().ToLower(), new LoginVmPresenterCalBack(this), cts.Token);
+                
+                var loginReqObj = new LoginRequestObj(LoginUserEmail.Trim().ToLower(), new LoginVmPresenterCalBack(this), CancellationToken.None);
 
                 var loginUseCaseObj = InstanceBuilder.CreateInstance<UserLogin>(loginReqObj);
 
@@ -103,11 +98,7 @@ namespace SPLITTR_Uwp.ViewModel
 
 
         }
-        public void SignUpButtonOnClick()
-        {
-            NavigationService.Frame.Navigate(typeof(SignUpPage), null, infoOverride: new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
-        }
-
+    
         public void PageUnloaded()
         {
             //stopping main page animation if the the page is unloaded
@@ -115,19 +106,19 @@ namespace SPLITTR_Uwp.ViewModel
         }
         private async void OnLoginCompleted(LoginResponseObj result)
         {
-            await UiService.RunOnUiThread((() =>
+            await UiService.RunOnUiThread(() =>
             {
                 if (!result.IsUserAlreadyExist)
                 {
-                    WrongUserCreDentialTextBlockVisibility = true;
+                    WrongUserCredentialVisibility = true;
                     return;
                 }
-                WrongUserCreDentialTextBlockVisibility = false;
-                Store.CurreUserBobj = result.LoginUserCred;
+                WrongUserCredentialVisibility = false;
+                Store.CurrentUserBobj = result.LoginUserCred;
                 NavigationService.Navigate<MainPage>();
-            }));
+            });
             //Storing Current User Session 
-            _stateManager?.RegisterUserLoginSession(Store.CurreUserBobj);
+            _stateManager?.RegisterUserLoginSession(Store.CurrentUserBobj);
         }
 
 
@@ -144,13 +135,13 @@ namespace SPLITTR_Uwp.ViewModel
             }
             public async void OnError(SplittrException ex)
             {
-                await UiService.RunOnUiThread((() =>
+                await UiService.RunOnUiThread(() =>
                 {
                     if (ex.InnerException is ArgumentNullException)
                     {
-                        _viewModel.WrongUserCreDentialTextBlockVisibility = true;
+                        _viewModel.WrongUserCredentialVisibility = true;
                     }
-                }));
+                });
 
             }
         }

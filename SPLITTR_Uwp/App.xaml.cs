@@ -1,15 +1,11 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Configuration;
-using SPLITTR_Uwp.Views;
-using Windows.UI.ViewManagement;
-using Windows.UI.Xaml.Media;
 using SPLITTR_Uwp.Services;
 
 namespace SPLITTR_Uwp
@@ -33,7 +29,7 @@ namespace SPLITTR_Uwp
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
-        public App():base()
+        public App()
         {
             InitializeComponent();
 
@@ -94,7 +90,7 @@ namespace SPLITTR_Uwp
             //Setting Initial preset  Theme
             rootFrame.RequestedTheme = ThemeHelperService.GetPreferenceThemeIfSet();
             
-            //Setting Appliations title bar to Requeired theme color
+            //Setting Application title bar to Required theme color
             AccentColorService.Register(Window.Current.CoreWindow);
 
 
@@ -105,7 +101,7 @@ namespace SPLITTR_Uwp
         /// </summary>
         /// <param name="sender">The Frame which failed navigation</param>
         /// <param name="e">Details about the navigation failure</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }

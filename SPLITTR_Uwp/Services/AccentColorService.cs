@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Core;
-using Windows.Foundation;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
-using Microsoft.Toolkit.Uwp.Helpers;
 
 namespace SPLITTR_Uwp.Services
 {
@@ -51,15 +46,15 @@ namespace SPLITTR_Uwp.Services
 
         private async static Task ChangeTitleBarColor(ICoreWindow appWindow)
         {
-           await appWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, (() =>
-            {
-                var view = ApplicationView.GetForCurrentView();
-                var applicationThemeColor = (Color)Application.Current.Resources["SystemAccentColorLight1"];
-                view.TitleBar.BackgroundColor = applicationThemeColor;
-                view.TitleBar.InactiveBackgroundColor = applicationThemeColor;
-                view.TitleBar.ButtonInactiveBackgroundColor = applicationThemeColor;
-                view.TitleBar.ButtonBackgroundColor = applicationThemeColor;
-            }));
+           await appWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+           {
+               var view = ApplicationView.GetForCurrentView();
+               var applicationThemeColor = (Color)Application.Current.Resources["SystemAccentColorLight1"];
+               view.TitleBar.BackgroundColor = applicationThemeColor;
+               view.TitleBar.InactiveBackgroundColor = applicationThemeColor;
+               view.TitleBar.ButtonInactiveBackgroundColor = applicationThemeColor;
+               view.TitleBar.ButtonBackgroundColor = applicationThemeColor;
+           });
 
         }
         public static void UnRegister(CoreWindow appWindow)

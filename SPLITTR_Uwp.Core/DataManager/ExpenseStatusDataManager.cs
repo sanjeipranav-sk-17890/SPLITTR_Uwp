@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.EventArg;
-using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.UseCase.SplitExpenses;
-using SPLITTR_Uwp.Core.UseCase;
-using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
-using SPLITTR_Uwp.Core.UseCase.MarkAsPaid;
-using SQLite;
-using SPLITTR_Uwp.Core.UseCase.CancelExpense;
-using System.Security.Cryptography;
 using SPLITTR_Uwp.Core.SplittrNotifications;
+using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.CancelExpense;
+using SPLITTR_Uwp.Core.UseCase.MarkAsPaid;
+using SPLITTR_Uwp.Core.UseCase.SplitExpenses;
+using SQLite;
 
 namespace SPLITTR_Uwp.Core.DataManager;
 

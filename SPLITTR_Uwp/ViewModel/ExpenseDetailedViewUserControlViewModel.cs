@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.Linq;
@@ -8,7 +7,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
-using SPLITTR_Uwp.Core.DataManager;
 using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.GetGroupDetails;
@@ -75,7 +73,7 @@ namespace SPLITTR_Uwp.ViewModel
             var getGroupDetail = new GroupDetailByIdRequest(expenseObj.GroupUniqueId,
                 CancellationToken.None,
                 new ExpenseDetailedViewPresenterCallBack(this),
-                Store.CurreUserBobj);
+                Store.CurrentUserBobj);
 
             var getGroupDetailUseCaseObj = InstanceBuilder.CreateInstance<GroupDetailById>(getGroupDetail);
 
@@ -93,7 +91,7 @@ namespace SPLITTR_Uwp.ViewModel
         {
             var cts = new CancellationTokenSource();
 
-            var relatedExpenseRequestObj = new RelatedExpenseRequestObj(_expense, Store.CurreUserBobj, cts.Token, new ExpenseDetailedViewPresenterCallBack(this));
+            var relatedExpenseRequestObj = new RelatedExpenseRequestObj(_expense, Store.CurrentUserBobj, cts.Token, new ExpenseDetailedViewPresenterCallBack(this));
 
             var relatedExpenseUseCase = InstanceBuilder.CreateInstance<RelatedExpense>(relatedExpenseRequestObj);
 
@@ -154,11 +152,11 @@ namespace SPLITTR_Uwp.ViewModel
             {
                 if (result?.RequestedGroup != null)
                 {
-                   await  RunOnUiThread((() =>
+                   await  RunOnUiThread(() =>
                    {
                        _viewModel.ExpenseOccuredGroupName = result.RequestedGroup.GroupName;
 
-                   })).ConfigureAwait(false);
+                   }).ConfigureAwait(false);
                 }
             }
             public void OnError(SplittrException ex)

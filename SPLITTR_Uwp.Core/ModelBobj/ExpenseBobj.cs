@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using SPLITTR_Uwp.Core.CurrencyCoverter;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace SPLITTR_Uwp.Core.ModelBobj
 {

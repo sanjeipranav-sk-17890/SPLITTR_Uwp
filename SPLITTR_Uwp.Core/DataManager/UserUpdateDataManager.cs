@@ -34,7 +34,7 @@ public interface IUserUpdateDataManager : IUserProfileUpdateDataManager, IAddWal
 public class UserUpdateDataManager : IUserUpdateDataManager
 {
 
-    readonly IUserDataManager _userDataManager;
+    private readonly IUserDataManager _userDataManager;
     private readonly ICurrencyCalcFactory _factory;
     public UserUpdateDataManager(IUserDataManager userDataManager, ICurrencyCalcFactory factory)
     {

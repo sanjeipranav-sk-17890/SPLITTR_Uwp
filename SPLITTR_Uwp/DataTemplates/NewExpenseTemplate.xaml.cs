@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Windows.UI;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
-using Color = Windows.UI.Color;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -36,8 +36,8 @@ namespace SPLITTR_Uwp.DataTemplates
 
         public NewExpenseTemplate()
         {
-            this.InitializeComponent();
-            this.DataContextChanged += (s, e) =>
+            InitializeComponent();
+            DataContextChanged += (s, e) =>
             {
                 Bindings.Update();
                 UserInitialProfilePicture.Initials = UserInitial;
@@ -47,8 +47,8 @@ namespace SPLITTR_Uwp.DataTemplates
 
         }
 
-        
-        bool _isInternalTextChange = true;
+
+        private bool _isInternalTextChange = true;
 
         private void ExpenseAmountTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {

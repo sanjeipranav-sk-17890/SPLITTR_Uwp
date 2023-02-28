@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.EventArg;
-using SPLITTR_Uwp.Core.DataManager;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.SettleUpExpense;
 using SPLITTR_Uwp.DataRepository;
@@ -35,7 +34,7 @@ internal class OwingMoneyPaymentExpenseViewModel :ObservableObject
     }
 
 
-    private ExpenseVobj _moneyPaymentExpense = null;
+    private ExpenseVobj _moneyPaymentExpense;
     public void PaymentWindowXamlRoot_SettleUpButtonClicked(bool isWalletPayment)
     {
 
@@ -46,7 +45,7 @@ internal class OwingMoneyPaymentExpenseViewModel :ObservableObject
         }
         var cts = new CancellationTokenSource();
 
-        var settleUpReqObj = new SettleUPExpenseRequestObj(isWalletPayment, Store.CurreUserBobj, _moneyPaymentExpense, new OwingMoneyPaymentExpenseVmPresenterCallBack(this), cts.Token);
+        var settleUpReqObj = new SettleUPExpenseRequestObj(isWalletPayment, Store.CurrentUserBobj, _moneyPaymentExpense, new OwingMoneyPaymentExpenseVmPresenterCallBack(this), cts.Token);
 
         var settleUpUseCaseObj = InstanceBuilder.CreateInstance<SettleUpSplit>(settleUpReqObj);
 
@@ -70,7 +69,7 @@ internal class OwingMoneyPaymentExpenseViewModel :ObservableObject
             PaymentControlVisibility = false;
         });
     }
-   class OwingMoneyPaymentExpenseVmPresenterCallBack : IPresenterCallBack<SettleUpExpenseResponseObj>
+    private class OwingMoneyPaymentExpenseVmPresenterCallBack : IPresenterCallBack<SettleUpExpenseResponseObj>
     {
         private readonly OwingMoneyPaymentExpenseViewModel _viewModel;
 

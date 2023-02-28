@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.DataManager;
 using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.CreateGroup;
@@ -34,7 +31,7 @@ namespace SPLITTR_Uwp.Core.DataManager
                     throw new ArgumentException($"number of {nameof(particiapants)} atleast  must be 2 To form a group");
                 }
 
-                var groupParticipants = new List<User>()
+                var groupParticipants = new List<User>
                 {
                     currentUser
                 };

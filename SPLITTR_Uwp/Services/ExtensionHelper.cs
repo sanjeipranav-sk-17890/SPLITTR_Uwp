@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Windows.UI.Core;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,10 +26,10 @@ namespace SPLITTR_Uwp.Services
         {
             if (!dispatcher.HasThreadAccess)
             {
-                return dispatcher?.RunAsync(CoreDispatcherPriority.Normal, (() =>
+                return dispatcher?.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     function?.Invoke();
-                })).AsTask();
+                }).AsTask();
             }
             function?.Invoke();
             return Task.CompletedTask;

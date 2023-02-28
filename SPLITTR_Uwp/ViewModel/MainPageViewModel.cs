@@ -1,25 +1,21 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading;
+using Windows.UI.Xaml.Media.Animation;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.GetUserExpenses;
 using SPLITTR_Uwp.Core.UseCase.GetUserGroups;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.Models;
-using SPLITTR_Uwp.ViewModel.VmLogic;
 using SPLITTR_Uwp.Views;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
-using SPLITTR_Uwp.Core.UseCase.GetUserExpenses;
 using static SPLITTR_Uwp.Services.UiService;
 
 namespace SPLITTR_Uwp.ViewModel
@@ -27,22 +23,15 @@ namespace SPLITTR_Uwp.ViewModel
     internal class MainPageViewModel : ObservableObject, IMainPageViewModel
     {
 
-
-        private readonly IMainView _mainPage;
-        private readonly IExpenseGrouper _expenseGrouper;
         private readonly IStateService _stateService;
         private string _userInitial;
         private bool _isUpdateWalletBalanceTeachingTipOpen;
 
 
-        public MainPageViewModel(IMainView mainPage, IExpenseGrouper expenseGrouper, IStateService stateService)
+        public MainPageViewModel(IStateService stateService)
         {
-
-            _mainPage = mainPage;
-            _expenseGrouper = expenseGrouper;
             _stateService = stateService;
-            UserVobj = new UserVobj(Store.CurreUserBobj);
-
+            UserVobj = new UserVobj(Store.CurrentUserBobj);
         }
 
         public string UserInitial
@@ -66,7 +55,7 @@ namespace SPLITTR_Uwp.ViewModel
         public void ViewLoaded()
         {
 
-            if (Store.CurreUserBobj == null)
+            if (Store.CurrentUserBobj == null)
             {
                 //Setting frame reference to Default windows Frame
                 NavigationService.Frame = null;
@@ -94,7 +83,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         private void CallUseCaseToFetchCurrentUserExpenses()
         {
-            var getExpensesRequestObj = new GetExpensesByIdRequest(CancellationToken.None, new MainViewVmPresenterCb(this), Store.CurreUserBobj);
+            var getExpensesRequestObj = new GetExpensesByIdRequest(CancellationToken.None, new MainViewVmPresenterCb(this), Store.CurrentUserBobj);
 
             var getExpenseUseCase = InstanceBuilder.CreateInstance<GetExpensesByUserId>(getExpensesRequestObj);
 
@@ -104,13 +93,13 @@ namespace SPLITTR_Uwp.ViewModel
         private async void SplittrNotification_GroupCreated(GroupCreatedEventArgs obj)
         { 
             //Adding New Ly Created Group To Navigation View
-           await RunOnUiThread((() =>
+           await RunOnUiThread(() =>
            {
                if (obj?.CreatedGroup is not null)
                {
                    UserGroups.Add(obj.CreatedGroup);
                }
-           })).ConfigureAwait(false);
+           }).ConfigureAwait(false);
            
         }
         public void ViewDisposed()
@@ -125,7 +114,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         private void FetchUserGroups()
         {
-            var getUSerGroupReqObj = new GetUserGroupReq(CancellationToken.None, new MainViewVmPresenterCb(this), Store.CurreUserBobj);
+            var getUSerGroupReqObj = new GetUserGroupReq(CancellationToken.None, new MainViewVmPresenterCb(this), Store.CurrentUserBobj);
 
             var getGroupsUseCase = InstanceBuilder.CreateInstance<GetUserGroups>(getUSerGroupReqObj);
 
@@ -143,11 +132,11 @@ namespace SPLITTR_Uwp.ViewModel
                 {
                     continue;
                 }
-                if (!expense.SplitRaisedOwner.Equals(Store.CurreUserBobj) && !RelatedUsers.Contains(expense.SplitRaisedOwner))
+                if (!expense.SplitRaisedOwner.Equals(Store.CurrentUserBobj) && !RelatedUsers.Contains(expense.SplitRaisedOwner))
                 {
                     RelatedUsers.Add(expense.SplitRaisedOwner);
                 }
-                if (!expense.CorrespondingUserObj.Equals(Store.CurreUserBobj) && !RelatedUsers.Contains(expense.CorrespondingUserObj))
+                if (!expense.CorrespondingUserObj.Equals(Store.CurrentUserBobj) && !RelatedUsers.Contains(expense.CorrespondingUserObj))
                 {
                     RelatedUsers.Add(expense.CorrespondingUserObj);
                 }
@@ -155,72 +144,30 @@ namespace SPLITTR_Uwp.ViewModel
 
         }
 
-
-        #region NavigationLogicRegion
-
-
-        private bool _paneVisibility = true;
-
-        public bool PaneVisibility
-        {
-            get => _paneVisibility;
-            set => SetProperty(ref _paneVisibility, value);
-        }
-
-        public void LogOutButtonClicked()
+        public void LogOutRequested()
         {
             _stateService.RequestUserLogout();
 
         }
 
-        public void PersonProfileClicked()
-        {
-            PaneVisibility = false;
-            NavigationService.Frame = _mainPage.ChildFrame;
-            NavigationService.Navigate<UserProfilePage>();
-        }
-
-        public void AddButtonItemSelected(object sender, RoutedEventArgs e)
-        {
-
-            //closing main Page pane
-            PaneVisibility = false;
-
-            var selectedItem = sender as MenuFlyoutItem;
-            var title = selectedItem.Text;
-            NavigationService.Frame = _mainPage.ChildFrame;
-            NavigationService.Navigate(string.Compare(title, "Add Exepense", StringComparison.InvariantCultureIgnoreCase) == 0 ?
-                typeof(AddExpenseTestPage) :
-                typeof(GroupCreationPage), new DrillInNavigationTransitionInfo());
-        }
-
-        #endregion
 
 
-
-        public void AddWalletBalanceButtonClicked()
-        {
-            IsUpdateWalletBalanceTeachingTipOpen = !IsUpdateWalletBalanceTeachingTipOpen;
-        }
-
-
-
-        class MainViewVmPresenterCb : IPresenterCallBack<GetUserGroupResponse>,IPresenterCallBack<GetExpensesByIdResponse>
+        private class MainViewVmPresenterCb : IPresenterCallBack<GetUserGroupResponse>,IPresenterCallBack<GetExpensesByIdResponse>
         {
             private readonly MainPageViewModel _viewModel;
 
             public MainViewVmPresenterCb(MainPageViewModel viewModel)
             {
-                this._viewModel = viewModel;
+                _viewModel = viewModel;
 
             }
             public async void OnSuccess(GetUserGroupResponse result)
             {
-                await RunOnUiThread((() =>
+                await RunOnUiThread(() =>
                 {
                     _viewModel.UserGroups.ClearAndAdd(result.UserParticipatingGroups);
 
-                })).ConfigureAwait(false);
+                }).ConfigureAwait(false);
             }
             public async void OnSuccess(GetExpensesByIdResponse result)
             {
@@ -228,10 +175,10 @@ namespace SPLITTR_Uwp.ViewModel
                 {
                     return;
                 }
-                await RunOnUiThread((() =>
+                await RunOnUiThread(() =>
                 {
-                 _viewModel.PopulateIndividualSplitUsers(result.CurrentUserExpenses);
-                })).ConfigureAwait(false);
+                    _viewModel.PopulateIndividualSplitUsers(result.CurrentUserExpenses);
+                }).ConfigureAwait(false);
             }
             public void OnError(SplittrException ex)
             {

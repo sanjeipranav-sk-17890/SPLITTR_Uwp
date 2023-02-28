@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Extensions.DependencyInjection;
-using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
-using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.ViewModel.Models;
 
@@ -32,7 +29,7 @@ namespace SPLITTR_Uwp.Views
             Unloaded += (sender, args) => _viewModel.ViewDisposed();
         }
 
-        private void ExpenseDetailedViewUserControl_DataContextChanged(Windows.UI.Xaml.FrameworkElement sender, Windows.UI.Xaml.DataContextChangedEventArgs args)
+        private void ExpenseDetailedViewUserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
 
             if (ExpenseObj is null)
@@ -66,9 +63,9 @@ namespace SPLITTR_Uwp.Views
         {
             ExpenseStatusBrush.Color = ExpenseObj.ExpenseStatus switch
             {
-                ExpenseStatus.Pending => Windows.UI.Colors.DarkRed,
-                ExpenseStatus.Cancelled => Windows.UI.Colors.Orange,
-                _ =>Windows.UI.Colors.DarkGreen
+                ExpenseStatus.Pending => Colors.DarkRed,
+                ExpenseStatus.Cancelled => Colors.Orange,
+                _ =>Colors.DarkGreen
             };
 
         }

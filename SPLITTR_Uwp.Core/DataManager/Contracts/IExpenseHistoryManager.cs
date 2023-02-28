@@ -1,6 +1,4 @@
-﻿using SPLITTR_Uwp.Core.DataManager;
-using System;
-using SPLITTR_Uwp.Core.UseCase;
+﻿using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.VerifyPaidExpense;
 
 namespace SPLITTR_Uwp.Core.DataManager.Contracts

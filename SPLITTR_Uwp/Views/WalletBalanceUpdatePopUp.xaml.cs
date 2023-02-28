@@ -11,15 +11,14 @@ namespace SPLITTR_Uwp.Views
     {
         
         private WalletBalanceUpdateViewModel _viewModel;
-        public event Action MakePaymentClicked;
 
         public event Action CloseButtonClicked;
         
         public WalletBalanceUpdatePopUp()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             _viewModel =  App.Container.GetService(typeof(WalletBalanceUpdateViewModel)) as WalletBalanceUpdateViewModel;
-            _viewModel.CloseButtonClicked += CloseButtonClicked;
+            _viewModel.OnViewDismiss += CloseButtonClicked;
         }
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {

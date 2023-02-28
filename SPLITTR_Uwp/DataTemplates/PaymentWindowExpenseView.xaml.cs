@@ -24,7 +24,7 @@ namespace SPLITTR_Uwp.DataTemplates
 
         public PaymentWindowExpenseView()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<PaymentWindowExpenseViewModel>(App.Container);
             DataContextChanged += PaymentWindowExpenseView_DataContextChanged;
         }
@@ -90,14 +90,14 @@ namespace SPLITTR_Uwp.DataTemplates
         public PaymentWindowExpenseViewModel()
         {
             
-            CurrentUser = new UserVobj(Store.CurreUserBobj);
+            CurrentUser = new UserVobj(Store.CurrentUserBobj);
 
         }
         private void InitializeValues(ExpenseVobj expenseObj)
         {
             CurrentUserInitial = expenseObj.CorrespondingUserObj.UserName.GetUserInitial();
             OwingUserInitial = expenseObj.SplitRaisedOwner.UserName.GetUserInitial();
-            CurrencySymbol = expenseObj.StrExpenseAmount.ExpenseSymbol(Store.CurreUserBobj);
+            CurrencySymbol = expenseObj.StrExpenseAmount.ExpenseSymbol(Store.CurrentUserBobj);
         }
     }
 }

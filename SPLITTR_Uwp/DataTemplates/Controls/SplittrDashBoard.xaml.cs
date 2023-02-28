@@ -2,21 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlClient;
+using System.Threading;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
-using SPLITTR_Uwp.DataRepository;
-using SPLITTR_Uwp.ViewModel.Models;
-using SPLITTR_Uwp.Core.ModelBobj.Enum;
-using SPLITTR_Uwp.Core.UseCase.UpdateUser;
-using SPLITTR_Uwp.Services;
-using static SPLITTR_Uwp.ViewModel.UserProfilePageViewModel;
-using System.Threading;
 using SPLITTR_Uwp.Core.EventArg;
-using SPLITTR_Uwp.Core.SplittrNotifications;
+using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.UseCase;
-using SPLITTR_Uwp.ViewModel.Contracts;
+using SPLITTR_Uwp.Core.UseCase.UpdateUser;
+using SPLITTR_Uwp.DataRepository;
+using SPLITTR_Uwp.Services;
+using SPLITTR_Uwp.ViewModel.Models;
 using SPLITTR_Uwp.ViewModel.VmLogic;
 
 
@@ -32,7 +28,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<SplittrDashBoardVm>(App.Container);
             _viewModel.BindingUpdateInvoked += ViewModel_BindingUpdateInvoked;
 
-            this.InitializeComponent();
+            InitializeComponent();
             Loaded += SplittrDashBoard_Loaded;
             Unloaded += SplittrDashBoard_Unloaded;
 
@@ -57,7 +53,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         private void SplittrDashBoard_Loaded(object sender, RoutedEventArgs e)
         {
             _viewModel.OnViewLoaded();
-            _timer = new DispatcherTimer()
+            _timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromSeconds(1)
             };
@@ -68,16 +64,17 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
 
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (CurrencyPreferrenceSplitButton.Flyout.IsOpen)
+            if (!CurrencyPreferrenceSplitButton.Flyout.IsOpen)
             {
-                CurrencyPreferrenceSplitButton.Flyout.Hide();
-                _viewModel.SaveUserCredentials();
+                return;
             }
+            CurrencyPreferrenceSplitButton.Flyout.Hide();
+            _viewModel.SaveUserCredentials();
         }
 
         private void UserNameTextBoxLostFocus(object sender, RoutedEventArgs e)
         {
-            if (!UserNameTextBox.Text.Equals(Store.CurreUserBobj.UserName))
+            if (!UserNameTextBox.Text.Equals(Store.CurrentUserBobj.UserName))
             {
                 _viewModel.SaveUserCredentials();
             }
@@ -116,7 +113,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             set => SetProperty(ref _preferredCurrencyIndex, value);
         }
 
-        public List<string> CurrencyList { get; } = new List<string>()
+        public List<string> CurrencyList { get; } = new List<string>
         {
             "Rupees ₹", "Dollar $", "Euro   €", "Yen    ¥"
         };
@@ -124,7 +121,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         public SplittrDashBoardVm(IStateService stateService)
         {
             _stateService = stateService;
-            UserVm = new UserVobj(Store.CurreUserBobj);
+            UserVm = new UserVobj(Store.CurrentUserBobj);
             UserVm.PropertyChanged += UserVm_PropertyChanged;
          
             
@@ -132,9 +129,9 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
 
         
 
-        private void UserVm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void UserVm_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName.Equals(nameof(Store.CurreUserBobj.CurrencyPreference)))
+            if (e.PropertyName.Equals(nameof(Store.CurrentUserBobj.CurrencyPreference)))
             {
                 InvokeBindingsUpdate();
             }
@@ -142,9 +139,9 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
 
         public void OnViewLoaded()
         {
-            UserCurrencyPreference = Store.CurreUserBobj.CurrencyPreference.ToString();
+            UserCurrencyPreference = Store.CurrentUserBobj.CurrencyPreference.ToString();
             _isVmChanged = true;
-            CurrentUserName = Store.CurreUserBobj.UserName;
+            CurrentUserName = Store.CurrentUserBobj.UserName;
             PreferredCurrencyIndex = UserVm.CurrencyIndex;
             _isVmChanged = false;
         }
@@ -157,8 +154,8 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
                 return;
             }
 
-            //useCase classes is updating the UserObj and its related data's
-            var updateUserRequestOBj = new UpdateUserRequestObj(CancellationToken.None, new SplittrDashBoardPresenterCallBack(this), Store.CurreUserBobj, _currentUserName.Trim(), (Currency)PreferredCurrencyIndex);
+            //useCase classes is updating the UserObj and its related data
+            var updateUserRequestOBj = new UpdateUserRequestObj(CancellationToken.None, new SplittrDashBoardPresenterCallBack(this), Store.CurrentUserBobj, _currentUserName.Trim(), (Currency)PreferredCurrencyIndex);
 
             var updateUserUseCaseObj = InstanceBuilder.CreateInstance<UpdateUser>(updateUserRequestOBj);
 
@@ -179,11 +176,11 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             }
             public async void OnSuccess(UpdateUserResponseObj result)
             {
-               await UiService.RunOnUiThread((() =>
+               await UiService.RunOnUiThread(() =>
                {
                    _viewModel.CurrentUserName = result.UpdatedUserBobj.UserName;
                    _viewModel.UserCurrencyPreference = result.UpdatedUserBobj.CurrencyPreference.ToString();
-               })).ConfigureAwait(false);
+               }).ConfigureAwait(false);
             }
             public async void OnError(SplittrException ex)
             {
@@ -192,9 +189,9 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
                     case UserNameInvalidException:
                         await UiService.RunOnUiThread(() =>
                         {
-                            _viewModel.PreferredCurrencyIndex = Store.CurreUserBobj.CurrencyIndex;
-                            _viewModel.CurrentUserName = Store.CurreUserBobj.UserName;
-                            _viewModel.PreferredCurrencyIndex = Store.CurreUserBobj.CurrencyIndex;
+                            _viewModel.PreferredCurrencyIndex = Store.CurrentUserBobj.CurrencyIndex;
+                            _viewModel.CurrentUserName = Store.CurrentUserBobj.UserName;
+                            _viewModel.PreferredCurrencyIndex = Store.CurrentUserBobj.CurrencyIndex;
                         }).ConfigureAwait(false);
                             ExceptionHandlerService.HandleException(ex.InnerException);
                         break;

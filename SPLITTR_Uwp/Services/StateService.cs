@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Core;
 using Windows.Security.Credentials;
 using Windows.Storage;
-using Windows.System;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
@@ -50,10 +43,10 @@ namespace SPLITTR_Uwp.Services
 
         public bool RequestUserLogout()
         {
-            InvokeCurrentUserLoggedOut(Store.CurreUserBobj);
+            InvokeCurrentUserLoggedOut(Store.CurrentUserBobj);
 
             //Clearing Reference to Current USer Cache
-            Store.CurreUserBobj = null;
+            Store.CurrentUserBobj = null;
             //Clearing User Session Details in 
             RevokeSessionLogIn();
 
@@ -139,12 +132,12 @@ namespace SPLITTR_Uwp.Services
 
             public async void OnSuccess(LoginResponseObj result)
             {
-                await RunOnUiThread((() =>
+                await RunOnUiThread(() =>
                 {
-                    Store.CurreUserBobj = result.LoginUserCred;
+                    Store.CurrentUserBobj = result.LoginUserCred;
                     NavigationService.Navigate(typeof(MainPage));
-                })).ConfigureAwait(false);
-                _stateManager.InvokeUserLoggingIn(Store.CurreUserBobj);
+                }).ConfigureAwait(false);
+                _stateManager.InvokeUserLoggingIn(Store.CurrentUserBobj);
 
             }
             public async void OnError(SplittrException ex)

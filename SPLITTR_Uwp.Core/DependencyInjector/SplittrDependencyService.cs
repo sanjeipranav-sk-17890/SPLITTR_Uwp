@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.CurrencyCoverter;
 using SPLITTR_Uwp.Core.CurrencyCoverter.Factory;
@@ -9,7 +7,6 @@ using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DbHandler;
 using SPLITTR_Uwp.Core.DbHandler.Contracts;
 using SPLITTR_Uwp.Core.DbHandler.SqliteConnection;
-using SPLITTR_Uwp.Core.UseCase.CreateGroup;
 using SPLITTR_Uwp.Core.UseCase.LoginUser;
 using SPLITTR_Uwp.Core.UseCase.MarkAsPaid;
 

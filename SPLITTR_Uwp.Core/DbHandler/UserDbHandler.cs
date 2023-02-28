@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Net.Mime;
 using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.DbHandler.Contracts;
 using SPLITTR_Uwp.Core.DbHandler.SqliteConnection;

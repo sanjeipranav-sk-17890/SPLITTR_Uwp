@@ -1,13 +1,12 @@
-﻿using SPLITTR_Uwp.Core.DataManager.Contracts;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Threading;
+using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DependencyInjector;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.UseCase.GetUserGroups;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Threading;
 
 namespace SPLITTR_Uwp.Core.UseCase.GetGroupDetails
 {
@@ -40,7 +39,7 @@ namespace SPLITTR_Uwp.Core.UseCase.GetGroupDetails
             _groupDataManager.GetUserParticipatingGroups(_requestObj.CurrentUser, new GroupDetailUsCallBack(this));
         }
 
-        class GroupDetailUsCallBack : IUseCaseCallBack<GetUserGroupResponse>
+       private class GroupDetailUsCallBack : IUseCaseCallBack<GetUserGroupResponse>
         {
             private readonly GroupDetailById _useCase;
 
@@ -53,11 +52,11 @@ namespace SPLITTR_Uwp.Core.UseCase.GetGroupDetails
             {
                 foreach (var group in responseObj?.UserParticipatingGroups)
                 {
-                    GroupDetailById._groupBobjCache.AddOrUpdate(group.GroupUniqueId, group, ((s, bobj) => bobj));
+                    _groupBobjCache.AddOrUpdate(group.GroupUniqueId, group, (s, bobj) => bobj);
                 }
                 try
                 {
-                    var requestedGroup = GroupDetailById._groupBobjCache[_useCase._requestObj.GroupUniqueId];
+                    var requestedGroup = _groupBobjCache[_useCase._requestObj.GroupUniqueId];
                     _useCase?.PresenterCallBack?.OnSuccess(new GroupDetailByIdResponse(requestedGroup));
                 }
                 catch (KeyNotFoundException ex)

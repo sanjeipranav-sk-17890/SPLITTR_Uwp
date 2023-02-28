@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.ViewModel.Models;
-using User = SPLITTR_Uwp.Core.Models.User;
 
 namespace SPLITTR_Uwp.ViewModel
 {
@@ -60,7 +60,7 @@ namespace SPLITTR_Uwp.ViewModel
         }
         private bool IsNotCurrentUser(User user)
         {
-            return !Store.CurreUserBobj.Equals(user);
+            return !Store.CurrentUserBobj.Equals(user);
         }
 
 

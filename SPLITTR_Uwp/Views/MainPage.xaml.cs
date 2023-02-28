@@ -1,18 +1,21 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Linq;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Navigation;
+using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.DataTemplates.Controls;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.ViewModel.Contracts;
-using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Navigation;
 using NavigationView = Microsoft.UI.Xaml.Controls.NavigationView;
+using NavigationViewItem = Microsoft.UI.Xaml.Controls.NavigationViewItem;
 using NavigationViewItemBase = Microsoft.UI.Xaml.Controls.NavigationViewItemBase;
 using NavigationViewSelectionChangedEventArgs = Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs;
 
@@ -25,7 +28,7 @@ namespace SPLITTR_Uwp.Views
     /// </summary>
     public sealed partial class MainPage : Page, IMainView
     {
-        IMainPageViewModel _viewModel;
+        private readonly IMainPageViewModel _viewModel;
         private static MainPage _view;
 
         private void PageOnPaneButtonOnClick()
@@ -47,15 +50,15 @@ namespace SPLITTR_Uwp.Views
 
         public MainPage()
         {
-            _viewModel = ActivatorUtilities.CreateInstance<MainPageViewModel>(App.Container, this);
-            this.InitializeComponent();
+            _viewModel = ActivatorUtilities.CreateInstance<MainPageViewModel>(App.Container);
+            InitializeComponent();
             _view = this;
             _viewModel.UserGroups.CollectionChanged += UserGroups_CollectionChanged;
         }
         #region NavigationViewGroupsPopulating 
 
 
-        private void UserGroups_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void UserGroups_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             //filtering GroupBobs From NavigationView Collection
             var groupNavigationViewItems = MainPageNavigationView.MenuItems
@@ -88,7 +91,7 @@ namespace SPLITTR_Uwp.Views
 
         private void AddGroupToNavigationView(GroupBobj group)
         {
-            MainPageNavigationView.MenuItems.Add(new Microsoft.UI.Xaml.Controls.NavigationViewItem()
+            MainPageNavigationView.MenuItems.Add(new NavigationViewItem
             {
                 Content = group,
                 Style = UserGroupNavigationItemStyle,
@@ -125,11 +128,31 @@ namespace SPLITTR_Uwp.Views
                 return;
             }
 
-            page.PaneButtonOnClick += (PageOnPaneButtonOnClick);
+            page.PaneButtonOnClick += PageOnPaneButtonOnClick;
             page.OnGroupInfoIconClicked += GroupInfoButton_onClick;
 
             NavigationService.Navigated -= NavigationService_Navigated;
         }
+        private void AddButtonItemSelected(object sender, RoutedEventArgs e)
+        {
+            //closing main Page pane
+            MainPageNavigationView.IsPaneOpen = false;
+
+            var selectedItem = sender as MenuFlyoutItem;
+            var title = selectedItem?.Text;
+            NavigationService.Frame = InnerFrame;
+            NavigationService.Navigate(string.Compare(title, "Add Exepense", StringComparison.InvariantCultureIgnoreCase) == 0 ?
+                typeof(AddExpenseTestPage) :
+                typeof(GroupCreationPage), new DrillInNavigationTransitionInfo());
+        }
+
+        private void PersonProfileClicked()
+        {
+            MainPageNavigationView.IsPaneOpen = false;
+            NavigationService.Frame = InnerFrame;
+            NavigationService.Navigate<UserProfilePage>();
+        }
+
 
         #endregion
 
@@ -196,19 +219,24 @@ namespace SPLITTR_Uwp.Views
 
         #endregion
 
-      
+
         private void CloseErrorMessageButton_OnClick(object sender, RoutedEventArgs e)
         {
             InAppNotification.Dismiss(true);
         }
         private void GroupInfoButton_onClick(Group obj)
         {
-           //Setting Navigation View corresponding group item is selected true
-           var groupNavigationViewItem = MainPageNavigationView.MenuItems.FirstOrDefault(i => i is NavigationViewItemBase { Content:Group group} && group.GroupUniqueId.Equals(obj?.GroupUniqueId));
-           if (groupNavigationViewItem is NavigationViewItemBase navigationViewItem)
-           {
-               navigationViewItem.IsSelected = true;
-           }
+            //Setting Navigation View corresponding group item is selected true
+            var groupNavigationViewItem = MainPageNavigationView.MenuItems.FirstOrDefault(i => i is NavigationViewItemBase { Content: Group group } && group.GroupUniqueId.Equals(obj?.GroupUniqueId));
+            if (groupNavigationViewItem is NavigationViewItemBase navigationViewItem)
+            {
+                navigationViewItem.IsSelected = true;
+            }
+        }
+
+        private void AddWalletBalanceButtonClicked()
+        {
+            WalletBalanceUpdateTeachingTip.IsOpen = !WalletBalanceUpdateTeachingTip.IsOpen;
         }
     }
 }

@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Diagnostics.Contracts;
+﻿using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using Windows.UI;
 using Windows.UI.Xaml.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
-using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.DataManager;
 using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.GetGroupDetails;
 using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
-using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.Models;
-using SPLITTR_Uwp.ViewModel;
 
 namespace SPLITTR_Uwp.ViewModel
 {
@@ -114,9 +108,9 @@ namespace SPLITTR_Uwp.ViewModel
 
             if (_expenseVObj is not null && IsCurrentUser(_expenseVObj.SplitRaisedOwner))
             {
-                return new SolidColorBrush(Windows.UI.Colors.DarkSeaGreen);
+                return new SolidColorBrush(Colors.DarkSeaGreen);
             }
-            return new SolidColorBrush(Windows.UI.Colors.DarkOrange);
+            return new SolidColorBrush(Colors.DarkOrange);
         }
 
         private string GetOwingExpenseAmountTitle()
@@ -155,7 +149,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         private bool IsCurrentUser(User user)
         {
-            return Store.CurreUserBobj.Equals(user);
+            return Store.CurrentUserBobj.Equals(user);
         }
 
         private void CallGroupNameByGroupIdUseCase(string groupUniqueId)
@@ -169,7 +163,7 @@ namespace SPLITTR_Uwp.ViewModel
             var getGroupDetail = new GroupDetailByIdRequest(groupUniqueId,
                 CancellationToken.None,
                 new ExpenseItemVmPresenterCallBack(this),
-                Store.CurreUserBobj);
+                Store.CurrentUserBobj);
 
             var getGroupDetailUseCaseObj = InstanceBuilder.CreateInstance<GroupDetailById>(getGroupDetail);
 
@@ -199,9 +193,9 @@ namespace SPLITTR_Uwp.ViewModel
             //if expense amount is more than 7 digits then trimming it to 7 digits and adding Currency Symbol
             if (expenseAmount.ToString(CultureInfo.InvariantCulture).Length > 7)
             {
-                return expenseAmount.ExpenseSymbol(Store.CurreUserBobj) + expenseAmount.ToString().Substring(0, 7);
+                return expenseAmount.ExpenseSymbol(Store.CurrentUserBobj) + expenseAmount.ToString().Substring(0, 7);
             }
-            return expenseAmount.ExpenseAmount(Store.CurreUserBobj);
+            return expenseAmount.ExpenseAmount(Store.CurrentUserBobj);
         }
 
         #endregion
@@ -232,12 +226,12 @@ namespace SPLITTR_Uwp.ViewModel
             //Recalculating Expense Total Based on new Currency Preference
             CallRelatedExpenseUseCaseCall();
 
-            await UiService.RunOnUiThread((() =>
+            await UiService.RunOnUiThread(() =>
             {
                 //Reassign Owing Amount Based On New Index
                 OwingSplitAmount = _expenseVObj is null ? string.Empty : FormatExpenseAmountWithSymbol(_expenseVObj.StrExpenseAmount);
 
-            })).ConfigureAwait(false);
+            }).ConfigureAwait(false);
         }
 
         public void ViewDisposed()
@@ -249,7 +243,7 @@ namespace SPLITTR_Uwp.ViewModel
         {
             var cts = new CancellationTokenSource();
 
-             var relatedExpenseReqObj = new RelatedExpenseRequestObj(_expenseVObj, Store.CurreUserBobj, cts.Token, new ExpenseItemVmPresenterCallBack(this));
+             var relatedExpenseReqObj = new RelatedExpenseRequestObj(_expenseVObj, Store.CurrentUserBobj, cts.Token, new ExpenseItemVmPresenterCallBack(this));
 
              var relatedExpenseUseCase = InstanceBuilder.CreateInstance<RelatedExpense>(relatedExpenseReqObj);
 
@@ -286,13 +280,13 @@ namespace SPLITTR_Uwp.ViewModel
             }
             public async void OnSuccess(GroupDetailByIdResponse result)
             {
-               await UiService.RunOnUiThread((() =>
+               await UiService.RunOnUiThread(() =>
                {
 
                    _viewModel.GroupName = result?.RequestedGroup?.GroupName;
                    _viewModel.GroupObject = result?.RequestedGroup;
 
-               })).ConfigureAwait(false);
+               }).ConfigureAwait(false);
             }
             public void OnError(SplittrException ex)
             {

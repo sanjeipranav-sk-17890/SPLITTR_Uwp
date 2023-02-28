@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DataManager.ServiceObjects;
 using SPLITTR_Uwp.Core.DbHandler.SqliteConnection;
-using SPLITTR_Uwp.Core.DataManager;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.VerifyPaidExpense;

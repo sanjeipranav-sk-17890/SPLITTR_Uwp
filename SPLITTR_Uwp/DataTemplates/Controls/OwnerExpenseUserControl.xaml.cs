@@ -11,18 +11,18 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
 {
     public sealed partial class OwnerExpenseUserControl : UserControl
     {
-       
 
-        public ExpenseVobj ExpenseObj
+
+        private ExpenseVobj ExpenseObj
         {
-            get=> this.DataContext as ExpenseVobj;
+            get=> DataContext as ExpenseVobj;
         }
 
-        private OwnerExpenseControlViewModel _viewModel;
+        private readonly OwnerExpenseControlViewModel _viewModel;
 
         public OwnerExpenseUserControl()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             DataContextChanged += OwnerExpenseUserControl_DataContextChanged;
             _viewModel = ActivatorUtilities.CreateInstance<OwnerExpenseControlViewModel>(App.Container);
         }

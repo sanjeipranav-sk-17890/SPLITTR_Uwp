@@ -1,12 +1,9 @@
-﻿namespace SPLITTR_Uwp.Core.EventArg
+﻿using System;
+
+namespace SPLITTR_Uwp.Core.EventArg
 {
-    public  class SplittrEventArgs : System.EventArgs
+    public  class SplittrEventArgs : EventArgs
     {
-        public SplittrEventArgs() 
-        {
-
-
-        }
         private SplittrEventArgs _dummy = new SplittrEventArgs();
 
 

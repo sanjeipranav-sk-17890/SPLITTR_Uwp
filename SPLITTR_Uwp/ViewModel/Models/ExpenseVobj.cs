@@ -1,11 +1,8 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Windows.Graphics.DirectX.Direct3D11;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.SplittrNotifications;
-using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 
 namespace SPLITTR_Uwp.ViewModel.Models
@@ -66,10 +63,10 @@ namespace SPLITTR_Uwp.ViewModel.Models
 
         protected async virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            await UiService.RunOnUiThread((() =>
+            await UiService.RunOnUiThread(() =>
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }));
+            });
         }
 
         #endregion

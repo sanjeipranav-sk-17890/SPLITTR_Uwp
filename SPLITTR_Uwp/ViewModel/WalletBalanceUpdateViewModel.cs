@@ -1,13 +1,13 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using SPLITTR_Uwp.DataRepository;
-using SPLITTR_Uwp.Services;
-using SPLITTR_Uwp.ViewModel.Models;
-using System;
+﻿using System;
 using System.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.AddWalletAmount;
 using SPLITTR_Uwp.Core.UseCase.UpdateUser;
+using SPLITTR_Uwp.DataRepository;
+using SPLITTR_Uwp.Services;
+using SPLITTR_Uwp.ViewModel.Models;
 using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel
@@ -19,13 +19,13 @@ namespace SPLITTR_Uwp.ViewModel
         private string _moneyTextBoxText;
         private bool _invalidInputTextBlockVisibility;
 
-        public event Action CloseButtonClicked;
+        public event Action OnViewDismiss;
 
         public UserVobj UserVobj { get; }
 
         public WalletBalanceUpdateViewModel()
         {
-            UserVobj = new UserVobj(Store.CurreUserBobj);
+            UserVobj = new UserVobj(Store.CurrentUserBobj);
         }
 
         public string MoneyTextBoxText
@@ -51,7 +51,7 @@ namespace SPLITTR_Uwp.ViewModel
                 //Should Made Static invoke source if Previous Request Cancelled
                 var cts = new CancellationTokenSource().Token;
 
-                var addWalletAmountRequestObject = new AddWalletAmountRequestObject(new WalletBalanceUpdateVmPresenterCallBack(this), cts, Store.CurreUserBobj, newWalletBalance);
+                var addWalletAmountRequestObject = new AddWalletAmountRequestObject(new WalletBalanceUpdateVmPresenterCallBack(this), cts, Store.CurrentUserBobj, newWalletBalance);
 
                 var addWalletAmountUseCase = InstanceBuilder.CreateInstance<AddWalletAmount>(addWalletAmountRequestObject);
 
@@ -64,12 +64,13 @@ namespace SPLITTR_Uwp.ViewModel
 
         }
 
-        public async void InvokeOnWalletBalanceUpdated(UpdateUserResponseObj result)
+        private async void InvokeOnWalletBalanceUpdated(UpdateUserResponseObj result)
         {
             await UiService.RunOnUiThread(async () =>
             {
                 await UiService.ShowContentAsync("Amount Added to Wallet SuccessFully", "Payment SuccessFull!!");
-                CloseButtonClicked?.Invoke();
+                MoneyTextBoxText = string.Empty;
+                OnViewDismiss?.Invoke();
             }).ConfigureAwait(false);
 
         }

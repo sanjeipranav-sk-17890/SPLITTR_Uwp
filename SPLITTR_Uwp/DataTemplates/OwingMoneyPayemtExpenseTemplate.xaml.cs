@@ -1,9 +1,9 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.ViewModel.Models;
-using System;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -16,7 +16,7 @@ namespace SPLITTR_Uwp.DataTemplates
         public OwingMoneyPayemtExpenseTemplate()
         {
             _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<OwingMoneyPaymentExpenseViewModel>(App.Container);
-            this.InitializeComponent();
+            InitializeComponent();
             DataContextChanged += OwingMoneyPayemtExpenseTemplate_DataContextChanged;
         }
 

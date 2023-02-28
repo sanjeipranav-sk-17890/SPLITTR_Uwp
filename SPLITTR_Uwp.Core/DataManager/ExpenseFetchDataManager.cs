@@ -45,7 +45,7 @@ public class ExpenseFetchDataManager : IExpenseFetchDataManager
 
     }
 
-    async Task<IEnumerable<ExpenseBobj>> InitializeExpenseBobjs(IEnumerable<Expense> expenses, User currentUser)
+    private async Task<IEnumerable<ExpenseBobj>> InitializeExpenseBobjs(IEnumerable<Expense> expenses, User currentUser)
     {
         //Fetching Current User's Currency Preference
         var userCurrencyPreference = (Currency)currentUser.CurrencyIndex;
@@ -58,7 +58,7 @@ public class ExpenseFetchDataManager : IExpenseFetchDataManager
         var outputList = new List<ExpenseBobj>();
 
         //For Each Expense Constructs ExpenseBobj in Worker Thread 
-        var tasksOfExpense = expenses.Select(expense => Task.Run((() => ConstructExpenseBobj(expense))));
+        var tasksOfExpense = expenses.Select(expense => Task.Run(() => ConstructExpenseBobj(expense)));
 
         var userExpenseBobjs = await Task.WhenAll(tasksOfExpense).ConfigureAwait(false);
 

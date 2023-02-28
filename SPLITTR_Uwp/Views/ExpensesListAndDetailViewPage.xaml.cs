@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.Extensions.DependencyInjection;
-using SPLITTR_Uwp.Core.ExtensionMethod;
-using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.DataTemplates;
 using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.ViewModel.Models;
-using SPLITTR_Uwp.ViewModel.Models.ExpenseListObject;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -27,7 +19,7 @@ namespace SPLITTR_Uwp.Views
         private readonly ExpenseListAndDetailedPageViewModel _viewModel;
         public ExpensesListAndDetailViewPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<ExpenseListAndDetailedPageViewModel>(App.Container);
             
         }

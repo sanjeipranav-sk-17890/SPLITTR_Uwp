@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SPLITTR_Uwp.Core.CurrencyCoverter
+﻿namespace SPLITTR_Uwp.Core.CurrencyCoverter
 {
     public class RupessConverter : ICurrencyConverter
     {

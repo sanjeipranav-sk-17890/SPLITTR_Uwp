@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,16 +16,16 @@ namespace SPLITTR_Uwp.Views
     /// </summary>
     public sealed partial class GroupCreationPage : Page
     {
-        GroupCreationPageViewModel _viewModel;
+        private GroupCreationPageViewModel _viewModel;
         public GroupCreationPage()
         {
             _viewModel = ActivatorUtilities.CreateInstance<GroupCreationPageViewModel>(App.Container);
-            this.InitializeComponent();
+            InitializeComponent();
             _viewModel.GroupParticipants.CollectionChanged += GroupParticipants_CollectionChanged;
         
 
         }
-        private void GroupParticipants_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void GroupParticipants_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             var groupParticipants = sender as ObservableCollection<User>;
             GroupCreateButton.IsEnabled = !(groupParticipants?.Count < 1); // allowing group creation when participant count is atleat 2

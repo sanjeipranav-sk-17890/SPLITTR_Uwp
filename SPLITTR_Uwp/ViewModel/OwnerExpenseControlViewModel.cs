@@ -4,8 +4,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
-using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.DataManager;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.CancelExpense;
 using SPLITTR_Uwp.Core.UseCase.MarkAsPaid;
@@ -19,7 +17,7 @@ namespace SPLITTR_Uwp.ViewModel
 
     internal class OwnerExpenseControlViewModel : ObservableObject
     {
-        private bool _expenseCancelButtonVisibility = false;
+        private bool _expenseCancelButtonVisibility;
         
 
         
@@ -37,7 +35,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         private void ChangeButtonVisibility(ExpenseBobj expense)
         {
-            if (expense.ExpenseStatus == ExpenseStatus.Pending && expense.SplitRaisedOwner.Equals(Store.CurreUserBobj))
+            if (expense.ExpenseStatus == ExpenseStatus.Pending && expense.SplitRaisedOwner.Equals(Store.CurrentUserBobj))
             {
                 ExpenseCancelButtonVisibility = true;
                 return;
@@ -50,7 +48,7 @@ namespace SPLITTR_Uwp.ViewModel
         {
             
             var cts = new CancellationTokenSource();
-            var cancelExpenseRequestObj = new CancelExpenseRequestObj(new OwnerExpenseControlVmPresenterCallBack(this), Store.CurreUserBobj, expense, cts.Token);
+            var cancelExpenseRequestObj = new CancelExpenseRequestObj(new OwnerExpenseControlVmPresenterCallBack(this), Store.CurrentUserBobj, expense, cts.Token);
 
             var cancelExpensesUseCaseObj = InstanceBuilder.CreateInstance<CancelExpense>(cancelExpenseRequestObj);
 
@@ -63,7 +61,7 @@ namespace SPLITTR_Uwp.ViewModel
             
             var cts = new CancellationTokenSource();
 
-            var markAsPaidRequestObj = new MarkAsPaidRequestObj(new OwnerExpenseControlVmPresenterCallBack(this), cts.Token,Store.CurreUserBobj, expense);
+            var markAsPaidRequestObj = new MarkAsPaidRequestObj(new OwnerExpenseControlVmPresenterCallBack(this), cts.Token,Store.CurrentUserBobj, expense);
 
             var markAsPaidUseCaseObj = InstanceBuilder.CreateInstance<MarkAsPaid>(markAsPaidRequestObj);
 
@@ -89,7 +87,7 @@ namespace SPLITTR_Uwp.ViewModel
             }).ConfigureAwait(false);
 
         }
-        class OwnerExpenseControlVmPresenterCallBack : IPresenterCallBack<MarkAsPaidResponseObj>, IPresenterCallBack<CancelExpenseResponseObj>
+        private class OwnerExpenseControlVmPresenterCallBack : IPresenterCallBack<MarkAsPaidResponseObj>, IPresenterCallBack<CancelExpenseResponseObj>
         {
             private readonly OwnerExpenseControlViewModel _viewModel;
             public OwnerExpenseControlVmPresenterCallBack(OwnerExpenseControlViewModel viewModel)

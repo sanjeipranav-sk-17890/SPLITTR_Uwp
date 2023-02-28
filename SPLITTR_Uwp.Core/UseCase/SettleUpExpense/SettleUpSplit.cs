@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using SPLITTR_Uwp.Core.DataManager.Contracts;
+﻿using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DependencyInjector;
 
 namespace SPLITTR_Uwp.Core.UseCase.SettleUpExpense

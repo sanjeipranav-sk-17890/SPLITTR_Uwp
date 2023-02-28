@@ -5,6 +5,6 @@ namespace SPLITTR_Uwp.DataRepository
     internal static class Store
     {
 
-        public static UserBobj CurreUserBobj { get; set; }
+        public static UserBobj CurrentUserBobj { get; set; }
     }
 }

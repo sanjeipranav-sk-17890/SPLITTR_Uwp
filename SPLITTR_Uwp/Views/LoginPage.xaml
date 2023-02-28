@@ -75,7 +75,7 @@
                         Content="Sign up"
                         Width="100"
                         Margin="5"
-                        Click="{x:Bind _viewModel.SignUpButtonOnClick}"
+                        Click="{x:Bind SignUpButtonOnClick}"
                         CornerRadius="4"/>
           
 
@@ -85,7 +85,7 @@
              <Border Background="DarkGoldenrod" CornerRadius="8"
                      Margin="40 0 40 0"
                      Height="30"
-                     Visibility="{x:Bind _viewModel.LoginInformationTextBox,Mode=OneWay}">
+                     Visibility="{x:Bind _viewModel.LoginInformation,Mode=OneWay}">
                 <TextBlock HorizontalAlignment="Left" 
                            Foreground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                             FontSize="22"
@@ -95,7 +95,7 @@
             <Border Background="Red" CornerRadius="8"
                     Margin="40 0 40 0"
                     Height="30"
-                    Visibility="{x:Bind _viewModel.WrongUserCreDentialTextBlockVisibility,Mode=OneWay}">
+                    Visibility="{x:Bind _viewModel.WrongUserCredentialVisibility,Mode=OneWay}">
                 <TextBlock HorizontalAlignment="Left" 
                            FontSize="22"
                            TextWrapping="WrapWholeWords"
@@ -169,7 +169,7 @@
                                      HorizontalAlignment="Stretch"
                                      BorderThickness="1"
                                      IsSpellCheckEnabled="False"
-                                     Text="{x:Bind _viewModel.UserEmailIdTextBox,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                     Text="{x:Bind _viewModel.LoginUserEmail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                 <TextBlock Text="Password"
                                        FontSize="20"
                                        Margin="0 20 0 0"

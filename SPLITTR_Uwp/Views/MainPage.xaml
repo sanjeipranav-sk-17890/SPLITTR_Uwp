@@ -13,7 +13,6 @@
     xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
     xmlns:toolKitControls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     Loaded="{x:Bind _viewModel.ViewLoaded}"
-
     Background="{ThemeResource ApplicationMainThemeAcrylicBrush}">
     <Page.Resources>
         <ui:AttachedDropShadow x:Name="AttachedDropShadow" Offset="8" Opacity="1" ></ui:AttachedDropShadow>
@@ -161,15 +160,15 @@
                     </Button.Content>
                     <Button.Flyout>
                         <MenuFlyout>
-                            <MenuFlyoutItem Text="Add Exepense" Click="{x:Bind _viewModel.AddButtonItemSelected}" />
-                            <MenuFlyoutItem Text="Create Group" Click="{x:Bind _viewModel.AddButtonItemSelected}" />
+                            <MenuFlyoutItem Text="Add Exepense" Click="{x:Bind AddButtonItemSelected}" />
+                            <MenuFlyoutItem Text="Create Group" Click="{x:Bind AddButtonItemSelected}" />
                         </MenuFlyout>
                     </Button.Flyout>
                 </Button>
                 <Button Style="{StaticResource AddWalletButtonStyle}"
                         ToolTipService.ToolTip="Add Wallet Amount"  
                         Margin="0 0 10 0"
-                        Click="{x:Bind _viewModel.AddWalletBalanceButtonClicked}"
+                        Click="{x:Bind AddWalletBalanceButtonClicked}"
                         Name="TitleBarAddExpenseButton"
                         RelativePanel.AlignRightWithPanel="True">
                     <Button.Content>
@@ -205,7 +204,7 @@
                                                  IsSettingsVisible="False"
                                                  Margin="-1 0 0 0"
                                                  CompactPaneLength="0" OpenPaneLength="230"
-                                                 IsPaneOpen="{x:Bind _viewModel.PaneVisibility,Mode=TwoWay}"
+                                                 IsPaneOpen="True"
                                                  IsBackButtonVisible="Collapsed" 
                                                  IsPaneToggleButtonVisible="False" 
                                                  SelectionChanged="MainPageNavigationView_OnSelectionChanged" >
@@ -305,7 +304,7 @@
                                     HorizontalContentAlignment="Stretch"
                                     VerticalContentAlignment="Stretch"
                                     Style="{StaticResource NoPointerAnimation}"
-                                    Click="{x:Bind _viewModel.PersonProfileClicked}"
+                                    Click="{x:Bind PersonProfileClicked}"
                                     BorderBrush="Transparent">
 
                                         <StackPanel Orientation="Horizontal">
@@ -334,7 +333,7 @@
                                 HorizontalContentAlignment="Left"
                                 Style="{StaticResource NoPointerAnimation}"
                                 BorderBrush="Transparent"
-                                Click="{x:Bind _viewModel.LogOutButtonClicked}">
+                                Click="{x:Bind _viewModel.LogOutRequested}">
                                     <Button.Content>
 
                                         <StackPanel Grid.Row="1"  Orientation="Horizontal">
@@ -368,7 +367,7 @@
                                     HorizontalContentAlignment="Stretch"
                                     VerticalContentAlignment="Stretch"
                                     BorderBrush="Transparent"
-                                    Click="{x:Bind _viewModel.PersonProfileClicked}">
+                                    Click="{x:Bind PersonProfileClicked}">
 
                     <PersonPicture Width="41"
                                            Height="30"
@@ -384,23 +383,21 @@
                                 Name="AddMoneyToWalletButton"
                                 Margin="0 0 10 0"
                                    ToolTipService.ToolTip="Add Money to Wallet"
-                                Click="{x:Bind _viewModel.AddWalletBalanceButtonClicked}" Style="{StaticResource AddWalletButtonStyle}">
+                                Click="{x:Bind AddWalletBalanceButtonClicked}" Style="{StaticResource AddWalletButtonStyle}">
                     <Button.Content>
                         <Image Source="/Assets/icons/wallet.png"
                                            Height="25"
                                            Stretch="Uniform"/>
                     </Button.Content>
                 </Button>
-                <controls:TeachingTip IsOpen="{x:Bind _viewModel.IsUpdateWalletBalanceTeachingTipOpen,Mode=TwoWay}"
-                                                  PreferredPlacement="RightTop"
-                                                  PlacementMargin="20" 
-                                                  ui:Effects.Shadow="{StaticResource AttachedDropShadow}"
-                                                  x:Name="WalletBalanceUpdateTeachingTip"
-                                                  IsLightDismissEnabled="True">
+                <controls:TeachingTip PreferredPlacement="RightTop"
+                                      PlacementMargin="20" 
+                                      ui:Effects.Shadow="{StaticResource AttachedDropShadow}"
+                                      x:Name="WalletBalanceUpdateTeachingTip"
+                                      IsLightDismissEnabled="True">
                     <controls:TeachingTip.Content>
-                        <view:WalletBalanceUpdatePopUp CloseButtonClicked="{x:Bind _viewModel.AddWalletBalanceButtonClicked}"/>
+                        <view:WalletBalanceUpdatePopUp CloseButtonClicked="{x:Bind AddWalletBalanceButtonClicked}"/>
                         <!--MakePaymentClicked="{x:Bind _viewModel.AddMoneyToWalletButtonClicked}"-->
-
                     </controls:TeachingTip.Content>
                 </controls:TeachingTip>
                 <Button Background="Transparent"
@@ -409,7 +406,7 @@
                                     BorderBrush="Transparent"
                                     ToolTipService.ToolTip="Logout"
                                     Margin="0 0 20 0"
-                                    Click="{x:Bind _viewModel.LogOutButtonClicked}">
+                                    Click="{x:Bind _viewModel.LogOutRequested}">
                     <Button.Content>
                         <StackPanel Grid.Row="1"  Orientation="Horizontal">
                             <Image Source="/Assets/icons/logout.png" Width="25"

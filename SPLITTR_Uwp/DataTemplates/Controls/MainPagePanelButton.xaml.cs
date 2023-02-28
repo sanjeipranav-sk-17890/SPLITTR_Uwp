@@ -1,14 +1,14 @@
-﻿using SPLITTR_Uwp.Core.ExtensionMethod;
-using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.DataRepository;
-using SPLITTR_Uwp.ViewModel.Models;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using SPLITTR_Uwp.Core.ExtensionMethod;
+using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.DataRepository;
+using SPLITTR_Uwp.ViewModel.Models;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -21,9 +21,9 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
 
         public MainPageButtonControl()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             // fetching current user details to avoid showing user as participants in each and every group
-            _currentUserVobj = new UserVobj(Store.CurreUserBobj);
+            _currentUserVobj = new UserVobj(Store.CurrentUserBobj);
         }
 
 

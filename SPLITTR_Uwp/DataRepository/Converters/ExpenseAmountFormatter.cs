@@ -9,7 +9,7 @@ public class ExpenseAmountFormatter : IValueConverter
     public object Convert(object value, Type targetType, object parameter, string language)
     {
         var amount = (double)value;
-        return amount.ExpenseAmount(Store.CurreUserBobj);
+        return amount.ExpenseAmount(Store.CurrentUserBobj);
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)

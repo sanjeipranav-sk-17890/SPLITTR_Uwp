@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using SPLITTR_Uwp.Core.ModelBobj;
@@ -9,7 +10,7 @@ namespace SPLITTR_Uwp.ViewModel.Models.ExpenseListObject
 {
     public class ExpenseGroupingList :ObservableCollection<ExpenseBobj>
     {
-         readonly ExpenseStatus _status;
+        private readonly ExpenseStatus _status;
 
         public ExpenseGroupHeader GroupHeader { get; }
        
@@ -32,7 +33,7 @@ namespace SPLITTR_Uwp.ViewModel.Models.ExpenseListObject
 
         }
 
-        private void ExpenseGroupingList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void ExpenseGroupingList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
               base.OnPropertyChanged(new PropertyChangedEventArgs(nameof(ExpenseGroupHeader)));  
         }
@@ -43,7 +44,7 @@ namespace SPLITTR_Uwp.ViewModel.Models.ExpenseListObject
             {
                 return false;
             }
-            return expenseGroup._status == this._status;
+            return expenseGroup._status == _status;
 
         }
         public override int GetHashCode()
@@ -66,7 +67,7 @@ namespace SPLITTR_Uwp.ViewModel.Models.ExpenseListObject
 
         }
 
-        private void Expense_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Expense_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged(nameof(NoOfExpenses));
         }

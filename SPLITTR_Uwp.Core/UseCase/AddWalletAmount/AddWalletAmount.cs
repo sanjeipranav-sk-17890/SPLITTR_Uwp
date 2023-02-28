@@ -1,7 +1,5 @@
-﻿using System;
-using SPLITTR_Uwp.Core.DataManager;
+﻿using SPLITTR_Uwp.Core.DataManager;
 using SPLITTR_Uwp.Core.DependencyInjector;
-using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.UseCase.UpdateUser;
 
 namespace SPLITTR_Uwp.Core.UseCase.AddWalletAmount;

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Diagnostics;
-using Windows.UI.Core;
-using Windows.UI.ViewManagement;
+﻿using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using SPLITTR_Uwp.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Xaml.Controls;
-using SPLITTR_Uwp.Services;
+using SPLITTR_Uwp.ViewModel;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -20,8 +14,8 @@ namespace SPLITTR_Uwp.Views
         public SplitExpenseUserControl()
         {
             _viewModel = ActivatorUtilities.CreateInstance<SplitExpenseViewModel>(App.Container,this);
-            this.InitializeComponent();
-            this.DataContext = _viewModel;
+            InitializeComponent();
+            DataContext = _viewModel;
             _viewModel.BindingUpdateInvoked += _viewModel_BindingUpdateInvoked;
             Loaded += SplitExpenseUserControl_Loaded;
         }

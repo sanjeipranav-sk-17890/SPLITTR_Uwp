@@ -1,20 +1,18 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using SPLITTR_Uwp.Core.ModelBobj.Enum;
-using SPLITTR_Uwp.DataRepository;
-using SPLITTR_Uwp.ViewModel.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading;
-using System.Threading.Tasks;
-using Windows.UI.Xaml;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
+using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.UpdateUser;
+using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Contracts;
+using SPLITTR_Uwp.ViewModel.Models;
 
 namespace SPLITTR_Uwp.ViewModel
 {
@@ -29,17 +27,17 @@ namespace SPLITTR_Uwp.ViewModel
 
         public UserProfilePageViewModel()
         {
-            User = new UserVobj(Store.CurreUserBobj);
+            User = new UserVobj(Store.CurrentUserBobj);
             SplittrNotification.UserObjUpdated += SplittrNotification_UserObjUpdated;
         }
 
         private async void SplittrNotification_UserObjUpdated(UserBobjUpdatedEventArgs obj)
         {
-            await UiService.RunOnUiThread((() =>
+            await UiService.RunOnUiThread(() =>
             {
                 BindingUpdateInvoked?.Invoke();
 
-            })).ConfigureAwait(false);
+            }).ConfigureAwait(false);
         }
 
         public void ViewDisposed()
@@ -61,7 +59,7 @@ namespace SPLITTR_Uwp.ViewModel
         {
             get
             {
-                return Store.CurreUserBobj?.CurrencyPreference.ToString();
+                return Store.CurrentUserBobj?.CurrencyPreference.ToString();
             }
 
         }
@@ -72,7 +70,7 @@ namespace SPLITTR_Uwp.ViewModel
             set => SetProperty(ref _isEditUserProfileVisible, value);
         }
 
-        public List<string> _currencyList = new List<string>()
+        public List<string> _currencyList = new List<string>
         {
             "Rupees ₹",
             "Dollar $",
@@ -80,7 +78,7 @@ namespace SPLITTR_Uwp.ViewModel
             "Yen    ¥"
         };
 
-        private bool _isEditUserProfileVisible = false;
+        private bool _isEditUserProfileVisible;
 
         public void EditUserProfileClicked()
         {
@@ -99,7 +97,7 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
         private int _preferedCurrencyIndex;
-        private bool _isUserNameEmptyIndicatorVisible = false;
+        private bool _isUserNameEmptyIndicatorVisible;
 
         public int PreferendCurrencyIndex
         {
@@ -130,7 +128,7 @@ namespace SPLITTR_Uwp.ViewModel
             IsUserNameEmptyIndicatorVisible = false;
             var cts = new CancellationTokenSource().Token;
             //useCase classes is updating the UserObj and its related data's
-            var updateUserRequestOBj = new UpdateUserRequestObj(cts,new UserProfileVmPresenterCallBack(this),Store.CurreUserBobj,_currentUserName,(Currency)_preferedCurrencyIndex);
+            var updateUserRequestOBj = new UpdateUserRequestObj(cts,new UserProfileVmPresenterCallBack(this),Store.CurrentUserBobj,_currentUserName,(Currency)_preferedCurrencyIndex);
 
             var updateUserUseCaseObj = InstanceBuilder.CreateInstance<UpdateUser>(updateUserRequestOBj);
 

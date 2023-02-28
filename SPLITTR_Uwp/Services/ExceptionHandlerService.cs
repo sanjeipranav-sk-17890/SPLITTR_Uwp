@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media;
 using Microsoft.Toolkit.Uwp.UI;
 using Microsoft.Toolkit.Uwp.UI.Controls;
-using SPLITTR_Uwp.DataTemplates.Controls;
 
 namespace SPLITTR_Uwp.Services
 {
@@ -28,16 +25,16 @@ namespace SPLITTR_Uwp.Services
             {
                 return;
             }
-            await UiService.RunOnUiThread((() =>
+            await UiService.RunOnUiThread(() =>
             {
                 if (NotificationControl is not null)
                 {
-                   NotificationControl.Dismiss();
+                    NotificationControl.Dismiss();
                     NotificationControl.Content = exception.Message;
                     NotificationControl?.Show(2000);
                 }
                
-            })).ConfigureAwait(false);
+            }).ConfigureAwait(false);
 
             /*/
              *If Exception is Internet not available exception show Network connection failed symbol and retry option template

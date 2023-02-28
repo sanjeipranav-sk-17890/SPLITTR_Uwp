@@ -7,7 +7,6 @@ using SPLITTR_Uwp.Core.DbHandler.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.DataManager;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
 
@@ -42,7 +41,7 @@ public class RelatedExpenseDataManager : IRelatedExpenseDataManager
         callBack?.OnSuccess(new RelatedExpenseResponseObj(filteredExpense));
     }
 
-    async Task<IEnumerable<ExpenseBobj>> InitializeExpenseBobjs(IEnumerable<Expense> expenses, User currentUser)
+    private async Task<IEnumerable<ExpenseBobj>> InitializeExpenseBobjs(IEnumerable<Expense> expenses, User currentUser)
     {
         //Fetching Current User's Currency Preference
         var userCurrencyPreference = (Currency)currentUser.CurrencyIndex;
@@ -55,7 +54,7 @@ public class RelatedExpenseDataManager : IRelatedExpenseDataManager
         var outputList = new List<ExpenseBobj>();
 
         //For Each Expense Constructs ExpenseBobj in Worker Thread 
-        var tasksOfExpense = expenses.Select(expense => Task.Run((() => ConstructExpenseBobj(expense))));
+        var tasksOfExpense = expenses.Select(expense => Task.Run(() => ConstructExpenseBobj(expense)));
 
         var userExpenseBobjs = await Task.WhenAll(tasksOfExpense).ConfigureAwait(false);
 

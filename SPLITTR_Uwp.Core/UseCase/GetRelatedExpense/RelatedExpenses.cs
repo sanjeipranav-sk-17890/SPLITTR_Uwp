@@ -1,8 +1,4 @@
-﻿using System;
-using System.Text;
-using SPLITTR_Uwp.Core.DataManager.Contracts;
-using SPLITTR_Uwp.Core.EventArg;
-using SPLITTR_Uwp.Core.DataManager;
+﻿using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DependencyInjector;
 
 namespace SPLITTR_Uwp.Core.UseCase.GetRelatedExpense

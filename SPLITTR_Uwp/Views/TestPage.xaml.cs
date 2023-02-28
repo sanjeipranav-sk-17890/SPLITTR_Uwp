@@ -11,7 +11,7 @@ namespace SPLITTR_Uwp.Views
     {
         public TestPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }

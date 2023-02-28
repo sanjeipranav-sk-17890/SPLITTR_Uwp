@@ -1,5 +1,4 @@
-﻿using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.ViewModel;
@@ -17,7 +16,7 @@ namespace SPLITTR_Uwp.Views
         public UserProfilePage()
         {
             _viewModel = App.Container.GetService<UserProfilePageViewModel>();
-            this.InitializeComponent();
+            InitializeComponent();
             _viewModel.BindingUpdateInvoked += _viewModel_BindingUpdateInvoked;
             Unloaded += UserProfilePage_Unloaded;
         }

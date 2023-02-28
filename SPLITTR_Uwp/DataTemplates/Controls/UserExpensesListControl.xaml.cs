@@ -16,7 +16,6 @@ using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.GetUserExpenses;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
-using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.Models;
 using SPLITTR_Uwp.ViewModel.Models.ExpenseListObject;
 using SPLITTR_Uwp.ViewModel.VmLogic;
@@ -37,7 +36,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             _viewModel = ActivatorUtilities.CreateInstance<ExpensesListControlViewModel>(App.Container, this);
             Loaded += UserExpensesListControl_Loaded;
             ListControl = this;
-            Unloaded += ((sender, args) => _viewModel.ViewDisposed());
+            Unloaded += (sender, args) => _viewModel.ViewDisposed();
         }
 
         private void UserExpensesListControl_Loaded(object sender, RoutedEventArgs e)
@@ -143,14 +142,14 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
                 return;
             }
             //if Showing list view is Date Time sorted then No Need to change list view 
-            if (selectedItem == DateMenuItem && (DateSortedList.Visibility != Visibility.Visible))
+            if (selectedItem == DateMenuItem && DateSortedList.Visibility != Visibility.Visible)
             {
                 //Setting visibility of dateListView and Hiding Grouped ListView
                 ExpensesLIstView.Visibility = Visibility.Collapsed;
                 DateSortedList.Visibility = Visibility.Visible;
 
             }
-            if (selectedItem != StatusMenuItem || (ExpensesLIstView.Visibility == Visibility.Visible))
+            if (selectedItem != StatusMenuItem || ExpensesLIstView.Visibility == Visibility.Visible)
             {
                 return;
             }
@@ -304,22 +303,22 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             //Populating Existing Cache
             _userExpensesCache?.AddRange(obj.NewExpenses.Select(ex => new ExpenseVobj(ex)));
 
-            await RunOnUiThread((() =>
+            await RunOnUiThread(() =>
             {
                 //grouping and Populating Newly added expenses Groups
                 FilterExpensesToBeShown(_preferedFilter);
 
-            })).ConfigureAwait(false);
+            }).ConfigureAwait(false);
         }
 
         private async void SplittrNotification_ExpenseStatusChanged(ExpenseStatusChangedEventArgs obj)
         {
-            await RunOnUiThread((() =>
+            await RunOnUiThread(() =>
             {
                 //grouping and Populating Newly added expenses Groups
                 FilterExpensesToBeShown(_preferedFilter);
 
-            })).ConfigureAwait(false);
+            }).ConfigureAwait(false);
         }
 
         #endregion
@@ -337,7 +336,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         }
         private void CallUseCaseToFetchCurrentUserExpense()
         {
-            var getUserExpenses = new GetExpensesByIdRequest(CancellationToken.None, new ExpenseListVmPresenterCb(this), Store.CurreUserBobj);
+            var getUserExpenses = new GetExpensesByIdRequest(CancellationToken.None, new ExpenseListVmPresenterCb(this), Store.CurrentUserBobj);
 
             var getUserExpensesUseCase = InstanceBuilder.CreateInstance<GetExpensesByUserId>(getUserExpenses);
 
@@ -449,7 +448,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
 
             bool IsUserRecievedExpense(ExpenseBobj expense)
             {
-                return !expense.SplitRaisedOwner.Equals(Store.CurreUserBobj);
+                return !expense.SplitRaisedOwner.Equals(Store.CurrentUserBobj);
             }
         }
         public void PopulateUserRaisedExpenses()
@@ -464,7 +463,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
 
             bool IsUserRaisedExpense(ExpenseBobj expense)
             {
-                return expense.SplitRaisedOwner.Equals(Store.CurreUserBobj);
+                return expense.SplitRaisedOwner.Equals(Store.CurrentUserBobj);
             }
         }
         #endregion
@@ -486,11 +485,11 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
                     return;
                 }
                 _viewModel._userExpensesCache = result.CurrentUserExpenses.Select(ex => new ExpenseVobj(ex)).ToList();
-                await RunOnUiThread((() =>
+                await RunOnUiThread(() =>
                 {
                     _viewModel.PopuLateExpenses(result.CurrentUserExpenses);
                     _viewModel.SortExpenseBasedOnDate(_viewModel.GroupedExpenses);
-                })).ConfigureAwait(false);
+                }).ConfigureAwait(false);
             }
             public void OnError(SplittrException ex)
             {

@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
 using Windows.ApplicationModel.Core;
-using Windows.Foundation;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
-using Windows.UI.WindowManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
+using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Services;
-using Windows.UI.WindowManagement.Preview;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -24,11 +19,11 @@ namespace SPLITTR_Uwp.Views
     {
         public AddExpenseTestPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             StateService.OnUserLoggedOut += StateService_OnUserLoggedOut;
         }
 
-        private  void StateService_OnUserLoggedOut(Core.ModelBobj.UserBobj obj)
+        private  void StateService_OnUserLoggedOut(UserBobj obj)
         {
             if (_sptrAppView is null)
             {
@@ -40,11 +35,11 @@ namespace SPLITTR_Uwp.Views
             });
         }
 
-        private static ApplicationView _sptrAppView = null;
-        private static CoreApplicationView _splittrCoreWindow = null;
+        private static ApplicationView _sptrAppView;
+        private static CoreApplicationView _splittrCoreWindow;
 
 
-        private Grid _rootGrid = null;
+        private Grid _rootGrid;
       
 
         private async void SplitExpenseControl_OnDragStarting(UIElement sender, DragStartingEventArgs args)
@@ -55,7 +50,7 @@ namespace SPLITTR_Uwp.Views
             } 
             _splittrCoreWindow = CoreApplication.CreateNewView();
 
-            await _splittrCoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, (() =>
+            await _splittrCoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 //Assign separated ctrl to New Window root Element
                 _rootGrid = new Grid();
@@ -76,7 +71,7 @@ namespace SPLITTR_Uwp.Views
 
                 _sptrAppView.Consolidated += SptrAppView_Consolidated;
                 
-            }));
+            });
 
             await ApplicationViewSwitcher.TryShowAsStandaloneAsync(_sptrAppView.Id);
 

@@ -1,9 +1,5 @@
-﻿using SQLite;
-using System;
-using System.Data.SqlTypes;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using System;
+using SQLite;
 
 namespace SPLITTR_Uwp.Core.Models
 {

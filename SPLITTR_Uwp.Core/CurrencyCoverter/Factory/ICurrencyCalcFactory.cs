@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SPLITTR_Uwp.Core.ModelBobj.Enum;
+﻿using SPLITTR_Uwp.Core.ModelBobj.Enum;
 
 namespace SPLITTR_Uwp.Core.CurrencyCoverter.Factory
 {

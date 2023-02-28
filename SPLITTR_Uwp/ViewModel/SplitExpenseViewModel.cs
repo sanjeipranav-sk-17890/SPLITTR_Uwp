@@ -1,8 +1,13 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
-using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.GetUserGroups;
@@ -14,12 +19,6 @@ using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.Models;
 using SPLITTR_Uwp.Views;
 using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Threading;
 
 namespace SPLITTR_Uwp.ViewModel
 {
@@ -61,7 +60,6 @@ namespace SPLITTR_Uwp.ViewModel
             {
                 _isInnerInvokationOfTextChanged = true;
                 SplittingUsersName = "";
-                return;
             }
 
         }
@@ -73,7 +71,7 @@ namespace SPLITTR_Uwp.ViewModel
             set
             {
                 _isUserSuggestionListOpen = value;
-                OnPropertyChanged(nameof(IsUserSuggestionListOpen));
+                OnPropertyChanged();
             }
         }
 
@@ -81,10 +79,10 @@ namespace SPLITTR_Uwp.ViewModel
 
         private User _selectedUser;
         private readonly IList<User> _usersToBeSplitted = new List<User>();
-        private int _selectedGroupIndex = 0;
+        private int _selectedGroupIndex;
         private string _selectedGroupName;
         private bool _isNameTextBoxReadOnly;
-        private bool _isInnerInvokationOfTextChanged = false;
+        private bool _isInnerInvokationOfTextChanged;
 
 
         public void TextBoxTextChanged()
@@ -137,14 +135,14 @@ namespace SPLITTR_Uwp.ViewModel
         public async void InvokeOnSplitExpenseCompleted(SplitExpenseResponseObj result)
         {
 
-            await UiService.RunOnUiThread((() =>
+            await UiService.RunOnUiThread(() =>
             {
                 UiService.ShowContentAsync("Spliting SuccessFull", "Expenses Splitted Successfully");
                 ResetPage();
-            }), View.Dispatcher);
+            }, View.Dispatcher);
         }
 
-        private User _dummyUser = new User()
+        private readonly User _dummyUser = new User
         {
             UserName = "No Results Found"
         };
@@ -224,7 +222,7 @@ namespace SPLITTR_Uwp.ViewModel
             set => SetProperty(ref _selectedUserIndex, value);
         }
 
-        private GroupBobj _dummyGroup = new GroupBobj()
+        private readonly GroupBobj _dummyGroup = new GroupBobj
         {
             GroupName = "Non Group Expense"
         };
@@ -247,7 +245,7 @@ namespace SPLITTR_Uwp.ViewModel
 
             void CallUserGroupsUseCase()
             {
-                var getUSerGroupReqObj = new GetUserGroupReq(CancellationToken.None, new SplitExpenseVmPresenterCallBack(this), Store.CurreUserBobj);
+                var getUSerGroupReqObj = new GetUserGroupReq(CancellationToken.None, new SplitExpenseVmPresenterCallBack(this), Store.CurrentUserBobj);
 
                 var getGroupsUseCase = InstanceBuilder.CreateInstance<GetUserGroups>(getUSerGroupReqObj);
 
@@ -292,7 +290,7 @@ namespace SPLITTR_Uwp.ViewModel
                     continue;
 
                 //CONCATING REMAINING USERS NAME TO THE USERS NAME TEXT BOX
-                SplittingUsersName += ("," + user.UserName);
+                SplittingUsersName += "," + user.UserName;
             }
         }
 
@@ -305,12 +303,12 @@ namespace SPLITTR_Uwp.ViewModel
 
 
         private string _singleUserExpenseShareAmount;
-        private bool _amountFormatIncorrectIndicatorVisibility = false;
+        private bool _amountFormatIncorrectIndicatorVisibility;
 
         private bool _splitEquallyPanelVisibility;
 
         //By default the Selected option is SplitEqully
-        private int _selectedSplitPreferenceIndex = 0;
+        private int _selectedSplitPreferenceIndex;
         /*       private bool _singleUserSelectionComboBoxVisibility;*/
 
         public string SingleUserExpenseShareAmount
@@ -459,7 +457,7 @@ namespace SPLITTR_Uwp.ViewModel
                 if (_selectedUser != null)//Individual Split
                 {
 
-                    _expensesToBeSplitted.Add(GenerateExpenseViewModel(Store.CurreUserBobj, null));//current User
+                    _expensesToBeSplitted.Add(GenerateExpenseViewModel(Store.CurrentUserBobj, null));//current User
                     _expensesToBeSplitted.Add(GenerateExpenseViewModel(_selectedUser, null));//Spiltting user
 
                 }
@@ -479,10 +477,10 @@ namespace SPLITTR_Uwp.ViewModel
 
         private ExpenseBobj GenerateExpenseViewModel(User user, string groupUid)
         {
-            return new ExpenseBobj(Store.CurreUserBobj.CurrencyConverter)
+            return new ExpenseBobj(Store.CurrentUserBobj.CurrencyConverter)
             {
-                RequestedOwner = Store.CurreUserBobj.EmailId,
-                SplitRaisedOwner = Store.CurreUserBobj, //Currently by default current user is splitRaiseOwner , 
+                RequestedOwner = Store.CurrentUserBobj.EmailId,
+                SplitRaisedOwner = Store.CurrentUserBobj, //Currently by default current user is splitRaiseOwner , 
                 UserEmailId = user.EmailId,
                 CorrespondingUserObj = user,
                 StrExpenseAmount = 0.0,
@@ -544,7 +542,7 @@ namespace SPLITTR_Uwp.ViewModel
 
             var ctk = new CancellationTokenSource().Token;
 
-            var splitExpenseRequestObj = new SplitExpenseRequestObj(expenseDescription, Store.CurreUserBobj, _expensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType, ctk, new SplitExpenseVmPresenterCallBack(this));
+            var splitExpenseRequestObj = new SplitExpenseRequestObj(expenseDescription, Store.CurrentUserBobj, _expensesToBeSplitted, expenseNote, dateOfExpense, _equalSplitAmount, splittingType, ctk, new SplitExpenseVmPresenterCallBack(this));
 
             var splitExpenseUseCaseObj = InstanceBuilder.CreateInstance<SplitExpenses>(splitExpenseRequestObj);
 
@@ -579,7 +577,7 @@ namespace SPLITTR_Uwp.ViewModel
         public SplitExpenseViewModel(ISplitExpenseView view)
         {
             View = view;
-            User = new UserVobj(Store.CurreUserBobj);
+            User = new UserVobj(Store.CurrentUserBobj);
             _expensesToBeSplitted.CollectionChanged += ExpensesToBeSplittedOnCollectionChanged;
 
         }
@@ -598,7 +596,7 @@ namespace SPLITTR_Uwp.ViewModel
         /// </summary>
         public event Action BindingUpdateInvoked;
 
-        class SplitExpenseVmPresenterCallBack : IPresenterCallBack<UserSuggestionResponseObject>, IPresenterCallBack<SplitExpenseResponseObj>, IPresenterCallBack<GetUserGroupResponse>
+        private class SplitExpenseVmPresenterCallBack : IPresenterCallBack<UserSuggestionResponseObject>, IPresenterCallBack<SplitExpenseResponseObj>, IPresenterCallBack<GetUserGroupResponse>
         {
             private readonly SplitExpenseViewModel _viewModel;
             public SplitExpenseVmPresenterCallBack(SplitExpenseViewModel viewModel)

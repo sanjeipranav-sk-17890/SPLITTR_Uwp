@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Extensions.DependencyInjection;
-using SPLITTR_Uwp.ViewModel.Models;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.ViewModel;
+using SPLITTR_Uwp.ViewModel.Models;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -23,7 +24,7 @@ namespace SPLITTR_Uwp.DataTemplates
         public RelatedExpenseTemplate()
         {
             _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<RelatedExpenseTemplateViewModel>(App.Container);
-            this.InitializeComponent();
+            InitializeComponent();
             DataContextChanged += RelatedExpenseTemplate_DataContextChanged;
             Unloaded += (sender, args) => _viewModel.ViewDisposed();
 
@@ -57,9 +58,9 @@ namespace SPLITTR_Uwp.DataTemplates
             }
             ExpenseStatusBrush.Color = ExpenseObj.ExpenseStatus switch
             {
-                ExpenseStatus.Pending => Windows.UI.Colors.DarkRed,
-                ExpenseStatus.Cancelled => Windows.UI.Colors.Orange,
-                _ => Windows.UI.Colors.DarkGreen
+                ExpenseStatus.Pending => Colors.DarkRed,
+                ExpenseStatus.Cancelled => Colors.Orange,
+                _ => Colors.DarkGreen
             };
 
         }

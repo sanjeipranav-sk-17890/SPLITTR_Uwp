@@ -1,8 +1,7 @@
-﻿using System;
+﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
@@ -12,7 +11,6 @@ using SPLITTR_Uwp.Core.UseCase.VerifyPaidExpense;
 using SPLITTR_Uwp.Core.Utility;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
-using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.Models;
 using SQLite;
 
@@ -38,7 +36,7 @@ namespace SPLITTR_Uwp.ViewModel
 
         public string CurrencySymbol
         {
-            get => ExpenseObj is null ? string.Empty : Store.CurreUserBobj.StrWalletBalance.ExpenseSymbol(Store.CurreUserBobj); // Fetching Currency symbol Corresponding to user preference
+            get => ExpenseObj is null ? string.Empty : Store.CurrentUserBobj.StrWalletBalance.ExpenseSymbol(Store.CurrentUserBobj); // Fetching Currency symbol Corresponding to user preference
         }
 
         public string UserInitial
@@ -59,7 +57,7 @@ namespace SPLITTR_Uwp.ViewModel
                 {
                     return string.Empty;
                 }
-                return ExpenseObj.CorrespondingUserObj.Equals(Store.CurreUserBobj) ? "you" : ExpenseObj.CorrespondingUserObj.UserName;
+                return ExpenseObj.CorrespondingUserObj.Equals(Store.CurrentUserBobj) ? "you" : ExpenseObj.CorrespondingUserObj.UserName;
             }
         }
 
@@ -85,11 +83,11 @@ namespace SPLITTR_Uwp.ViewModel
 
         private async void SplittrNotification_CurrencyPreferenceChanged(CurrencyPreferenceChangedEventArgs obj)
         {
-            await UiService.RunOnUiThread((() =>
+            await UiService.RunOnUiThread(() =>
             {
                 OnPropertyChanged(nameof(ExpenditureAmount));
                 OnPropertyChanged(nameof(CurrencySymbol));
-            })).ConfigureAwait(false);
+            }).ConfigureAwait(false);
         }
 
         public void ViewDisposed()
@@ -114,7 +112,7 @@ namespace SPLITTR_Uwp.ViewModel
         }
 
 
-        private void ExpenseObj_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void ExpenseObj_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
            CheckExpenseMarkHistory();
         }
@@ -127,7 +125,7 @@ namespace SPLITTR_Uwp.ViewModel
             }).ConfigureAwait(false);
 
         }
-        class RelatedExpenseTemplateVmPresenterCallBack : IPresenterCallBack<VerifyPaidExpenseResponseObj>
+        private class RelatedExpenseTemplateVmPresenterCallBack : IPresenterCallBack<VerifyPaidExpenseResponseObj>
         {
             private readonly RelatedExpenseTemplateViewModel _viewModel;
             public RelatedExpenseTemplateVmPresenterCallBack(RelatedExpenseTemplateViewModel viewModel)

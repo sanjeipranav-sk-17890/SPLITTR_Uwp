@@ -62,7 +62,7 @@ namespace SPLITTR_Uwp.Core.DataManager
             }
         }
 
-        void UpdateLocalUserCacheData(User oldUserData, User newUserData)
+        private void UpdateLocalUserCacheData(User oldUserData, User newUserData)
         {
             oldUserData.UserName = newUserData.UserName;
             oldUserData.CurrencyIndex = newUserData.CurrencyIndex;

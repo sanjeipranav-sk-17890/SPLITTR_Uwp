@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.UseCase;
-using SPLITTR_Uwp.DataRepository;
-using SPLITTR_Uwp.Services;
-using SPLITTR_Uwp.ViewModel.Contracts;
-using SPLITTR_Uwp.ViewModel.Models;
-using SQLite;
 using SPLITTR_Uwp.Core.UseCase.CreateGroup;
 using SPLITTR_Uwp.Core.UseCase.UserSuggestion;
-using SPLITTR_Uwp.Core.DataManager;
-using SPLITTR_Uwp.Core.SplittrNotifications;
+using SPLITTR_Uwp.DataRepository;
+using SPLITTR_Uwp.Services;
+using SPLITTR_Uwp.ViewModel.Models;
+using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel
 {
@@ -48,11 +43,11 @@ namespace SPLITTR_Uwp.ViewModel
 
         public GroupCreationPageViewModel()
         {
-            User = new UserVobj(Store.CurreUserBobj);
+            User = new UserVobj(Store.CurrentUserBobj);
         }
 
 
-        private User _dummyUser = new User()
+        private readonly User _dummyUser = new User
         {
             UserName = "No results Found"
         };
@@ -70,7 +65,7 @@ namespace SPLITTR_Uwp.ViewModel
         //User Suggestion Call BAck
         public async void OnSuggestionRecievd(UserSuggestionResponseObject response)
         {
-            await UiService.RunOnUiThread((() =>
+            await UiService.RunOnUiThread(() =>
             {
                 foreach (var suggestedUser in response.UserSuggestions)
                 {
@@ -82,7 +77,7 @@ namespace SPLITTR_Uwp.ViewModel
                     UserSuggestionList.Add(_dummyUser);
                 }
 
-            }));
+            });
         }
 
         //Group Creation Success Call Back
@@ -92,16 +87,16 @@ namespace SPLITTR_Uwp.ViewModel
 
             var token = new CancellationTokenSource().Token;
 
-            var groupCreationRequestObject = new GroupCreationRequestObj(token, new GroupCreationPageVmPresenterCallBack(this), Store.CurreUserBobj, GroupParticipants, groupName);
+            var groupCreationRequestObject = new GroupCreationRequestObj(token, new GroupCreationPageVmPresenterCallBack(this), Store.CurrentUserBobj, GroupParticipants, groupName);
 
             var groupCreationUseCase = InstanceBuilder.CreateInstance<GroupCreation>(groupCreationRequestObject);
 
             groupCreationUseCase.Execute();
         }
-        
 
 
-        class GroupCreationPageVmPresenterCallBack : IPresenterCallBack<GroupCreationResponseObj>, IPresenterCallBack<UserSuggestionResponseObject>
+
+        private class GroupCreationPageVmPresenterCallBack : IPresenterCallBack<GroupCreationResponseObj>, IPresenterCallBack<UserSuggestionResponseObject>
         {
             private readonly GroupCreationPageViewModel _viewModel;
             public GroupCreationPageVmPresenterCallBack(GroupCreationPageViewModel viewModel)

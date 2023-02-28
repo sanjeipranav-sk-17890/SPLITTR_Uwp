@@ -1,26 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Configuration;
+using System.IO;
 using Microsoft.Extensions.DependencyInjection;
-using SPLITTR_Uwp.Core.CurrencyCoverter;
-using SPLITTR_Uwp.Core.CurrencyCoverter.Factory;
-using SPLITTR_Uwp.Core;
-using SPLITTR_Uwp.Core.DataManager;
-using SPLITTR_Uwp.Core.DataManager.Contracts;
-using SPLITTR_Uwp.Core.DbHandler;
-using SPLITTR_Uwp.Core.DbHandler.Contracts;
-using SPLITTR_Uwp.Core.DbHandler.SqliteConnection;
-using SPLITTR_Uwp.Core.Utility;
-using SPLITTR_Uwp.ViewModel;
-using SPLITTR_Uwp.DataTemplates;
-using SPLITTR_Uwp.ViewModel.Contracts;
-using SPLITTR_Uwp.ViewModel.VmLogic;
-using SPLITTR_Uwp.Services;
-using SPLITTR_Uwp.Views;
-using SPLITTR_Uwp.Core.UseCase.CreateGroup;
-using SPLITTR_Uwp.Core.UseCase.UpdateUser;
 using SPLITTR_Uwp.Core.UseCase.AddWalletAmount;
 using SPLITTR_Uwp.Core.UseCase.CancelExpense;
+using SPLITTR_Uwp.Core.UseCase.CreateGroup;
 using SPLITTR_Uwp.Core.UseCase.GetGroupDetails;
 using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
 using SPLITTR_Uwp.Core.UseCase.GetUserGroups;
@@ -29,8 +13,15 @@ using SPLITTR_Uwp.Core.UseCase.MarkAsPaid;
 using SPLITTR_Uwp.Core.UseCase.SettleUpExpense;
 using SPLITTR_Uwp.Core.UseCase.SignUpUser;
 using SPLITTR_Uwp.Core.UseCase.SplitExpenses;
+using SPLITTR_Uwp.Core.UseCase.UpdateUser;
 using SPLITTR_Uwp.Core.UseCase.UserSuggestion;
 using SPLITTR_Uwp.Core.UseCase.VerifyPaidExpense;
+using SPLITTR_Uwp.Core.Utility;
+using SPLITTR_Uwp.DataTemplates;
+using SPLITTR_Uwp.Services;
+using SPLITTR_Uwp.ViewModel;
+using SPLITTR_Uwp.ViewModel.Contracts;
+using SPLITTR_Uwp.ViewModel.VmLogic;
 
 namespace SPLITTR_Uwp.Configuration
 {
@@ -38,11 +29,11 @@ namespace SPLITTR_Uwp.Configuration
     public static class Configuration
     {
         /// <summary>
-        /// Adding SpliitrUwp Dependencies to Service Collection 
+        /// Adding SplittrUwp Dependencies to Service Collection 
         /// </summary>
         public static IServiceCollection AddDependencies(this IServiceCollection container)
         {
-            //Storing App's local storage for db file location
+            //Storing Apps local storage for db file location
             var connectionString= Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SPLITTR.db3");
             ConfigurationManager.AppSettings.Set("ConnectionString",connectionString);
 
