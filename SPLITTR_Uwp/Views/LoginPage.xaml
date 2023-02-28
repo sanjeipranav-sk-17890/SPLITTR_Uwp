@@ -183,6 +183,7 @@
                                     Margin="0 30 0 0"
                                     Content="Log in"
                                     AccessKey="Enter"
+                                    ToolTipService.ToolTip="Log In"
                                     FontFamily="Segoe UI Variable"
                                     FontWeight="Bold"
                                     Foreground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -192,6 +193,7 @@
                                 <HyperlinkButton FontSize="18" 
                                              HorizontalAlignment="Center"
                                              Content="Forgot your Password ?"
+                                             ToolTipService.ToolTip="Coming Soon"
                                              Foreground="{ThemeResource ApplicationMainThemeColor }"
                             ></HyperlinkButton>
                                 <TextBlock Text="-- OR --" HorizontalAlignment="Center"
@@ -200,6 +202,7 @@
                                     CornerRadius="4"
                                     Background="Transparent"
                                     BorderBrush="Gray"
+                                    ToolTipService.ToolTip="Coming Soon"
                                     BorderThickness=".5">
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal"

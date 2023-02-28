@@ -11,6 +11,7 @@ using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.SignUpUser;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.Views;
+using System.Text.RegularExpressions;
 
 namespace SPLITTR_Uwp.ViewModel;
 
@@ -36,10 +37,7 @@ public class SignPageViewModel : ObservableObject
     public bool EmailPassInputPanelVisibility
     {
         get => _emailPassInputPanelVisibility;
-        set
-        {
-            SetProperty(ref _emailPassInputPanelVisibility, value);
-        }
+        set => SetProperty(ref _emailPassInputPanelVisibility, value);
     }
 
     public string EmailIdText { get; set; }
@@ -84,15 +82,15 @@ public class SignPageViewModel : ObservableObject
                 { Effect = SlideNavigationTransitionEffect.FromLeft });
         }
     }
-
+    private bool ValidateEmail(string email)
+    {
+        var regex = new Regex("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
+        return regex.IsMatch(email);
+    }
 
     public  void OnSignUpButtonClicked()
     {
-        if (string.IsNullOrEmpty(EmailIdText) ||
-            !EmailIdText.ContainsString(new[]
-            {
-                "@gmail", "@yahoo", "@zoho", "@bitsathy"
-            }))
+        if (string.IsNullOrEmpty(EmailIdText) || !ValidateEmail(EmailIdText))
         {
             IsValidEmailIdTextBlockVisibility = true;
             UserAlreadyExistTextBlockVisibility = false;

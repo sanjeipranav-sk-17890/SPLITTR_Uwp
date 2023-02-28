@@ -156,6 +156,7 @@
                         <Button
                         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                         CornerRadius="4" 
+                        ToolTipService.ToolTip="Coming Soon"
                         Margin="-7 0 0 0">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal"

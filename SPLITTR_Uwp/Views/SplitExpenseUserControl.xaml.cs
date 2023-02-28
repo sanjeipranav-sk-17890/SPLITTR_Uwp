@@ -33,10 +33,7 @@ public sealed partial class SplitExpenseUserControl : UserControl,ISplitExpenseV
 
     public XamlRoot VisualRoot
     {
-        get
-        {
-            return XamlRoot.Content.XamlRoot;
-        }
+        get => XamlRoot.Content.XamlRoot;
     }
 
     public SplitExpenseUserControl(SplitExpenseUserControl control)

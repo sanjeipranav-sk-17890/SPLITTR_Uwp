@@ -36,9 +36,15 @@ public static class NavigationService
         }
     }
 
-    public static bool CanGoBack => Frame.CanGoBack;
+    public static bool CanGoBack
+    {
+        get => Frame.CanGoBack;
+    }
 
-    public static bool CanGoForward => Frame.CanGoForward;
+    public static bool CanGoForward
+    {
+        get => Frame.CanGoForward;
+    }
 
     public static bool GoBack()
     {

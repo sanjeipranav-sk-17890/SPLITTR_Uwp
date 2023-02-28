@@ -47,19 +47,12 @@ public class UserProfilePageViewModel : ObservableObject,IViewModel
 
     public string UserInitial
     {
-        get
-        {
-            return User.UserName.GetUserInitial();
-        }
+        get => User.UserName.GetUserInitial();
     }
 
     public string CurrencyPreference
     {
-        get
-        {
-            return Store.CurrentUserBobj?.CurrencyPreference.ToString();
-        }
-
+        get => Store.CurrentUserBobj?.CurrencyPreference.ToString();
     }
 
     public bool IsEditUserProfileVisible
