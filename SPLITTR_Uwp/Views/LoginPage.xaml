@@ -131,9 +131,9 @@
                              <Setter Property="Width" Value="auto"/>
                          </Style>
                      </FlipView.Resources>
-                     <Border Background="{StaticResource FlipViewImage1}"  />
+                     <Border Background="{StaticResource FlipViewImage3}"  />
                      <Border Background="{StaticResource FlipViewImage2}"  ></Border>
-                     <Border Background="{StaticResource FlipViewImage3}"></Border>
+                     <Border Background="{StaticResource FlipViewImage1}"></Border>
                      <Border Background="{StaticResource FlipViewImage4}"  ></Border>
                  </FlipView>
             </Grid>

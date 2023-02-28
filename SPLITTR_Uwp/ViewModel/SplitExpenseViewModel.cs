@@ -34,9 +34,6 @@ public class SplitExpenseViewModel : ObservableObject, IViewModel
     /// </summary>
     public readonly ObservableCollection<ExpenseBobj> _expensesToBeSplitted = new ObservableCollection<ExpenseBobj>();
 
-
-
-
     #region UserAutoSUggestionBox Logic Region
     private bool _isUserSuggestionListOpen;
     private string _splittingUsersName = string.Empty;
@@ -332,39 +329,7 @@ public class SplitExpenseViewModel : ObservableObject, IViewModel
         set => SetProperty(ref _selectedSplitPreferenceIndex, value);
     }
 
-    /*
-            public bool SingleUserSelectionComboBoxVisibility
-            {
-                get => _singleUserSelectionComboBoxVisibility;
-                set => SetProperty(ref _singleUserSelectionComboBoxVisibility, value);
-            }
 
-
-            public List<string> SingleUserSplitComboBoxItems()
-            {
-                if (_selectedUser is null)
-                {
-                    return new List<string>();
-                }
-                return new List<string>()
-                {
-                    "Split This Bill",
-                    $"{_selectedUser.UserName} owe the full Total ",
-                    " You owe the Full Total"
-                };
-            }
-    */
-    /*if (SelectedUser != null)
-                    {
-                        //calling iNotify to populate combo box items 
-                        OnPropertyChanged(nameof(SingleUserSplitComboBoxItems));
-                        SingleUserSelectionComboBoxVisibility = true;
-                    }
-                    else
-                    {
-
-                        SingleUserSelectionComboBoxVisibility = false;
-                    }*/
     private double _equalSplitAmount;
 
     public void ExpenseTextBoxValueChanged()

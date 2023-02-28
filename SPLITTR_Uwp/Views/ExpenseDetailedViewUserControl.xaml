@@ -83,7 +83,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
            <Grid.ColumnDefinitions>
-               <ColumnDefinition Width="2*"/>
+               <ColumnDefinition Width="3*"/>
                <ColumnDefinition Width="5*"/>
            </Grid.ColumnDefinitions>
             <TextBlock Foreground="{ThemeResource AccentTextColorBrush}"  
@@ -138,16 +138,24 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal" Margin="20 20 0 0">
-                <TextBlock  
+            <Grid  Grid.Row="4" Grid.Column="0"   Margin="20 20 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock  
                         FontFamily="Segoe MDL2 Assets" 
                         Text="" 
+                        Grid.Column="0"
                         ToolTipService.ToolTip="Date Of Expense "
                         Foreground="{ThemeResource AccentTextColorBrush}"
-                        
                         VerticalAlignment="Top"/>
-                <TextBlock Margin="5 0 0 0"  ToolTipService.ToolTip="Date Of Expense " TextTrimming="CharacterEllipsis">Date Of Expense :</TextBlock>
-            </StackPanel>
+                    <TextBlock Margin="5 0 0 0"
+                               ToolTipService.ToolTip="Date Of Expense " 
+                               Grid.Column="1"
+                               TextTrimming="CharacterEllipsis">Date Of Expense :</TextBlock>
+            </Grid>
+
             <TextBlock Grid.Row="4" 
                        Grid.Column="1"
                        Margin="20 20 0 0"

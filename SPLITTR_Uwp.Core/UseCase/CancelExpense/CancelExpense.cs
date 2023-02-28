@@ -7,7 +7,7 @@ public class CancelExpense :UseCaseBase<CancelExpenseResponseObj>
 {
     private readonly CancelExpenseRequestObj _requestObj;
     private readonly IExpenseCancellationDataManager _dataManager;
-    public CancelExpense(CancelExpenseRequestObj requestObj) : base(requestObj.CallBack,requestObj.Cts)
+    public CancelExpense(CancelExpenseRequestObj requestObj) : base(requestObj.PresenterCallBack,requestObj.Cts)
     {
         _requestObj = requestObj;
         _dataManager = SplittrDependencyService.GetInstance<IExpenseCancellationDataManager>();

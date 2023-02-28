@@ -530,63 +530,75 @@
                 </Grid.ColumnDefinitions>
                 <Image Grid.Row="0"
                        Grid.Column="0"
-                       Source="../Assets/icons/invoice.png"
-                       Height="75"
+                       Source="../Assets/icons/BillImage.png"
+                       Height="80"
+                       ToolTipService.ToolTip="Category : UnCategorized"
                        Margin="10 5 0 0"
                        Stretch="Uniform"
                        Width="50"></Image>
-                <RelativePanel Grid.Row="0"
-                            Grid.Column="1">
-                   
-                    <TextBox TextWrapping="Wrap"
-                             PlaceholderText="Enter the Title"
-                             FontWeight="SemiBold"
-                             
-                             Text="{x:Bind _viewModel.ExpenseDescription,Mode=TwoWay}"
-                             RelativePanel.AlignRightWithPanel="True"
-                             BorderBrush="Transparent"
-                             Margin="25 0 0 0"
-                               RelativePanel.AlignTopWithPanel="True"
-                               RelativePanel.AlignLeftWithPanel="True"
-                               Name="ExpenditureLabel"
-                    />
-                    <TextBlock Text="Please enter value in correct Format !!"
-                               Name="WrongInputIndiactor"
-                               Visibility="{x:Bind _viewModel.AmountFormatIncorrectIndicatorVisibility,Mode=OneWay}"
-                               RelativePanel.Below="ExpenditureLabel"
-                                Margin="60 10 0 0" Style="{StaticResource IndicatorTextBlockStyle}"/>
-                    <StackPanel Orientation="Horizontal" Name="InputExpenseStackPanel"
-                                RelativePanel.Below="WrongInputIndiactor"
-                                RelativePanel.AlignBottomWithPanel="True"
-                                RelativePanel.AlignLeftWithPanel="True"
-                                Margin="5 0 0 0">
-                        <TextBlock RelativePanel.Below="ExpenditureLabel"
-                                    Margin="0 10 0 0"
-                                    Visibility="{x:Bind _viewModel.SplitEquallyPanelVisibility,Mode=OneWay}"
-                                   Text="{x:Bind _viewModel.GetUserCurrencyPreference(),Mode=OneWay}"
-                                   FontWeight="Bold"
-                             HorizontalAlignment="Center"
-                                   />
-                    <TextBox Margin="5 0 0 0"
-                             Width="300"
-                             Height="30"
-                             Visibility="{x:Bind _viewModel.SplitEquallyPanelVisibility,Mode=OneWay}"
-                             HorizontalAlignment="Center"
-                             TextAlignment="Center"
-                             TextWrapping="Wrap"
-                             BorderBrush="Transparent"
-                             Name="InputExpenseAmountTextBlock"
-                             CornerRadius="4"
-                             TextChanged="{x:Bind _viewModel.ExpenseTextBoxValueChanged}"
-                             Text="{x:Bind _viewModel.SingleUserExpenseShareAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                             PlaceholderText="0.00" 
-                             ></TextBox>        
-                    </StackPanel>
-                </RelativePanel>
-                 <Image Grid.Row="0" Grid.Column="2"
-                        Source="../Assets/AppLogo/../icons/split.png"
-                        Height="50"
-                        Margin=" 0 0 5 0"></Image>
+                
+                    <Grid  Grid.Row="0"
+                           Grid.Column="1">
+                       <Grid.RowDefinitions>
+                           <RowDefinition Height="Auto"/>
+                           <RowDefinition Height="Auto"/>
+                           <RowDefinition Height="Auto"/>
+                       </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid></Grid>
+                       <TextBox TextWrapping="Wrap"
+                                PlaceholderText="Enter the Title"
+                                FontWeight="SemiBold"
+                                Text="{x:Bind _viewModel.ExpenseDescription,Mode=TwoWay}"
+                                BorderBrush="Transparent"
+                                Margin="0 0 0 0"
+                                Name="ExpenditureLabel"
+                                HorizontalAlignment="Stretch"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                       />
+                       <TextBlock Text="Please enter value in correct Format !!"
+                                  Name="WrongInputIndiactor"
+                                  Visibility="{x:Bind _viewModel.AmountFormatIncorrectIndicatorVisibility,Mode=OneWay}"
+                                  Margin="0 10 0 0"
+                                  HorizontalAlignment="Center"
+                                  Style="{StaticResource IndicatorTextBlockStyle}"
+                                  Grid.Row="1"
+                                  Grid.Column="1"/>
+                       <TextBlock 
+                           Margin="4 10 0 0"
+                           Text="{x:Bind _viewModel.GetUserCurrencyPreference(),Mode=OneWay}"
+                           FontWeight="Bold"
+                           Grid.Row="0"
+                           Grid.RowSpan="3"
+                           VerticalAlignment="Center"
+                           Grid.Column="0"
+                           HorizontalAlignment="Center"
+                       />
+                       <TextBox Margin="5 0 0 0"
+                                Height="30"
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Visibility="{x:Bind _viewModel.SplitEquallyPanelVisibility,Mode=OneWay}"
+                                HorizontalAlignment="Stretch"
+                                TextAlignment="Center"
+                                TextWrapping="Wrap"
+                                BorderBrush="Transparent"
+                                Name="InputExpenseAmountTextBlock"
+                                CornerRadius="4"
+                                TextChanged="{x:Bind _viewModel.ExpenseTextBoxValueChanged}"
+                                Text="{x:Bind _viewModel.SingleUserExpenseShareAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                PlaceholderText="0.00" 
+                       ></TextBox>
+
+                    </Grid>
+                <Image Grid.Row="0" Grid.Column="2"
+                       Source="../Assets/AppLogo/../icons/split.png"
+                       Height="50"
+                       Margin=" 0 0 5 0"></Image>
                 <!--<ComboBox Grid.Row="1"
                           Grid.ColumnSpan="3"
                           Grid.Column="0"
@@ -606,16 +618,16 @@
         <StackPanel Grid.Row="2">
             <MenuFlyoutSeparator Style="{StaticResource MenuFlyoutSeparatorStyle}"></MenuFlyoutSeparator>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Paid by   :"
+                <TextBlock Text="Paid by    :"
                            Foreground="{ThemeResource ApplicationMainThemeColor}"
                            FontSize="18"
                            VerticalAlignment="Center"
-                           Margin="3 0 0 0"/>
+                           Margin="0 0 0 0"/>
                 <TextBox IsReadOnly="True"
                          CornerRadius="4"
                          Width="400"
                          Text="You"
-                         Margin="5 0 0 0"
+                         Margin="3 0 0 0"
                          BorderThickness=".5"></TextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
@@ -623,16 +635,16 @@
                            FontSize="18"
                            Foreground="{ThemeResource ApplicationMainThemeColor}"
                            VerticalAlignment="Center"
-                           Margin="5 0 0 0"/>
-                <ComboBox Width="400"
-                          Margin="0 5 0 0"
+                           Margin="2 0 0 0"/>
+                <ComboBox Margin="3 5 0 0"
                           FontSize="15" 
                           CornerRadius="4"
+                          Width="400"
                           Name="SplitingMethodSelectionComboBox"
                           BorderThickness=".5"
                           SelectedIndex="{x:Bind _viewModel.SelectedSplitPreferenceIndex,Mode=TwoWay}"
                           SelectionChanged="{x:Bind _viewModel.SplitPreferenceChanged}"
-                          HorizontalContentAlignment="Center">
+                          HorizontalContentAlignment="Stretch">
                     <x:String>Equally</x:String>
                     <x:String>Unequally</x:String>
                 </ComboBox>
