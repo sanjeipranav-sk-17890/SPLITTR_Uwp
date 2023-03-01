@@ -12,6 +12,7 @@ public interface ISqlDataAdapter
     Task<int> InsertObj<T>(T obj);
     Task<int> InsertObjects<T>(IEnumerable<T> objs);
     Task<int> UpdateObj<T>(T obj);
-    Task<int> ExecuteQueryAsync<T>(string query, params object[] parameters);
-    public Task RunInTransaction(Action action);
+    Task<int> ExecuteQueryAsync<T>(string query, params object[] parameters); 
+    Task RunInTransaction(Action action);
+    Task<List<T>> QueryAsync<T>(string query, params object[] parameters);
 }

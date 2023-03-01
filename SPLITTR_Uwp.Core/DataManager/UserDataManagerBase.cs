@@ -16,17 +16,14 @@ namespace SPLITTR_Uwp.Core.DataManager;
 public class UserDataManagerBase : IUserDataManager
 {
     private readonly IUserDbHandler _userDbHandler;
-    private readonly IGroupDataManager _groupDataManager;
-    private readonly IExpenseDataManager _expenseDataManager;
     private readonly ICurrencyCalcFactory _currencyCalc;
     private string _currentUserEmailId;
     private User _currentUser;
     private readonly ConcurrentDictionary<string, User> _localUserCache = new ConcurrentDictionary<string, User>();
 
-    public UserDataManagerBase(IUserDbHandler userDbHandler, IExpenseDataManager expenseDataManager,ICurrencyCalcFactory currencyCalc)
+    public UserDataManagerBase(IUserDbHandler userDbHandler,ICurrencyCalcFactory currencyCalc)
     {
         _userDbHandler = userDbHandler;
-        _expenseDataManager = expenseDataManager;
         _currencyCalc = currencyCalc;
     }
 

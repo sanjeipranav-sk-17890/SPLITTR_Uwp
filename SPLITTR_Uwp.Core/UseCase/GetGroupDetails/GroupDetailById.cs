@@ -1,7 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Threading;
+using SPLITTR_Uwp.Core.DataManager;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
+using SPLITTR_Uwp.Core.DbHandler.Contracts;
 using SPLITTR_Uwp.Core.DependencyInjector;
 using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
@@ -72,26 +73,34 @@ public class GroupDetailById : UseCaseBase<GroupDetailByIdResponse>
     }
 
 }
-
-public class GroupDetailByIdRequest : SplittrRequestBase<GroupDetailByIdResponse>
+public interface IGroupDetailManager
 {
-    public GroupDetailByIdRequest(string groupUniqueId, CancellationToken cts, IPresenterCallBack<GroupDetailByIdResponse> presenterCallBack, User currentUser) : base(cts, presenterCallBack)
-    {
-        GroupUniqueId = groupUniqueId;
-        CurrentUser = currentUser;
-    }
-
-    public string GroupUniqueId { get; }
-
-    public User CurrentUser { get; }
-
+    public void FetchGroupByGroupId(string groupId,User currentUSer,IUseCaseCallBack<GroupDetailByIdResponse> callBack);
+    public bool IsCacheAvailable(string groupId);
 }
-public class GroupDetailByIdResponse
+public class GroupDetailManager : GroupDataManagerBase, IGroupDetailManager
 {
-    public GroupDetailByIdResponse(GroupBobj requestedGroup)
+    
+    private readonly static ConcurrentDictionary<string, GroupBobj> _groupBobjCache = new ConcurrentDictionary<string, GroupBobj>();
+
+
+    public GroupDetailManager(IGroupDbHandler groupDbHandler,IUserDataManager userDataManager,IGroupToUserDbHandler groupToUserDbHandler):base(groupDbHandler,groupToUserDbHandler ,userDataManager)
     {
-        RequestedGroup = requestedGroup;
+
     }
 
-    public GroupBobj RequestedGroup { get; }
+    public async void FetchGroupByGroupId(string groupId,  User currentUSer,IUseCaseCallBack<GroupDetailByIdResponse> callBack)
+    {
+       var userParticipatingGroups = await GetUserParticipatingGroups(currentUSer).ConfigureAwait(false);
+
+       foreach (var groupCache in userParticipatingGroups)
+       {
+            
+       }
+
+    }
+    public bool IsCacheAvailable(string groupId)
+    {
+        return _groupBobjCache.ContainsKey(groupId);
+    }
 }

@@ -44,9 +44,9 @@ public class SqlDataBaseAdapter : ISqlDataAdapter
 
         return _connection.UpdateAsync(obj, typeof(T));
     }
-    public Task<int> ExecuteQueryAsync<T>(string sql, params object[] parameters)
+    public Task<int> ExecuteQueryAsync<T>(string query, params object[] parameters)
     {
-        return _connection.ExecuteAsync(sql, parameters);
+        return _connection.ExecuteAsync(query, parameters);
     }
 
     public Task RunInTransaction(Action action)
@@ -57,6 +57,10 @@ public class SqlDataBaseAdapter : ISqlDataAdapter
         });
     }
 
+    public Task<List<T>> QueryAsync<T>(string query, params object[] parameters) where T : new()
+    {
+        return _connection.QueryAsync<T>(query, parameters);
+    }
     private string GetConnectionString()
     {
         try

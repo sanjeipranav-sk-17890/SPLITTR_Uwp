@@ -26,50 +26,56 @@ public class GroupDataManagerBase : IGroupDataManager
         _userDataManager = userDataManager;
             
     }
-    public async void GetUserParticipatingGroups(User user,IUseCaseCallBack<GetUserGroupResponse> callBack)
+    
+    async void IGroupDataManager.GetUserParticipatingGroups(User user,IUseCaseCallBack<GetUserGroupResponse> callBack)
     {
 
         try
         {
-            if (string.IsNullOrEmpty(user.EmailId))
-            {
-                throw new ArgumentNullException(nameof(user.EmailId), "UserBobj  value must be initialized first");
-            }
-
-            //fetching groupIds where user is a Participant 
-            var groupIds = await _groupToUserDbHandler.SelectGroupIdsWithUserEmail(user.EmailId).ConfigureAwait(false);
-
-
-            var outputList = new List<GroupBobj>();
-
-
-            //For each groupIds Asyncronously Fetcing the GroupBoj of the respective groupIds
-
-            foreach (var grpIds in groupIds)
-            {
-                var group = await _groupDbHandler.GetGroupObjByGroupId(grpIds).ConfigureAwait(false);
-
-
-                var participants = await GetGroupParticipants(group.GroupUniqueId).ConfigureAwait(false);
-
-                outputList.Add(new GroupBobj(group, participants));
-
-            }
+            var outputList = await GetUserParticipatingGroups(user).ConfigureAwait(false);
 
             callBack?.OnSuccess(new GetUserGroupResponse(outputList));
 
         }
-        catch (ArgumentException e)
-        {
-            callBack?.OnError(new SplittrException(e));
-        }
-        catch(SQLiteException e)
+        catch(Exception e)
         {
             callBack?.OnError(new SplittrException(e,"Db Call Failed"));
         }
     }
 
-    public Task CreateGroupAsync(GroupBobj groupBobj)
+
+    protected async Task<List<GroupBobj>> GetUserParticipatingGroups(User user)
+    {
+
+        if (string.IsNullOrEmpty(user.EmailId))
+        {
+            throw new ArgumentNullException(nameof(user.EmailId), "UserBobj  value must be initialized first");
+        }
+
+        //fetching groupIds where user is a Participant 
+        var groupIds = await _groupToUserDbHandler.SelectGroupIdsWithUserEmail(user.EmailId).ConfigureAwait(false);
+
+
+        var outputList = new List<GroupBobj>();
+
+
+        //For each groupIds Asynchronously Fetching the GroupBoj of the respective groupIds
+
+        foreach (var grpIds in groupIds)
+        {
+            var group = await _groupDbHandler.GetGroupObjByGroupId(grpIds).ConfigureAwait(false);
+
+
+            var participants = await GetGroupParticipants(group.GroupUniqueId).ConfigureAwait(false);
+
+            outputList.Add(new GroupBobj(group, participants));
+
+        }
+        return outputList;
+    }
+
+
+    Task IGroupDataManager.CreateGroupAsync(GroupBobj groupBobj)
     {
         _groupDbHandler.InsertGroupAsync(groupBobj);
 
@@ -79,7 +85,7 @@ public class GroupDataManagerBase : IGroupDataManager
     }
 
     /// <summary>
-    /// for given GroupUniqueId Retrives the all the participants of the group
+    /// for given GroupUniqueId Retrieves the all the participants of the group
     /// </summary>
     /// <param name="groupUniqueId"></param>
     /// <returns></returns>

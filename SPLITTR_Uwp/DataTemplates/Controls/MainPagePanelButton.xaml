@@ -64,7 +64,7 @@
             </ListView.ItemContainerTransitions>
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="model:User">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+                    <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" >
                         <TextBlock Text="#"  FontSize="12" FontWeight="Bold"/>
                             <TextBlock Text="{x:Bind UserName,Mode=OneWay}"
                                        FontSize="12"
