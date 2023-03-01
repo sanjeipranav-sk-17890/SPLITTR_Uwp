@@ -44,7 +44,7 @@ public class SqlDataBaseAdapter : ISqlDataAdapter
 
         return _connection.UpdateAsync(obj, typeof(T));
     }
-    public Task<int> ExecuteQueryAsync<T>(string query, params object[] parameters)
+    public Task<int> ExecuteQueryAsync(string query, params object[] parameters)
     {
         return _connection.ExecuteAsync(query, parameters);
     }
