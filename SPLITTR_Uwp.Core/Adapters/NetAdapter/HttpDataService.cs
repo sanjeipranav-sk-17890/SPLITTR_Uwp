@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using SPLITTR_Uwp.Core.EventArg;
 
 namespace SPLITTR_Uwp.Core.Adapters.NetAdapter;
 
@@ -22,23 +22,25 @@ public class HttpDataService : INetAdapter
 
     public async Task<HttpResponseMessage> GetAsync(string baseUri,string uri, string accessToken = null, bool forceRefresh = false)
     {
-        HttpResponseMessage result = default;
+        ThrowIfNetworkNotAvailable();
 
-        _client.BaseAddress = new Uri(baseUri);
+         HttpResponseMessage result;
+
+        _client.BaseAddress ??= new Uri(baseUri);
 
         // The responseCache is a simple store of past responses to avoid unnecessary requests for the same resource.
         if (forceRefresh || !_responseCache.ContainsKey(uri))
         {
             AddAuthorizationHeader(accessToken);
-            var response = await _client.GetAsync(uri).ConfigureAwait(false);
+            result = await _client.GetAsync(uri).ConfigureAwait(false);
 
             if (_responseCache.ContainsKey(uri))
             {
-                _responseCache[uri] = response;
+                _responseCache[uri] = result;
             }
             else
             {
-                _responseCache.Add(uri, response);
+                _responseCache.Add(uri, result);
             }
         }
         else
@@ -47,6 +49,13 @@ public class HttpDataService : INetAdapter
         }
 
         return result;
+    }
+    private static void ThrowIfNetworkNotAvailable()
+    {
+        if (!NetworkInterface.GetIsNetworkAvailable())
+        {
+            throw new NoInterNetException();
+        }
     }
 
     //public async Task<bool> PostAsync<T>(string uri, T item)

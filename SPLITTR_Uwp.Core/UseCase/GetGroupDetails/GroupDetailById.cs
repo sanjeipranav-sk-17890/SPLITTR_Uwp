@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using SPLITTR_Uwp.Core.DataManager.Contracts;
+﻿using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DependencyInjector;
-using SPLITTR_Uwp.Core.EventArg;
-using SPLITTR_Uwp.Core.UseCase.GetUserGroups;
 
 namespace SPLITTR_Uwp.Core.UseCase.GetGroupDetails;
 
@@ -45,7 +42,7 @@ public class GroupDetailById : UseCaseBase<GroupDetailByIdResponse>
         {
             _useCase.PresenterCallBack?.OnSuccess(responseObj);
         }
-        public void OnError(SplittrException error)
+        public void OnError(SplittrException.SplittrException error)
         {
             _useCase?.PresenterCallBack?.OnError(error);
         }

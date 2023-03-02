@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using SPLITTR_Uwp.Core.Adapters.NetAdapter;
 using SPLITTR_Uwp.Core.Adapters.SqlAdapter;
 using SPLITTR_Uwp.Core.CurrencyCoverter;
 using SPLITTR_Uwp.Core.CurrencyCoverter.Factory;
@@ -7,6 +8,7 @@ using SPLITTR_Uwp.Core.DataManager;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DbHandler;
 using SPLITTR_Uwp.Core.DbHandler.Contracts;
+using SPLITTR_Uwp.Core.NetHandler;
 using SPLITTR_Uwp.Core.UseCase.LoginUser;
 using SPLITTR_Uwp.Core.UseCase.MarkAsPaid;
 
@@ -56,6 +58,9 @@ public class SplittrDependencyService
             .AddSingleton<IGroupDetailManager,GroupDetailManager>()
             .AddSingleton<IExpenseFetchDataManager,ExpenseFetchDataManager>()
             .AddSingleton<IAuthenticationManager, AuthenticationManager>()
+            .AddSingleton<IExpenseCategoryManager,ExpenseCategoryManager>()
+            .AddSingleton<INetAdapter,HttpDataService>()
+            .AddSingleton<IExpenseCategoryNetHandler,ExpenseCategoryNetHandler>()
             .AddTransient<RupessConverter>()
             .AddTransient<DollarConverter>()
             .AddTransient<YenConverter>()

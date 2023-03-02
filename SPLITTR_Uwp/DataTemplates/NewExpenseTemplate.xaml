@@ -27,11 +27,11 @@
                        Width="50"
                        x:Name="UserInitialProfilePicture"
                        BorderBrush="{ThemeResource ApplicationMainThemeColor}"
-                       Initials="{x:Bind  UserInitial,Mode=OneWay}"
+                       Initials="{x:Bind  UserInitial}"
         ></PersonPicture>
         <StackPanel Grid.Column="1">
             <TextBlock HorizontalAlignment="Center"
-                       Text="{x:Bind ExpenseObj.CorrespondingUserObj.UserName,Mode=OneWay}"
+                       Text="{x:Bind ExpenseObj.CorrespondingUserObj.UserName}"
                        FontSize="15"/>
             <TextBox BorderThickness="5"
                      x:Name="ExpenseAmountTextBox"

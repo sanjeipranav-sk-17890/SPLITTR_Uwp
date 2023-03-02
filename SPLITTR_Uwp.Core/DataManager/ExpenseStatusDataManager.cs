@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
-using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
@@ -33,15 +32,15 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager, IMarkExpensePa
         }
         catch (SQLiteException ex)
         {
-            callBack?.OnError(new SplittrException(ex, "Db Fetch Error"));
+            callBack?.OnError(new SplittrException.SplittrException(ex, "Db Fetch Error"));
         }
         catch (ArgumentException ex)
         {
-            callBack?.OnError(new SplittrException(ex, "Owner of Passed Expense Didn't match Current User"));
+            callBack?.OnError(new SplittrException.SplittrException(ex, "Owner of Passed Expense Didn't match Current User"));
         }
         catch (Exception ex)
         {
-            callBack?.OnError(new SplittrException(ex, ex.Message));
+            callBack?.OnError(new SplittrException.SplittrException(ex, ex.Message));
         }
     }
 
@@ -59,7 +58,7 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager, IMarkExpensePa
         }
         catch (SQLiteException e)
         {
-            callBack?.OnError(new SplittrException(e, "Db Fetch Error"));
+            callBack?.OnError(new SplittrException.SplittrException(e, "Db Fetch Error"));
         }
 
 
@@ -219,11 +218,11 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager, IMarkExpensePa
         }
         catch (ArgumentException ex)
         {
-            callBack?.OnError(new SplittrException(ex, ex.Message));
+            callBack?.OnError(new SplittrException.SplittrException(ex, ex.Message));
         }
         catch (SQLiteException ex)
         {
-            callBack?.OnError(new SplittrException(ex, "Db Fetch Error"));
+            callBack?.OnError(new SplittrException.SplittrException(ex, "Db Fetch Error"));
         }
 
     }

@@ -2,7 +2,6 @@
 using System.Threading;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DependencyInjector;
-using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
 
@@ -35,7 +34,7 @@ public class GetExpensesByUserId :UseCaseBase<GetExpensesByIdResponse>
         {
             _useCase?.PresenterCallBack?.OnSuccess(responseObj);   
         }
-        public void OnError(SplittrException error)
+        public void OnError(SplittrException.SplittrException error)
         {
             _useCase?.PresenterCallBack?.OnError(error);
         }

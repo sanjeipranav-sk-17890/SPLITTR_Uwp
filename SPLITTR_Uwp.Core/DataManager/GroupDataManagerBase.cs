@@ -4,12 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DbHandler.Contracts;
-using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.GetUserGroups;
-using SQLite;
 
 namespace SPLITTR_Uwp.Core.DataManager;
 
@@ -39,7 +37,7 @@ public class GroupDataManagerBase : IGroupDataManager
         }
         catch(Exception e)
         {
-            callBack?.OnError(new SplittrException(e,"Db Call Failed"));
+            callBack?.OnError(new SplittrException.SplittrException(e,"Db Call Failed"));
         }
     }
 

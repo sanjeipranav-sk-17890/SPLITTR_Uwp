@@ -86,7 +86,7 @@
                                             <PersonPicture Height="40" HorizontalAlignment="Left"
                                                            Margin="-5 0 0 0"
                                                            BorderBrush="{ThemeResource ApplicationMainThemeColor}"
-                                                           Initials="{x:Bind  UserName,Mode=OneWay,Converter={StaticResource UserInitialFormatter}}"
+                                                           Initials="{x:Bind  UserName,Converter={StaticResource UserInitialFormatter}}"
                                                            />
                                             <TextBlock Grid.Column="1"
                                                        FontSize="25"

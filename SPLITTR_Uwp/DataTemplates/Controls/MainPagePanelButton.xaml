@@ -66,7 +66,7 @@
                 <DataTemplate x:DataType="model:User">
                     <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" >
                         <TextBlock Text="#"  FontSize="12" FontWeight="Bold"/>
-                            <TextBlock Text="{x:Bind UserName,Mode=OneWay}"
+                            <TextBlock Text="{x:Bind UserName}"
                                        FontSize="12"
                                        Margin="5 0 0 0" 
                                        VerticalAlignment="Center"></TextBlock>

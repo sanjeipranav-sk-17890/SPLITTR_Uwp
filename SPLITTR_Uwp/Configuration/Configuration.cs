@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.UseCase.AddWalletAmount;
 using SPLITTR_Uwp.Core.UseCase.CancelExpense;
 using SPLITTR_Uwp.Core.UseCase.CreateGroup;
+using SPLITTR_Uwp.Core.UseCase.FetchExpenseCategory;
 using SPLITTR_Uwp.Core.UseCase.GetGroupDetails;
 using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
 using SPLITTR_Uwp.Core.UseCase.GetUserGroups;
@@ -61,6 +62,7 @@ public static class Configuration
             .AddTransient<SignUpUser>()
             .AddTransient<VerifyPaidExpense>()
             .AddTransient<GroupDetailById>()
+            .AddTransient<FetchExpenseCategory>()
             .AddTransient<GetUserGroups>()
             .AddTransient<UserSuggestion>();
     }

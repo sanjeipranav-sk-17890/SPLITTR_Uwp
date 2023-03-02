@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
-using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.CreateGroup;
-using SQLite;
 
 namespace SPLITTR_Uwp.Core.DataManager;
 
@@ -55,19 +53,9 @@ public class GroupCreationDataManager : IGroupCreationDataManager
             //Invoking Notifications
             SplittrNotification.InvokeGroupCreated(new GroupCreatedEventArgs(newGroup));
         }
-        catch (ArgumentException ex)
-        {
-            var error = new SplittrException(ex, ex.Message);
-            callBack.OnError(error);
-        }
-        catch (SQLiteException ex)
-        {
-            var error = new SplittrException(ex, ex.Message);
-            callBack.OnError(error);
-        }
         catch (Exception ex)
         {
-            var error = new SplittrException(ex, ex.Message);
+            var error = new SplittrException.SplittrException(ex, ex.Message);
             callBack?.OnError(error);
         }
 

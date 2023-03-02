@@ -2,7 +2,6 @@
 using System.Threading;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DependencyInjector;
-using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
 
@@ -36,7 +35,7 @@ public class GetUserGroups :UseCaseBase<GetUserGroupResponse>
         {
             _useCase.PresenterCallBack?.OnSuccess(result);
         }
-        public void OnError(SplittrException ex)
+        public void OnError(SplittrException.SplittrException ex)
         {
             _useCase.PresenterCallBack?.OnError(ex);
         }

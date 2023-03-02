@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using SPLITTR_Uwp.Core.Adapters.SqlAdapter;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DataManager.ServiceObjects;
-using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.VerifyPaidExpense;
 using SQLite;
@@ -68,11 +67,11 @@ public class ExpenseHistoryManager : IExpenseHistoryManager
         }
         catch (SQLiteException ex)
         {
-            callBack?.OnError(new SplittrException(ex, "Db Fetch Error"));
+            callBack?.OnError(new SplittrException.SplittrException(ex, "Db Fetch Error"));
         }
         catch (Exception ex)
         {
-            callBack?.OnError(new SplittrException(ex,ex.Message));
+            callBack?.OnError(new SplittrException.SplittrException(ex,ex.Message));
         }
     }
 }

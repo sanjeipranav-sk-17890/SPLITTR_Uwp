@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using Windows.UI.Xaml;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SPLITTR_Uwp.Core.EventArg;
+using SPLITTR_Uwp.Core.SplittrException;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.LoginUser;
 using SPLITTR_Uwp.DataRepository;

@@ -50,11 +50,11 @@ public class AuthenticationManager : IAuthenticationManager,ISignUpDataManager
         }
         catch (ArgumentException ex)
         {
-            callBack?.OnError(new SplittrException(ex, ex.Message));
+            callBack?.OnError(new SplittrException.SplittrException(ex, ex.Message));
         }
         catch (Exception ex)
         {
-            callBack?.OnError(new SplittrException(ex, ex.Message));
+            callBack?.OnError(new SplittrException.SplittrException(ex, ex.Message));
         }
 
     }
@@ -75,11 +75,11 @@ public class AuthenticationManager : IAuthenticationManager,ISignUpDataManager
         }
         catch (SQLiteException e)
         {
-            callBack.OnError(new SplittrException(e, "Db Insertion error"));
+            callBack.OnError(new SplittrException.SplittrException(e, "Db Insertion error"));
         }
         catch (Exception ex)
         {
-            callBack?.OnError(new SplittrException(ex,ex.Message));
+            callBack?.OnError(new SplittrException.SplittrException(ex,ex.Message));
         }
     }
 }

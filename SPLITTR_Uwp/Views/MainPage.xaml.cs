@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -10,6 +11,9 @@ using Windows.UI.Xaml.Navigation;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.Core.SplittrException;
+using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.FetchExpenseCategory;
 using SPLITTR_Uwp.DataTemplates.Controls;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel;
@@ -237,5 +241,24 @@ public sealed partial class MainPage : Page, IMainView
     private void AddWalletBalanceButtonClicked()
     {
         WalletBalanceUpdateTeachingTip.IsOpen = !WalletBalanceUpdateTeachingTip.IsOpen;
+    }
+    private void TestButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        var fetchResponseUsecase = InstanceBuilder.CreateInstance<FetchExpenseCategory>(new FetchExpenseCategoryRequest(CancellationToken.None,new ToBeDeleted()));
+        fetchResponseUsecase.Execute();
+    }
+
+    //To Be Deleted.................
+    class ToBeDeleted: IPresenterCallBack<FetchExpenseCategoryResponse>
+    {
+
+        public void OnSuccess(FetchExpenseCategoryResponse result)
+        {
+            
+        }
+        public void OnError(SplittrException ex)
+        {
+            ExceptionHandlerService.HandleException(ex);
+        }
     }
 }
