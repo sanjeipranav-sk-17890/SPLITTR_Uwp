@@ -5,7 +5,7 @@ using Windows.Security.Credentials;
 using Windows.Storage;
 using Windows.UI.Xaml.Media.Animation;
 using SPLITTR_Uwp.Core.ModelBobj;
-using SPLITTR_Uwp.Core.SplittrException;
+using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.LoginUser;
 using SPLITTR_Uwp.DataRepository;

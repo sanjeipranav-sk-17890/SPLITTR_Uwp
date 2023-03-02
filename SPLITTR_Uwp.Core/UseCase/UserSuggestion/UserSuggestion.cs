@@ -3,6 +3,7 @@ using System.Threading;
 using SPLITTR_Uwp.Core.DataManager;
 using SPLITTR_Uwp.Core.DependencyInjector;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.Core.SplittrExceptions;
 
 namespace SPLITTR_Uwp.Core.UseCase.UserSuggestion;
 
@@ -42,7 +43,7 @@ public class UserSuggestion : UseCaseBase<UserSuggestionResponseObject>,IUseCase
     {
         PresenterCallBack?.OnSuccess(result);
     }
-    void IUseCaseCallBack<UserSuggestionResponseObject>.OnError(SplittrException.SplittrException ex)
+    void IUseCaseCallBack<UserSuggestionResponseObject>.OnError(SplittrException ex)
     {
         PresenterCallBack?.OnError(ex);
     }

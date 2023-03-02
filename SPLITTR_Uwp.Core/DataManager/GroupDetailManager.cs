@@ -1,9 +1,9 @@
 ﻿using System.Collections.Concurrent;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DbHandler.Contracts;
-using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.GetGroupDetails;
 

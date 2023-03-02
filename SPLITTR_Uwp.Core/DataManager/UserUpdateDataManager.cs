@@ -1,8 +1,8 @@
 ﻿using SPLITTR_Uwp.Core.CurrencyCoverter.Factory;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
-using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.UpdateUser;
@@ -81,11 +81,11 @@ public class UserUpdateDataManager : IUserUpdateDataManager
         }
         catch (UserNameInvalidException ex)
         {
-            callBack?.OnError(new SplittrException.SplittrException(ex,ex.Message));
+            callBack?.OnError(new SplittrException(ex,ex.Message));
         }
         catch (SQLiteException ex)
         {
-            callBack?.OnError(new SplittrException.SplittrException(ex, "Db Call Failed"));
+            callBack?.OnError(new SplittrException(ex, "Db Call Failed"));
         }
         
     }
@@ -99,7 +99,7 @@ public class UserUpdateDataManager : IUserUpdateDataManager
         }
         catch (SQLiteException ex)
         {
-            callBack?.OnError(new SplittrException.SplittrException(ex, "Db Call Failed"));
+            callBack?.OnError(new SplittrException(ex, "Db Call Failed"));
         }
     }
     public async void GetUsersSuggestionAsync(string userName, IUseCaseCallBack<UserSuggestionResponseObject> callBack)
@@ -112,7 +112,7 @@ public class UserUpdateDataManager : IUserUpdateDataManager
         }
         catch (SQLiteException e)
         {
-            callBack?.OnError(new SplittrException.SplittrException(e, "Db Fetch Error"));
+            callBack?.OnError(new SplittrException(e, "Db Fetch Error"));
         }
 
 

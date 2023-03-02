@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Animation;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.SignUpUser;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.Views;
 using System.Text.RegularExpressions;
-using SPLITTR_Uwp.Core.SplittrException;
+using SPLITTR_Uwp.Core.SplittrExceptions;
 
 namespace SPLITTR_Uwp.ViewModel;
 

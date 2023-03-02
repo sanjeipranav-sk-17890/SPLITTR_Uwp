@@ -7,6 +7,7 @@ using SPLITTR_Uwp.Core.DbHandler.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.GetUserExpenses;
 using SQLite;
@@ -39,7 +40,7 @@ public class ExpenseFetchDataManager : IExpenseFetchDataManager
         }
         catch (SQLiteException e)
         {
-            callBack?.OnError(new SplittrException.SplittrException(e, "db Fetch Error"));
+            callBack?.OnError(new SplittrException(e, "db Fetch Error"));
         }
 
     }

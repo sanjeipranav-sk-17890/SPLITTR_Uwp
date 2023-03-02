@@ -6,7 +6,7 @@ using System.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
-using SPLITTR_Uwp.Core.SplittrException;
+using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.GetGroupDetails;

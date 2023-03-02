@@ -156,6 +156,9 @@
     <Compile Include="DataRepository\Converters\TimeConverter.cs" />
     <Compile Include="DataRepository\Converters\UserInitialFormater.cs" />
     <Compile Include="DataRepository\Store.cs" />
+    <Compile Include="DataTemplates\Controls\ExpenseCategoryControl.xaml.cs">
+      <DependentUpon>ExpenseCategoryControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataTemplates\Controls\NoConnectionIndicator.xaml.cs">
       <DependentUpon>NoConnectionIndicator.xaml</DependentUpon>
     </Compile>
@@ -259,6 +262,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="DataTemplates\Controls\ExpenseCategoryControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DataTemplates\Controls\NoConnectionIndicator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

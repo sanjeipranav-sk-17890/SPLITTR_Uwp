@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
-using SPLITTR_Uwp.Core.EventArg;
+using SPLITTR_Uwp.Core.SplittrExceptions;
 
 namespace SPLITTR_Uwp.Core.Adapters.NetAdapter;
 

@@ -4,6 +4,7 @@ using SPLITTR_Uwp.Core.Adapters.SqlAdapter;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.SettleUpExpense;
 
@@ -79,11 +80,11 @@ public class SettleUpExpenseDataManager : ISettleUpSplitDataManager
         }
         catch (NotSupportedException ex)
         {
-            callBack?.OnError(new SplittrException.SplittrException(ex, "Insufficient Wallet Balance"));
+            callBack?.OnError(new SplittrException(ex, "Insufficient Wallet Balance"));
         }
         catch (Exception ex)
         {
-            callBack?.OnError(new SplittrException.SplittrException(ex, ex.Message));
+            callBack?.OnError(new SplittrException(ex, ex.Message));
         }
     }
 

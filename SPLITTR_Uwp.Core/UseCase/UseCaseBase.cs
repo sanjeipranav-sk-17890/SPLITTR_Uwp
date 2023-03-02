@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using SPLITTR_Uwp.Core.SplittrExceptions;
 
 namespace SPLITTR_Uwp.Core.UseCase;
 
@@ -31,7 +32,7 @@ public abstract class UseCaseBase<T> : IUseCaseBase
             }
             catch (Exception e)
             {
-                var exception = new SplittrException.SplittrException(e, e.Message);
+                var exception = new SplittrException(e, e.Message);
                 PresenterCallBack?.OnError(exception);
             }
         },_cts);

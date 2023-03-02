@@ -11,7 +11,6 @@ using Windows.UI.Xaml.Navigation;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.SplittrException;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.FetchExpenseCategory;
 using SPLITTR_Uwp.DataTemplates.Controls;

@@ -1,4 +1,6 @@
-﻿namespace SPLITTR_Uwp.Core.UseCase;
+﻿using SPLITTR_Uwp.Core.SplittrExceptions;
+
+namespace SPLITTR_Uwp.Core.UseCase;
 
 public class UseCaseCallBackBase<T> : IUseCaseCallBack<T>
 {
@@ -12,7 +14,7 @@ public class UseCaseCallBackBase<T> : IUseCaseCallBack<T>
     {
         _useCase?.PresenterCallBack.OnSuccess(result);
     }
-    public virtual void OnError(SplittrException.SplittrException ex)
+    public virtual void OnError(SplittrException ex)
     {
         _useCase?.PresenterCallBack.OnError(ex);
     }

@@ -1,5 +1,6 @@
 ﻿using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DependencyInjector;
+using SPLITTR_Uwp.Core.SplittrExceptions;
 
 namespace SPLITTR_Uwp.Core.UseCase.GetGroupDetails;
 
@@ -42,7 +43,7 @@ public class GroupDetailById : UseCaseBase<GroupDetailByIdResponse>
         {
             _useCase.PresenterCallBack?.OnSuccess(responseObj);
         }
-        public void OnError(SplittrException.SplittrException error)
+        public void OnError(SplittrException error)
         {
             _useCase?.PresenterCallBack?.OnError(error);
         }

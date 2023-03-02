@@ -3,6 +3,7 @@ using System.Threading;
 using SPLITTR_Uwp.Core.DataManager;
 using SPLITTR_Uwp.Core.DependencyInjector;
 using SPLITTR_Uwp.Core.ModelBobj;
+using SPLITTR_Uwp.Core.SplittrExceptions;
 
 namespace SPLITTR_Uwp.Core.UseCase.FetchExpenseCategory
 {
@@ -33,7 +34,7 @@ namespace SPLITTR_Uwp.Core.UseCase.FetchExpenseCategory
             {
                _useCase?.PresenterCallBack?.OnSuccess(responseObj);
             }
-            public void OnError(SplittrException.SplittrException error)
+            public void OnError(SplittrException error)
             {
                 _useCase?.PresenterCallBack?.OnError(error);
             }

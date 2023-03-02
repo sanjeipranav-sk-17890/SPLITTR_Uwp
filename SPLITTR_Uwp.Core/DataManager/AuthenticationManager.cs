@@ -48,10 +48,6 @@ public class AuthenticationManager : IAuthenticationManager,ISignUpDataManager
             callBack?.OnSuccess(new LoginResponseObj(currentUser, true));
 
         }
-        catch (ArgumentException ex)
-        {
-            callBack?.OnError(new SplittrException.SplittrException(ex, ex.Message));
-        }
         catch (Exception ex)
         {
             callBack?.OnError(new SplittrException.SplittrException(ex, ex.Message));
@@ -72,10 +68,6 @@ public class AuthenticationManager : IAuthenticationManager,ISignUpDataManager
             await _userDbHandler.InsertUserObjAsync(newUser).ConfigureAwait(false);
 
             callBack.OnSuccess(new SignUpUserResponseObj(newUser));
-        }
-        catch (SQLiteException e)
-        {
-            callBack.OnError(new SplittrException.SplittrException(e, "Db Insertion error"));
         }
         catch (Exception ex)
         {

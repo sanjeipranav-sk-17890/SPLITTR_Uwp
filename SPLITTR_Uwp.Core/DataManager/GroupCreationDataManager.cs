@@ -4,6 +4,7 @@ using System.Linq;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.CreateGroup;
@@ -55,7 +56,7 @@ public class GroupCreationDataManager : IGroupCreationDataManager
         }
         catch (Exception ex)
         {
-            var error = new SplittrException.SplittrException(ex, ex.Message);
+            var error = new SplittrException(ex, ex.Message);
             callBack?.OnError(error);
         }
 

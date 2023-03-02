@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.Core.NetHandler;
+using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.FetchExpenseCategory;
 
@@ -44,7 +46,7 @@ namespace SPLITTR_Uwp.Core.DataManager
             }
             catch (Exception e)
             {
-                callBack?.OnError(new SplittrException.SplittrException(e));
+                callBack?.OnError(new SplittrException(e));
             }
 
         }

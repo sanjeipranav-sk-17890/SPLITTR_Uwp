@@ -6,7 +6,7 @@ using Windows.UI.Xaml;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.Core.SplittrException;
+using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.CreateGroup;
 using SPLITTR_Uwp.Core.UseCase.UserSuggestion;
