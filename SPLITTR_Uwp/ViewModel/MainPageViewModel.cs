@@ -25,7 +25,6 @@ internal class MainPageViewModel : ObservableObject, IMainPageViewModel
 
     private readonly IStateService _stateService;
     private string _userInitial;
-    private bool _isUpdateWalletBalanceTeachingTipOpen;
 
 
     public MainPageViewModel(IStateService stateService)
@@ -41,12 +40,6 @@ internal class MainPageViewModel : ObservableObject, IMainPageViewModel
     }
 
     public UserVobj UserVobj { get; }
-
-    public bool IsUpdateWalletBalanceTeachingTipOpen
-    {
-        get => _isUpdateWalletBalanceTeachingTipOpen;
-        set => SetProperty(ref _isUpdateWalletBalanceTeachingTipOpen, value);
-    }
 
     public ObservableCollection<GroupBobj> UserGroups { get; } = new ObservableCollection<GroupBobj>();
 

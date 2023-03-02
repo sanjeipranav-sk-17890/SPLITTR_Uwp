@@ -136,7 +136,7 @@ namespace SPLITTR_Uwp.Core.DataManager
                 {
                     Id = o.Value<int>("id"),
                     Name = o.Value<string>("name"),
-                    Icon = o["icon_types"]["transparent"]["large"].Value<string>()
+                    Icon = o["icon_types"]["square"]["large"].Value<string>()
                 };
                 return subCategory;
             }

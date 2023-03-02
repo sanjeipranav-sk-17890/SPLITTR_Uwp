@@ -146,10 +146,7 @@
 
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
-                <!-- -->
-                <Button x:Name="TestButton" Click="TestButton_OnClick">To Be Deleted ExpenseCategory Testing</Button>
                 <themeButton:NoConnectionIndicator VerticalAlignment="Center" ToolTipService.ToolTip="No Internet"/>
-                <!-- -->
                 <Button Style="{StaticResource AddWalletButtonStyle}" ToolTipService.ToolTip="DashBoard"
                         VerticalAlignment="Stretch" Click="DashBoardButton_OnClick" x:Name="DashBoardPaneOpenButton" >
                     <Button.Content>

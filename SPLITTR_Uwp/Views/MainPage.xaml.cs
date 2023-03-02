@@ -242,23 +242,4 @@ public sealed partial class MainPage : Page, IMainView
     {
         WalletBalanceUpdateTeachingTip.IsOpen = !WalletBalanceUpdateTeachingTip.IsOpen;
     }
-    private void TestButton_OnClick(object sender, RoutedEventArgs e)
-    {
-        var fetchResponseUsecase = InstanceBuilder.CreateInstance<FetchExpenseCategory>(new FetchExpenseCategoryRequest(CancellationToken.None,new ToBeDeleted()));
-        fetchResponseUsecase.Execute();
-    }
-
-    //To Be Deleted.................
-    class ToBeDeleted: IPresenterCallBack<FetchExpenseCategoryResponse>
-    {
-
-        public void OnSuccess(FetchExpenseCategoryResponse result)
-        {
-            
-        }
-        public void OnError(SplittrException ex)
-        {
-            ExceptionHandlerService.HandleException(ex);
-        }
-    }
 }
