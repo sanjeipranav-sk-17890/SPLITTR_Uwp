@@ -91,7 +91,7 @@
                        Grid.Column="0"
                        FontSize="16"
                        Margin="4 4 0 0"
-                       FontWeight="Light">Total Expenditure :</TextBlock>
+                       FontWeight="Medium">Total Expenditure :</TextBlock>
             <TextBlock Grid.Column="1"
                        Grid.Row="0"
                        FontWeight="Bold"
@@ -102,7 +102,7 @@
                        Grid.Column="0"
                        Margin="4 4 0 0"
                        FontSize="16"
-                       FontWeight="Light"
+                       FontWeight="Medium"
                        Foreground="{ThemeResource AccentTextColorBrush}">Description :</TextBlock>
             <TextBlock Grid.Row="1"
                        Grid.Column="1"

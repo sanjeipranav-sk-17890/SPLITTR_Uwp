@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DbHandler.Contracts;
-using SPLITTR_Uwp.Core.EventArg;
 using SPLITTR_Uwp.Core.Models;
+using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.LoginUser;
 using SPLITTR_Uwp.Core.UseCase.SignUpUser;
@@ -50,7 +50,7 @@ public class AuthenticationManager : IAuthenticationManager,ISignUpDataManager
         }
         catch (Exception ex)
         {
-            callBack?.OnError(new SplittrException.SplittrException(ex, ex.Message));
+            callBack?.OnError(new SplittrException(ex, ex.Message));
         }
 
     }
@@ -71,7 +71,7 @@ public class AuthenticationManager : IAuthenticationManager,ISignUpDataManager
         }
         catch (Exception ex)
         {
-            callBack?.OnError(new SplittrException.SplittrException(ex,ex.Message));
+            callBack?.OnError(new SplittrException(ex,ex.Message));
         }
     }
 }

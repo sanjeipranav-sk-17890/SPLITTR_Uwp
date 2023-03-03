@@ -15,8 +15,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ModelBobj;
-using SPLITTR_Uwp.Core.SplittrException;
+using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.FetchExpenseCategory;
 using SPLITTR_Uwp.Services;
@@ -28,45 +29,68 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
 {
     public sealed partial class ExpenseCategoryControl : UserControl
     {
+        private CategoryControlViewModel _viewModel;
         public ExpenseCategoryControl()
         {
+            _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<CategoryControlViewModel>(App.Container);
             this.InitializeComponent();
         }
-    }
-    public class CategoryControlViewModel : ObservableObject
-    {
-        public ObservableCollection<ExpenseCategoryBobj> Categories { get; } = new ObservableCollection<ExpenseCategoryBobj>();
-
-        /// <summary>
-        /// Call to Expense category UseCase To Fetch Data
-        /// </summary>
-        public void LoadData()
+        private void CatogoriesFlyOut_Opening(object sender, object e)
         {
-            var fetchCategoryReq = new FetchExpenseCategoryRequest(CancellationToken.None, null);
+            if (_viewModel.Categories.Count > 0)
+            {
+                return;
+            }
+            _viewModel.LoadData();
         }
 
-
-        class CategoryControlVmPresenterCb : IPresenterCallBack<FetchExpenseCategoryResponse>
+        private void CategoryImageClicked(object sender, RoutedEventArgs e)
         {
-            private readonly CategoryControlViewModel _viewModel;
-            public CategoryControlVmPresenterCb(CategoryControlViewModel _viewModel)
+            if (sender is Button btn)
             {
-                this._viewModel = _viewModel;
             }
 
-            public async void OnSuccess(FetchExpenseCategoryResponse result)
+        }
+        public class CategoryControlViewModel : ObservableObject
+        {
+            public ObservableCollection<ExpenseCategoryBobj> Categories { get; } = new ObservableCollection<ExpenseCategoryBobj>();
+
+            /// <summary>
+            /// Call to Expense category UseCase To Fetch Data
+            /// </summary>
+            public void LoadData()
             {
-                await RunOnUiThread(() =>
-                { 
-                    _viewModel.Categories.ClearAndAdd(result.Categories);
-                }).ConfigureAwait(false);
+                var fetchCategoryReq = new FetchExpenseCategoryRequest(CancellationToken.None, new CategoryControlVmPresenterCb(this));
+
+                var fetchCategoryUseCaseObj = InstanceBuilder.CreateInstance<FetchExpenseCategory>(fetchCategoryReq);
+
+                fetchCategoryUseCaseObj?.Execute();
             }
-            public void OnError(SplittrException ex)
+
+
+            class CategoryControlVmPresenterCb : IPresenterCallBack<FetchExpenseCategoryResponse>
             {
-               ExceptionHandlerService.HandleException(ex);
+                private readonly CategoryControlViewModel _viewModel;
+
+                public CategoryControlVmPresenterCb(CategoryControlViewModel viewModel)
+                {
+                    this._viewModel = viewModel;
+                }
+
+                public async void OnSuccess(FetchExpenseCategoryResponse result)
+                {
+                    await RunOnUiThread(() =>
+                    {
+                        _viewModel.Categories.ClearAndAdd(result.Categories);
+                    }).ConfigureAwait(false);
+                }
+                public void OnError(SplittrException ex)
+                {
+                    ExceptionHandlerService.HandleException(ex);
+                }
             }
+
         }
 
     }
-
 }

@@ -9,6 +9,7 @@
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:splittrUwp="using:SPLITTR_Uwp"
+    xmlns:controls="using:SPLITTR_Uwp.DataTemplates.Controls"
     mc:Ignorable="d"
     d:DesignHeight="100"
     d:DesignWidth="500">
@@ -126,10 +127,15 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Image Source="../Assets/icons/BillImage.png"
+                <!--<Image Source="../Assets/icons/BillImage.png"
                        Stretch="UniformToFill"
                        Grid.Column="0" Grid.RowSpan="2"
-                       MaxHeight="40"/>
+                       MaxHeight="40"/>-->
+                <controls:ExpenseCategoryControl 
+                    MaxHeight="40"
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Grid.RowSpan="2"/>
                 <TextBlock  Text="{x:Bind ExpenseObj.Description,Mode=OneWay}"
                            FontSize="15"
                            x:Name="DescriptionTextBox"

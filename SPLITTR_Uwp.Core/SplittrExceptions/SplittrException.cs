@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SPLITTR_Uwp.Core.SplittrException;
+namespace SPLITTR_Uwp.Core.SplittrExceptions;
 
 public class SplittrException : Exception
 {

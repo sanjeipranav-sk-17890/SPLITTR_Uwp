@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace SPLITTR_Uwp.Core.EventArg;
+namespace SPLITTR_Uwp.Core.SplittrExceptions;
 
-public class GroupIdInvalidException : SplittrException.SplittrException
+public class GroupIdInvalidException : SplittrException
 {
 
     public GroupIdInvalidException(Exception ex, string message) : base(ex, message)

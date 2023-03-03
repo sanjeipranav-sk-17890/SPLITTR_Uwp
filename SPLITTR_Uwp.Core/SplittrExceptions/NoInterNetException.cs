@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace SPLITTR_Uwp.Core.EventArg;
+namespace SPLITTR_Uwp.Core.SplittrExceptions;
 
-public class NoInterNetException : SplittrException.SplittrException
+public class NoInterNetException : SplittrException
 {
     public NoInterNetException()
     {

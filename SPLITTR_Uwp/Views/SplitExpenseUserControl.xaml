@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="using:System"
+    xmlns:localControl="using:SPLITTR_Uwp.DataTemplates.Controls"
     xmlns:local="using:SPLITTR_Uwp.DataTemplates"
     xmlns:converter="using:SPLITTR_Uwp.DataRepository.Converters"
     xmlns:model="using:SPLITTR_Uwp.Core.Models"
@@ -528,16 +529,14 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <Image Grid.Row="0"
-                       Grid.Column="0"
-                       Source="../Assets/icons/BillImage.png"
-                       Height="80"
-                       ToolTipService.ToolTip="Category : UnCategorized"
-                       Margin="10 5 0 0"
-                       Stretch="Uniform"
-                       Width="50"></Image>
-                
-                    <Grid  Grid.Row="0"
+                <localControl:ExpenseCategoryControl Width="50"
+                                                     Height="80"
+                                                     Grid.Row="0"
+                                                     Grid.Column="0"
+                                                     ToolTipService.ToolTip="Category : UnCategorized"
+                                                     Margin="10 5 0 0"/>
+
+                <Grid  Grid.Row="0"
                            Grid.Column="1">
                        <Grid.RowDefinitions>
                            <RowDefinition Height="Auto"/>

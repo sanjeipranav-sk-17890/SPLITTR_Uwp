@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SPLITTR_Uwp.Core.EventArg;
+namespace SPLITTR_Uwp.Core.SplittrExceptions;
 
 public class UserNameInvalidException : Exception
 {

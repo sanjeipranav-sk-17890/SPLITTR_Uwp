@@ -17,9 +17,9 @@ public class SqlDataBaseAdapter : ISqlDataAdapter
 
     }
 
-    public async Task CreateTable<T>() where T : new()
+    public Task CreateTable<T>() where T : new()
     {
-        await _connection.CreateTableAsync<T>().ConfigureAwait(false);
+        return _connection.CreateTableAsync<T>();
     }
 
     public AsyncTableQuery<T> FetchTable<T>() where T : new()
