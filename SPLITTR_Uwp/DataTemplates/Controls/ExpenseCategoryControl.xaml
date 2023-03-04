@@ -5,6 +5,9 @@
     xmlns:local="using:SPLITTR_Uwp.DataTemplates.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:modelBobj="using:SPLITTR_Uwp.Core.ModelBobj"
+    xmlns:control="using:Microsoft.UI.Xaml.Controls"
+    xmlns:model="using:SPLITTR_Uwp.Core.Models"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -94,6 +97,146 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="NoMarginFlyoutPresenterStyle" TargetType="FlyoutPresenter">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="Background" Value="{ThemeResource FlyoutPresenterBackground}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource FlyoutBorderThemeBrush}"/>
+            <Setter Property="BorderThickness" Value="{ThemeResource FlyoutBorderThemeThickness}"/>
+            <Setter Property="Padding" Value="{ThemeResource FlyoutContentThemePadding}"/>
+            <Setter Property="MinWidth" Value="{ThemeResource FlyoutThemeMinWidth}"/>
+            <Setter Property="MaxWidth" Value="{ThemeResource FlyoutThemeMaxWidth}"/>
+            <Setter Property="MinHeight" Value="{ThemeResource FlyoutThemeMinHeight}"/>
+            <Setter Property="MaxHeight" Value="{ThemeResource FlyoutThemeMaxHeight}"/>
+            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Auto"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollMode" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.ZoomMode" Value="Disabled"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="FlyoutPresenter">
+                        <Border Background="Transparent" BackgroundSizing="OuterBorderEdge" BorderBrush="Transparent" BorderThickness="0" CornerRadius="{TemplateBinding CornerRadius}" Padding="0">
+                            <ScrollViewer x:Name="ScrollViewer" AutomationProperties.AccessibilityView="Raw" HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}" VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}" VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}" ZoomMode="{TemplateBinding ScrollViewer.ZoomMode}">
+                                <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentTransitions="{TemplateBinding ContentTransitions}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="NoPaddingListViewItemContainer" TargetType="ListViewItem">
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+            <Setter Property="Background" Value="{ThemeResource ListViewItemBackground}"/>
+            <Setter Property="Foreground" Value="{ThemeResource ListViewItemForeground}"/>
+            <Setter Property="TabNavigation" Value="Local"/>
+            <Setter Property="IsHoldingEnabled" Value="True"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Width" Value="32"></Setter>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="MinWidth" Value="0"/>
+            <Setter Property="MinHeight" Value="0"/>
+            <Setter Property="AllowDrop" Value="False"/>
+            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}"/>
+            <Setter Property="FocusVisualMargin" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <ListViewItemPresenter x:Name="Root" 
+                                               CheckMode="{ThemeResource ListViewItemCheckMode}" 
+                                               CheckBoxBrush="{ThemeResource ListViewItemCheckBoxBrush}"
+                                               CheckBrush="{ThemeResource ListViewItemCheckBrush}" 
+                                               ContentMargin="1"
+                                               ContentTransitions="{TemplateBinding ContentTransitions}"
+                                               DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}" 
+                                               DragBackground="{ThemeResource ListViewItemDragBackground}"
+                                               DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}"
+                                               DragForeground="{ThemeResource ListViewItemDragForeground}" 
+                                               FocusVisualMargin="{TemplateBinding FocusVisualMargin}"
+                                               FocusBorderBrush="{ThemeResource ListViewItemFocusBorderBrush}" 
+                                               FocusSecondaryBorderBrush="{ThemeResource ListViewItemFocusSecondaryBorderBrush}" 
+                                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                               Control.IsTemplateFocusTarget="True" 
+                                               PlaceholderBackground="{ThemeResource ListViewItemPlaceholderBackground}" 
+                                               PointerOverBackground="{ThemeResource ListViewItemBackgroundPointerOver}" 
+                                               PointerOverForeground="{ThemeResource ListViewItemForegroundPointerOver}" 
+                                               PressedBackground="{ThemeResource ListViewItemBackgroundPressed}" 
+                                               RevealBorderThickness="{ThemeResource ListViewItemRevealBorderThemeThickness}" 
+                                               RevealBackground="{ThemeResource ListViewItemRevealBackground}" 
+                                               RevealBorderBrush="{ThemeResource ListViewItemRevealBorderBrush}"
+                                               ReorderHintOffset="{ThemeResource ListViewItemReorderHintThemeOffset}"
+                                               SelectedForeground="{ThemeResource ListViewItemForegroundSelected}"
+                                               SelectedPointerOverBackground="{ThemeResource ListViewItemBackgroundSelectedPointerOver}" 
+                                               SelectionCheckMarkVisualEnabled="True" 
+                                               SelectedBackground="{ThemeResource ListViewItemBackgroundSelected}"
+                                               SelectedPressedBackground="{ThemeResource ListViewItemBackgroundSelectedPressed}" 
+                                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Target="Root.Opacity" Value="0.5"></Setter>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Target="Root.RevealBorderBrush" Value="Black"></Setter>
+                                            <Setter Target="Root.RevealBorderThickness" Value="1.5"></Setter>
+                                            <Setter Target="Root.Opacity" Value="1"></Setter>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="PointerOver">
+                                        <VisualState.Setters>
+                                            <Setter Target="Root.Opacity" Value="1"></Setter>
+                                            <Setter Target="Root.(RevealBrush.State)" Value="PointerOver"/>
+                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPointerOver}"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="PointerOverSelected">
+                                        <VisualState.Setters>
+                                            <Setter Target="Root.(RevealBrush.State)" Value="PointerOver"/>
+                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPointerOver}"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="PointerOverPressed">
+                                        <VisualState.Setters>
+                                            <Setter Target="Root.Opacity" Value="1"></Setter>
+                                            <Setter Target="Root.(RevealBrush.State)" Value="Pressed"/>
+                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPressed}"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <VisualState.Setters>
+                                            <Setter Target="Root.Opacity" Value="1"></Setter>
+                                            <Setter Target="Root.(RevealBrush.State)" Value="Pressed"/>
+                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPressed}"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="PressedSelected">
+                                        <VisualState.Setters>
+                                            <Setter Target="Root.Opacity" Value="1"></Setter>
+                                            <Setter Target="Root.(RevealBrush.State)" Value="Pressed"/>
+                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPressed}"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="DisabledStates">
+                                    <VisualState x:Name="Enabled"/>
+                                    <VisualState x:Name="Disabled">
+                                        <VisualState.Setters>
+                                            <Setter Target="Root.RevealBorderThickness" Value="0"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </ListViewItemPresenter>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
     <Button Style="{StaticResource CategoryControlButton}" BorderBrush="Transparent"
             BorderThickness="0"
@@ -102,12 +245,51 @@
             <Image Source="../../Assets/icons/BillImage.png" Stretch="Uniform"/>
         </Button.Content>
         <Button.Flyout>
-            <Flyout AreOpenCloseAnimationsEnabled="True"
+            <Flyout FlyoutPresenterStyle="{StaticResource NoMarginFlyoutPresenterStyle}" AreOpenCloseAnimationsEnabled="True"
                     ShouldConstrainToRootBounds="True"  
                     Opening="CatogoriesFlyOut_Opening"
                     Placement="BottomEdgeAlignedLeft">
                 <ListView ItemsSource="{x:Bind _viewModel.Categories}"
-                          SelectionMode="None"></ListView>
+                          SelectionMode="None"
+                          CornerRadius="4"
+                          Background="{ThemeResource ApplicationMainThemeAcrylicBrush}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="modelBobj:ExpenseCategoryBobj">
+                            <ListView ItemsSource="{x:Bind SubExpenseCategories}"
+                                      SelectionMode="Single"
+                                      SelectionChanged="SubCategory_ListOnSelectionChanged"
+                                      VerticalContentAlignment="Top" ItemContainerStyle="{StaticResource NoPaddingListViewItemContainer}"
+                                      Margin="0 0 4 0">
+                                <ListView.Header>
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Top"
+                                                    Width="120">
+                                            <TextBlock VerticalAlignment="Top"
+                                                       Text="{x:Bind Name}"/>
+                                            <TextBlock VerticalAlignment="Top"
+                                                       Text=":"/>
+                                        </StackPanel>
+                                    </ListView.Header>
+                                    <ListView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <ItemsStackPanel Orientation="Horizontal" GroupHeaderPlacement="Left"/>
+                                        </ItemsPanelTemplate>
+                                    </ListView.ItemsPanel>
+                                    <ListView.ItemTemplate>
+                                         <DataTemplate x:DataType="model:ExpenseCategory">
+                                             <local:SubcategoryIconControl HorizontalAlignment="Stretch"
+                                                                           VerticalAlignment="Stretch"
+                                                                           x:Name="IconControl"
+                                                                           TeachingTipContent="Testing"/>
+                                         </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                  
+                                   
+                            </ListView>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </Flyout>
         </Button.Flyout>
     </Button>

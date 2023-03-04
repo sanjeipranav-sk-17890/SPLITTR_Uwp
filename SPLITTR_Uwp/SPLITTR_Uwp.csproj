@@ -165,6 +165,9 @@
     <Compile Include="DataTemplates\Controls\SplittrDashBoard.xaml.cs">
       <DependentUpon>SplittrDashBoard.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataTemplates\Controls\SubcategoryIconControl.xaml.cs">
+      <DependentUpon>SubcategoryIconControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataTemplates\Controls\ThemeChangerButton.xaml.cs">
       <DependentUpon>ThemeChangerButton.xaml</DependentUpon>
     </Compile>
@@ -271,6 +274,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataTemplates\Controls\SplittrDashBoard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataTemplates\Controls\SubcategoryIconControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

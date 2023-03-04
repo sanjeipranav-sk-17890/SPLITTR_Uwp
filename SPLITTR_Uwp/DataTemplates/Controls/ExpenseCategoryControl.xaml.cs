@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using Windows.Foundation;
@@ -17,6 +18,7 @@ using Windows.UI.Xaml.Navigation;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ModelBobj;
+using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.FetchExpenseCategory;
@@ -51,6 +53,46 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             }
 
         }
+        public event Action<ExpenseCategory> OnExpenseCategorySelected;
+
+        private void SubCategory_ListOnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is not ListView selectedListView)
+            {
+                return;
+            }
+            var selectedCategory = GetMultiListViewSingularExpenseCategorySelection(selectedListView);
+            OnExpenseCategorySelected?.Invoke(selectedCategory);
+        }
+
+
+
+        private ListView _previousSelectionMadeListControl;
+        /// <summary>
+        /// only allows one item to be selected in a whole collection of ListView and
+        /// Returns selected item and unselecting Previous selection
+        /// </summary>
+        /// <param name="selectedListView"></param>
+        /// <returns></returns>
+        private ExpenseCategory GetMultiListViewSingularExpenseCategorySelection(ListView selectedListView)
+        {
+
+            if (_previousSelectionMadeListControl is null)
+            {
+                _previousSelectionMadeListControl = selectedListView;
+                return (ExpenseCategory)selectedListView.SelectedItem;
+                
+            }
+            if (_previousSelectionMadeListControl != selectedListView)
+            {
+                _previousSelectionMadeListControl.SelectedIndex = -1;
+                _previousSelectionMadeListControl = selectedListView;
+                 return (ExpenseCategory)selectedListView.SelectedItem;
+            }
+            return (ExpenseCategory)selectedListView.SelectedItem;
+           
+        }
+    }
         public class CategoryControlViewModel : ObservableObject
         {
             public ObservableCollection<ExpenseCategoryBobj> Categories { get; } = new ObservableCollection<ExpenseCategoryBobj>();
@@ -91,6 +133,4 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             }
 
         }
-
-    }
 }

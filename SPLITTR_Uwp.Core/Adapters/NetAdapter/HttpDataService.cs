@@ -20,7 +20,7 @@ public class HttpDataService : INetAdapter
         _responseCache = new Dictionary<string, HttpResponseMessage>();
     }
 
-    public async Task<HttpResponseMessage> GetAsync(string baseUri,string uri, string accessToken = null, bool forceRefresh = false)
+    public async Task<HttpResponseMessage> GetAsync(string baseUri,string uri, string accessToken = null, bool forceRefresh = true)
     {
         ThrowIfNetworkNotAvailable();
 

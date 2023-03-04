@@ -24,13 +24,10 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
     {
         public NoConnectionIndicator()
         {
-            Visibility = Visibility.Collapsed;
-            this.InitializeComponent();
-
             Loaded += NoConnectionIndicator_Loaded;
-
-            //Subscribing For Change in Network Connection
             NetworkInformation.NetworkStatusChanged += NetworkInformationOnNetworkStatusChanged;
+            this.InitializeComponent();
+            //Subscribing For Change in Network Connection
         }
 
         private void NoConnectionIndicator_Loaded(object sender, RoutedEventArgs e)
