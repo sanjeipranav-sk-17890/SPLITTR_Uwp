@@ -212,9 +212,9 @@
     <Compile Include="ViewModel\Contracts\IMainPageViewModel.cs" />
     <Compile Include="ViewModel\LoginPageViewModel.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />
-    <Compile Include="ViewModel\Models\ExpenseListObject\ExpenseGroupingList.cs" />
-    <Compile Include="ViewModel\Models\ExpenseVobj.cs" />
-    <Compile Include="ViewModel\Models\UserVobj.cs" />
+    <Compile Include="ViewModel\Vobj\ExpenseListObject\ExpenseGroupingList.cs" />
+    <Compile Include="ViewModel\Vobj\ExpenseVobj.cs" />
+    <Compile Include="ViewModel\Vobj\UserVobj.cs" />
     <Compile Include="ViewModel\SignPageViewModel.cs" />
     <Compile Include="ViewModel\SplitExpenseViewModel.cs" />
     <Compile Include="ViewModel\UserProfilePageViewModel.cs" />
