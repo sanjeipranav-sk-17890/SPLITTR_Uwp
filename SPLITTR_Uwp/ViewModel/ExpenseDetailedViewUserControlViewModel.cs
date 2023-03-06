@@ -13,7 +13,7 @@ using SPLITTR_Uwp.Core.UseCase.GetGroupDetails;
 using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
-using SPLITTR_Uwp.ViewModel.Models;
+using SPLITTR_Uwp.ViewModel.Vobj;
 using static SPLITTR_Uwp.Services.UiService;
 
 namespace SPLITTR_Uwp.ViewModel;

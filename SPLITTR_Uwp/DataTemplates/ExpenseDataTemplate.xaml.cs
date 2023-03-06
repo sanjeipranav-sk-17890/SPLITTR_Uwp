@@ -5,7 +5,7 @@ using Windows.UI.Xaml.Input;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.ViewModel;
-using SPLITTR_Uwp.ViewModel.Models;
+using SPLITTR_Uwp.ViewModel.Vobj;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 

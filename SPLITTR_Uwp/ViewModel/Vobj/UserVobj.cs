@@ -5,7 +5,7 @@ using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Services;
 
-namespace SPLITTR_Uwp.ViewModel.Models;
+namespace SPLITTR_Uwp.ViewModel.Vobj;
 
 public class UserVobj : UserBobj, INotifyPropertyChanged
 {

@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 
-namespace SPLITTR_Uwp.ViewModel.Models.ExpenseListObject;
+namespace SPLITTR_Uwp.ViewModel.Vobj.ExpenseListObject;
 
 public class ExpenseGroupingList :ObservableCollection<ExpenseBobj>
 {

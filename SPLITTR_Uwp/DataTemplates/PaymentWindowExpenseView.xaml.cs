@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.DataRepository;
-using SPLITTR_Uwp.ViewModel.Models;
+using SPLITTR_Uwp.ViewModel.Vobj;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 

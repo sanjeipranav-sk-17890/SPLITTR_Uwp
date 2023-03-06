@@ -6,6 +6,7 @@ using SPLITTR_Uwp.Core.CurrencyCoverter;
 using SPLITTR_Uwp.Core.CurrencyCoverter.Factory;
 using SPLITTR_Uwp.Core.DataManager;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
+using SPLITTR_Uwp.Core.DataManager.Services;
 using SPLITTR_Uwp.Core.DbHandler;
 using SPLITTR_Uwp.Core.DbHandler.Contracts;
 using SPLITTR_Uwp.Core.NetHandler;
@@ -61,6 +62,7 @@ public class SplittrDependencyService
             .AddSingleton<IExpenseCategoryManager,ExpenseCategoryManager>()
             .AddSingleton<INetAdapter,HttpDataService>()
             .AddSingleton<IExpenseCategoryNetHandler,ExpenseCategoryNetHandler>()
+            .AddTransient<IExpenseCategoryJsonToPoCoConverter,ExpenseCategoriesDeserializer>()
             .AddTransient<RupessConverter>()
             .AddTransient<DollarConverter>()
             .AddTransient<YenConverter>()

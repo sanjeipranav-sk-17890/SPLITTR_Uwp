@@ -6,8 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:template="using:SPLITTR_Uwp.DataTemplates"
-    xmlns:vm="using:SPLITTR_Uwp.ViewModel.Models"
-    xmlns:header="using:SPLITTR_Uwp.ViewModel.Models.ExpenseListObject"
+    xmlns:vobj="using:SPLITTR_Uwp.ViewModel.Vobj"
+    xmlns:expenseListObject="using:SPLITTR_Uwp.ViewModel.Vobj.ExpenseListObject"
     mc:Ignorable="d"
     d:DesignHeight="300" Background="Transparent"
     d:DesignWidth="400">
@@ -134,7 +134,7 @@
                       Grid.ColumnSpan="2"
                       SelectedItem="{x:Bind _viewModel.SelectedExpenseObj,Mode=TwoWay}">
                 <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="vm:ExpenseVobj">
+                    <DataTemplate x:DataType="vobj:ExpenseVobj">
                         <template:ExpenseDataTemplate HorizontalAlignment="Stretch"
                                                         CornerRadius="5"
                                                         OnGroupInfoButtonClicked="ExpenseDataTemplate_OnOnGroupInfoButtonClicked"
@@ -146,7 +146,7 @@
                 <ListView.GroupStyle>
                     <GroupStyle>
                         <GroupStyle.HeaderTemplate>
-                            <DataTemplate x:DataType="header:ExpenseGroupingList" >
+                            <DataTemplate x:DataType="expenseListObject:ExpenseGroupingList" >
                                 <Grid HorizontalAlignment="Stretch" Width="{Binding ElementName=ExpensesLIstView,Path=ActualWidth,Mode=OneWay}">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -212,7 +212,7 @@
                       Grid.ColumnSpan="2"
                       SelectedItem="{x:Bind _viewModel.SelectedExpenseObj,Mode=TwoWay}">
                 <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="vm:ExpenseVobj">
+                    <DataTemplate x:DataType="vobj:ExpenseVobj">
                         <template:ExpenseDataTemplate HorizontalAlignment="Stretch"
                                                         CornerRadius="5"
                                                         OnGroupInfoButtonClicked="ExpenseDataTemplate_OnOnGroupInfoButtonClicked"

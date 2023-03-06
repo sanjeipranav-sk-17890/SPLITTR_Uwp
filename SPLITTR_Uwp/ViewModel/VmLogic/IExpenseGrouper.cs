@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using SPLITTR_Uwp.Core.ModelBobj;
-using SPLITTR_Uwp.ViewModel.Models.ExpenseListObject;
+using SPLITTR_Uwp.ViewModel.Vobj.ExpenseListObject;
 
 namespace SPLITTR_Uwp.ViewModel.VmLogic;
 

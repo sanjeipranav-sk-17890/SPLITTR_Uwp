@@ -1,7 +1,7 @@
 ﻿using System;
 using SQLite;
 
-namespace SPLITTR_Uwp.Core.DataManager.ServiceObjects;
+namespace SPLITTR_Uwp.Core.DataManager.Services;
 
 public class ExpenseHistory 
 {

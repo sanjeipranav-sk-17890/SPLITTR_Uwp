@@ -11,7 +11,7 @@ using SPLITTR_Uwp.Core.UseCase.VerifyPaidExpense;
 using SPLITTR_Uwp.Core.Utility;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
-using SPLITTR_Uwp.ViewModel.Models;
+using SPLITTR_Uwp.ViewModel.Vobj;
 using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel;

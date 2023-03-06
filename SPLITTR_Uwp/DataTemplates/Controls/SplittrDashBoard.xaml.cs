@@ -12,8 +12,8 @@ using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.UpdateUser;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
-using SPLITTR_Uwp.ViewModel.Models;
 using SPLITTR_Uwp.ViewModel.VmLogic;
+using SPLITTR_Uwp.ViewModel.Vobj;
 
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236

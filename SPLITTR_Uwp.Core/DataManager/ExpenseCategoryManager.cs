@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.NetHandler;
@@ -21,11 +21,13 @@ namespace SPLITTR_Uwp.Core.DataManager
     internal class ExpenseCategoryManager : IExpenseCategoryManager
     {
         private readonly IExpenseCategoryNetHandler _expenseCategoryNetHandler;
+        private readonly IExpenseCategoryJsonToPoCoConverter _expenseCategoriesDeserializer;
         private readonly ConcurrentDictionary<int,ExpenseCategoryBobj> _expenseCategoryCache = new ConcurrentDictionary<int,ExpenseCategoryBobj>();
 
-        public ExpenseCategoryManager(IExpenseCategoryNetHandler expenseCategoryNetHandler)
+        public ExpenseCategoryManager(IExpenseCategoryNetHandler expenseCategoryNetHandler,IExpenseCategoryJsonToPoCoConverter expenseCategoriesDeserializer)
         {
             _expenseCategoryNetHandler = expenseCategoryNetHandler;
+            _expenseCategoriesDeserializer = expenseCategoriesDeserializer;
         }
 
 
@@ -56,7 +58,7 @@ namespace SPLITTR_Uwp.Core.DataManager
 
             var categoryJsonResponse = await _expenseCategoryNetHandler.FetchExpenseCategory().ConfigureAwait(false);
 
-            var expenseCategories = ExpenseCategoriesDeserializer.DeserializeJsonToExpenseCategoryBobjs(categoryJsonResponse);
+            var expenseCategories = _expenseCategoriesDeserializer.DeserializeJsonToExpenseCategoryBobjs(categoryJsonResponse);
 
             var fetchExpensesCategoryByNetHandler = expenseCategories.ToList();
 
@@ -81,7 +83,7 @@ namespace SPLITTR_Uwp.Core.DataManager
 
             return FetchExpenseCategoryOrDefault(categories,id);
 
-            //queries Sub from Parent if Available
+            //queries SubCategories from Parent if Available
             ExpenseCategory FetchExpenseCategoryOrDefault(IEnumerable<ExpenseCategoryBobj> _expenseCategoryBobjs,int categoryId)
             {
 
@@ -96,57 +98,4 @@ namespace SPLITTR_Uwp.Core.DataManager
     }
 
 
-    public static class ExpenseCategoriesDeserializer
-    {
-        public static IEnumerable<ExpenseCategoryBobj> DeserializeJsonToExpenseCategoryBobjs(string jsonString)
-        {
-            var jsonObj = JObject.Parse(jsonString);
-
-             if(jsonObj.TryGetValue("categories",out JToken root) && root is JArray JmainCategoriesArray)
-             { 
-                return JmainCategoriesArray.AsParallel().Select(jToken =>
-                {
-                    var mainCategory = ConvertJObjectToExpenseCategory(jToken as JObject);
-
-                    mainCategory.ParentCategoryId = -1;
-
-                    var subCategory = InitializeSubCategories(jToken["subcategories"] as JArray,mainCategory.Id);
-
-                    return new ExpenseCategoryBobj(mainCategory,subCategory);
-                });
-             }
-
-             return new List<ExpenseCategoryBobj>().DefaultIfEmpty();
-
-            //Traversing Each Subcategory Array And Instantiating a Enumerable SubCategory
-            IEnumerable<ExpenseCategory> InitializeSubCategories(JArray subCategoryJArray,int mappingParentId)
-            {
-                return  subCategoryJArray?.AsParallel().Cast<JObject>().Select(jobj =>
-                {
-                    var subCategory = ConvertJObjectToExpenseCategory(jobj);
-                    subCategory.ParentCategoryId = mappingParentId;
-                    return subCategory;
-                });
-            }
-           
-        }
-        private static ExpenseCategory ConvertJObjectToExpenseCategory(JObject o)
-        {
-            try
-            {
-                var subCategory = new ExpenseCategory()
-                {
-                    Id = o.Value<int>("id"),
-                    Name = o.Value<string>("name"),
-                    Icon = o["icon_types"]["square"]["large"].Value<string>()
-                };
-                return subCategory;
-            }
-            catch (NullReferenceException)
-            {
-                return default;
-            }
-        }
-    }
-  
 }

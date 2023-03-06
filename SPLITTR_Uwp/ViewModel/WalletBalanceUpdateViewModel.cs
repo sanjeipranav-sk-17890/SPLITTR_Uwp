@@ -7,7 +7,7 @@ using SPLITTR_Uwp.Core.UseCase.AddWalletAmount;
 using SPLITTR_Uwp.Core.UseCase.UpdateUser;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
-using SPLITTR_Uwp.ViewModel.Models;
+using SPLITTR_Uwp.ViewModel.Vobj;
 using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel;

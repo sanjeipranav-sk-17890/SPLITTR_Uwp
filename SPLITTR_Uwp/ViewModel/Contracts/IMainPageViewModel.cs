@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
-using SPLITTR_Uwp.ViewModel.Models;
+using SPLITTR_Uwp.ViewModel.Vobj;
 
 namespace SPLITTR_Uwp.ViewModel.Contracts;
 

@@ -6,8 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:vm="using:SPLITTR_Uwp.ViewModel.Models"
-    xmlns:header="using:SPLITTR_Uwp.ViewModel.Models.ExpenseListObject"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     Background="{ThemeResource ApplicationMainThemeAcrylicBrush}"
     xmlns:template="using:SPLITTR_Uwp.DataTemplates"
