@@ -26,7 +26,7 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         {
             Loaded += NoConnectionIndicator_Loaded;
             NetworkInformation.NetworkStatusChanged += NetworkInformationOnNetworkStatusChanged;
-            this.InitializeComponent();
+            InitializeComponent();
             //Subscribing For Change in Network Connection
         }
 

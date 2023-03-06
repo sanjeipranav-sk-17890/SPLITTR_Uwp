@@ -19,6 +19,7 @@ using SPLITTR_Uwp.Core.UseCase.UserSuggestion;
 using SPLITTR_Uwp.Core.UseCase.VerifyPaidExpense;
 using SPLITTR_Uwp.Core.Utility;
 using SPLITTR_Uwp.DataTemplates;
+using SPLITTR_Uwp.DataTemplates.Controls;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.ViewModel.Contracts;
@@ -86,7 +87,7 @@ public static class Configuration
         container.AddTransient<PaymentWindowExpenseViewModel>();
         container.AddTransient<ExpenseDetailedViewUserControlViewModel>();
         container.AddTransient<OwingMoneyPaymentExpenseViewModel>();
-
+        container.AddTransient<CategoryControlViewModel>();
     }
 
 }

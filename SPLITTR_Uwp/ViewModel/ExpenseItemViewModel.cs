@@ -33,8 +33,13 @@ internal class ExpenseItemViewModel : ObservableObject
     private string _owingSplitAmount;
     private string _owingSplitTitle;
     private Brush _owingExpenseForeground;
+    private bool _isCategoryChangeAllowed;
 
-
+    public bool IsCategoryChangeAllowed
+    {
+        get => _isCategoryChangeAllowed;
+        set => SetProperty(ref _isCategoryChangeAllowed, value);
+    }
 
 
     public bool IsGroupButtonVisible
@@ -170,11 +175,14 @@ internal class ExpenseItemViewModel : ObservableObject
             
     }
 
-    private void SetViewDataBasesOnExpense()
+    private void SetViewDataBasesdOnExpense()
     {
 
         //Changing visibility for Group Name Indicator
         IsGroupButtonVisible = _expenseVObj?.GroupUniqueId is not null;
+
+        //Allowing Category Change Only if Current User is OWer of that Expense
+        IsCategoryChangeAllowed = _expenseVObj?.SplitRaisedOwner.Equals(Store.CurrentUserBobj) ?? false;
 
         OwingAmountTextBlockVisibility = !IsCurrentUserRaisedExpense(_expenseVObj);
 
@@ -211,7 +219,7 @@ internal class ExpenseItemViewModel : ObservableObject
         //Subscribing For Currency Preference Changed Notification
         SplittrNotification.CurrencyPreferenceChanged += SplittrNotification_CurrencyPreferenceChanged;
 
-        SetViewDataBasesOnExpense();
+        SetViewDataBasesdOnExpense();
 
         CallGroupNameByGroupIdUseCase(expenseObj?.GroupUniqueId);
 

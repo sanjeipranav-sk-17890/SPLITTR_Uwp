@@ -135,6 +135,7 @@
                     MaxHeight="40"
                     Grid.Column="0"
                     Grid.Row="0"
+                    IsFlyOutOpeningAllowed="{x:Bind _viewModel.IsCategoryChangeAllowed,Mode=OneWay}"
                     Grid.RowSpan="2"/>
                 <TextBlock  Text="{x:Bind ExpenseObj.Description,Mode=OneWay}"
                            FontSize="15"

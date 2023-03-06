@@ -177,6 +177,7 @@
                                                      Height="80"
                                                      Grid.Row="0"
                                                      Grid.Column="0"
+                                                     IsFlyOutOpeningAllowed="True"
                                                      ToolTipService.ToolTip="Category : UnCategorized"
                                                      Margin="10 5 0 0"/>
 

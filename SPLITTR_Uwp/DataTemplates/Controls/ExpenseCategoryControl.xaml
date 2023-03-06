@@ -239,20 +239,24 @@
         </Style>
     </UserControl.Resources>
     <Button Style="{StaticResource CategoryControlButton}" BorderBrush="Transparent"
-            BorderThickness="0"
-            Click="CategoryImageClicked">
+            BorderThickness="0" Click="CategoryButton_OnClick" >
         <Button.Content>
-            <Image Source="../../Assets/icons/BillImage.png" Stretch="Uniform"/>
+            <Image Source="../../Assets/icons/BillImage.png"
+                   x:Name="CategoryImage"
+                   Stretch="Uniform"/>
         </Button.Content>
-        <Button.Flyout>
+        <FlyoutBase.AttachedFlyout>
             <Flyout FlyoutPresenterStyle="{StaticResource NoMarginFlyoutPresenterStyle}" AreOpenCloseAnimationsEnabled="True"
                     ShouldConstrainToRootBounds="True"  
-                    Opening="CatogoriesFlyOut_Opening"
+                    Opening="CatogoriesFlyOut_Opening" 
+                    x:Name="CategoryFlyout"
                     Placement="BottomEdgeAlignedLeft">
-                <ListView ItemsSource="{x:Bind _viewModel.Categories}"
-                          SelectionMode="None"
-                          CornerRadius="4"
-                          Background="{ThemeResource ApplicationMainThemeAcrylicBrush}">
+                <Grid>
+                    <ProgressRing IsActive="{x:Bind _viewModel.IsCategoryLoading,Mode=OneWay}" Canvas.ZIndex="100"></ProgressRing>
+                    <ListView ItemsSource="{x:Bind _viewModel.Categories}"
+                              SelectionMode="None"
+                              CornerRadius="4"
+                              Background="{ThemeResource ApplicationMainThemeAcrylicBrush}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="modelBobj:ExpenseCategoryBobj">
                             <ListView ItemsSource="{x:Bind SubExpenseCategories}"
@@ -278,19 +282,26 @@
                                     </ListView.ItemsPanel>
                                     <ListView.ItemTemplate>
                                          <DataTemplate x:DataType="model:ExpenseCategory">
-                                             <local:SubcategoryIconControl HorizontalAlignment="Stretch"
-                                                                           VerticalAlignment="Stretch"
-                                                                           x:Name="IconControl"
-                                                                           TeachingTipContent="Testing"/>
-                                         </DataTemplate>
+                                              <Image Height="28" 
+                                               Width="28"
+                                               Stretch="Uniform" 
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Top"
+                                               x:Name="IconImage"
+                                               Source="{x:Bind Icon}">
+                                                 <ToolTipService.ToolTip>
+                                                      <ToolTip Content="{x:Bind Name}" />
+                                                 </ToolTipService.ToolTip>
+                                        </Image>
+                                    </DataTemplate>
                                     </ListView.ItemTemplate>
-                                  
-                                   
                             </ListView>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+
+                </Grid>
             </Flyout>
-        </Button.Flyout>
+        </FlyoutBase.AttachedFlyout>
     </Button>
 </UserControl>
