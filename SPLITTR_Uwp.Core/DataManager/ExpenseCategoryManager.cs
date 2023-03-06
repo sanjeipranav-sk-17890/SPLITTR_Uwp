@@ -10,15 +10,17 @@ using SPLITTR_Uwp.Core.NetHandler;
 using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.FetchExpenseCategory;
+using SPLITTR_Uwp.Core.UseCase.GetCategoryById;
 
 namespace SPLITTR_Uwp.Core.DataManager
 {
-    internal interface IExpenseCategoryManager
+    public interface IExpenseCategoryManager
     {
         void FetchExpenseCategory(IUseCaseCallBack<FetchExpenseCategoryResponse> callBack);
+        void FetchExpenseCategoryById(int id , IUseCaseCallBack<GetCategoryByIdResponse> callBack);
     }
 
-    internal class ExpenseCategoryManager : IExpenseCategoryManager
+    public class ExpenseCategoryManager : IExpenseCategoryManager
     {
         private readonly IExpenseCategoryNetHandler _expenseCategoryNetHandler;
         private readonly IExpenseCategoryJsonToPoCoConverter _expenseCategoriesDeserializer;
@@ -53,6 +55,20 @@ namespace SPLITTR_Uwp.Core.DataManager
 
         }
 
+        public async void FetchExpenseCategoryById(int id, IUseCaseCallBack<GetCategoryByIdResponse> callBack)
+        {
+            try
+            {
+                var requestedCategory =await FetchExpenseCategoryById(id).ConfigureAwait(false);
+
+                callBack?.OnSuccess(new GetCategoryByIdResponse(requestedCategory));
+            }
+            catch (Exception e)
+            {
+                callBack?.OnError(new SplittrException(e));
+            }
+        }
+
         private async Task<IEnumerable<ExpenseCategoryBobj>> FetchExpensesCategoryByNetHandler()
         {
 
@@ -70,7 +86,7 @@ namespace SPLITTR_Uwp.Core.DataManager
             return fetchExpensesCategoryByNetHandler;
         }
 
-        public async Task<ExpenseCategory> FetchExpenseCategoryById(int id)
+        private async Task<ExpenseCategory> FetchExpenseCategoryById(int id)
         {
             var subCategory = FetchExpenseCategoryOrDefault(_expenseCategoryCache.Values,id);
 

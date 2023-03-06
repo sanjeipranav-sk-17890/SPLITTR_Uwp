@@ -50,7 +50,7 @@ public class SplittrDependencyService
             .AddSingleton<IUserProfileUpdateDataManager, UserUpdateDataManager>()
             .AddSingleton<IAddWalletBalanceDataManager, UserUpdateDataManager>()
             .AddSingleton<IUserSuggestionDataManager, UserUpdateDataManager>()
-            .AddSingleton<IRelatedExpenseDataManager, RelatedExpenseDataManager>()
+            .AddSingleton<IRelatedExpenseDataManager, ExpenseFetchDataManager>()
             .AddSingleton<ISplitExpenseDataManager, ExpenseStatusDataManager>()
             .AddSingleton<IMarkExpensePaidDataManager, ExpenseStatusDataManager>()
             .AddSingleton<IExpenseCancellationDataManager, ExpenseStatusDataManager>()

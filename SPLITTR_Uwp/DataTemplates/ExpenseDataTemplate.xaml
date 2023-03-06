@@ -133,8 +133,10 @@
                        MaxHeight="40"/>-->
                 <controls:ExpenseCategoryControl 
                     MaxHeight="40"
+                    x:Phase="9"
                     Grid.Column="0"
                     Grid.Row="0"
+                    CategoryIconSource="{x:Bind _viewModel.ExpenseCategoryImgSource,Mode=OneWay}"
                     IsFlyOutOpeningAllowed="{x:Bind _viewModel.IsCategoryChangeAllowed,Mode=OneWay}"
                     Grid.RowSpan="2"/>
                 <TextBlock  Text="{x:Bind ExpenseObj.Description,Mode=OneWay}"

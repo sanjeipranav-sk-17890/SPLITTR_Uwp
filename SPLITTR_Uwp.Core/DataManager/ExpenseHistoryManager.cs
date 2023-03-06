@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using SPLITTR_Uwp.Core.Adapters.SqlAdapter;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.DataManager.Services;
+using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.VerifyPaidExpense;

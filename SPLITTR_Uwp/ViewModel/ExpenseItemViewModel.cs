@@ -1,20 +1,24 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.GetCategoryById;
 using SPLITTR_Uwp.Core.UseCase.GetGroupDetails;
 using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Vobj;
+using static SPLITTR_Uwp.Services.UiService;
 
 namespace SPLITTR_Uwp.ViewModel;
 
@@ -34,6 +38,7 @@ internal class ExpenseItemViewModel : ObservableObject
     private string _owingSplitTitle;
     private Brush _owingExpenseForeground;
     private bool _isCategoryChangeAllowed;
+    private ImageSource _expenseCategoryImgSource;
 
     public bool IsCategoryChangeAllowed
     {
@@ -41,6 +46,11 @@ internal class ExpenseItemViewModel : ObservableObject
         set => SetProperty(ref _isCategoryChangeAllowed, value);
     }
 
+    public ImageSource ExpenseCategoryImgSource
+    {
+        get => _expenseCategoryImgSource;
+        set => SetProperty(ref _expenseCategoryImgSource, value);
+    }
 
     public bool IsGroupButtonVisible
     {
@@ -224,16 +234,19 @@ internal class ExpenseItemViewModel : ObservableObject
         CallGroupNameByGroupIdUseCase(expenseObj?.GroupUniqueId);
 
         CallRelatedExpenseUseCaseCall();
-    }
 
-      
+        CallExpenseCategoryUseCaseToFetchImageSource();
+    }
+   
+
+
 
     private async void SplittrNotification_CurrencyPreferenceChanged(CurrencyPreferenceChangedEventArgs obj)
     {
         //Recalculating Expense Total Based on new Currency Preference
         CallRelatedExpenseUseCaseCall();
 
-        await UiService.RunOnUiThread(() =>
+        await RunOnUiThread(() =>
         {
             //Reassign Owing Amount Based On New Index
             OwingSplitAmount = _expenseVObj is null ? string.Empty : FormatExpenseAmountWithSymbol(_expenseVObj.StrExpenseAmount);
@@ -256,7 +269,14 @@ internal class ExpenseItemViewModel : ObservableObject
 
         relatedExpenseUseCase.Execute();
     }
+    private void CallExpenseCategoryUseCaseToFetchImageSource()
+    {
+        var getCategoryByIdReq = new GetCategoryByIdReq(CancellationToken.None, new ExpenseItemVmPresenterCallBack(this), _expenseVObj.CategoryId);
 
+        var getCategoryByIdUseCase = InstanceBuilder.CreateInstance<GetCategoryById>(getCategoryByIdReq);
+
+        getCategoryByIdUseCase.Execute();
+    }
 
 
     private async void OnRelatedExpensesRecievedSuccess(RelatedExpenseResponseObj result)
@@ -266,14 +286,14 @@ internal class ExpenseItemViewModel : ObservableObject
 
         var formatedExpenseAmount = FormatExpenseAmountWithSymbol(totalAmount);
 
-        await UiService.RunOnUiThread(() =>
+        await RunOnUiThread(() =>
         {
             ExpenseTotalAmount = formatedExpenseAmount;
         }).ConfigureAwait(false);
     }
 
 
-    private class ExpenseItemVmPresenterCallBack : IPresenterCallBack<RelatedExpenseResponseObj>,IPresenterCallBack<GroupDetailByIdResponse>
+    private class ExpenseItemVmPresenterCallBack : IPresenterCallBack<RelatedExpenseResponseObj>,IPresenterCallBack<GroupDetailByIdResponse>,IPresenterCallBack<GetCategoryByIdResponse>
     {
         private readonly ExpenseItemViewModel _viewModel;
         public ExpenseItemVmPresenterCallBack(ExpenseItemViewModel viewModel)
@@ -287,13 +307,24 @@ internal class ExpenseItemViewModel : ObservableObject
         }
         public async void OnSuccess(GroupDetailByIdResponse result)
         {
-            await UiService.RunOnUiThread(() =>
+            await RunOnUiThread(() =>
             {
 
                 _viewModel.GroupName = result?.RequestedGroup?.GroupName;
                 _viewModel.GroupObject = result?.RequestedGroup;
 
             }).ConfigureAwait(false);
+        }
+        public async void OnSuccess(GetCategoryByIdResponse result)
+        {
+            if (result is { RequestedCategoryObj: { } })
+            {
+                await RunOnUiThread((() =>
+                {
+                    var sourceUri = new Uri(result.RequestedCategoryObj.Icon);
+                    _viewModel.ExpenseCategoryImgSource = new BitmapImage(sourceUri);
+                })).ConfigureAwait(false);
+            }
         }
         public void OnError(SplittrException ex)
         {

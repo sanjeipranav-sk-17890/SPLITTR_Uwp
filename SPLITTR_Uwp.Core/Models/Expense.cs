@@ -7,11 +7,12 @@ public class Expense
 {
     private double _expenseAmount;
     private string _note;
+    private int _categoryId = 18;
 
     [PrimaryKey, Unique]
     public string ExpenseUniqueId { get; set; }
 
-    public int ExpenseStatusindex { get; set; }
+    public int ExpenseStatusIndex { get; set; }
 
 
     public string Description { get; set; }
@@ -43,7 +44,11 @@ public class Expense
 
     public string UserEmailId { get; set; }
 
-
+    public int CategoryId
+    {
+        get => _categoryId;
+        set => _categoryId = value;
+    }
 
     public Expense()
     {
@@ -54,17 +59,18 @@ public class Expense
 
 
 
-    public Expense(string description,double expenseAmount, string requestedOwner, DateTime dateOfExpense,DateTime createdDate,string note, string groupUniqueId, int expenseStatus, string expenseUniqueId, string userEmailId, string parentExpenseId)
+    public Expense(string description,double expenseAmount, string requestedOwner, DateTime dateOfExpense,DateTime createdDate,string note, string groupUniqueId, int expenseStatus, string expenseUniqueId, string userEmailId, string parentExpenseId,int categoryId)
     {
         Description = description;
         _expenseAmount = expenseAmount;
         RequestedOwner = requestedOwner;
         DateOfExpense = dateOfExpense;
         _note = note;
+        _categoryId = categoryId;
         CreatedDate = createdDate;
         GroupUniqueId = groupUniqueId;
         UserEmailId = userEmailId;
-        ExpenseStatusindex = expenseStatus;
+        ExpenseStatusIndex = expenseStatus;
         ExpenseUniqueId = expenseUniqueId;
         ParentExpenseId = parentExpenseId;
     }

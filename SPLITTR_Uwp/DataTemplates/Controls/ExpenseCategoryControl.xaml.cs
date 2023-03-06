@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Navigation;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ModelBobj;
@@ -24,9 +14,9 @@ using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.FetchExpenseCategory;
-using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using static SPLITTR_Uwp.Services.UiService;
+using System.Runtime.CompilerServices;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -47,6 +37,22 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             set => SetValue(IsFlyOutOpeningAllowedProperty, value);
         }
 
+        public readonly static DependencyProperty CategoryIconSourceProperty = DependencyProperty.Register(
+            nameof(CategoryIconSource), typeof(ImageSource), typeof(ExpenseCategoryControl),new PropertyMetadata(default(ImageSource),new PropertyChangedCallback((CategoryImageSourcePropertyChangedCallBack))));
+
+        private static void CategoryImageSourcePropertyChangedCallBack(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is ExpenseCategoryControl control && e.NewValue is not null)
+            {
+                control.CategoryImage.Source = (ImageSource)e.NewValue;
+            }
+        }
+
+        public ImageSource CategoryIconSource
+        {
+            get => (ImageSource)GetValue(CategoryIconSourceProperty);
+            set => SetValue(CategoryIconSourceProperty, value);
+        }
 
         public ExpenseCategoryControl()
         {
@@ -55,6 +61,10 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             OnExpenseCategorySelected += ExpenseCategoryControl_OnExpenseCategorySelected;
         }
 
+
+        /*
+         * For Dev Purpose will Be Set By External Control USer by Listen to OnExpenseCategoryChangedEvent 
+         */
         private void ExpenseCategoryControl_OnExpenseCategorySelected(ExpenseCategory obj)
         {
             CategoryImage.Source =new BitmapImage(new Uri(obj.Icon));

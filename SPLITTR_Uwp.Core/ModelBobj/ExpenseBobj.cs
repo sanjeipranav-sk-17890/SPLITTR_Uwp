@@ -8,7 +8,8 @@ namespace SPLITTR_Uwp.Core.ModelBobj;
 
 public class ExpenseBobj : Expense
 {
-        
+    private readonly ExpenseCategory _expenseCategory;
+
 
     public static ICurrencyConverter CurrencyConverter { get; set; }
 
@@ -16,19 +17,11 @@ public class ExpenseBobj : Expense
 
     public virtual ExpenseStatus ExpenseStatus
     {
-        get => (ExpenseStatus)ExpenseStatusindex;
-        set
-        {
-            ExpenseStatusindex = (int)value;
-            OnValueChanged(nameof(ExpenseStatus));
-        }
+        get => (ExpenseStatus)ExpenseStatusIndex;
+        set => ExpenseStatusIndex = (int)value;
     }
 
     public User SplitRaisedOwner { get; set; }
-
-
-    public virtual event Action<string> ValueChanged;
-
 
     public  double StrExpenseAmount
     {
@@ -36,13 +29,9 @@ public class ExpenseBobj : Expense
         set => base.ExpenseAmount = CurrencyConverter.ConvertToEntityCurrency(value);
     }
 
-    protected void OnValueChanged(string property)
+    private ExpenseBobj(Expense expense) : base(expense.Description,expense.ExpenseAmount ,expense.RequestedOwner,dateOfExpense: expense.DateOfExpense,createdDate:expense.CreatedDate ,expense.Note, expense.GroupUniqueId, expense.ExpenseStatusIndex, expense.ExpenseUniqueId, expense.UserEmailId, expense.ParentExpenseId,expense.CategoryId)
     {
-        ValueChanged?.Invoke(property);
-    }
-
-    private ExpenseBobj(Expense expense) : base(expense.Description,expense.ExpenseAmount ,expense.RequestedOwner,dateOfExpense: expense.DateOfExpense,createdDate:expense.CreatedDate ,expense.Note, expense.GroupUniqueId, expense.ExpenseStatusindex, expense.ExpenseUniqueId, expense.UserEmailId, expense.ParentExpenseId)
-    {
+        
 
     }
 
@@ -50,7 +39,6 @@ public class ExpenseBobj : Expense
     {
         CorrespondingUserObj = correspondingUser;
         SplitRaisedOwner = splitRaisedOwner;
-
     }
     public ExpenseBobj(ExpenseBobj expenseBobj) : this(expenseBobj.CorrespondingUserObj,expenseBobj.SplitRaisedOwner, expenseBobj)
     {
@@ -59,6 +47,7 @@ public class ExpenseBobj : Expense
     public ExpenseBobj(ICurrencyConverter currencyConverter)
     {
         CurrencyConverter = currencyConverter;
+        
     }
 
 }

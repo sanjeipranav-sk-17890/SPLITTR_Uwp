@@ -8,6 +8,7 @@
     xmlns:modelBobj="using:SPLITTR_Uwp.Core.ModelBobj"
     xmlns:control="using:Microsoft.UI.Xaml.Controls"
     xmlns:model="using:SPLITTR_Uwp.Core.Models"
+    xmlns:system="using:System"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -237,6 +238,9 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <BitmapImage UriSource="../../Assets/icons/BillImage.png" x:Key="BillImageIcon" />
+
+
     </UserControl.Resources>
     <Button Style="{StaticResource CategoryControlButton}" BorderBrush="Transparent"
             BorderThickness="0" Click="CategoryButton_OnClick" >
