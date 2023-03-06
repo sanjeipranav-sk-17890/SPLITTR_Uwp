@@ -27,10 +27,10 @@ internal static class ThemeHelperService
             var appTheme=(int) ApplicationData.Current.LocalSettings.Values["themeIndex"];
             CurrentTheme =(ElementTheme)appTheme;
         }
-        catch (KeyNotFoundException)
+        catch (Exception)
         {
               
-            ApplicationData.Current.LocalSettings.Values["themeIndex"] = GetCurrentTheme();
+            ApplicationData.Current.LocalSettings.Values["themeIndex"] = (int) GetCurrentTheme();
           
         }
 
@@ -43,7 +43,7 @@ internal static class ThemeHelperService
             var preferedThemeIndex =(int) ApplicationData.Current.LocalSettings.Values["themeIndex"];
             return (ElementTheme)preferedThemeIndex;
         }
-        catch (KeyNotFoundException)
+        catch (Exception)
         {
             return ElementTheme.Default;
         }
