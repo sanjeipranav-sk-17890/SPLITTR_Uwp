@@ -61,4 +61,8 @@ public sealed partial class ExpenseDataTemplate : UserControl
             OnGroupInfoButtonClicked?.Invoke(groupInfoBtn.DataContext as Group);
         }
     }
+    private void ExpenseCategoryControl_OnOnExpenseCategorySelected(ExpenseCategory obj)
+    {
+        _viewModel.ChangeExpenseCategory(obj);
+    }
 }

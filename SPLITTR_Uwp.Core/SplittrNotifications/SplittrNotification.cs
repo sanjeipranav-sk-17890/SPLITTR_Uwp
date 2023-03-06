@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using SPLITTR_Uwp.Core.Models;
 
 namespace SPLITTR_Uwp.Core.SplittrNotifications;
 
@@ -16,7 +17,10 @@ public static class SplittrNotification
 
     public static event Action<GroupCreatedEventArgs> GroupCreated;
 
-    public static event Action<ExpenseSplittedEventArgs> ExpensesSplitted; 
+    public static event Action<ExpenseSplittedEventArgs> ExpensesSplitted;
+
+    public static event Action<ExpenseCategoryChangedEventArgs> ExpenseCategoryChanged;
+    
 
     internal static void InvokeUserObjUpdated(UserBobjUpdatedEventArgs obj)
     {
@@ -40,7 +44,24 @@ public static class SplittrNotification
     {
         ExpensesSplitted?.Invoke(obj);
     }
+    internal static void InvokeExpenseCategoryChanged(ExpenseCategoryChangedEventArgs obj)
+    {
+        ExpenseCategoryChanged?.Invoke(obj);
+    }
 }
+
+public class ExpenseCategoryChangedEventArgs : SplittrEventArgs
+{
+    public ExpenseCategoryChangedEventArgs(ExpenseBobj updatedExpenseBobj, ExpenseCategory changedCategory)
+    {
+        this.UpdatedExpenseBobj = updatedExpenseBobj;
+        ChangedCategory = changedCategory;
+    }
+
+    public ExpenseBobj UpdatedExpenseBobj { get; }
+    public ExpenseCategory ChangedCategory { get; }
+}
+
 public class ExpenseSplittedEventArgs : SplittrEventArgs
 {
     public IEnumerable<ExpenseBobj> NewExpenses { get;}

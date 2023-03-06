@@ -46,10 +46,12 @@ public class ExpenseVobj : ExpenseBobj,INotifyPropertyChanged
 
     private void SplittrNotification_ExpenseStatusChanged(ExpenseStatusChangedEventArgs obj)
     {
-        if (obj?.StatusChangedExpense?.ExpenseUniqueId.Equals(ExpenseUniqueId) is true)
+        if (obj?.StatusChangedExpense?.ExpenseUniqueId.Equals(ExpenseUniqueId) is not true)
         {
-            ExpenseStatus = obj.StatusChangedExpense.ExpenseStatus;
+            return;
         }
+        ExpenseStatus = obj.StatusChangedExpense.ExpenseStatus;
+        CategoryId = obj.StatusChangedExpense.CategoryId;
     }
 
     #region INotifyPropertyChanged Region

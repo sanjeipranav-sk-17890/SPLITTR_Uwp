@@ -178,7 +178,7 @@
                                                      Grid.Row="0"
                                                      Grid.Column="0"
                                                      IsFlyOutOpeningAllowed="True"
-                                                     ToolTipService.ToolTip="Category : UnCategorized"
+                                                     OnExpenseCategorySelected="ExpenseCategoryControl_OnOnExpenseCategorySelected"
                                                      Margin="10 5 0 0"/>
 
                 <Grid  Grid.Row="0"

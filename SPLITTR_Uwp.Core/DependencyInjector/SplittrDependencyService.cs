@@ -56,6 +56,7 @@ public class SplittrDependencyService
             .AddSingleton<IExpenseCancellationDataManager, ExpenseStatusDataManager>()
             .AddSingleton<ISettleUpSplitDataManager, SettleUpExpenseDataManager>()
             .AddSingleton<ISignUpDataManager, AuthenticationManager>()
+            .AddSingleton<ICategoryUpdateDataManager,CategoryUpdateDataManager>()
             .AddSingleton<IGroupDetailManager,GroupDetailManager>()
             .AddSingleton<IExpenseFetchDataManager,ExpenseFetchDataManager>()
             .AddSingleton<IAuthenticationManager, AuthenticationManager>()

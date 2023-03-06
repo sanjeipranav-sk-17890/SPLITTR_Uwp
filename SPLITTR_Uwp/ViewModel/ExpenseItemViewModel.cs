@@ -12,6 +12,7 @@ using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.ChangeExpenseCategory;
 using SPLITTR_Uwp.Core.UseCase.GetCategoryById;
 using SPLITTR_Uwp.Core.UseCase.GetGroupDetails;
 using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
@@ -237,9 +238,25 @@ internal class ExpenseItemViewModel : ObservableObject
 
         CallExpenseCategoryUseCaseToFetchImageSource();
     }
-   
 
+    public void ChangeExpenseCategory(ExpenseCategory expenseCategory)
+    {
+        //No UseCase Call If Same Category Selected Again  
+        if (expenseCategory == null || IsCurrentCategoryAndPreviousCategorySame(expenseCategory))
+        {
+            return;
+        }
+        var changeCategoryReq = new ChangeExpenseCategoryReq(CancellationToken.None, new ExpenseItemVmPresenterCallBack(this), _expenseVObj, expenseCategory, Store.CurrentUserBobj);
 
+        var changeCategoryUseCase = InstanceBuilder.CreateInstance<ChangeExpenseCategory>(changeCategoryReq);
+
+        changeCategoryUseCase.Execute();
+
+        bool IsCurrentCategoryAndPreviousCategorySame(ExpenseCategory newCategory)
+        {
+            return _expenseVObj.CategoryId == newCategory.Id;
+        }
+    }
 
     private async void SplittrNotification_CurrencyPreferenceChanged(CurrencyPreferenceChangedEventArgs obj)
     {
@@ -293,7 +310,7 @@ internal class ExpenseItemViewModel : ObservableObject
     }
 
 
-    private class ExpenseItemVmPresenterCallBack : IPresenterCallBack<RelatedExpenseResponseObj>,IPresenterCallBack<GroupDetailByIdResponse>,IPresenterCallBack<GetCategoryByIdResponse>
+    private class ExpenseItemVmPresenterCallBack : IPresenterCallBack<RelatedExpenseResponseObj>,IPresenterCallBack<GroupDetailByIdResponse>,IPresenterCallBack<GetCategoryByIdResponse>,IPresenterCallBack<ChangeExpenseCategoryResponse>
     {
         private readonly ExpenseItemViewModel _viewModel;
         public ExpenseItemVmPresenterCallBack(ExpenseItemViewModel viewModel)
@@ -326,12 +343,25 @@ internal class ExpenseItemViewModel : ObservableObject
                 })).ConfigureAwait(false);
             }
         }
+        public async void OnSuccess(ChangeExpenseCategoryResponse result)
+        {
+            if (result is { ChangedExpenseCategory: { } })
+            {
+                await RunOnUiThread((() =>
+                {
+                    var sourceUri = new Uri(result.ChangedExpenseCategory.Icon);
+                    _viewModel.ExpenseCategoryImgSource = new BitmapImage(sourceUri);
+                })).ConfigureAwait(false);
+            }
+        }
         public void OnError(SplittrException ex)
         {
             if (ex.InnerException is SqlException)
             {
                 //Code to Notify sql db access failed
             }
+            ExceptionHandlerService.HandleException(ex);
         }
     }
+   
 }

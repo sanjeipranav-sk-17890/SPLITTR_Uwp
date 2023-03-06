@@ -133,9 +133,9 @@
                        MaxHeight="40"/>-->
                 <controls:ExpenseCategoryControl 
                     MaxHeight="40"
-                    x:Phase="9"
                     Grid.Column="0"
                     Grid.Row="0"
+                    OnExpenseCategorySelected="ExpenseCategoryControl_OnOnExpenseCategorySelected"
                     CategoryIconSource="{x:Bind _viewModel.ExpenseCategoryImgSource,Mode=OneWay}"
                     IsFlyOutOpeningAllowed="{x:Bind _viewModel.IsCategoryChangeAllowed,Mode=OneWay}"
                     Grid.RowSpan="2"/>

@@ -2,6 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Extensions.DependencyInjection;
+using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.ViewModel;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
@@ -36,11 +37,11 @@ public sealed partial class SplitExpenseUserControl : UserControl,ISplitExpenseV
         get => XamlRoot.Content.XamlRoot;
     }
 
-    public SplitExpenseUserControl(SplitExpenseUserControl control)
-    {
-           
-    }
 
+    private void ExpenseCategoryControl_OnOnExpenseCategorySelected(ExpenseCategory category)
+    {
+        _viewModel.PreferedExpenseCategoryChanged(category);
+    }
 }
 
 

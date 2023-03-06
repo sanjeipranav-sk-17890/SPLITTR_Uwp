@@ -528,6 +528,17 @@ public class SplitExpenseViewModel : ObservableObject, IViewModel
 
     #endregion
 
+    #region ExpenseCategoryPreference
+
+    public void PreferedExpenseCategoryChanged(ExpenseCategory category)
+    {
+        foreach (var expense in _expensesToBeSplitted)
+        {
+            expense.CategoryId = category.Id;
+        }
+    }
+
+    #endregion
 
     public string GetUserCurrencyPreference()
     {

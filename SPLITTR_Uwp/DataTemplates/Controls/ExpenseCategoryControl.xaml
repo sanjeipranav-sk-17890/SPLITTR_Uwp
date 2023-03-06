@@ -11,7 +11,8 @@
     xmlns:system="using:System"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignWidth="400"
+    ToolTipService.ToolTip="{x:Bind ToolTipText,Mode=OneWay}"> 
     <UserControl.Resources>
         <Style x:Key="CategoryControlButton" TargetType="Button">
             <Setter Property="Background" Value="{ThemeResource ButtonBackground}"/>
@@ -238,9 +239,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <BitmapImage UriSource="../../Assets/icons/BillImage.png" x:Key="BillImageIcon" />
-
-
     </UserControl.Resources>
     <Button Style="{StaticResource CategoryControlButton}" BorderBrush="Transparent"
             BorderThickness="0" Click="CategoryButton_OnClick" >
