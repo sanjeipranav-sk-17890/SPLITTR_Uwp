@@ -136,10 +136,11 @@
             <Setter Property="TabNavigation" Value="Local"/>
             <Setter Property="IsHoldingEnabled" Value="True"/>
             <Setter Property="Padding" Value="1"/>
-            <Setter Property="Width" Value="32"></Setter>
+            <Setter Property="Width" Value="auto"></Setter>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Top"/>
             <Setter Property="MinWidth" Value="0"/>
+            <Setter Property="Margin" Value="2 0 2 0"></Setter>
             <Setter Property="MinHeight" Value="0"/>
             <Setter Property="AllowDrop" Value="False"/>
             <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}"/>
@@ -185,7 +186,7 @@
                                     </VisualState>
                                     <VisualState x:Name="Selected">
                                         <VisualState.Setters>
-                                            <Setter Target="Root.RevealBorderBrush" Value="Black"></Setter>
+                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource TextFillColorPrimaryBrush}"></Setter>
                                             <Setter Target="Root.RevealBorderThickness" Value="1.5"></Setter>
                                             <Setter Target="Root.Opacity" Value="1"></Setter>
                                         </VisualState.Setters>

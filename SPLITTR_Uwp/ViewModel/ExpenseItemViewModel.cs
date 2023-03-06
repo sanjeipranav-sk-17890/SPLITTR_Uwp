@@ -40,6 +40,7 @@ internal class ExpenseItemViewModel : ObservableObject
     private Brush _owingExpenseForeground;
     private bool _isCategoryChangeAllowed;
     private ImageSource _expenseCategoryImgSource;
+    private string _categoryName;
 
     public bool IsCategoryChangeAllowed
     {
@@ -110,6 +111,13 @@ internal class ExpenseItemViewModel : ObservableObject
         get => _owingExpenseForeground;
         set => SetProperty(ref _owingExpenseForeground, value);
     }
+
+    public string CategoryName
+    {
+        get => _categoryName;
+        set => SetProperty(ref _categoryName, value);
+    }
+
     #endregion
 
     #region ViewDataCalCulationgMethods
@@ -218,26 +226,7 @@ internal class ExpenseItemViewModel : ObservableObject
 
     #endregion
 
-    public void ExpenseObjLoaded(ExpenseVobj expenseObj)
-    {
-
-        if (expenseObj is null)
-        {
-            return;
-        }
-        _expenseVObj = expenseObj;
-
-        //Subscribing For Currency Preference Changed Notification
-        SplittrNotification.CurrencyPreferenceChanged += SplittrNotification_CurrencyPreferenceChanged;
-
-        SetViewDataBasesdOnExpense();
-
-        CallGroupNameByGroupIdUseCase(expenseObj?.GroupUniqueId);
-
-        CallRelatedExpenseUseCaseCall();
-
-        CallExpenseCategoryUseCaseToFetchImageSource();
-    }
+    #region UseCaseCallRegion
 
     public void ChangeExpenseCategory(ExpenseCategory expenseCategory)
     {
@@ -256,24 +245,6 @@ internal class ExpenseItemViewModel : ObservableObject
         {
             return _expenseVObj.CategoryId == newCategory.Id;
         }
-    }
-
-    private async void SplittrNotification_CurrencyPreferenceChanged(CurrencyPreferenceChangedEventArgs obj)
-    {
-        //Recalculating Expense Total Based on new Currency Preference
-        CallRelatedExpenseUseCaseCall();
-
-        await RunOnUiThread(() =>
-        {
-            //Reassign Owing Amount Based On New Index
-            OwingSplitAmount = _expenseVObj is null ? string.Empty : FormatExpenseAmountWithSymbol(_expenseVObj.StrExpenseAmount);
-
-        }).ConfigureAwait(false);
-    }
-
-    public void ViewDisposed()
-    {
-        SplittrNotification.CurrencyPreferenceChanged -= SplittrNotification_CurrencyPreferenceChanged;
     }
 
     private void CallRelatedExpenseUseCaseCall()
@@ -295,6 +266,55 @@ internal class ExpenseItemViewModel : ObservableObject
         getCategoryByIdUseCase.Execute();
     }
 
+
+    #endregion
+
+    public void ExpenseObjLoaded(ExpenseVobj expenseObj)
+    {
+
+        if (expenseObj is null)
+        {
+            return;
+        }
+        _expenseVObj = expenseObj;
+
+        //Subscribing For Currency Preference Changed Notification
+        SplittrNotification.CurrencyPreferenceChanged += SplittrNotification_CurrencyPreferenceChanged;
+
+        SetViewDataBasesdOnExpense();
+
+        CallGroupNameByGroupIdUseCase(expenseObj?.GroupUniqueId);
+
+        CallRelatedExpenseUseCaseCall();
+
+        CallExpenseCategoryUseCaseToFetchImageSource();
+    }
+
+
+    private async void SplittrNotification_CurrencyPreferenceChanged(CurrencyPreferenceChangedEventArgs obj)
+    {
+        //Recalculating Expense Total Based on new Currency Preference
+        CallRelatedExpenseUseCaseCall();
+
+        await RunOnUiThread(() =>
+        {
+            //Reassign Owing Amount Based On New Index
+            OwingSplitAmount = _expenseVObj is null ? string.Empty : FormatExpenseAmountWithSymbol(_expenseVObj.StrExpenseAmount);
+
+        }).ConfigureAwait(false);
+    }
+
+    public void ViewDisposed()
+    {
+        SplittrNotification.CurrencyPreferenceChanged -= SplittrNotification_CurrencyPreferenceChanged;
+    }
+
+    private void OnExpenseCategoryRecievedSuccess(ExpenseCategory expenseCategory)
+    {
+        var sourceUri = new Uri(expenseCategory.Icon);
+         ExpenseCategoryImgSource = new BitmapImage(sourceUri);
+         CategoryName = expenseCategory.Name;
+    }
 
     private async void OnRelatedExpensesRecievedSuccess(RelatedExpenseResponseObj result)
     {
@@ -338,8 +358,7 @@ internal class ExpenseItemViewModel : ObservableObject
             {
                 await RunOnUiThread((() =>
                 {
-                    var sourceUri = new Uri(result.RequestedCategoryObj.Icon);
-                    _viewModel.ExpenseCategoryImgSource = new BitmapImage(sourceUri);
+                   _viewModel.OnExpenseCategoryRecievedSuccess(result.RequestedCategoryObj);
                 })).ConfigureAwait(false);
             }
         }
@@ -349,8 +368,7 @@ internal class ExpenseItemViewModel : ObservableObject
             {
                 await RunOnUiThread((() =>
                 {
-                    var sourceUri = new Uri(result.ChangedExpenseCategory.Icon);
-                    _viewModel.ExpenseCategoryImgSource = new BitmapImage(sourceUri);
+                  _viewModel.OnExpenseCategoryRecievedSuccess(result.ChangedExpenseCategory);
                 })).ConfigureAwait(false);
             }
         }

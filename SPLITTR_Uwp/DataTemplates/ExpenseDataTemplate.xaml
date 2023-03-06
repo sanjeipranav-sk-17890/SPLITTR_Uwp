@@ -84,6 +84,7 @@
                 <VisualState x:Name="OnPointerOver">
                         <VisualState.Setters>
                             <Setter Target="DescriptionTextBox.FontWeight" Value="Bold"></Setter>
+                            <Setter Target="DescriptionTextBox.TextDecorations" Value="Underline"></Setter>
                         </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="OnPointerLeaved">
@@ -135,6 +136,7 @@
                     MaxHeight="40"
                     Grid.Column="0"
                     Grid.Row="0"
+                    ToolTipText="{x:Bind _viewModel.CategoryName,Mode=OneWay}"
                     OnExpenseCategorySelected="ExpenseCategoryControl_OnOnExpenseCategorySelected"
                     CategoryIconSource="{x:Bind _viewModel.ExpenseCategoryImgSource,Mode=OneWay}"
                     IsFlyOutOpeningAllowed="{x:Bind _viewModel.IsCategoryChangeAllowed,Mode=OneWay}"

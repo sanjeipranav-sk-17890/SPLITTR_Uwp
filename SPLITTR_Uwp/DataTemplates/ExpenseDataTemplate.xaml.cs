@@ -1,4 +1,5 @@
 ﻿using System;
+using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -36,6 +37,11 @@ public sealed partial class ExpenseDataTemplate : UserControl
     private void ExpenseDataTemplateV2_PointerExited(object sender, PointerRoutedEventArgs e)
     {
         VisualStateManager.GoToState(this, nameof(OnPointerLeaved), false);
+
+        //work around Since TextBlock not Changes when Decoration set to none 
+        DescriptionTextBox.Text = string.Empty;
+        DescriptionTextBox.TextDecorations = TextDecorations.None;
+        DescriptionTextBox.Text = ExpenseObj?.Description ?? string.Empty;
     }
     private void ExpenseDataTemplateV2_PointerEntered(object sender, PointerRoutedEventArgs e)
     {
