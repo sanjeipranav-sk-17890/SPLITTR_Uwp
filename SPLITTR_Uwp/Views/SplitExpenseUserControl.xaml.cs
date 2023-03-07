@@ -17,7 +17,6 @@ public sealed partial class SplitExpenseUserControl : UserControl,ISplitExpenseV
         _viewModel = ActivatorUtilities.CreateInstance<SplitExpenseViewModel>(App.Container,this);
         InitializeComponent();
         DataContext = _viewModel;
-        _viewModel.BindingUpdateInvoked += _viewModel_BindingUpdateInvoked;
         Loaded += SplitExpenseUserControl_Loaded;
     }
 
@@ -25,12 +24,6 @@ public sealed partial class SplitExpenseUserControl : UserControl,ISplitExpenseV
     {
         Bindings.Update();
     }
-
-    private void _viewModel_BindingUpdateInvoked()
-    {
-        Bindings.Update();
-    }
-
 
     public XamlRoot VisualRoot
     {

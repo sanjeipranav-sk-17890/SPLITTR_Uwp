@@ -11,7 +11,7 @@
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:media="using:Microsoft.UI.Xaml.Media"
-    Style="{ThemeResource HomePageBackground}">
+    controls:BackdropMaterial.ApplyToRootOrPageBackground="True">
 
     <Page.Resources>
         <converter:ExpenseAmountFormatter x:Key="AmountFormatter"/> 
@@ -26,8 +26,8 @@
                       VerticalAlignment="Center"
                       HorizontalScrollMode="Enabled"
                       >
-            <RelativePanel Grid.Column="0"
-                           AlignHorizontalCenterWithPanel="True"
+            <RelativePanel
+                AlignHorizontalCenterWithPanel="True"
                            AlignVerticalCenterWithPanel="True">
             <StackPanel RelativePanel.AlignHorizontalCenterWithPanel="True"
                         RelativePanel.AlignVerticalCenterWithPanel="True"
@@ -170,15 +170,7 @@
                            Margin="60 0 0 0"
                            Content="Cancel"/>
                </StackPanel>
-
-
-
-
            </StackPanel>
-
         </RelativePanel>
-         
-
-
     </Grid>
 </Page>

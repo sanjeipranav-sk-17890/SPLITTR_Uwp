@@ -6,9 +6,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:control="using:Microsoft.UI.Xaml.Controls"
-    mc:Ignorable="d"
+    mc:Ignorable="d"  CornerRadius="4"
     xmlns:Converter="using:SPLITTR_Uwp.DataRepository.Converters"
     xmlns:models="using:SPLITTR_Uwp.Core.Models"
+   
     control:BackdropMaterial.ApplyToRootOrPageBackground="True"
     >
     <!--Style="{ThemeResource HomePageBackground}"-->
@@ -20,7 +21,7 @@
         <Converter:UserInitialFormatter x:Key="UserInitialFormatter"/>
     </Page.Resources>
 
-    <Grid>
+    <Grid  CornerRadius="4">
         <RelativePanel>
             <StackPanel Orientation="Horizontal" RelativePanel.AlignVerticalCenterWithPanel="True"
                         RelativePanel.AlignHorizontalCenterWithPanel="True">

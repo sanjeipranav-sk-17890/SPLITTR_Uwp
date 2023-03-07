@@ -299,7 +299,7 @@
                                       XamlRoot="{x:Bind XamlRoot,Mode=OneWay}"
                                       ShouldConstrainToRootBounds="False"
                                       Closed="{x:Bind _viewModel.UnequalSplitTeachingSplitClosed}"
-                                      IsOpen="{x:Bind _viewModel.UneqaulSplitPopUpVisibility,Mode=TwoWay}">
+                                      IsOpen="{x:Bind _viewModel.IsUnEqualSplitPopUpVisible,Mode=TwoWay}">
                     <!--<Rectangle Height="300"
                                Width="300"
                                Fill="Red"></Rectangle>-->
@@ -357,7 +357,7 @@
                     BorderBrush="Transparent"
                     Content="SPLIT"
                     IsEnabled="{x:Bind _viewModel.IsSplitButtonEnabled,Mode=OneWay}"
-                    Click="{x:Bind _viewModel.SplitButtonOnClick}">
+                    Click="{x:Bind _viewModel.SplitPopulatedExpenses}">
             </Button>
         </StackPanel>
     </Grid>

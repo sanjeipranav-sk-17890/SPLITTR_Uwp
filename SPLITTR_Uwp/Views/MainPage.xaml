@@ -270,7 +270,8 @@
                         <!--inner frame where other pages load-->
                         <Frame  Height="{Binding ElementName=FrameContainerRelativePanel ,Path=ActualHeight,Mode=OneWay}"
                                 Width="{Binding ElementName=FrameContainerRelativePanel,Path=ActualWidth,Mode=OneWay}" Name="InnerFrame"  Grid.Column="0"  Grid.Row="0"
-                                x:FieldModifier="public"  >
+                                x:FieldModifier="public" 
+                                 Background="Transparent" >
                             <component:ExpensesListAndDetailViewPage 
                                 PaneButtonOnClick="{x:Bind PageOnPaneButtonOnClick}" 
                                 OnGroupInfoIconClicked="{x:Bind GroupInfoButton_onClick}"

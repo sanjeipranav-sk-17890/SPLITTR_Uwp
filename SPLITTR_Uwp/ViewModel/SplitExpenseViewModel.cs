@@ -22,7 +22,7 @@ using SQLite;
 
 namespace SPLITTR_Uwp.ViewModel;
 
-public class SplitExpenseViewModel : ObservableObject, IViewModel
+public class SplitExpenseViewModel : ObservableObject
 {
 
     private ISplitExpenseView View { get; set; }
@@ -131,7 +131,7 @@ public class SplitExpenseViewModel : ObservableObject, IViewModel
 
         await UiService.RunOnUiThread(() =>
         {
-            UiService.ShowContentAsync("Spliting SuccessFull", "Expenses Splitted Successfully");
+            UiService.ShowContentAsync("Spitting SuccessFull", "Expenses Splitted Successfully",View.VisualRoot,View.Dispatcher);
             ResetPage();
         }, View.Dispatcher);
     }
@@ -151,7 +151,7 @@ public class SplitExpenseViewModel : ObservableObject, IViewModel
 
         _selectedUser = UsersList[SelectedUserIndex];
 
-        //checking whether the selcted user obj is dummy obj for showing no results found and clearing text box
+        //checking whether the selected user obj is dummy obj for showing no results found and clearing text box
         if (string.IsNullOrEmpty(_selectedUser.EmailId))
         {
             _selectedUser = null;
@@ -355,13 +355,13 @@ public class SplitExpenseViewModel : ObservableObject, IViewModel
         if (SelectedSplitPreferenceIndex == 0)
         {
             //NOt showing teaching tip if unequal split option is selected
-            UneqaulSplitPopUpVisibility = false;
+            IsUnEqualSplitPopUpVisible = false;
 
             SplitEquallyPanelVisibility = true;
             return;
         }
         //showing teaching tip if unequal split option is selected
-        UneqaulSplitPopUpVisibility = true;
+        IsUnEqualSplitPopUpVisible = true;
         SplitEquallyPanelVisibility = false;
 
     }
@@ -390,16 +390,13 @@ public class SplitExpenseViewModel : ObservableObject, IViewModel
     #endregion
 
     #region UnEqualSplitPopUpLogicRegion
-    private bool _uneqaulSplitPopUpVisibility;
+    private bool _isUnEqualSplitPopUpVisible;
 
-    public bool UneqaulSplitPopUpVisibility
+    public bool IsUnEqualSplitPopUpVisible
     {
-        get => _uneqaulSplitPopUpVisibility;
-        set => SetProperty(ref _uneqaulSplitPopUpVisibility, value);
+        get => _isUnEqualSplitPopUpVisible;
+        set => SetProperty(ref _isUnEqualSplitPopUpVisible, value);
     }
-
-
-
 
     public void UnequalSplitTeachingSplitClosed()
     {
@@ -407,8 +404,7 @@ public class SplitExpenseViewModel : ObservableObject, IViewModel
     }
 
 
-
-    //Manupulates ExpenseViewModels for Unequal Splitting in teaching tip 
+    //Manipulates ExpenseViewModels for Unequal Splitting in teaching tip 
     private void SplittingUserPreferenceChanged()
     {
         _expensesToBeSplitted.Clear();
@@ -439,7 +435,7 @@ public class SplitExpenseViewModel : ObservableObject, IViewModel
 
     private ExpenseBobj GenerateExpenseViewModel(User user, string groupUid)
     {
-        return new ExpenseBobj(Store.CurrentUserBobj.CurrencyConverter)
+        var newExpenseObj = new ExpenseBobj(Store.CurrentUserBobj.CurrencyConverter)
         {
             RequestedOwner = Store.CurrentUserBobj.EmailId,
             SplitRaisedOwner = Store.CurrentUserBobj, //Currently by default current user is splitRaiseOwner , 
@@ -448,7 +444,11 @@ public class SplitExpenseViewModel : ObservableObject, IViewModel
             StrExpenseAmount = 0.0,
             GroupUniqueId = groupUid
         };
-
+        if (_preferedCategory is not null) // if Category is Been set Explicitly set setting Currency Preference
+        {
+            newExpenseObj.CategoryId = _preferedCategory.Id;
+        }
+        return newExpenseObj;
     }
 
     #endregion
@@ -494,7 +494,7 @@ public class SplitExpenseViewModel : ObservableObject, IViewModel
 
     }
 
-    public void SplitButtonOnClick()
+    public void SplitPopulatedExpenses()
     {
         var expenseNote = ExpenseNote != null ? ExpenseNote.Trim() : string.Empty;
         var dateOfExpense = ExpenditureDate.DateTime;
@@ -530,8 +530,15 @@ public class SplitExpenseViewModel : ObservableObject, IViewModel
 
     #region ExpenseCategoryPreference
 
+    private ExpenseCategory _preferedCategory;
+
     public void PreferedExpenseCategoryChanged(ExpenseCategory category)
     {
+        if (category is null)
+        {
+            return;
+        }
+        _preferedCategory = category;
         foreach (var expense in _expensesToBeSplitted)
         {
             expense.CategoryId = category.Id;
@@ -554,20 +561,6 @@ public class SplitExpenseViewModel : ObservableObject, IViewModel
         _expensesToBeSplitted.CollectionChanged += ExpensesToBeSplittedOnCollectionChanged;
 
     }
-
-    private async void OnUserValueChanged(string property)
-    {
-        await UiService.RunOnUiThread(
-            () =>
-            {
-                BindingUpdateInvoked?.Invoke();
-            }, View.Dispatcher).ConfigureAwait(false);
-    }
-
-    /// <summary>
-    /// Updating expense objects Currency Converter if the currency preference Changes 
-    /// </summary>
-    public event Action BindingUpdateInvoked;
 
     private class SplitExpenseVmPresenterCallBack : IPresenterCallBack<UserSuggestionResponseObject>, IPresenterCallBack<SplitExpenseResponseObj>, IPresenterCallBack<GetUserGroupResponse>
     {

@@ -17,18 +17,13 @@ public sealed partial class UserProfilePage : Page
     {
         _viewModel = App.Container.GetService<UserProfilePageViewModel>();
         InitializeComponent();
-        _viewModel.BindingUpdateInvoked += _viewModel_BindingUpdateInvoked;
+
         Unloaded += UserProfilePage_Unloaded;
     }
 
     private void UserProfilePage_Unloaded(object sender, RoutedEventArgs e)
     {
         _viewModel.ViewDisposed();
-    }
-
-    private void _viewModel_BindingUpdateInvoked()
-    {
-        Bindings.Update();
     }
 
         

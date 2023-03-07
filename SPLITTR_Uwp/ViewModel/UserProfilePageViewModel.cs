@@ -16,7 +16,7 @@ using SPLITTR_Uwp.ViewModel.Vobj;
 
 namespace SPLITTR_Uwp.ViewModel;
 
-public class UserProfilePageViewModel : ObservableObject,IViewModel
+public class UserProfilePageViewModel : ObservableObject
 {
 
 
@@ -33,7 +33,7 @@ public class UserProfilePageViewModel : ObservableObject,IViewModel
     {
         await UiService.RunOnUiThread(() =>
         {
-            BindingUpdateInvoked?.Invoke();
+           OnPropertyChanged(nameof(UserInitial));
 
         }).ConfigureAwait(false);
     }
@@ -42,8 +42,6 @@ public class UserProfilePageViewModel : ObservableObject,IViewModel
     {
         SplittrNotification.UserObjUpdated -= SplittrNotification_UserObjUpdated;
     }
-
-
 
     public string UserInitial
     {
@@ -127,9 +125,7 @@ public class UserProfilePageViewModel : ObservableObject,IViewModel
 
 
     }
-        
-    public event Action BindingUpdateInvoked;
-
+   
     public async void InvokeOnUserObjectUpdated(UpdateUserResponseObj result)
     { 
 
