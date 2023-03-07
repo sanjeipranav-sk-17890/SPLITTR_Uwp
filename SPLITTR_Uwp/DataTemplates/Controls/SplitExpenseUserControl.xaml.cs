@@ -9,7 +9,7 @@ using SPLITTR_Uwp.ViewModel;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace SPLITTR_Uwp.Views;
+namespace SPLITTR_Uwp.DataTemplates.Controls;
 
 public sealed partial class SplitExpenseUserControl : UserControl,ISplitExpenseView
 {

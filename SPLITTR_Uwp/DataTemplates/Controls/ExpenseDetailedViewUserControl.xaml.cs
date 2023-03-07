@@ -10,7 +10,7 @@ using SPLITTR_Uwp.ViewModel.Vobj;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace SPLITTR_Uwp.Views;
+namespace SPLITTR_Uwp.DataTemplates.Controls;
 
 public sealed partial class ExpenseDetailedViewUserControl : UserControl
 {
@@ -29,13 +29,16 @@ public sealed partial class ExpenseDetailedViewUserControl : UserControl
         Unloaded += (sender, args) => _viewModel.ViewDisposed();
     }
 
+    private ExpenseVobj _previousExpenseVobj = default;
     private void ExpenseDetailedViewUserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
     {
 
-        if (ExpenseObj is null)
+        //No change in Detailed View Subscription if Same Object is been Selected
+        if (ExpenseObj is null || _previousExpenseVobj?.ExpenseUniqueId.Equals(ExpenseObj.ExpenseUniqueId) is true)
         {
             return;
         }
+        _previousExpenseVobj = ExpenseObj;
         ExpenseObj.PropertyChanged += ExpenseObj_PropertyChanged;
         ManipulateUiBasedOnDataContext();
         Bindings.Update();

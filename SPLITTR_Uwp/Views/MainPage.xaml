@@ -94,6 +94,7 @@
                         <AdaptiveTrigger MinWindowWidth="0"/>
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
+                        <Setter Target="ToggleButtonTextBlock.Visibility" Value="Collapsed"></Setter>
                         <Setter Target="DashBoardSplitView.DisplayMode" Value="Overlay"></Setter>
                         <Setter Target="NavigationViewFooter.Visibility" Value="Collapsed"/>
                         <Setter Target="BottomPanel.Visibility" Value="Visible"/>
@@ -115,6 +116,7 @@
                         <AdaptiveTrigger MinWindowWidth="1400"/>
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
+                        <Setter Target="ToggleButtonTextBlock.Visibility" Value="Visible"></Setter>
                         <Setter Target="DashBoardSplitView.DisplayMode" Value="Inline"></Setter>
                     </VisualState.Setters>
                 </VisualState>
@@ -143,28 +145,28 @@
                            Margin="-20 0 0 0"
                            FontFamily="Segoe UI Variable"/>
                 <controls:SplitButton x:Name="AddToggleFlyOutButton"
-                                   Margin="10 0 0 0" 
-                                   Background="{ThemeResource ApplicationMainThemeAcrylicBrush}"
+                                   Margin="15 0 0 0" 
+                                   Background="{ThemeResource ApplicationMainThemeColor}"
                                    Click="AddToggleFlyOutButton_OnClick"
-                                   Foreground="{ThemeResource SystemAccentColorDark3}"
+                                   Foreground="White"
+                                   ToolTipService.ToolTip="{x:Bind ToggleButtonTextBlock.Text,Mode=OneWay}"
                                    VerticalAlignment="Center">
 
                         <controls:SplitButton.Flyout>
                         <MenuFlyout Placement="BottomEdgeAlignedRight">
-                            <MenuFlyoutItem Text="Add Expense"  
+                            <MenuFlyoutItem Text="New Expense"  
                                             Click="MenuFlyoutItem_OnClick"/>
-                            <MenuFlyoutItem Text="Add Group" 
+                            <MenuFlyoutItem Text="New Group" 
                                             Click="MenuFlyoutItem_OnClick"/>
                         </MenuFlyout>
                     </controls:SplitButton.Flyout>
                     <controls:SplitButton.Content>
                        <StackPanel Orientation="Horizontal">
-                           <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xF10E;" 
-                                     VerticalAlignment="Center"/>
-                            <TextBlock Margin="4 0 0 0" Text="Add Expense"
+                           <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xED11;" Foreground="White" />
+                            <TextBlock Margin="4 0 0 0" Text="New Expense"
                                        x:Name="ToggleButtonTextBlock"
                                        VerticalAlignment="Center"
-                                       Foreground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                                       Foreground="White"
                                        ></TextBlock>
                         </StackPanel>
                     </controls:SplitButton.Content>
@@ -180,7 +182,7 @@
                     </Button.Content>
                 </Button>
                 <themeButton:ThemeChangerButton/>
-                <Button Style="{StaticResource AddWalletButtonStyle}"
+                <!--<Button Style="{StaticResource AddWalletButtonStyle}"
                         RelativePanel.LeftOf="TitleBarAddExpenseButton"  >
                     <Button.Content>
                         <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="23" Glyph="&#xECCD;" />
@@ -191,7 +193,7 @@
                             <MenuFlyoutItem Text="Create Group" Click="{x:Bind AddButtonItemSelected}" />
                         </MenuFlyout>
                     </Button.Flyout>
-                </Button>
+                </Button>-->
                 <Button Style="{StaticResource AddWalletButtonStyle}"
                         ToolTipService.ToolTip="Add Wallet Amount"  
                         Margin="0 0 10 0"

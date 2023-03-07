@@ -162,7 +162,7 @@ public sealed partial class MainPage : Page, IMainView
     }
     private void NavigateWithRespectToGivenString(string title)
     {
-        NavigationService.Navigate(string.Compare(title, "Add Expense", StringComparison.InvariantCultureIgnoreCase) == 0 ?
+        NavigationService.Navigate(string.Compare(title, "New Expense", StringComparison.InvariantCultureIgnoreCase) == 0 ?
             typeof(AddExpenseTestPage) :
             typeof(GroupCreationPage),null,new DrillInNavigationTransitionInfo());
     }
