@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
     xmlns:views="using:SPLITTR_Uwp.Views"
+    xmlns:controls="using:SPLITTR_Uwp.DataTemplates.Controls"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -21,7 +22,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <views:ExpenseDetailedViewUserControl Grid.Row="0" Grid.ColumnSpan="3"
+        <controls:ExpenseDetailedViewUserControl Grid.Row="0" Grid.ColumnSpan="3"
                                               DataContext="{x:Bind DataContext,Mode=OneWay}"
                                            HorizontalAlignment="Stretch"
                                               BackButtonClicked="ExpenseDetailedViewUserControl_OnBackButtonClicked"/>

@@ -6,13 +6,14 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+    xmlns:controls1="using:SPLITTR_Uwp.DataTemplates.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationMainThemeAcrylicBrush}">
 
     <Grid>
-            <local:SplitExpenseUserControl HorizontalAlignment="Center" CanDrag="True"
+            <controls1:SplitExpenseUserControl HorizontalAlignment="Center" CanDrag="True"
                                            x:Name="SplitExpneseControl"
                                            DragStarting="SplitExpenseControl_OnDragStarting" 
-            ></local:SplitExpenseUserControl>
+            ></controls1:SplitExpenseUserControl>
     </Grid>
 </Page>

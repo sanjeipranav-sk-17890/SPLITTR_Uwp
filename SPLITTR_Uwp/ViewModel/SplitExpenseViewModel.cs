@@ -14,6 +14,7 @@ using SPLITTR_Uwp.Core.UseCase.GetUserGroups;
 using SPLITTR_Uwp.Core.UseCase.SplitExpenses;
 using SPLITTR_Uwp.Core.UseCase.UserSuggestion;
 using SPLITTR_Uwp.DataRepository;
+using SPLITTR_Uwp.DataTemplates.Controls;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.Vobj;

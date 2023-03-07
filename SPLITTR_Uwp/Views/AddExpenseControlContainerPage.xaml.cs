@@ -6,6 +6,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using SPLITTR_Uwp.Core.ModelBobj;
+using SPLITTR_Uwp.DataTemplates.Controls;
 using SPLITTR_Uwp.Services;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238

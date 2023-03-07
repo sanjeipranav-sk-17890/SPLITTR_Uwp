@@ -214,7 +214,7 @@
     <Compile Include="ViewModel\OwnerExpenseControlViewModel.cs" />
     <Compile Include="ViewModel\RelatedExpenseTemplateViewModel.cs" />
     <Compile Include="ViewModel\VmLogic\ViewModelBase.cs" />
-    <Compile Include="Views\ExpenseDetailedViewUserControl.xaml.cs">
+    <Compile Include="DataTemplates\Controls\ExpenseDetailedViewUserControl.xaml.cs">
       <DependentUpon>ExpenseDetailedViewUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\ExpenseItemViewModel.cs" />
@@ -246,7 +246,7 @@
     <Compile Include="DataTemplates\Controls\MainPagePanelButton.xaml.cs">
       <DependentUpon>MainPagePanelButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SplitExpenseUserControl.xaml.cs">
+    <Compile Include="DataTemplates\Controls\SplitExpenseUserControl.xaml.cs">
       <DependentUpon>SplitExpenseUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WalletBalanceUpdatePopUp.xaml.cs">
@@ -340,7 +340,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ExpenseDetailedViewUserControl.xaml">
+    <Page Include="DataTemplates\Controls\ExpenseDetailedViewUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -364,7 +364,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SplitExpenseUserControl.xaml">
+    <Page Include="DataTemplates\Controls\SplitExpenseUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
