@@ -18,6 +18,8 @@ using NavigationView = Microsoft.UI.Xaml.Controls.NavigationView;
 using NavigationViewItem = Microsoft.UI.Xaml.Controls.NavigationViewItem;
 using NavigationViewItemBase = Microsoft.UI.Xaml.Controls.NavigationViewItemBase;
 using NavigationViewSelectionChangedEventArgs = Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs;
+using SplitButton = Microsoft.UI.Xaml.Controls.SplitButton;
+using SplitButtonClickEventArgs = Microsoft.UI.Xaml.Controls.SplitButtonClickEventArgs;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -53,6 +55,7 @@ public sealed partial class MainPage : Page, IMainView
         _viewModel = ActivatorUtilities.CreateInstance<MainPageViewModel>(App.Container);
         InitializeComponent();
         _view = this;
+        NavigationService.Frame = InnerFrame;
         _viewModel.UserGroups.CollectionChanged += UserGroups_CollectionChanged;
     }
     #region NavigationViewGroupsPopulating 
@@ -111,7 +114,6 @@ public sealed partial class MainPage : Page, IMainView
     {
 
         MainPageNavigationView.IsPaneOpen = true;
-        NavigationService.Frame = InnerFrame;
         NavigationService.Navigated += NavigationService_Navigated;
         NavigationService.Navigate(typeof(ExpensesListAndDetailViewPage));
     }
@@ -140,20 +142,35 @@ public sealed partial class MainPage : Page, IMainView
 
         var selectedItem = sender as MenuFlyoutItem;
         var title = selectedItem?.Text;
-        NavigationService.Frame = InnerFrame;
-        NavigationService.Navigate(string.Compare(title, "Add Exepense", StringComparison.InvariantCultureIgnoreCase) == 0 ?
-            typeof(AddExpenseTestPage) :
-            typeof(GroupCreationPage), new DrillInNavigationTransitionInfo());
+         NavigateWithRespectToGivenString(title);
     }
 
     private void PersonProfileClicked()
     {
         MainPageNavigationView.IsPaneOpen = false;
-        NavigationService.Frame = InnerFrame;
         NavigationService.Navigate<UserProfilePage>();
     }
-
-
+    private void MenuFlyoutItem_OnClick(object sender, RoutedEventArgs e)
+    {
+        //closing main Page pane
+        MainPageNavigationView.IsPaneOpen = false;
+        var selectedItem = sender as MenuFlyoutItem;
+        ToggleButtonTextBlock.Text = selectedItem?.Text ?? string.Empty;
+        var title = selectedItem?.Text;
+        NavigateWithRespectToGivenString(title);
+       
+    }
+    private void NavigateWithRespectToGivenString(string title)
+    {
+        NavigationService.Navigate(string.Compare(title, "Add Expense", StringComparison.InvariantCultureIgnoreCase) == 0 ?
+            typeof(AddExpenseTestPage) :
+            typeof(GroupCreationPage),null,new DrillInNavigationTransitionInfo());
+    }
+    private void AddToggleFlyOutButton_OnClick(SplitButton sender, SplitButtonClickEventArgs args)
+    {
+        MainPageNavigationView.IsPaneOpen = false;
+        NavigateWithRespectToGivenString(ToggleButtonTextBlock.Text);
+    }
     #endregion
 
     #region ExpenseSelection Control Redirection 
@@ -238,4 +255,6 @@ public sealed partial class MainPage : Page, IMainView
     {
         WalletBalanceUpdateTeachingTip.IsOpen = !WalletBalanceUpdateTeachingTip.IsOpen;
     }
+
+    
 }

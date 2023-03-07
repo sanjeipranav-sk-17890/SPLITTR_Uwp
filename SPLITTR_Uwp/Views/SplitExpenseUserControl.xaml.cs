@@ -1,6 +1,8 @@
-﻿using Windows.UI.Core;
+﻿using System;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Imaging;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.ViewModel;
@@ -33,6 +35,11 @@ public sealed partial class SplitExpenseUserControl : UserControl,ISplitExpenseV
 
     private void ExpenseCategoryControl_OnOnExpenseCategorySelected(ExpenseCategory category)
     {
+        if (category is null)
+        {
+            return;
+        }
+        ExpenseCategoryControl.CategoryIconSource = new BitmapImage(new Uri(category.Icon));
         _viewModel.PreferedExpenseCategoryChanged(category);
     }
 }

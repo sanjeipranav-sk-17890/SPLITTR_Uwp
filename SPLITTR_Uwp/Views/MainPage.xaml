@@ -135,7 +135,6 @@
                 <Image Source="../Assets/AppLogo/62e914dea1e1b17f781f57f4.png" 
                        Stretch="Uniform"
                        Height="40"
-
                        Width="80" Tapped="AppIcon_OnClick"></Image>
                 <TextBlock  Text="SPLITTR"
                            VerticalAlignment="Center"
@@ -143,6 +142,33 @@
                            FontSize="20" 
                            Margin="-20 0 0 0"
                            FontFamily="Segoe UI Variable"/>
+                <controls:SplitButton x:Name="AddToggleFlyOutButton"
+                                   Margin="10 0 0 0" 
+                                   Background="{ThemeResource ApplicationMainThemeAcrylicBrush}"
+                                   Click="AddToggleFlyOutButton_OnClick"
+                                   Foreground="{ThemeResource SystemAccentColorDark3}"
+                                   VerticalAlignment="Center">
+
+                        <controls:SplitButton.Flyout>
+                        <MenuFlyout Placement="BottomEdgeAlignedRight">
+                            <MenuFlyoutItem Text="Add Expense"  
+                                            Click="MenuFlyoutItem_OnClick"/>
+                            <MenuFlyoutItem Text="Add Group" 
+                                            Click="MenuFlyoutItem_OnClick"/>
+                        </MenuFlyout>
+                    </controls:SplitButton.Flyout>
+                    <controls:SplitButton.Content>
+                       <StackPanel Orientation="Horizontal">
+                           <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xF10E;" 
+                                     VerticalAlignment="Center"/>
+                            <TextBlock Margin="4 0 0 0" Text="Add Expense"
+                                       x:Name="ToggleButtonTextBlock"
+                                       VerticalAlignment="Center"
+                                       Foreground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                                       ></TextBlock>
+                        </StackPanel>
+                    </controls:SplitButton.Content>
+                </controls:SplitButton>
 
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >

@@ -70,19 +70,10 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         public ExpenseCategoryControl()
         {
             _viewModel = ActivatorUtilities.CreateInstance<CategoryControlViewModel>(App.Container, this);
+            _viewModel.LoadData();
             InitializeComponent();
-            OnExpenseCategorySelected += ExpenseCategoryControl_OnExpenseCategorySelected;
+            
         }
-
-
-        /*
-         * For Dev Purpose will Be Set By External Control USer by Listen to OnExpenseCategoryChangedEvent 
-         */
-        private void ExpenseCategoryControl_OnExpenseCategorySelected(ExpenseCategory obj)
-        {
-            CategoryImage.Source = new BitmapImage(new Uri(obj.Icon));
-        }
-
 
         #region  EVENTS_REGION
 
@@ -154,7 +145,12 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         private readonly IView _view;
         private bool _isCategoryLoading;
 
-        public ObservableCollection<ExpenseCategoryBobj> Categories { get; } = new ObservableCollection<ExpenseCategoryBobj>();
+        private static ObservableCollection<ExpenseCategoryBobj> CategoryCache { get; } = new ObservableCollection<ExpenseCategoryBobj>();
+
+        public ObservableCollection<ExpenseCategoryBobj> Categories
+        {
+            get => CategoryCache;
+        }
 
         public bool IsCategoryLoading
         {
@@ -167,11 +163,14 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             _view = view;
 
         }
+
+        
         /// <summary>
         /// Call to Expense category UseCase To Fetch Data
         /// </summary>
         public void LoadData()
         {
+
             IsCategoryLoading = true;
 
             var fetchCategoryReq = new FetchExpenseCategoryRequest(CancellationToken.None, new CategoryControlVmPresenterCb(this));

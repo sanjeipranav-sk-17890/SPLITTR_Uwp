@@ -177,6 +177,7 @@
                                                      Height="80"
                                                      Grid.Row="0"
                                                      Grid.Column="0"
+                                                     x:Name="ExpenseCategoryControl"
                                                      IsFlyOutOpeningAllowed="True"
                                                      OnExpenseCategorySelected="ExpenseCategoryControl_OnOnExpenseCategorySelected"
                                                      Margin="10 5 0 0"/>
