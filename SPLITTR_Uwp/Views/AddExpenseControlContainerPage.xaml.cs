@@ -5,6 +5,7 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.DataTemplates.Controls;
 using SPLITTR_Uwp.Services;
@@ -76,7 +77,10 @@ public sealed partial class AddExpenseTestPage : Page
 
         await ApplicationViewSwitcher.TryShowAsStandaloneAsync(_sptrAppView.Id);
 
-        MainPage.RequestMainPageNavigation();
+        if(MainPage.GetForCurrentView is { } currentView)
+        {
+            currentView.OnDefaultViewRequested(this,default);
+        }
     }
 
     private void OnRootGridOnLoaded(object o, RoutedEventArgs eventArgs)

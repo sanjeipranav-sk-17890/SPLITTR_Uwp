@@ -1,6 +1,7 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -32,15 +33,19 @@ public sealed partial class App : Application
     public App()
     {
         InitializeComponent();
-
     }
-        
-
 
     private static IServiceProvider GetServiceProvider()
     {
         return new ServiceCollection().AddDependencies().BuildServiceProvider();
     }
+
+    public static bool IsAppTitleBarButtonVisible
+    {
+        get => SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility == AppViewBackButtonVisibility.Visible;
+        set => SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = value ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
+    }
+
 
     /// <summary>
     /// Invoked when the application is launched normally by the end user.  Other entry points

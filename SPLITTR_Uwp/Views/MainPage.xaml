@@ -137,7 +137,7 @@
                 <Image Source="../Assets/AppLogo/62e914dea1e1b17f781f57f4.png" 
                        Stretch="Uniform"
                        Height="40"
-                       Width="80" Tapped="AppIcon_OnClick"></Image>
+                       Width="80" ></Image>
                 <TextBlock  Text="SPLITTR"
                            VerticalAlignment="Center"
                            FontWeight="SemiBold"

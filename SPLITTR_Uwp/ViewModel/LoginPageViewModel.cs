@@ -118,6 +118,8 @@ public class LoginPageViewModel : ObservableObject
         });
         //Storing Current User Session 
         _stateManager?.RegisterUserLoginSession(Store.CurrentUserBobj);
+        //Fetching Required Data
+        Store.LoadInitialNecessaryData();
     }
 
 

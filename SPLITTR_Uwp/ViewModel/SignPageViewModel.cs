@@ -65,7 +65,7 @@ public class SignPageViewModel : ObservableObject
 
     private void UserNameValueChanged()
     {
-        EmailPassInputPanelVisibility = _userName.Length > 3;
+        EmailPassInputPanelVisibility = _userName.Length > 2;
     }
 
 

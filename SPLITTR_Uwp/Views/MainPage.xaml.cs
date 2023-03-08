@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -20,6 +21,7 @@ using NavigationViewItemBase = Microsoft.UI.Xaml.Controls.NavigationViewItemBase
 using NavigationViewSelectionChangedEventArgs = Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs;
 using SplitButton = Microsoft.UI.Xaml.Controls.SplitButton;
 using SplitButtonClickEventArgs = Microsoft.UI.Xaml.Controls.SplitButtonClickEventArgs;
+using Windows.UI.Core;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -28,10 +30,23 @@ namespace SPLITTR_Uwp.Views;
 /// <summary>
 /// An empty page that can be used on its own or navigated to within a Frame.
 /// </summary>
-public sealed partial class MainPage : Page, IMainView
+public sealed partial class MainPage : Page
 {
     private readonly IMainPageViewModel _viewModel;
-    private static MainPage _view;
+    private static MainPage _instance;
+    
+   
+
+   
+    public MainPage()
+    {
+        _viewModel = ActivatorUtilities.CreateInstance<MainPageViewModel>(App.Container);
+        _instance = this;
+        InitializeComponent();
+        NavigationService.Frame = InnerFrame;
+        _viewModel.UserGroups.CollectionChanged += UserGroups_CollectionChanged;
+        SystemNavigationManager.GetForCurrentView().BackRequested += OnDefaultViewRequested;
+    }
 
     private void PageOnPaneButtonOnClick()
     {
@@ -43,20 +58,6 @@ public sealed partial class MainPage : Page, IMainView
     private void MainPage_Unloaded(object sender, RoutedEventArgs e)
     {
         _viewModel.ViewDisposed();
-    }
-
-    public Frame ChildFrame
-    {
-        get => InnerFrame;
-    }
-
-    public MainPage()
-    {
-        _viewModel = ActivatorUtilities.CreateInstance<MainPageViewModel>(App.Container);
-        InitializeComponent();
-        _view = this;
-        NavigationService.Frame = InnerFrame;
-        _viewModel.UserGroups.CollectionChanged += UserGroups_CollectionChanged;
     }
     #region NavigationViewGroupsPopulating 
 
@@ -103,25 +104,27 @@ public sealed partial class MainPage : Page, IMainView
 
     #endregion
 
-
     #region NavigationLogic
 
-    private void AppIcon_OnClick(object sender, TappedRoutedEventArgs e)
+    public static MainPage GetForCurrentView
+    {
+        get => _instance;
+    }
+
+
+    public void OnDefaultViewRequested(object sender, BackRequestedEventArgs e)
     {
         NavigationRequested();
     }
+
     private void NavigationRequested()
     {
-
+        App.IsAppTitleBarButtonVisible = false;
         MainPageNavigationView.IsPaneOpen = true;
         NavigationService.Navigated += NavigationService_Navigated;
         NavigationService.Navigate(typeof(ExpensesListAndDetailViewPage));
     }
-    public static void RequestMainPageNavigation()
-    {
-        _view?.NavigationRequested();
-    }
-
+    
     private void NavigationService_Navigated(object sender, NavigationEventArgs e)
     {
 
@@ -135,18 +138,10 @@ public sealed partial class MainPage : Page, IMainView
 
         NavigationService.Navigated -= NavigationService_Navigated;
     }
-    private void AddButtonItemSelected(object sender, RoutedEventArgs e)
-    {
-        //closing main Page pane
-        MainPageNavigationView.IsPaneOpen = false;
-
-        var selectedItem = sender as MenuFlyoutItem;
-        var title = selectedItem?.Text;
-         NavigateWithRespectToGivenString(title);
-    }
 
     private void PersonProfileClicked()
     {
+        App.IsAppTitleBarButtonVisible = true;
         MainPageNavigationView.IsPaneOpen = false;
         NavigationService.Navigate<UserProfilePage>();
     }
@@ -162,6 +157,7 @@ public sealed partial class MainPage : Page, IMainView
     }
     private void NavigateWithRespectToGivenString(string title)
     {
+        App.IsAppTitleBarButtonVisible = true;
         NavigationService.Navigate(string.Compare(title, "New Expense", StringComparison.InvariantCultureIgnoreCase) == 0 ?
             typeof(AddExpenseTestPage) :
             typeof(GroupCreationPage),null,new DrillInNavigationTransitionInfo());
