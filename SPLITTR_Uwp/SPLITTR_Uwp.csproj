@@ -26,7 +26,7 @@
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundle>Always</AppxBundle>
-    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
+    <AppxBundlePlatforms>x64</AppxBundlePlatforms>
     <AppInstallerUri>https://drive.google.com/drive/folders/1p50O3GdPAtjhcv0iyZt3lF3ysvJv23VK%3fusp=share_link</AppInstallerUri>
     <HoursBetweenUpdateChecks>24</HoursBetweenUpdateChecks>
     <AppxPackageDir>D:\Internal Build 2.0\</AppxPackageDir>
@@ -198,7 +198,6 @@
     <Compile Include="Services\NetworkInfoService.cs" />
     <Compile Include="Services\StateService.cs" />
     <Compile Include="Services\ThemeHelperService.cs" />
-    <Compile Include="ViewModel\Contracts\IViewModel.cs" />
     <Compile Include="ViewModel\OwingMoneyPaymentExpenseViewModel.cs" />
     <Compile Include="DataTemplates\Controls\OwnerExpenseUserControl.xaml.cs">
       <DependentUpon>OwnerExpenseUserControl.xaml</DependentUpon>
@@ -230,7 +229,7 @@
     <Compile Include="ViewModel\SignPageViewModel.cs" />
     <Compile Include="ViewModel\SplitExpenseViewModel.cs" />
     <Compile Include="ViewModel\UserProfilePageViewModel.cs" />
-    <Compile Include="ViewModel\VmLogic\ExpenseGrouper.cs" />
+    <Compile Include="ViewModel\VmLogic\ExpenseStatusGrouper.cs" />
     <Compile Include="ViewModel\VmLogic\IExpenseGrouper.cs" />
     <Compile Include="ViewModel\WalletBalanceUpdateViewModel.cs" />
     <Compile Include="Views\AddExpenseControlContainerPage.xaml.cs">

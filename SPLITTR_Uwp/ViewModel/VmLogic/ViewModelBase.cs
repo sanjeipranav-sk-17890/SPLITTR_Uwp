@@ -4,11 +4,11 @@ using SPLITTR_Uwp.ViewModel.Contracts;
 
 namespace SPLITTR_Uwp.ViewModel.VmLogic;
 
-public abstract class ViewModelBase : ObservableObject, IViewModel
+public abstract class ViewModelBase : ObservableObject
 {
     public event Action BindingUpdateInvoked;
 
-    public void InvokeBindingsUpdate()
+    protected void InvokeBindingsUpdate()
     {
         BindingUpdateInvoked?.Invoke();
     }

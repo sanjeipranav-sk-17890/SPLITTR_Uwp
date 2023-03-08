@@ -52,7 +52,7 @@ public static class Configuration
             
         container.AddSingleton<IStateService, StateService>()
             .AddTransient<IStringManipulator, Manipulator>()
-            .AddTransient<IExpenseGrouper, ExpenseGrouper>()
+            .AddTransient<IExpenseGrouper, ExpenseStatusGrouper>()
             .AddTransient<UpdateUser>()
             .AddTransient<AddWalletAmount>()
             .AddTransient<GroupCreation>()
