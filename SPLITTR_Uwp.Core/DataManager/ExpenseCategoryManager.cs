@@ -50,7 +50,11 @@ namespace SPLITTR_Uwp.Core.DataManager
             }
             catch (Exception e)
             {
-                callBack?.OnError(new SplittrException(e));
+                var wrapperError = new SplittrException(e)
+                {
+                    IsNetworkCallError = true
+                };
+                callBack?.OnError(wrapperError);
             }
 
         }

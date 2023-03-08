@@ -68,7 +68,7 @@ public sealed partial class ExpenseDataTemplate : UserControl
         }
     }
     private void ExpenseCategoryControl_OnOnExpenseCategorySelected(ExpenseCategory obj)
-    {
+    { 
         _viewModel.ChangeExpenseCategory(obj);
     }
 }

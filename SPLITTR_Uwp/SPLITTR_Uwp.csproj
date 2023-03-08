@@ -195,6 +195,7 @@
       <DependentUpon>UserExpensesListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\AccentColorService.cs" />
+    <Compile Include="Services\NetworkInfoService.cs" />
     <Compile Include="Services\StateService.cs" />
     <Compile Include="Services\ThemeHelperService.cs" />
     <Compile Include="ViewModel\Contracts\IViewModel.cs" />

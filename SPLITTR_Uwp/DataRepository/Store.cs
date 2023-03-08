@@ -13,16 +13,18 @@ namespace SPLITTR_Uwp.DataRepository;
 
 internal static class Store
 {
-    private readonly static List<ExpenseCategoryBobj> CategoriesRepo = new List<ExpenseCategoryBobj>();
-
     public static UserBobj CurrentUserBobj { get; set; }
+
 
     public static IReadOnlyList<ExpenseCategoryBobj> Categories
     {
         get => CategoriesRepo;
     }
 
+    private readonly static List<ExpenseCategoryBobj> CategoriesRepo = new List<ExpenseCategoryBobj>();
+
     public static event Action<IEnumerable<ExpenseCategoryBobj>> CategoriesLoaded; 
+
 
     private static void PopulateCategoryObj()
     {
@@ -45,10 +47,35 @@ internal static class Store
         {
             CategoriesRepo.AddRange(result.Categories);
             CategoriesLoaded?.Invoke(Categories);
+
+            NetworkInfoService.NetWorkConnectionChanged -= NetworkInfoService_NetWorkConnectionChanged;
         }
         public void OnError(SplittrException ex)
         {
             ExceptionHandlerService.HandleException(ex);
+            if (ex.IsNetworkCallError)
+            {
+                SubscribeToNetWorkChangeIfNot();
+                NetworkInfoService.NetWorkConnectionChanged += NetworkInfoService_NetWorkConnectionChanged;
+            }
+        }
+        private static bool _isNetWorkSubscribed;
+
+        private void SubscribeToNetWorkChangeIfNot()
+        {
+            if (!_isNetWorkSubscribed)
+            {
+                NetworkInfoService.NetWorkConnectionChanged += NetworkInfoService_NetWorkConnectionChanged;
+                _isNetWorkSubscribed =true;
+            }
+        }
+
+        private void NetworkInfoService_NetWorkConnectionChanged(NetWorkConnectionChangedEventArgs obj)
+        {
+            if (obj?.IsInterNetAvailable is true)
+            {
+                PopulateCategoryObj();
+            }
         }
     }
 }

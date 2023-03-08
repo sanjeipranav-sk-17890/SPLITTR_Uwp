@@ -1,6 +1,7 @@
 ﻿using Windows.Networking.Connectivity;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using SPLITTR_Uwp.Services;
 using static SPLITTR_Uwp.Services.UiService;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
@@ -11,30 +12,38 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
     {
         public NoConnectionIndicator()
         {
-            Loaded += NoConnectionIndicator_Loaded;
-            NetworkInformation.NetworkStatusChanged += NetworkInformationOnNetworkStatusChanged;
-            InitializeComponent();
             //Subscribing For Change in Network Connection
+            NetworkInfoService.NetWorkConnectionChanged += NetworkInfoService_NetWorkConnectionChanged;
+            InitializeComponent();
+            Loaded += NoConnectionIndicator_Loaded;
+            Unloaded += NoConnectionIndicator_Unloaded;
+        }
+
+        private void NoConnectionIndicator_Unloaded(object sender, RoutedEventArgs e)
+        {
+            NetworkInfoService.NetWorkConnectionChanged -= NetworkInfoService_NetWorkConnectionChanged;
         }
 
         private void NoConnectionIndicator_Loaded(object sender, RoutedEventArgs e)
         {
-            //Initial Checking For Network Connection
-            NetworkInformationOnNetworkStatusChanged(default);
+            SwitchVisibilityBasedOnBool(NetworkInfoService.IsNetworkConnectionAvailable);
         }
 
-
-        private void NetworkInformationOnNetworkStatusChanged(object sender)
+        private void NetworkInfoService_NetWorkConnectionChanged(NetWorkConnectionChangedEventArgs args)
         {
-            var netInfo = NetworkInformation.GetInternetConnectionProfile();
-            var level = netInfo?.GetNetworkConnectivityLevel();
-            if (level is null or NetworkConnectivityLevel.None)
+            SwitchVisibilityBasedOnBool(args.IsInterNetAvailable);
+        }
+        private void SwitchVisibilityBasedOnBool(bool isInternetAvailable)
+        {
+
+            if (isInternetAvailable)
             {
-              ShowNoConnectionIndicator();
+              HideNoConnectionIndicator();
                 return;
             }
-            HideNoConnectionIndicator();
+            ShowNoConnectionIndicator();
         }
+
         private async void HideNoConnectionIndicator()
         {
             await RunOnUiThread((() =>

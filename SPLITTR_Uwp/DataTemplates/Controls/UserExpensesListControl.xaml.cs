@@ -326,6 +326,7 @@ public class ExpensesListControlViewModel :ObservableObject
     {
         SplittrNotification.ExpensesSplitted -= SplittrNotification_ExpensesSplitted;
         SplittrNotification.ExpenseStatusChanged -= SplittrNotification_ExpenseStatusChanged;
+        Store.CategoriesLoaded -= (AssignRespectiveIcons);
     }
 
     public void OnExpenseListControlLoaded()
