@@ -6,7 +6,7 @@ using SPLITTR_Uwp.ViewModel.Vobj.ExpenseListObject;
 
 namespace SPLITTR_Uwp.ViewModel.VmLogic;
 
-internal class ExpenseGrouper : IExpenseGrouper
+internal class ExpenseStatusGrouper : IExpenseGrouper
 {
 
     private readonly IEnumerable<ExpenseBobj> _emptyList = new List<ExpenseBobj>().DefaultIfEmpty();
@@ -16,7 +16,7 @@ internal class ExpenseGrouper : IExpenseGrouper
 
 
 
-    public ExpenseGrouper()
+    public ExpenseStatusGrouper()
     {
         _emptyPaidExpensesGroup =  new ExpenseGroupingList(ExpenseStatus.Paid, _emptyList);
         _emptyPendingExpensesGroup = new ExpenseGroupingList(ExpenseStatus.Pending, _emptyList);
