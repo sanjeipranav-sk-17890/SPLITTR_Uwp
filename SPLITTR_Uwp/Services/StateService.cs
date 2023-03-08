@@ -132,6 +132,9 @@ public class StateService : IStateService
 
         public async void OnSuccess(LoginResponseObj result)
         {
+            //Fetching Initial needed Data 
+            Store.LoadInitialNecessaryData();
+
             await RunOnUiThread(() =>
             {
                 Store.CurrentUserBobj = result.LoginUserCred;

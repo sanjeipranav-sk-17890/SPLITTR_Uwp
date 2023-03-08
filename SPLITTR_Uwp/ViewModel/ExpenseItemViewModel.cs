@@ -39,19 +39,12 @@ internal class ExpenseItemViewModel : ObservableObject
     private string _owingSplitTitle;
     private Brush _owingExpenseForeground;
     private bool _isCategoryChangeAllowed;
-    private ImageSource _expenseCategoryImgSource;
     private string _categoryName;
 
     public bool IsCategoryChangeAllowed
     {
         get => _isCategoryChangeAllowed;
         set => SetProperty(ref _isCategoryChangeAllowed, value);
-    }
-
-    public ImageSource ExpenseCategoryImgSource
-    {
-        get => _expenseCategoryImgSource;
-        set => SetProperty(ref _expenseCategoryImgSource, value);
     }
 
     public bool IsGroupButtonVisible
@@ -257,16 +250,6 @@ internal class ExpenseItemViewModel : ObservableObject
 
         relatedExpenseUseCase.Execute();
     }
-    private void CallExpenseCategoryUseCaseToFetchImageSource()
-    {
-        var getCategoryByIdReq = new GetCategoryByIdReq(CancellationToken.None, new ExpenseItemVmPresenterCallBack(this), _expenseVObj.CategoryId);
-
-        var getCategoryByIdUseCase = InstanceBuilder.CreateInstance<GetCategoryById>(getCategoryByIdReq);
-
-        getCategoryByIdUseCase.Execute();
-    }
-
-
     #endregion
 
     public void ExpenseObjLoaded(ExpenseVobj expenseObj)
@@ -287,9 +270,7 @@ internal class ExpenseItemViewModel : ObservableObject
 
         CallRelatedExpenseUseCaseCall();
 
-        CallExpenseCategoryUseCaseToFetchImageSource();
     }
-
 
     private async void SplittrNotification_CurrencyPreferenceChanged(CurrencyPreferenceChangedEventArgs obj)
     {
@@ -309,13 +290,6 @@ internal class ExpenseItemViewModel : ObservableObject
         SplittrNotification.CurrencyPreferenceChanged -= SplittrNotification_CurrencyPreferenceChanged;
     }
 
-    private void OnExpenseCategoryRecievedSuccess(ExpenseCategory expenseCategory)
-    {
-        var sourceUri = new Uri(expenseCategory.Icon);
-         ExpenseCategoryImgSource = new BitmapImage(sourceUri);
-         CategoryName = expenseCategory.Name;
-    }
-
     private async void OnRelatedExpensesRecievedSuccess(RelatedExpenseResponseObj result)
     {
         var totalAmount = result.RelatedExpenses.Sum(expense => expense.StrExpenseAmount);
@@ -330,13 +304,12 @@ internal class ExpenseItemViewModel : ObservableObject
     }
 
 
-    private class ExpenseItemVmPresenterCallBack : IPresenterCallBack<RelatedExpenseResponseObj>,IPresenterCallBack<GroupDetailByIdResponse>,IPresenterCallBack<GetCategoryByIdResponse>,IPresenterCallBack<ChangeExpenseCategoryResponse>
+    private class ExpenseItemVmPresenterCallBack : IPresenterCallBack<RelatedExpenseResponseObj>,IPresenterCallBack<GroupDetailByIdResponse>,IPresenterCallBack<ChangeExpenseCategoryResponse>
     {
         private readonly ExpenseItemViewModel _viewModel;
         public ExpenseItemVmPresenterCallBack(ExpenseItemViewModel viewModel)
         {
             _viewModel = viewModel;
-
         }
         public void OnSuccess(RelatedExpenseResponseObj result)
         {
@@ -352,24 +325,17 @@ internal class ExpenseItemViewModel : ObservableObject
 
             }).ConfigureAwait(false);
         }
-        public async void OnSuccess(GetCategoryByIdResponse result)
-        {
-            if (result is { RequestedCategoryObj: { } })
-            {
-                await RunOnUiThread((() =>
-                {
-                   _viewModel.OnExpenseCategoryRecievedSuccess(result.RequestedCategoryObj);
-                })).ConfigureAwait(false);
-            }
-        }
         public async void OnSuccess(ChangeExpenseCategoryResponse result)
         {
             if (result is { ChangedExpenseCategory: { } })
             {
-                await RunOnUiThread((() =>
+               await RunOnUiThread((() =>
                 {
-                  _viewModel.OnExpenseCategoryRecievedSuccess(result.ChangedExpenseCategory);
-                })).ConfigureAwait(false);
+                    _viewModel._expenseVObj.IconSource = result.ChangedExpenseCategory.Icon;
+                    _viewModel._expenseVObj.CategoryName = result.ChangedExpenseCategory.Name;
+                    _viewModel.CategoryName = result.ChangedExpenseCategory.Name;
+                }));
+                   
             }
         }
         public void OnError(SplittrException ex)

@@ -25,7 +25,7 @@ public sealed partial class ExpenseDetailedViewUserControl : UserControl
     {
         _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<ExpenseDetailedViewUserControlViewModel>(App.Container);
         InitializeComponent();
-        DataContextChanged += ExpenseDetailedViewUserControl_DataContextChanged;
+        DataContextChanged += ExpenseDetailedViewUserControl_DataContextChanged; 
         Unloaded += (sender, args) => _viewModel.ViewDisposed();
     }
 
@@ -46,7 +46,11 @@ public sealed partial class ExpenseDetailedViewUserControl : UserControl
 
     private void ExpenseObj_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        ManipulateUiBasedOnDataContext();
+        //Listing To Only status Change in Expense Status
+        if (e.PropertyName.Equals(nameof(ExpenseObj.ExpenseStatus)))
+        {
+            ManipulateUiBasedOnDataContext();
+        }
     }
 
     private void ManipulateUiBasedOnDataContext()

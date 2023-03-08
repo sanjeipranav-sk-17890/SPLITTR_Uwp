@@ -16,6 +16,7 @@
     <UserControl.Resources>
         <converter:StringFormatConverter x:Key="StringFormater" />
         <converter:BoolToRowSpanConverter x:Key="RowSpanConverter"/>
+        <converter:StingToBitMapSourceConverter x:Key="BitMapSourceConverter"/>
         <!--Overriding Pointer over animation -->
         <Style x:Key="NoPointerAnimation" TargetType="Button">
             <Setter Property="Background" Value="{ThemeResource ButtonBackground}"/>
@@ -136,9 +137,9 @@
                     MaxHeight="40"
                     Grid.Column="0"
                     Grid.Row="0"
-                    ToolTipText="{x:Bind _viewModel.CategoryName,Mode=OneWay}"
+                    ToolTipText="{x:Bind ExpenseObj.CategoryName,Mode=OneWay}"
                     OnExpenseCategorySelected="ExpenseCategoryControl_OnOnExpenseCategorySelected"
-                    CategoryIconSource="{x:Bind _viewModel.ExpenseCategoryImgSource,Mode=OneWay}"
+                    CategoryIconSource="{x:Bind ExpenseObj.IconSource,Mode=OneWay,Converter={StaticResource BitMapSourceConverter}}"
                     IsFlyOutOpeningAllowed="{x:Bind _viewModel.IsCategoryChangeAllowed,Mode=OneWay}"
                     Grid.RowSpan="2"/>
                 <TextBlock  Text="{x:Bind ExpenseObj.Description,Mode=OneWay}"

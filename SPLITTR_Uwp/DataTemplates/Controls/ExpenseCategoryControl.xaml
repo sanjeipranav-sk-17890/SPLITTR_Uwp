@@ -256,7 +256,7 @@
                     Placement="BottomEdgeAlignedLeft">
                 <Grid>
                     <ProgressRing IsActive="{x:Bind _viewModel.IsCategoryLoading,Mode=OneWay}" Canvas.ZIndex="100"></ProgressRing>
-                    <ListView ItemsSource="{x:Bind _viewModel.Categories}"
+                    <ListView ItemsSource="{x:Bind _viewModel.Categories,Mode=OneWay}"
                               SelectionMode="None"
                               CornerRadius="4"
                               Background="{ThemeResource ApplicationMainThemeAcrylicBrush}">

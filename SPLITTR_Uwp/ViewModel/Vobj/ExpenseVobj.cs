@@ -11,6 +11,32 @@ public class ExpenseVobj : ExpenseBobj,INotifyPropertyChanged
 {
        
     private bool _visibility = true;
+    private string _iconSource;
+    private string _categoryName;
+
+    public string IconSource
+    {
+        get => _iconSource;
+        set
+        {
+            if (value == _iconSource)
+                return;
+            _iconSource = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string CategoryName
+    {
+        get => _categoryName;
+        set
+        {
+            if (value == _categoryName)
+                return;
+            _categoryName = value;
+            OnPropertyChanged();
+        }
+    }
 
     public override  ExpenseStatus ExpenseStatus
     {

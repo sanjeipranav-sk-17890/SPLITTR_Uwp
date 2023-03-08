@@ -8,7 +8,7 @@ using SPLITTR_Uwp.Core.ModelBobj.Enum;
 
 namespace SPLITTR_Uwp.ViewModel.Vobj.ExpenseListObject;
 
-public class ExpenseGroupingList :ObservableCollection<ExpenseBobj>
+public class ExpenseGroupingList :ObservableCollection<ExpenseVobj>
 {
     private readonly ExpenseStatus _status;
 
@@ -55,11 +55,11 @@ public class ExpenseGroupingList :ObservableCollection<ExpenseBobj>
 }
 public class ExpenseGroupHeader : INotifyPropertyChanged
 {
-    private readonly ObservableCollection<ExpenseBobj> _expense;
+    private readonly ObservableCollection<ExpenseVobj> _expense;
 
     public string GroupName { get; }   
 
-    public ExpenseGroupHeader(ObservableCollection<ExpenseBobj> expense,string groupNAme)
+    public ExpenseGroupHeader(ObservableCollection<ExpenseVobj>expense,string groupNAme)
     {
         GroupName = groupNAme;
         _expense = expense;

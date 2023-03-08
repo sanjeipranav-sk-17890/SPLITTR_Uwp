@@ -15,6 +15,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
+using SPLITTR_Uwp.Core.ExtensionMethod;
+using SPLITTR_Uwp.DataRepository;
 using static SPLITTR_Uwp.Services.UiService;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
@@ -41,7 +43,25 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
 
 
         public readonly static DependencyProperty ToolTipTextProperty = DependencyProperty.Register(
-            nameof(ToolTipText), typeof(string), typeof(ExpenseCategoryControl), new PropertyMetadata("General"));
+            nameof(ToolTipText), typeof(string), typeof(ExpenseCategoryControl), new PropertyMetadata("General",new PropertyChangedCallback((ToolTipTextPropertyChangedCallBack))));
+
+        private static void ToolTipTextPropertyChangedCallBack(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is not ExpenseCategoryControl categoryCtrl)
+            {
+                return;
+            }
+            if (e.NewValue?.Equals(e.OldValue) is true)
+            {
+                return;
+            }
+            if (e.NewValue is string and not null)
+            {
+                categoryCtrl.ToolTipText = e.NewValue as string;
+                return;
+            }
+            categoryCtrl.ToolTipText = e.OldValue as string;
+        }
 
         public string ToolTipText
         {
@@ -70,7 +90,6 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         public ExpenseCategoryControl()
         {
             _viewModel = ActivatorUtilities.CreateInstance<CategoryControlViewModel>(App.Container, this);
-            _viewModel.LoadData();
             InitializeComponent();
             
         }
@@ -145,12 +164,8 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         private readonly IView _view;
         private bool _isCategoryLoading;
 
-        private static ObservableCollection<ExpenseCategoryBobj> CategoryCache { get; } = new ObservableCollection<ExpenseCategoryBobj>();
 
-        public ObservableCollection<ExpenseCategoryBobj> Categories
-        {
-            get => CategoryCache;
-        }
+        public ObservableCollection<ExpenseCategoryBobj> Categories { get; } = new ObservableCollection<ExpenseCategoryBobj>();
 
         public bool IsCategoryLoading
         {
@@ -170,8 +185,13 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         /// </summary>
         public void LoadData()
         {
+            if (Store.Categories.Count > 0)
+            {
+                Categories.AddRange(Store.Categories);
+                return;
+            }
 
-            IsCategoryLoading = true;
+            IsCategoryLoading = true;   
 
             var fetchCategoryReq = new FetchExpenseCategoryRequest(CancellationToken.None, new CategoryControlVmPresenterCb(this));
 

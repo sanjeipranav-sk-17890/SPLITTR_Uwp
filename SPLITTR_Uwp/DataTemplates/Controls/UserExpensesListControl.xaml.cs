@@ -207,7 +207,7 @@ public class ExpensesListControlViewModel :ObservableObject
     private readonly IExpenseGrouper _expenseGrouper;
     private string _titleText;
 
-    public ObservableCollection<ExpenseBobj> DateSortedExpenseList { get; } = new ObservableCollection<ExpenseBobj>();
+    public ObservableCollection<ExpenseVobj> DateSortedExpenseList { get; } = new ObservableCollection<ExpenseVobj>();
 
     public ObservableCollection<ExpenseGroupingList> GroupedExpenses { get; } = new ObservableCollection<ExpenseGroupingList>();
 
@@ -223,10 +223,22 @@ public class ExpensesListControlViewModel :ObservableObject
 
     #endregion
 
+    public ExpensesListControlViewModel(IExpenseListControl view, IExpenseGrouper expenseGrouper)
+    {
+        _view = view;
+        _expenseGrouper = expenseGrouper;
+
+        SplittrNotification.ExpensesSplitted += SplittrNotification_ExpensesSplitted;
+        SplittrNotification.ExpenseStatusChanged += SplittrNotification_ExpenseStatusChanged;
+    }
+
+
+    #region SortingAndGroupingRequest
+
     public void SortExpenseBasedOnDate(ObservableCollection<ExpenseGroupingList> groupedExpenses)
     {
         DateSortedExpenseList.Clear();
-        var expensesToBeSorted = new List<ExpenseBobj>();
+        var expensesToBeSorted = new List<ExpenseVobj>();
         foreach (var expenses in groupedExpenses)
         {
             expensesToBeSorted.AddRange(expenses);
@@ -239,19 +251,6 @@ public class ExpensesListControlViewModel :ObservableObject
             DateSortedExpenseList.Add(expense);
         }
     }
-
-
-    public ExpensesListControlViewModel(IExpenseListControl view, IExpenseGrouper expenseGrouper)
-    {
-        _view = view;
-        _expenseGrouper = expenseGrouper;
-
-        SplittrNotification.ExpensesSplitted += SplittrNotification_ExpensesSplitted;
-        SplittrNotification.ExpenseStatusChanged += SplittrNotification_ExpenseStatusChanged;
-    }
-
-
-    #region SortingAndGroupingRequest
 
     private ExpenseListFilterObj _preferedFilter;
 
@@ -285,12 +284,11 @@ public class ExpensesListControlViewModel :ObservableObject
 
         //After Grouping Expenses Based on Request Also Populating Date Sorted ListView Based On Newly Grouped Expenses
         SortExpenseBasedOnDate(GroupedExpenses);
+        //Assign Icon Source For ExpenseVobjs
+        AssignIconSourceToExpenseVobjs();
     }
         
     #endregion
-
-
-
 
     #region NotificationListering
 
@@ -451,6 +449,8 @@ public class ExpensesListControlViewModel :ObservableObject
             return !expense.SplitRaisedOwner.Equals(Store.CurrentUserBobj);
         }
     }
+
+
     public void PopulateUserRaisedExpenses()
     {
         GroupedExpenses.Clear();
@@ -466,6 +466,65 @@ public class ExpensesListControlViewModel :ObservableObject
             return expense.SplitRaisedOwner.Equals(Store.CurrentUserBobj);
         }
     }
+    #endregion
+
+    #region IconLogicApplyRegion
+    private void AssignIconSourceToExpenseVobjs()
+    {
+        if (!Store.Categories.Any())
+        {
+            Store.CategoriesLoaded += (AssignRespectiveIcons);
+            return;
+        }
+        AssignRespectiveIcons(Store.Categories);
+    }
+    private void AssignRespectiveIcons(IEnumerable<ExpenseCategoryBobj> mainCategories)
+    {
+        //Assigning RespectiveIcon For grouped Expenses and DateSortedExpenseList
+        foreach (var group in GroupedExpenses)
+        {
+            group.Select(ex => AssignRespectiveCategoryIcon(ex, mainCategories));
+        }
+        //Assigning Respective Icon To Date Sorted Expense List
+        foreach (var expense in DateSortedExpenseList)
+        {
+            AssignRespectiveCategoryIcon(expense, mainCategories);
+        }
+    }
+
+    private string AssignRespectiveCategoryIcon(ExpenseVobj ex, IEnumerable<ExpenseCategoryBobj> mainCategories)
+    {
+        var respectedCategory = FetchCategoryById(mainCategories, ex.CategoryId);
+        ex.CategoryName = respectedCategory?.Name;
+        return ex.IconSource = respectedCategory?.Icon;
+    }
+
+    /// <summary>
+    /// Queries Icon From the list of Main Categories and Returns Its icon source link
+    /// </summary>
+    /// <param name="mainCategories"></param>
+    /// <param name="categoryId"></param>
+    /// <returns></returns>
+    private ExpenseCategory FetchCategoryById(IEnumerable<ExpenseCategoryBobj> mainCategories, int categoryId)
+    {
+        ExpenseCategory subCategory = default;
+        var parentCategory = mainCategories.FirstOrDefault(ex => ex.SubExpenseCategories.FirstOrDefault(IfSubCategoryExistAssign) is not null);
+
+        return subCategory;
+
+        //Checks if Requested Category id respective id matched, and assign to local variable if matches
+        bool IfSubCategoryExistAssign(ExpenseCategory sub)
+        {
+            if (sub.Id != categoryId)
+            {
+                return false;
+            }
+            subCategory = sub;
+            return true;
+        }
+    }
+
+
     #endregion
 
     #region PresenterCallBack
@@ -489,6 +548,7 @@ public class ExpensesListControlViewModel :ObservableObject
             {
                 _viewModel.PopuLateExpenses(result.CurrentUserExpenses);
                 _viewModel.SortExpenseBasedOnDate(_viewModel.GroupedExpenses);
+                _viewModel.AssignIconSourceToExpenseVobjs();
             }).ConfigureAwait(false);
         }
         public void OnError(SplittrException ex)
