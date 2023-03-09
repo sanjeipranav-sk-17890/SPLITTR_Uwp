@@ -17,7 +17,7 @@
     mc:Ignorable="d"
     Height="auto"
     d:DesignWidth="500" d:DesignHeight="700"
-    MaxWidth="500"
+    Width="500"
     
 >
 
@@ -183,9 +183,9 @@
                                                      Margin="10 5 0 0"/>
 
                 <Grid  Grid.Row="0"
-                           Grid.Column="1">
+                       VerticalAlignment="Center"
+                       Grid.Column="1">
                        <Grid.RowDefinitions>
-                           <RowDefinition Height="Auto"/>
                            <RowDefinition Height="Auto"/>
                            <RowDefinition Height="Auto"/>
                        </Grid.RowDefinitions>
@@ -199,33 +199,25 @@
                                 FontWeight="SemiBold"
                                 Text="{x:Bind _viewModel.ExpenseDescription,Mode=TwoWay}"
                                 BorderBrush="Transparent"
-                                Margin="0 0 0 0"
                                 Name="ExpenditureLabel"
                                 HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
                                 Grid.Row="0"
                                 Grid.Column="1"
                        />
-                       <TextBlock Text="Please enter value in correct Format !!"
-                                  Name="WrongInputIndiactor"
-                                  Visibility="{x:Bind _viewModel.AmountFormatIncorrectIndicatorVisibility,Mode=OneWay}"
-                                  Margin="0 10 0 0"
-                                  HorizontalAlignment="Center"
-                                  Style="{StaticResource IndicatorTextBlockStyle}"
-                                  Grid.Row="1"
-                                  Grid.Column="1"/>
+                      
                        <TextBlock 
-                           Margin="4 10 0 0"
+                           Margin="4 -8 0 0"
                            Text="{x:Bind _viewModel.GetUserCurrencyPreference(),Mode=OneWay}"
                            FontWeight="Bold"
                            Grid.Row="0"
-                           Grid.RowSpan="3"
+                           Grid.RowSpan="2"
                            VerticalAlignment="Center"
                            Grid.Column="0"
                            HorizontalAlignment="Center"
                        />
-                       <TextBox Margin="5 0 0 0"
-                                Height="30"
-                                Grid.Row="2"
+                       <TextBox Margin="0 0 0 0"
+                                Grid.Row="1"
                                 Grid.Column="1"
                                 Visibility="{x:Bind _viewModel.SplitEquallyPanelVisibility,Mode=OneWay}"
                                 HorizontalAlignment="Stretch"
@@ -236,12 +228,20 @@
                                 CornerRadius="4"
                                 TextChanged="{x:Bind _viewModel.ExpenseTextBoxValueChanged}"
                                 Text="{x:Bind _viewModel.SingleUserExpenseShareAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                PlaceholderText="0.00" 
-                       ></TextBox>
+                                PlaceholderText="0.00">
+                           <TextBox.Header>
+                               <TextBlock Text="Please enter value in correct Format !!"
+                                          Name="WrongInputIndiactor"
+                                          Visibility="{x:Bind _viewModel.AmountFormatIncorrectIndicatorVisibility,Mode=OneWay}"
+                                          Margin="0 0 0 0"
+                                          HorizontalAlignment="Center"
+                                          Style="{StaticResource IndicatorTextBlockStyle}"/>
+                           </TextBox.Header>
+                       </TextBox>
 
                     </Grid>
                 <Image Grid.Row="0" Grid.Column="2"
-                       Source="../Assets/AppLogo/../icons/split.png"
+                       Source="/Assets/AppLogo/../icons/split.png"
                        Height="50"
                        Margin=" 0 0 5 0"></Image>
                 <!--<ComboBox Grid.Row="1"
@@ -337,12 +337,13 @@
             />-->
            <CalendarDatePicker HorizontalAlignment="Center"
                                Width="200"
+                               Foreground="Azure"
                                XamlRoot="{x:Bind XamlRoot,Mode=OneWay}"
                                PlaceholderText="Date Of Expense :"
                                MaxDate="{x:Bind _viewModel.MaxYearDisplayLimit,Mode=OneWay}"
-                                Date="{x:Bind _viewModel.ExpenditureDate,Mode=TwoWay}"
+                               Date="{x:Bind _viewModel.ExpenditureDate,Mode=TwoWay}"
                                Background="{ThemeResource ApplicationMainThemeColor}"
-                                IsTodayHighlighted="True"
+                               IsTodayHighlighted="True"
            />
            <TextBox Margin="5"
                     PlaceholderText="Enter Additional details"

@@ -84,9 +84,6 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             set => SetValue(CategoryIconSourceProperty, value);
         }
 
-
-
-
         public ExpenseCategoryControl()
         {
             _viewModel = ActivatorUtilities.CreateInstance<CategoryControlViewModel>(App.Container, this);
