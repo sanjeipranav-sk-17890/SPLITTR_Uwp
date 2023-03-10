@@ -2,29 +2,33 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using static SPLITTR_Uwp.Services.UiService;
 
 namespace SPLITTR_Uwp.ViewModel.Vobj.ExpenseListObject;
 
 public class ExpenseGroupingList :ObservableCollection<ExpenseVobj>
 {
-    private readonly ExpenseStatus _status;
-
+    
     public ExpenseGroupHeader GroupHeader { get; }
        
         
-    public ExpenseGroupingList(ExpenseStatus status, IEnumerable<ExpenseBobj> expenses)
+    public ExpenseGroupingList(string headerTitle, IEnumerable<ExpenseBobj> expenses)
     {
-        _status = status;
-
-        GroupHeader = new ExpenseGroupHeader(this,_status.ToString());
+        GroupHeader = new ExpenseGroupHeader(this, headerTitle);
 
         foreach (var expense in expenses)
         {
             if (expense == null)
             {
+                continue;
+            }
+            if (expense is ExpenseVobj vobj)
+            {
+                Add(vobj);
                 continue;
             }
             Add(new ExpenseVobj(expense));
@@ -44,7 +48,7 @@ public class ExpenseGroupingList :ObservableCollection<ExpenseVobj>
         {
             return false;
         }
-        return expenseGroup._status == _status;
+        return expenseGroup.GroupHeader.GroupName?.Equals(GroupHeader.GroupName) is true;
 
     }
     public override int GetHashCode()
@@ -56,12 +60,17 @@ public class ExpenseGroupingList :ObservableCollection<ExpenseVobj>
 public class ExpenseGroupHeader : INotifyPropertyChanged
 {
     private readonly ObservableCollection<ExpenseVobj> _expense;
+    private string _groupName;
 
-    public string GroupName { get; }   
+    public string GroupName
+    {
+        get => _groupName;
+        set => SetField(ref _groupName, value);
+    }
 
     public ExpenseGroupHeader(ObservableCollection<ExpenseVobj>expense,string groupNAme)
     {
-        GroupName = groupNAme;
+        GroupName = groupNAme??"...";
         _expense = expense;
         expense.CollectionChanged += Expense_CollectionChanged;
 
@@ -72,25 +81,21 @@ public class ExpenseGroupHeader : INotifyPropertyChanged
         OnPropertyChanged(nameof(NoOfExpenses));
     }
 
-
     public int NoOfExpenses
     {
         get => _expense.Count;
     }
 
 
-
-
-
-
-
-
-
     public event PropertyChangedEventHandler PropertyChanged;
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    protected async void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+       await RunOnUiThread(() =>
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        }).ConfigureAwait(false);
     }
     protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
     {

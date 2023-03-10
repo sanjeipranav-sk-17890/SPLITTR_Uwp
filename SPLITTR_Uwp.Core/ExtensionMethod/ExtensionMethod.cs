@@ -17,6 +17,11 @@ public static class ExtensionMethod
     /// <returns></returns>
     public static ICollection<T> AddRange<T>(this ICollection<T> target, IEnumerable<T> source)
     {
+        if (target is List<T> list)
+        {
+            list.AddRange(source);
+            return list;
+        }
         foreach (var obj in source)
         {
             target.Add(obj);

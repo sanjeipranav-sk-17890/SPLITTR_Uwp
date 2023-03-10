@@ -8,6 +8,7 @@ using SPLITTR_Uwp.Core.UseCase.FetchExpenseCategory;
 using SPLITTR_Uwp.Services;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -182,21 +183,36 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
         /// </summary>
         public void LoadData()
         {
-            if (Store.Categories.Count > 0)
+            switch (Store.Categories.Count)
             {
-                Categories.AddRange(Store.Categories);
-                return;
+                case > 0:
+                {
+                    if (Categories.Any())
+                    {
+                        return;
+                    }
+                    Categories.AddRange(Store.Categories);
+                    IsCategoryLoading = false;
+                    return;
+                }
+                case <= 0:
+                    IsCategoryLoading = true;
+                    Store.CategoriesLoaded += StoreCategoriesLoaded;
+                    break;
             }
 
-            IsCategoryLoading = true;   
-
-            var fetchCategoryReq = new FetchExpenseCategoryRequest(CancellationToken.None, new CategoryControlVmPresenterCb(this));
-
-            var fetchCategoryUseCaseObj = InstanceBuilder.CreateInstance<FetchExpenseCategory>(fetchCategoryReq);
-
-            fetchCategoryUseCaseObj?.Execute();
+            async void StoreCategoriesLoaded(CategoryLoadedEventArgs obj)
+            {
+                Store.CategoriesLoaded -= StoreCategoriesLoaded;
+                await RunOnUiThread((() =>
+                {
+                    IsCategoryLoading = false;
+                    Categories.AddRange(obj.ExpenseCategories);
+                })).ConfigureAwait(false);
+            }
         }
 
+        
 
         class CategoryControlVmPresenterCb : IPresenterCallBack<FetchExpenseCategoryResponse>
         {

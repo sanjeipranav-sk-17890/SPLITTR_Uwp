@@ -70,6 +70,11 @@ public class ExpenseVobj : ExpenseBobj,INotifyPropertyChanged
         SplittrNotification.ExpenseStatusChanged += SplittrNotification_ExpenseStatusChanged;
     }
 
+    ~ExpenseVobj()
+    {
+        SplittrNotification.ExpenseStatusChanged -= SplittrNotification_ExpenseStatusChanged;
+    }
+
     private void SplittrNotification_ExpenseStatusChanged(ExpenseStatusChangedEventArgs obj)
     {
         if (obj?.StatusChangedExpense?.ExpenseUniqueId.Equals(ExpenseUniqueId) is not true)
@@ -81,11 +86,6 @@ public class ExpenseVobj : ExpenseBobj,INotifyPropertyChanged
     }
 
     #region INotifyPropertyChanged Region
-
-    private void InnerObjValueChanged(string property)
-    {
-        OnPropertyChanged(property);
-    }
 
     public event PropertyChangedEventHandler PropertyChanged;
 

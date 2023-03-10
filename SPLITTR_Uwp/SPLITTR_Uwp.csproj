@@ -170,6 +170,9 @@
     <Compile Include="DataTemplates\Controls\ExpenseCategoryControl.xaml.cs">
       <DependentUpon>ExpenseCategoryControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataTemplates\Controls\ExpenseListControl\ExpenseListFilterObj.cs" />
+    <Compile Include="DataTemplates\Controls\ExpenseListControl\ExpenseListGroupingObj.cs" />
+    <Compile Include="DataTemplates\Controls\ExpenseListControl\ExpensesListControlViewModel.cs" />
     <Compile Include="DataTemplates\Controls\NoConnectionIndicator.xaml.cs">
       <DependentUpon>NoConnectionIndicator.xaml</DependentUpon>
     </Compile>
@@ -191,7 +194,7 @@
     <Compile Include="DataTemplates\PaymentWindowExpenseView.xaml.cs">
       <DependentUpon>PaymentWindowExpenseView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataTemplates\Controls\UserExpensesListControl.xaml.cs">
+    <Compile Include="DataTemplates\Controls\ExpenseListControl\UserExpensesListControl.xaml.cs">
       <DependentUpon>UserExpensesListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\AccentColorService.cs" />
@@ -214,6 +217,7 @@
     <Compile Include="ViewModel\ExpenseListAndDetailedPageViewModel.cs" />
     <Compile Include="ViewModel\OwnerExpenseControlViewModel.cs" />
     <Compile Include="ViewModel\RelatedExpenseTemplateViewModel.cs" />
+    <Compile Include="ViewModel\VmLogic\ExpenseCategoryGrouper.cs" />
     <Compile Include="ViewModel\VmLogic\ViewModelBase.cs" />
     <Compile Include="DataTemplates\Controls\ExpenseDetailedViewUserControl.xaml.cs">
       <DependentUpon>ExpenseDetailedViewUserControl.xaml</DependentUpon>
@@ -224,6 +228,7 @@
     <Compile Include="ViewModel\LoginPageViewModel.cs" />
     <Compile Include="ViewModel\MainPageViewModel.cs" />
     <Compile Include="ViewModel\Vobj\ExpenseListObject\ExpenseGroupingList.cs" />
+    <Compile Include="ViewModel\Vobj\ExpenseListObject\IExpenseGrouperFactory.cs" />
     <Compile Include="ViewModel\Vobj\ExpenseVobj.cs" />
     <Compile Include="ViewModel\Vobj\UserVobj.cs" />
     <Compile Include="ViewModel\SignPageViewModel.cs" />
@@ -313,7 +318,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataTemplates\Controls\UserExpensesListControl.xaml">
+    <Page Include="DataTemplates\Controls\ExpenseListControl\UserExpensesListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -336,10 +341,6 @@
     <Page Include="Styles\_controlStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="DataTemplates\Controls\ExpenseDetailedViewUserControl.xaml">
       <SubType>Designer</SubType>

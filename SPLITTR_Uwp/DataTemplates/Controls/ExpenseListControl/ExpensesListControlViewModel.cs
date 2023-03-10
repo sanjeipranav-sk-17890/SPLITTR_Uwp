@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.SplittrExceptions;
@@ -19,184 +16,8 @@ using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.VmLogic;
 using SPLITTR_Uwp.ViewModel.Vobj;
 using SPLITTR_Uwp.ViewModel.Vobj.ExpenseListObject;
-using static SPLITTR_Uwp.Services.UiService;
 
-// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
-
-namespace SPLITTR_Uwp.DataTemplates.Controls;
-
-public sealed partial class UserExpensesListControl : UserControl,IExpenseListControl
-{
-    private ExpensesListControlViewModel _viewModel;
-
-    private static UserExpensesListControl ListControl { get; set; }
-    public UserExpensesListControl()
-    {
-        InitializeComponent();
-        _viewModel = ActivatorUtilities.CreateInstance<ExpensesListControlViewModel>(App.Container, this);
-        Loaded += UserExpensesListControl_Loaded;
-        ListControl = this;
-        Unloaded += (sender, args) => _viewModel.ViewDisposed();
-    }
-
-    private void UserExpensesListControl_Loaded(object sender, RoutedEventArgs e)
-    {
-        _viewModel.OnExpenseListControlLoaded();
-    }
-
-      
-    public static void FilterExpense(ExpenseListFilterObj requestObj)
-    {
-        if (ListControl is null)
-        {
-            return;
-        }
-        ListControl._viewModel.FilterExpensesToBeShown(requestObj);
-
-    }
-
-        
-    public event Action PaneButtonOnClick;
-    private void NavigationPaneName_OnClick(object sender, RoutedEventArgs e)
-    {
-        //Changing Appearance of pane button and invoking click event 
-        if (PaneButtonStateGroup.CurrentState is not null && PaneButtonStateGroup.CurrentState.Name == nameof(OpenPaneState))
-        {
-            VisualStateManager.GoToState(this, nameof(ClosePaneState), true);
-            PaneButtonOnClick?.Invoke();
-            return;
-        }
-        VisualStateManager.GoToState(this, nameof(OpenPaneState), true);
-        PaneButtonOnClick?.Invoke();
-    }
-
-
-    public event Action<object, SelectionChangedEventArgs> OnExpenseSelectionChanged;
-    private void ExpensesLIstView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        OnExpenseSelectionChanged?.Invoke(sender,e);
-    }
-
-    //Changing selected  Groups Visibility 
-    private void ExpenseShowButton_OnClick(object sender, RoutedEventArgs e)
-    {
-        //if button rotation is 90 set it to 0 and vice versa
-        if (sender is not Button sideButton)
-        {
-            return;
-        }
-
-        if (sideButton.DataContext is not ExpenseGroupingList expenseGroup)
-        {
-            return;
-        }
-        var expenseVisibility = true;
-
-        foreach (var expense in expenseGroup)
-        {
-            if (expense is not ExpenseVobj expenseVm)
-            {
-                continue;
-            }
-            expenseVm.Visibility = !expenseVm.Visibility;
-            expenseVisibility = expenseVm.Visibility;
-        }
-        AssignButtonStyleBasedOnVisibility(expenseVisibility, sideButton);
-
-
-    }
-
-
-    private void AssignButtonStyleBasedOnVisibility(bool expenseVisibility, Button sideButton)
-    {
-        if (expenseVisibility)
-        {
-
-            var style = ShowExpenseButtonStyle;
-            sideButton.Style = style;
-        }
-        else
-        {
-            var style = HideExpenseButtonStyle;
-            sideButton.Style = style;
-        }
-    }
-
-        
-    public void SetCollectionListSource(IEnumerable Source)
-    {
-        // Add Csv Source for newValue.CollectionChanged 
-        if (Source is not ObservableCollection<ExpenseGroupingList> newSource)
-        {
-            return;
-        }
-        CollectionViewSource.Source = newSource;
-        ExpensesLIstView.ItemsSource = CollectionViewSource.View;
-
-    }
-
-    private void SortingFlyoutButton_OnClick(object sender, RoutedEventArgs e)
-    {
-        if (sender is not MenuFlyoutItem selectedItem)
-        {
-            return;
-        }
-        //if Showing list view is Date Time sorted then No Need to change list view 
-        if (selectedItem == DateMenuItem && DateSortedList.Visibility != Visibility.Visible)
-        {
-            //Setting visibility of dateListView and Hiding Grouped ListView
-            ExpensesLIstView.Visibility = Visibility.Collapsed;
-            DateSortedList.Visibility = Visibility.Visible;
-
-        }
-        if (selectedItem != StatusMenuItem || ExpensesLIstView.Visibility == Visibility.Visible)
-        {
-            return;
-        }
-        ExpensesLIstView.Visibility = Visibility.Visible;
-        DateSortedList.Visibility = Visibility.Collapsed;
-
-    }
-
-    public event Action<Group> OnGroupInfoButtonClicked ;
-    private void ExpenseDataTemplate_OnOnGroupInfoButtonClicked(Group obj)
-    {
-        OnGroupInfoButtonClicked?.Invoke(obj);
-    }
-}
-
-/// <summary>
-/// Encapsulate Request obj To used by UserList Expense Control Parent 
-/// </summary>
-public class ExpenseListFilterObj
-{
-    public ExpenseListFilterObj(Group group1, User user, ExpenseFilter filterType)
-    {
-        Group = group1;
-        User = user;
-        FilterType = filterType;
-    }
-
-    public Group Group { get; }
-
-    public User User { get; }
-
-    public ExpenseFilter FilterType { get; }
-    public enum ExpenseFilter
-    {
-        RequestByMe,
-        RequestToMe,
-        AllExpenses,
-        GroupExpense,
-        UserExpense,
-    }
-}
-    
-public interface IExpenseListControl
-{
-    void SetCollectionListSource(IEnumerable Source);
-
-}
+namespace SPLITTR_Uwp.DataTemplates.Controls.ExpenseListControl;
 
 public class ExpensesListControlViewModel :ObservableObject
 {
@@ -204,7 +25,7 @@ public class ExpensesListControlViewModel :ObservableObject
     #region BindableProperties
 
     private readonly IExpenseListControl _view;
-    private readonly IExpenseGrouper _expenseGrouper;
+    private  IExpenseGrouper _expenseGrouper;
     private string _titleText;
 
     public ObservableCollection<ExpenseVobj> DateSortedExpenseList { get; } = new ObservableCollection<ExpenseVobj>();
@@ -220,7 +41,17 @@ public class ExpensesListControlViewModel :ObservableObject
     }
     public ExpenseVobj SelectedExpenseObj { get; set; }
 
-
+    /// <exception cref="ArgumentNullException" accessor="set">Thrown when the arguments are <see langword="null"/></exception>
+    public IExpenseGrouper ExpenseGrouper
+    {
+        get => _expenseGrouper;
+        set
+        {
+            _expenseGrouper = value ?? throw new ArgumentNullException();
+            FilterExpensesToBeShown(_preferedFilter);
+        }
+    }
+    
     #endregion
 
     public ExpensesListControlViewModel(IExpenseListControl view, IExpenseGrouper expenseGrouper)
@@ -301,7 +132,7 @@ public class ExpensesListControlViewModel :ObservableObject
         //Populating Existing Cache
         _userExpensesCache?.AddRange(obj.NewExpenses.Select(ex => new ExpenseVobj(ex)));
 
-        await RunOnUiThread(() =>
+        await UiService.RunOnUiThread(() =>
         {
             //grouping and Populating Newly added expenses Groups
             FilterExpensesToBeShown(_preferedFilter);
@@ -311,7 +142,7 @@ public class ExpensesListControlViewModel :ObservableObject
 
     private async void SplittrNotification_ExpenseStatusChanged(ExpenseStatusChangedEventArgs obj)
     {
-        await RunOnUiThread(() =>
+        await UiService.RunOnUiThread(() =>
         {
             //grouping and Populating Newly added expenses Groups
             FilterExpensesToBeShown(_preferedFilter);
@@ -326,7 +157,7 @@ public class ExpensesListControlViewModel :ObservableObject
     {
         SplittrNotification.ExpensesSplitted -= SplittrNotification_ExpensesSplitted;
         SplittrNotification.ExpenseStatusChanged -= SplittrNotification_ExpenseStatusChanged;
-        Store.CategoriesLoaded -= (AssignRespectiveIcons);
+        Store.CategoriesLoaded -= OnAssignCategoryLoaded;
     }
 
     public void OnExpenseListControlLoaded()
@@ -341,7 +172,7 @@ public class ExpensesListControlViewModel :ObservableObject
 
         getUserExpensesUseCase.Execute();
     }
-    private void PopuLateExpenses(IEnumerable<ExpenseBobj> currentUserExpenses)
+    private void PopuLateExpenses(IEnumerable<ExpenseVobj> currentUserExpenses)
     {
         GroupedExpenses.Clear();
 
@@ -351,7 +182,7 @@ public class ExpensesListControlViewModel :ObservableObject
 
         _view.SetCollectionListSource(GroupedExpenses);
 
-        IEnumerable<ExpenseBobj> FilterCurrentUserExpense(IEnumerable<ExpenseBobj> expenses)
+        IEnumerable<ExpenseVobj> FilterCurrentUserExpense(IEnumerable<ExpenseVobj> expenses)
         {
             return expenses.Where(IsNotOwnerExpense);
         }
@@ -359,19 +190,63 @@ public class ExpensesListControlViewModel :ObservableObject
 
     #region GroupingLogicRegion
 
-    private void GroupingAndPopulateExpensesList(IEnumerable<ExpenseBobj> filteredExpenses)
+    private ObservableCollection<ExpenseGroupingList> _previousGroupedCollection;
+
+    private void GroupingAndPopulateExpensesList(IEnumerable<ExpenseVobj> filteredExpenses)
     {
         if (filteredExpenses == null)
         {
             return;
         }
+        TryClearingPreviousSubscription();
         var groups = _expenseGrouper.CreateExpenseGroupList(filteredExpenses);
+
+        if (groups is ObservableCollection<ExpenseGroupingList> observableGroups)
+        {
+            observableGroups.CollectionChanged += GroupedCollectionOnChange;
+            _previousGroupedCollection = observableGroups;
+        }
 
         GroupedExpenses.Clear();
         foreach (var group in groups)
         {
             GroupedExpenses.Add(group);
         }
+
+
+        void TryClearingPreviousSubscription()
+        {
+            if (_previousGroupedCollection != null)
+            {
+                _previousGroupedCollection.CollectionChanged -= GroupedCollectionOnChange;
+            }
+        }
+
+    }
+    private void GroupedCollectionOnChange(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.NewItems is not null)
+        {
+            foreach (var newGroup in e.NewItems)
+            {
+                if (newGroup is ExpenseGroupingList newAddedGroup)
+                {
+                    GroupedExpenses.Add(newAddedGroup);
+                }
+            }
+
+        }
+        if (e.OldItems is not null)
+        {
+            foreach (var oldGroups in e.OldItems)
+            {
+                if (oldGroups is ExpenseGroupingList oldRemovedGroup)
+                {
+                    GroupedExpenses.Remove(oldRemovedGroup);
+                }
+            }
+        }
+       
     }
 
     public void PopulateSpecificGroupExpenses(Group selectedGroup)
@@ -474,57 +349,34 @@ public class ExpensesListControlViewModel :ObservableObject
     {
         if (!Store.Categories.Any())
         {
-            Store.CategoriesLoaded += (AssignRespectiveIcons);
+            Store.CategoriesLoaded += OnAssignCategoryLoaded;
             return;
         }
-        AssignRespectiveIcons(Store.Categories);
+        AssignRespectiveIcons(Store.CategoryOnlyDictionary);
     }
-    private void AssignRespectiveIcons(IEnumerable<ExpenseCategoryBobj> mainCategories)
+    private void OnAssignCategoryLoaded(CategoryLoadedEventArgs obj)
+    {
+        AssignRespectiveIcons(obj.ExpenseCategoriesDict);
+    }
+    private void AssignRespectiveIcons(IReadOnlyDictionary<int,ExpenseCategory> categoryDictionary)
     {
         //Assigning RespectiveIcon For grouped Expenses and DateSortedExpenseList
         foreach (var group in GroupedExpenses)
         {
-            group.Select(ex => AssignRespectiveCategoryIcon(ex, mainCategories));
+            group.Select(ex => AssignRespectiveCategoryIcon(ex,categoryDictionary));
         }
         //Assigning Respective Icon To Date Sorted Expense List
         foreach (var expense in DateSortedExpenseList)
         {
-            AssignRespectiveCategoryIcon(expense, mainCategories);
+            AssignRespectiveCategoryIcon(expense,categoryDictionary);
         }
     }
-
-    private string AssignRespectiveCategoryIcon(ExpenseVobj ex, IEnumerable<ExpenseCategoryBobj> mainCategories)
+    private string AssignRespectiveCategoryIcon(ExpenseVobj ex, IReadOnlyDictionary<int, ExpenseCategory> categoryDictionary)
     {
-        var respectedCategory = FetchCategoryById(mainCategories, ex.CategoryId);
+        var respectedCategory = categoryDictionary[ex.CategoryId];
         ex.CategoryName = respectedCategory?.Name;
         return ex.IconSource = respectedCategory?.Icon;
     }
-
-    /// <summary>
-    /// Queries Icon From the list of Main Categories and Returns Its icon source link
-    /// </summary>
-    /// <param name="mainCategories"></param>
-    /// <param name="categoryId"></param>
-    /// <returns></returns>
-    private ExpenseCategory FetchCategoryById(IEnumerable<ExpenseCategoryBobj> mainCategories, int categoryId)
-    {
-        ExpenseCategory subCategory = default;
-        var parentCategory = mainCategories.FirstOrDefault(ex => ex.SubExpenseCategories.FirstOrDefault(IfSubCategoryExistAssign) is not null);
-
-        return subCategory;
-
-        //Checks if Requested Category id respective id matched, and assign to local variable if matches
-        bool IfSubCategoryExistAssign(ExpenseCategory sub)
-        {
-            if (sub.Id != categoryId)
-            {
-                return false;
-            }
-            subCategory = sub;
-            return true;
-        }
-    }
-
 
     #endregion
 
@@ -545,9 +397,9 @@ public class ExpensesListControlViewModel :ObservableObject
                 return;
             }
             _viewModel._userExpensesCache = result.CurrentUserExpenses.Select(ex => new ExpenseVobj(ex)).ToList();
-            await RunOnUiThread(() =>
+            await UiService.RunOnUiThread(() =>
             {
-                _viewModel.PopuLateExpenses(result.CurrentUserExpenses);
+                _viewModel.PopuLateExpenses(_viewModel._userExpensesCache);
                 _viewModel.SortExpenseBasedOnDate(_viewModel.GroupedExpenses);
                 _viewModel.AssignIconSourceToExpenseVobjs();
             }).ConfigureAwait(false);

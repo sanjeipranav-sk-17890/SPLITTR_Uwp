@@ -22,6 +22,7 @@ using NavigationViewSelectionChangedEventArgs = Microsoft.UI.Xaml.Controls.Navig
 using SplitButton = Microsoft.UI.Xaml.Controls.SplitButton;
 using SplitButtonClickEventArgs = Microsoft.UI.Xaml.Controls.SplitButtonClickEventArgs;
 using Windows.UI.Core;
+using SPLITTR_Uwp.DataTemplates.Controls.ExpenseListControl;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 

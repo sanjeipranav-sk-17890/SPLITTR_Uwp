@@ -22,6 +22,15 @@ internal static class ExtensionHelper
         }
     }
 
+    public static ObservableCollection<T> ToObservableList<T>(this IEnumerable<T> source)
+    {
+        var outputList = new ObservableCollection<T>();
+        foreach (var obj in source)
+        {
+            outputList.Add(obj);
+        }
+        return outputList;
+    }
     public static Task RunOnUIContextAsync(this CoreDispatcher dispatcher,Action function)
     {
         if (!dispatcher.HasThreadAccess)

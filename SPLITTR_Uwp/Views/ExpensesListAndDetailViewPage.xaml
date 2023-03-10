@@ -10,6 +10,7 @@
     Background="{ThemeResource ApplicationMainThemeAcrylicBrush}"
     xmlns:template="using:SPLITTR_Uwp.DataTemplates"
     xmlns:controls1="using:SPLITTR_Uwp.DataTemplates.Controls"
+    xmlns:expenseListControl="using:SPLITTR_Uwp.DataTemplates.Controls.ExpenseListControl"
     SizeChanged="ExpensesListAndDetailViewPage_OnSizeChanged">
     <Page.Resources>
         <Style x:Key="CustomGridSplitterStyle" TargetType="controls:GridSplitter">
@@ -69,7 +70,7 @@
 
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        <controls1:UserExpensesListControl CornerRadius="5"
+        <expenseListControl:UserExpensesListControl CornerRadius="5"
                                           MinWidth="400"
                                           x:Name="ExpensesListControl" OnGroupInfoButtonClicked="ExpensesListControl_OnOnGroupInfoButtonClicked"
                                           HorizontalAlignment="Stretch"

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.UseCase.AddWalletAmount;
@@ -26,6 +27,7 @@ using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.VmLogic;
+using SPLITTR_Uwp.ViewModel.Vobj.ExpenseListObject;
 
 namespace SPLITTR_Uwp.Configuration;
 
@@ -52,7 +54,12 @@ public static class Configuration
             
         container.AddSingleton<IStateService, StateService>()
             .AddTransient<IStringManipulator, Manipulator>()
-            .AddTransient<IExpenseGrouper, ExpenseStatusGrouper>()
+            .AddTransient<IExpenseGrouper,ExpenseCategoryGrouper>()
+            .AddTransient<ExpenseCategoryGrouper>()
+            .AddTransient<ExpenseStatusGrouper>()
+            .AddSingleton<IExpenseGrouperFactory,ExpenseGrouperFactory>(provider =>
+                new ExpenseGrouperFactory(provider.GetService<ExpenseCategoryGrouper>(),
+                    provider.GetService<ExpenseStatusGrouper>())) 
             .AddTransient<UpdateUser>()
             .AddTransient<AddWalletAmount>()
             .AddTransient<GroupCreation>()
@@ -71,6 +78,8 @@ public static class Configuration
             .AddTransient<ChangeExpenseCategory>()
             .AddTransient<UserSuggestion>();
     }
+
+    
 
     /// <summary>
     /// Adding ViewModel's of the Splitter into the container 
