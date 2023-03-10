@@ -155,17 +155,14 @@ public sealed partial class UserExpensesListControl : UserControl,IExpenseListCo
         if (selectedItem == DateMenuItem && DateSortedList.Visibility != Visibility.Visible)
         {
             //Setting visibility of dateListView and Hiding Grouped ListView
-            ExpensesLIstView.Visibility = Visibility.Collapsed;
-            DateSortedList.Visibility = Visibility.Visible;
+            VisualStateManager.GoToState(this, nameof(SortingState), false);
 
         }
         if (selectedItem != StatusMenuItem || ExpensesLIstView.Visibility == Visibility.Visible)
         {
             return;
         }
-        ExpensesLIstView.Visibility = Visibility.Visible;
-        DateSortedList.Visibility = Visibility.Collapsed;
-
+        VisualStateManager.GoToState(this, nameof(GroupingState), false);
     }
 
     public event Action<Group> OnGroupInfoButtonClicked ;
