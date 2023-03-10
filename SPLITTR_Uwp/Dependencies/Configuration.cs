@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.UseCase.AddWalletAmount;
@@ -29,7 +28,7 @@ using SPLITTR_Uwp.ViewModel.Contracts;
 using SPLITTR_Uwp.ViewModel.VmLogic;
 using SPLITTR_Uwp.ViewModel.Vobj.ExpenseListObject;
 
-namespace SPLITTR_Uwp.Configuration;
+namespace SPLITTR_Uwp.Dependencies;
 
 public static class Configuration
 {

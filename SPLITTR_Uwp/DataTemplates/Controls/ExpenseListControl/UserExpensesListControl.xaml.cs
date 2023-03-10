@@ -151,18 +151,17 @@ public sealed partial class UserExpensesListControl : UserControl,IExpenseListCo
         {
             return;
         }
-        //if Showing list view is Date Time sorted then No Need to change list view 
-        if (selectedItem == DateMenuItem && DateSortedList.Visibility != Visibility.Visible)
+        if (selectedItem == DateMenuItem)
         {
             //Setting visibility of dateListView and Hiding Grouped ListView
             VisualStateManager.GoToState(this, nameof(SortingState), false);
+            return;
 
         }
-        if (selectedItem != StatusMenuItem || ExpensesLIstView.Visibility == Visibility.Visible)
+        if (selectedItem == StatusMenuItem )
         {
-            return;
+          VisualStateManager.GoToState(this, nameof(GroupingState), false);
         }
-        VisualStateManager.GoToState(this, nameof(GroupingState), false);
     }
 
     public event Action<Group> OnGroupInfoButtonClicked ;

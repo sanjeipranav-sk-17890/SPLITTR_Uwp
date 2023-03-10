@@ -6,7 +6,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.Extensions.DependencyInjection;
-using SPLITTR_Uwp.Configuration;
+using SPLITTR_Uwp.Dependencies;
 using SPLITTR_Uwp.Services;
 
 namespace SPLITTR_Uwp;
