@@ -5,6 +5,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.ViewModel;
 using SPLITTR_Uwp.ViewModel.Vobj;
 
@@ -81,5 +82,9 @@ public sealed partial class ExpenseDetailedViewUserControl : UserControl
     private void ListViewBackButton_OnClick(object sender, RoutedEventArgs e)
     {
         BackButtonClicked?.Invoke(this, e);
+    }
+    private void ExpenseCategoryControl_OnOnExpenseCategorySelected(ExpenseCategory obj)
+    {
+        _viewModel.CategoryChangeSelected(obj);
     }
 }

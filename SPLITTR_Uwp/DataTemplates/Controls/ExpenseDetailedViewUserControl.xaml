@@ -8,11 +8,13 @@
     mc:Ignorable="d"
     xmlns:dataTemplates="using:SPLITTR_Uwp.DataTemplates"
     xmlns:converter="using:SPLITTR_Uwp.DataRepository.Converters"
+    xmlns:controls="using:SPLITTR_Uwp.DataTemplates.Controls"
     d:DesignHeight="700"
     d:DesignWidth="450">
     <UserControl.Resources>
         <SolidColorBrush x:Key="ExpenseStatusBrush" Color="DarkGreen" x:Name="ExpenseStatusBrush"></SolidColorBrush>
         <converter:StringFormatConverter x:Key="StringFormater"/>
+        <converter:StingToBitMapSourceConverter x:Key="StingToBitMapSourceConverter"/>
         <converter:ExpenseAmountFormatter x:Key="ExpenseAmountFormatter" />
     </UserControl.Resources>
     <Grid Padding="10">
@@ -83,35 +85,54 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
            <Grid.ColumnDefinitions>
-               <ColumnDefinition Width="3*"/>
+               <ColumnDefinition Width="auto"/>
                <ColumnDefinition Width="5*"/>
            </Grid.ColumnDefinitions>
-            <TextBlock Foreground="{ThemeResource AccentTextColorBrush}"  
+            <controls:ExpenseCategoryControl Grid.Row="0"
+                                             Margin="5 10 0 0"
+                                             CategoryIconSource="{x:Bind ExpenseObj.IconSource,Mode=OneWay,Converter={StaticResource StingToBitMapSourceConverter}}"
+                                             ToolTipText="{x:Bind ExpenseObj.CategoryName,Mode=OneWay}"
+                                             OnExpenseCategorySelected="ExpenseCategoryControl_OnOnExpenseCategorySelected"
+                                             IsFlyOutOpeningAllowed="{x:Bind _viewModel.IsCategoryChangeAllowed,Mode=OneWay}"
+                                             HorizontalAlignment="Left"/>
+            <!--<TextBlock Foreground="{ThemeResource AccentTextColorBrush}"  
                        Grid.Row="0" 
                        Grid.Column="0"
                        FontSize="16"
                        Margin="4 4 0 0"
-                       FontWeight="Medium">Total Expenditure :</TextBlock>
-            <TextBlock Grid.Column="1"
-                       Grid.Row="0"
-                       FontWeight="Bold"
-                       Margin="10 4 0 0"
-                       Text="{x:Bind _viewModel.TotalExpenditureAmount,Converter={StaticResource ExpenseAmountFormatter},Mode=OneWay}"
-                       />
-            <TextBlock Grid.Row="1"
+                       FontWeight="Medium">Total Expenditure :</TextBlock>-->
+            <!--<TextBlock Grid.Row="1"
                        Grid.Column="0"
                        Margin="4 4 0 0"
                        FontSize="16"
                        FontWeight="Medium"
-                       Foreground="{ThemeResource AccentTextColorBrush}">Description :</TextBlock>
-            <TextBlock Grid.Row="1"
-                       Grid.Column="1"
-                       Margin="10 4 0 0"
-                       FontWeight="SemiBold"
+                       Foreground="{ThemeResource AccentTextColorBrush}">Description :</TextBlock>-->
+            <StackPanel Orientation="Vertical" 
+                        Grid.Row="0" 
+                        HorizontalAlignment="Left"
+                        Margin="-20 15 0 0"
+                        Grid.Column="1">
+                <TextBlock Margin="0 4 0 0"
+                           FontWeight="SemiLight"
+                           FontSize="17" 
+                           IsTextSelectionEnabled="True"
+                           ToolTipService.ToolTip="Title"
+                           Text="{x:Bind ExpenseObj.Description,Mode=OneWay}" 
+                           TextWrapping="Wrap"
+                ></TextBlock>
+            <TextBlock FontWeight="Bold"
                        FontSize="20"
-                       Text="{x:Bind ExpenseObj.Description,Mode=OneWay}" 
-                       TextWrapping="Wrap"
-                       ></TextBlock>
+                       ToolTipService.ToolTip="Total Expenditure"
+                       Margin="0 4 0 0"
+                       Text="{x:Bind _viewModel.TotalExpenditureAmount,Converter={StaticResource ExpenseAmountFormatter},Mode=OneWay}"
+                       />
+            <TextBlock Margin="0 4 0 0"
+                       Text="{x:Bind _viewModel.ExpenseOwnerInfo,Mode=OneWay}" 
+                       Foreground="Gray"
+                       ToolTipService.ToolTip="Owner Info"
+                       TextWrapping="Wrap"></TextBlock>
+
+            </StackPanel>
             <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="5">
                 <TextBlock   IsTextSelectionEnabled="True" 
                              FontSize="20"
