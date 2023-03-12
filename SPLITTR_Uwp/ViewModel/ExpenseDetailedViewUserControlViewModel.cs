@@ -6,9 +6,11 @@ using System.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SPLITTR_Uwp.Core.ExtensionMethod;
 using SPLITTR_Uwp.Core.ModelBobj;
+using SPLITTR_Uwp.Core.Models;
 using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
+using SPLITTR_Uwp.Core.UseCase.ChangeExpenseCategory;
 using SPLITTR_Uwp.Core.UseCase.GetGroupDetails;
 using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
 using SPLITTR_Uwp.DataRepository;
@@ -23,6 +25,8 @@ internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
         
     private double _totalExpenditureAmount;
 
+
+
     public ObservableCollection<ExpenseVobj> RelatedExpenses { get; } = new ObservableCollection<ExpenseVobj>();
 
     public double TotalExpenditureAmount
@@ -35,6 +39,21 @@ internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
     private ExpenseVobj _expense;
 
     private string _expenseOccuredGroupName = string.Empty;
+    private bool _isCategoryChangeAllowed;
+    private string _expenseOwnerInfo;
+
+
+    public bool IsCategoryChangeAllowed
+    {
+        get => _isCategoryChangeAllowed;
+        set => SetProperty(ref _isCategoryChangeAllowed, value);
+    }
+
+    public string ExpenseOwnerInfo
+    {
+        get => _expenseOwnerInfo;
+        set => SetProperty(ref _expenseOwnerInfo, value);
+    }
 
     public void ExpenseObjLoaded(ExpenseVobj expenseObj)
     {
@@ -49,6 +68,21 @@ internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
         GetGroupName(expenseObj);
 
         CallRelatedExpenseUseCase();
+
+        IsCategoryChangeAllowed = IsCurrentUserRaisedExpense();
+
+        ExpenseOwnerInfo = FormatExpenseOwnerInfo();
+    }
+    private string FormatExpenseOwnerInfo()
+    {
+        var ownerName = IsCurrentUserRaisedExpense() ? "You" : _expense.SplitRaisedOwner.UserName;
+        var dateOfExpense = _expense.CreatedDate.ToString("MMMM dd yyyy");
+
+        return $"Added By {ownerName} on {dateOfExpense}";
+    }
+    private bool IsCurrentUserRaisedExpense()
+    {
+        return _expense.SplitRaisedOwner?.Equals(Store.CurrentUserBobj) is true;
     }
 
     private  void SplittrNotification_CurrencyPreferenceChanged(CurrencyPreferenceChangedEventArgs obj)
@@ -85,6 +119,7 @@ internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
         set => SetProperty(ref _expenseOccuredGroupName, value);
     }
 
+   
 
     private void CallRelatedExpenseUseCase()
     {
@@ -131,7 +166,16 @@ internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
 
     }
 
-    private class ExpenseDetailedViewPresenterCallBack : IPresenterCallBack<RelatedExpenseResponseObj>,IPresenterCallBack<GroupDetailByIdResponse>
+    public void CategoryChangeSelected(ExpenseCategory expenseCategory)
+    {
+        if (_expense?.CategoryId != expenseCategory.ParentCategoryId)
+        {
+            var categoryChangeRequestObj = new ChangeExpenseCategoryReq(CancellationToken.None, new ExpenseDetailedViewPresenterCallBack(this), _expense, expenseCategory, Store.CurrentUserBobj);
+            var categoryChangeUseCase = InstanceBuilder.CreateInstance<ChangeExpenseCategory>(categoryChangeRequestObj);
+            categoryChangeUseCase.Execute();
+        }
+    }
+    private class ExpenseDetailedViewPresenterCallBack : IPresenterCallBack<RelatedExpenseResponseObj>,IPresenterCallBack<GroupDetailByIdResponse>,IPresenterCallBack<ChangeExpenseCategoryResponse>
     {
         private readonly ExpenseDetailedViewUserControlViewModel _viewModel;
         public ExpenseDetailedViewPresenterCallBack(ExpenseDetailedViewUserControlViewModel viewModel)
@@ -158,6 +202,15 @@ internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
                 }).ConfigureAwait(false);
             }
         }
+        public void OnSuccess(ChangeExpenseCategoryResponse result)
+        {
+            if (_viewModel._expense?.ExpenseUniqueId.Equals(result.UpdatedExpenseBobj.ExpenseUniqueId) is true)
+            {
+                _viewModel._expense.IconSource = result.ChangedExpenseCategory.Icon;
+                _viewModel._expense.CategoryId = result.ChangedExpenseCategory.Id;
+                _viewModel._expense.CategoryName = result.ChangedExpenseCategory.Name;
+            }
+        }
         public void OnError(SplittrException ex)
         {
             if (ex.InnerException is SqlException)
@@ -166,4 +219,5 @@ internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
             }
         }
     }
+ 
 }
