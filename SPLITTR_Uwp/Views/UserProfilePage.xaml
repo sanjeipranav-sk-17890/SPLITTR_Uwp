@@ -1,176 +1,193 @@
-﻿<Page
-    x:Class="SPLITTR_Uwp.Views.UserProfilePage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SPLITTR_Uwp.Views"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    xmlns:converter="using:SPLITTR_Uwp.DataRepository.Converters"
-    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
-    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
-    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
-    xmlns:media="using:Microsoft.UI.Xaml.Media"
-    controls:BackdropMaterial.ApplyToRootOrPageBackground="True">
+﻿<Page x:Class="SPLITTR_Uwp.Views.UserProfilePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+      xmlns:converter="using:SPLITTR_Uwp.DataRepository.Converters"
+      xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+      xmlns:local="using:SPLITTR_Uwp.Views"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:media="using:Microsoft.UI.Xaml.Media"
+      controls:BackdropMaterial.ApplyToRootOrPageBackground="True"
+      mc:Ignorable="d"
+      >
 
     <Page.Resources>
-        <converter:ExpenseAmountFormatter x:Key="AmountFormatter"/> 
+        <converter:ExpenseAmountFormatter x:Key="AmountFormatter" />
     </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-       
-        <ScrollViewer Grid.Column="0" HorizontalAlignment="Stretch"
+
+        <ScrollViewer Grid.Column="0"
+                      HorizontalAlignment="Stretch"
                       VerticalAlignment="Center"
                       HorizontalScrollMode="Enabled"
                       >
-            <RelativePanel
-                AlignHorizontalCenterWithPanel="True"
-                           AlignVerticalCenterWithPanel="True">
-            <StackPanel RelativePanel.AlignHorizontalCenterWithPanel="True"
-                        RelativePanel.AlignVerticalCenterWithPanel="True"
-                        Width="auto">
-               
-             
+            <RelativePanel AlignHorizontalCenterWithPanel="True"
+                           AlignVerticalCenterWithPanel="True"
+                           >
+                <StackPanel Width="auto"
+                            RelativePanel.AlignHorizontalCenterWithPanel="True"
+                            RelativePanel.AlignVerticalCenterWithPanel="True"
+                            >
+
+
                     <StackPanel Orientation="Horizontal">
-                    <PersonPicture 
-                        Background="Transparent"
-                        HorizontalAlignment="Center"
-                        Initials="{x:Bind _viewModel.UserInitial,Mode=OneWay}"
-                    />
-                    <StackPanel Margin="10 0 0 0">
-                        <TextBlock
-                            FontSize="36"
-                            Name="UserNameTextBox"
-                            Text="{x:Bind _viewModel.User.UserName,Mode=OneWay}"
-                            FontWeight="Bold"
-                            Margin="0 10 0 0" 
-                            Style="{StaticResource TextBlockStyle}">
-                        </TextBlock>
-                        <TextBlock 
-                            Style="{StaticResource TextBlockStyle}"
-                            FontSize="20"
-                            Name="UserEmialIdTextBlock"
-                            Text="{x:Bind _viewModel.User.EmailId}"
-                            FontWeight="Medium"
-                            Foreground="DarkGray"
-                            Margin="0 5 0 0">
-                        </TextBlock>
+                        <PersonPicture HorizontalAlignment="Center"
+                                       Background="Transparent"
+                                       Initials="{x:Bind _viewModel.UserInitial, Mode=OneWay}"
+                                       />
+                        <StackPanel Margin="10,0,0,0">
+                            <TextBlock Name="UserNameTextBox"
+                                       Margin="0,10,0,0"
+                                       FontSize="36"
+                                       FontWeight="Bold"
+                                       Style="{StaticResource TextBlockStyle}"
+                                       Text="{x:Bind _viewModel.User.UserName, Mode=OneWay}"
+                                       />
+                            <TextBlock Name="UserEmialIdTextBlock"
+                                       Margin="0,5,0,0"
+                                       FontSize="20"
+                                       FontWeight="Medium"
+                                       Foreground="DarkGray"
+                                       Style="{StaticResource TextBlockStyle}"
+                                       Text="{x:Bind _viewModel.User.EmailId}"
+                                       />
                         </StackPanel>
-                </StackPanel>
-                <StackPanel Margin="30 10 0 0">
+                    </StackPanel>
+                    <StackPanel Margin="30,10,0,0">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Name="WalletBalanceLabel"
-                                       Text="WalletBalance :"
                                        FontSize="24"
                                        Style="{StaticResource DetailsTextBlockStyle}"
-                            />
-                            <TextBlock RelativePanel.RightOf="WalletBalanceLabel"
-                                       Margin="5 0 0 0"
+                                       Text="WalletBalance :"
+                                       />
+                            <TextBlock Margin="5,0,0,0"
                                        VerticalAlignment="Center"
+                                       RelativePanel.RightOf="WalletBalanceLabel"
                                        Style="{StaticResource TextBlockStyle}"
-                                       Text="{x:Bind _viewModel.User.StrWalletBalance,Mode=OneWay,Converter={StaticResource AmountFormatter}}">
-                            </TextBlock>
+                                       Text="{x:Bind _viewModel.User.StrWalletBalance, Mode=OneWay, Converter={StaticResource AmountFormatter}}"
+                                       />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Name="AmountLendedLabel"
-                               Text="Lended Amount :"
-                               FontSize="24"
-                               Style="{StaticResource DetailsTextBlockStyle}"
-                            />
-                            <TextBlock RelativePanel.RightOf="WalletBalanceLabel"
-                               Margin="5 0 0 0"
-                               VerticalAlignment="Center"
-                               Style="{StaticResource TextBlockStyle}"
-                               Text="{x:Bind _viewModel.User.StrLentAmount,Converter={StaticResource AmountFormatter},Mode=OneWay}"/>
+                                       FontSize="24"
+                                       Style="{StaticResource DetailsTextBlockStyle}"
+                                       Text="Lended Amount :"
+                                       />
+                            <TextBlock Margin="5,0,0,0"
+                                       VerticalAlignment="Center"
+                                       RelativePanel.RightOf="WalletBalanceLabel"
+                                       Style="{StaticResource TextBlockStyle}"
+                                       Text="{x:Bind _viewModel.User.StrLentAmount, Converter={StaticResource AmountFormatter}, Mode=OneWay}"
+                                       />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Name="PendindAmountLabel"
-                               Text="Owing  Amount :"
-                               FontSize="24"
-                               Style="{StaticResource DetailsTextBlockStyle}"
-                         ></TextBlock>
-                            <TextBlock RelativePanel.RightOf="WalletBalanceLabel"
-                               Margin="5 0 0 0"
-                               VerticalAlignment="Center"
-                               Style="{StaticResource TextBlockStyle}"
-                               Text="{x:Bind _viewModel.User.StrOwingAmount,Converter={StaticResource AmountFormatter},Mode=OneWay}"/>
+                                       FontSize="24"
+                                       Style="{StaticResource DetailsTextBlockStyle}"
+                                       Text="Owing  Amount :"
+                                       />
+                            <TextBlock Margin="5,0,0,0"
+                                       VerticalAlignment="Center"
+                                       RelativePanel.RightOf="WalletBalanceLabel"
+                                       Style="{StaticResource TextBlockStyle}"
+                                       Text="{x:Bind _viewModel.User.StrOwingAmount, Converter={StaticResource AmountFormatter}, Mode=OneWay}"
+                                       />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Name="CurrencyPreferenceLabel"
-                               Text="Currency Preference:"
-                               FontSize="24"
-                               Style="{StaticResource DetailsTextBlockStyle}"
-                           ></TextBlock>
-                            <TextBlock RelativePanel.RightOf="WalletBalanceLabel"
-                               Margin="5 0 0 0"
-                               FontSize="18"
-                               VerticalAlignment="Center"
-                               Style="{StaticResource TextBlockStyle}"
-                               Text="{x:Bind _viewModel.CurrencyPreference,Mode=OneWay}"/>
-                        </StackPanel>
-                        <HyperlinkButton Margin="0 5 0 0"
-                                 FontSize="15"
-                                 Background="{ThemeResource ApplicationMainThemeColor}"
-                                 Foreground="{ThemeResource TextBoxForegroundThemeBrush}"
-                             Content="Edit Profile" Click="{x:Bind _viewModel.EditUserProfileClicked}" ></HyperlinkButton>
-                    </StackPanel>
-                
-            </StackPanel>
-        </RelativePanel> 
-        </ScrollViewer>
-        <RelativePanel Grid.Column="1" Width="500"
-                       Visibility="{x:Bind _viewModel.IsEditUserProfileVisible,Mode=OneWay}"
-                       CornerRadius="10" 
-                       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-           <StackPanel RelativePanel.AlignVerticalCenterWithPanel="True"
-                       RelativePanel.AlignHorizontalCenterWithPanel="True"
-                       HorizontalAlignment="Stretch"
-           >
-               <StackPanel.Resources>
-                   <Style x:Key="TextBlockStyle" TargetType="TextBlock">
-                       <Setter Property="FontSize" Value="20" />
-                       <Setter Property="HorizontalAlignment" Value="Stretch" />
-                       <Setter Property="FontFamily" Value="segoe Ui Varibale" />
-                   </Style>
-               </StackPanel.Resources>
-               <PersonPicture 
-                                           Background="Transparent"
-                                           HorizontalAlignment="Center"
-                                           Initials="{x:Bind _viewModel.UserInitial,Mode=OneWay}"
+                                       FontSize="24"
+                                       Style="{StaticResource DetailsTextBlockStyle}"
+                                       Text="Currency Preference:"
                                        />
-               <TextBlock Text="Name" Style="{StaticResource TextBlockStyle}"></TextBlock>
-               <TextBox BorderThickness="0.7"
-                        CornerRadius="4"
-                        Text="{x:Bind _viewModel.CurrentUserName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
-           <TextBlock Text="Name Feild Cannot be empty !!!" 
-           Foreground="Red"
-           FontSize="10"
-           Visibility="{x:Bind _viewModel.IsUserNameEmptyIndicatorVisible,Mode=OneWay}"></TextBlock>
-               <TextBlock Text="Currency Preference" Style="{StaticResource TextBlockStyle}"></TextBlock>
-               <ComboBox ItemsSource="{x:Bind _viewModel._currencyList}"
-                         SelectedIndex="{x:Bind _viewModel.PreferendCurrencyIndex,Mode=TwoWay}"
-                         HorizontalAlignment="Stretch"
-                         CornerRadius="8"
-                         FontSize="20"
-                         HorizontalContentAlignment="Center"
-                         BorderThickness="0.7"
-               ></ComboBox>
-                <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
-                   <Button Style="{StaticResource OrangeButtonStyle}"
-                           Background="GreenYellow"
-                           FontSize="18"
-                           Click="{x:Bind _viewModel.SaveButtonClicked}"
-                           Content=" Save "/>
-                   <Button Style="{StaticResource OrangeButtonStyle}"
-                           FontSize="18"
-                           Click="{x:Bind _viewModel.CancelButtonClicked}"
-                           Margin="60 0 0 0"
-                           Content="Cancel"/>
-               </StackPanel>
-           </StackPanel>
+                            <TextBlock Margin="5,0,0,0"
+                                       VerticalAlignment="Center"
+                                       FontSize="18"
+                                       RelativePanel.RightOf="WalletBalanceLabel"
+                                       Style="{StaticResource TextBlockStyle}"
+                                       Text="{x:Bind _viewModel.CurrencyPreference, Mode=OneWay}"
+                                       />
+                        </StackPanel>
+                        <HyperlinkButton Margin="0,5,0,0"
+                                         Background="{ThemeResource ApplicationMainThemeColor}"
+                                         Click="{x:Bind _viewModel.EditUserProfileClicked}"
+                                         Content="Edit Profile"
+                                         FontSize="15"
+                                         Foreground="{ThemeResource TextBoxForegroundThemeBrush}"
+                                         />
+                    </StackPanel>
+
+                </StackPanel>
+            </RelativePanel>
+        </ScrollViewer>
+        <RelativePanel Grid.Column="1"
+                       Width="500"
+                       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                       CornerRadius="10"
+                       Visibility="{x:Bind _viewModel.IsEditUserProfileVisible, Mode=OneWay}"
+                       >
+            <StackPanel HorizontalAlignment="Stretch"
+                        RelativePanel.AlignHorizontalCenterWithPanel="True"
+                        RelativePanel.AlignVerticalCenterWithPanel="True"
+                        >
+                <StackPanel.Resources>
+                    <Style x:Key="TextBlockStyle"
+                           TargetType="TextBlock"
+                           >
+                        <Setter Property="FontSize" Value="20" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="FontFamily" Value="segoe Ui Varibale" />
+                    </Style>
+                </StackPanel.Resources>
+                <PersonPicture HorizontalAlignment="Center"
+                               Background="Transparent"
+                               Initials="{x:Bind _viewModel.UserInitial, Mode=OneWay}"
+                               />
+                <TextBlock Style="{StaticResource TextBlockStyle}"
+                           Text="Name"
+                           />
+                <TextBox BorderThickness="0.7"
+                         CornerRadius="4"
+                         Text="{x:Bind _viewModel.CurrentUserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         />
+                <TextBlock FontSize="10"
+                           Foreground="Red"
+                           Text="Name Feild Cannot be empty !!!"
+                           Visibility="{x:Bind _viewModel.IsUserNameEmptyIndicatorVisible, Mode=OneWay}"
+                           />
+                <TextBlock Style="{StaticResource TextBlockStyle}"
+                           Text="Currency Preference"
+                           />
+                <ComboBox HorizontalAlignment="Stretch"
+                          HorizontalContentAlignment="Center"
+                          BorderThickness="0.7"
+                          CornerRadius="8"
+                          FontSize="20"
+                          ItemsSource="{x:Bind _viewModel._currencyList}"
+                          SelectedIndex="{x:Bind _viewModel.PreferendCurrencyIndex, Mode=TwoWay}"
+                          />
+                <StackPanel Margin="0,20,0,0"
+                            Orientation="Horizontal"
+                            >
+                    <Button Background="GreenYellow"
+                            Click="{x:Bind _viewModel.SaveButtonClicked}"
+                            Content=" Save "
+                            FontSize="18"
+                            Style="{StaticResource OrangeButtonStyle}"
+                            />
+                    <Button Margin="60,0,0,0"
+                            Click="{x:Bind _viewModel.CancelButtonClicked}"
+                            Content="Cancel"
+                            FontSize="18"
+                            Style="{StaticResource OrangeButtonStyle}"
+                            />
+                </StackPanel>
+            </StackPanel>
         </RelativePanel>
     </Grid>
 </Page>

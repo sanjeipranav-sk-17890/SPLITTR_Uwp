@@ -1,214 +1,272 @@
-﻿<Page
-    x:Class="SPLITTR_Uwp.Views.LoginPage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SPLITTR_Uwp.Views"
-    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    MinWidth="500">
+﻿<Page x:Class="SPLITTR_Uwp.Views.LoginPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:SPLITTR_Uwp.Views"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      MinWidth="500"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+      mc:Ignorable="d"
+      >
 
-   <Page.Resources>
+    <Page.Resources>
 
-       <Style TargetType="TextBlock" >
-            <Setter Property="FontFamily" Value="Segoe UI Variable"></Setter>
-       </Style>
-       <ImageBrush ImageSource="../Assets/AppLogo/white-background-with-3d-hexagonal-pattern-design_1017-28443.jpg"
-                   Stretch="UniformToFill" x:Key="LoginPageImageBrush">
-       </ImageBrush>
-       <ImageBrush ImageSource="../Assets/LoginPageFlipViewItems/imageedit_1_6012202156.png" Stretch="Uniform" x:Key="FlipViewImage1"></ImageBrush>
-       <ImageBrush ImageSource="../Assets/LoginPageFlipViewItems/imageedit_3_4639561983.png" Stretch="Uniform" x:Key="FlipViewImage2"></ImageBrush>
-       <ImageBrush ImageSource="../Assets/LoginPageFlipViewItems/imageedit_5_2730752383.png" Stretch="Uniform" x:Key="FlipViewImage3"></ImageBrush>
-       <ImageBrush ImageSource="../Assets/LoginPageFlipViewItems/imageedit_7_2815236106.png" Stretch="Uniform" x:Key="FlipViewImage4"></ImageBrush>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI Variable" />
+        </Style>
+        <ImageBrush x:Key="LoginPageImageBrush"
+                    ImageSource="../Assets/AppLogo/white-background-with-3d-hexagonal-pattern-design_1017-28443.jpg"
+                    Stretch="UniformToFill"
+                    />
+        <ImageBrush x:Key="FlipViewImage1"
+                    ImageSource="../Assets/LoginPageFlipViewItems/imageedit_1_6012202156.png"
+                    Stretch="Uniform"
+                    />
+        <ImageBrush x:Key="FlipViewImage2"
+                    ImageSource="../Assets/LoginPageFlipViewItems/imageedit_3_4639561983.png"
+                    Stretch="Uniform"
+                    />
+        <ImageBrush x:Key="FlipViewImage3"
+                    ImageSource="../Assets/LoginPageFlipViewItems/imageedit_5_2730752383.png"
+                    Stretch="Uniform"
+                    />
+        <ImageBrush x:Key="FlipViewImage4"
+                    ImageSource="../Assets/LoginPageFlipViewItems/imageedit_7_2815236106.png"
+                    Stretch="Uniform"
+                    />
 
 
-   </Page.Resources>
-    <Grid >
-         <Grid.RowDefinitions>
-             <RowDefinition Height="Auto"/>
-             <RowDefinition Height="Auto"/>
-             <RowDefinition Height="*"/>
-         </Grid.RowDefinitions>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
 
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-         <RelativePanel Grid.Row="0" >
-             <StackPanel Orientation="Horizontal"
-                         Name="LogoStactPanel" Margin="40 0 0 0">
-                 <Image Source="../Assets/AppLogo/62e914dea1e1b17f781f57f4.png" RelativePanel.AlignRightWithPanel="True"
-                        RelativePanel.AlignTopWithPanel="True"
-                        Height="75" 
-                        Width="150"></Image>
-                 <TextBlock Text="SPLITTR"
-                            VerticalAlignment="Bottom"
-                            FontWeight="SemiBold"
-                            FontSize="42" 
-                            Margin="-30 20 0 0"
-                            FontFamily="Segoe UI Variable"/>
+        <RelativePanel Grid.Row="0">
+            <StackPanel Name="LogoStactPanel"
+                        Margin="40,0,0,0"
+                        Orientation="Horizontal"
+                        >
+                <Image Width="150"
+                       Height="75"
+                       RelativePanel.AlignRightWithPanel="True"
+                       RelativePanel.AlignTopWithPanel="True"
+                       Source="../Assets/AppLogo/62e914dea1e1b17f781f57f4.png"
+                       />
+                <TextBlock Margin="-30,20,0,0"
+                           VerticalAlignment="Bottom"
+                           FontFamily="Segoe UI Variable"
+                           FontSize="42"
+                           FontWeight="SemiBold"
+                           Text="SPLITTR"
+                           />
 
             </StackPanel>
-             </RelativePanel>
-        <RelativePanel Grid.Row="0" Grid.Column="1">
-            <StackPanel Orientation="Horizontal"
-                        RelativePanel.AlignVerticalCenterWithPanel="True"
-                        RelativePanel.AlignRightWithPanel="True"
-                        Margin="0 0 20 0"
-                        >
-                <Button Name="LogInButton" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                        Foreground="{ThemeResource ApplicationMainThemeColor}"
-                        Content="Log in"
-                        FontSize="20"
-                        BorderBrush="Transparent"
-                        Width="100"
-                        Margin="5"
-                        FontWeight="SemiBold"
-                        CornerRadius="4" 
-                        IsEnabled="True"/>
-                <Button Name="SignUpButton" Background="{ThemeResource ApplicationMainThemeColor}"
-                        Foreground="White"
-                        FontWeight="SemiBold"
-                        FontSize="20"
-                        Content="Sign up"
-                        Width="100"
-                        Margin="5"
-                        Click="{x:Bind SignUpButtonOnClick}"
-                        CornerRadius="4"/>
-          
-
-             </StackPanel>
         </RelativePanel>
-        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0">
-             <Border Background="DarkGoldenrod" CornerRadius="8"
-                     Margin="40 0 40 0"
-                     Height="30"
-                     Visibility="{x:Bind _viewModel.LoginInformation,Mode=OneWay}">
-                <TextBlock HorizontalAlignment="Left" 
-                           Foreground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                            FontSize="22"
-                            TextWrapping="Wrap"
-                            Text="   You Must be login To Continue"/>
-             </Border>
-            <Border Background="Red" CornerRadius="8"
-                    Margin="40 0 40 0"
-                    Height="30"
-                    Visibility="{x:Bind _viewModel.WrongUserCredentialVisibility,Mode=OneWay}">
-                <TextBlock HorizontalAlignment="Left" 
+        <RelativePanel Grid.Row="0"
+                       Grid.Column="1"
+                       >
+            <StackPanel Margin="0,0,20,0"
+                        Orientation="Horizontal"
+                        RelativePanel.AlignRightWithPanel="True"
+                        RelativePanel.AlignVerticalCenterWithPanel="True"
+                        >
+                <Button Name="LogInButton"
+                        Width="100"
+                        Margin="5"
+                        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                        BorderBrush="Transparent"
+                        Content="Log in"
+                        CornerRadius="4"
+                        FontSize="20"
+                        FontWeight="SemiBold"
+                        Foreground="{ThemeResource ApplicationMainThemeColor}"
+                        IsEnabled="True"
+                        />
+                <Button Name="SignUpButton"
+                        Width="100"
+                        Margin="5"
+                        Background="{ThemeResource ApplicationMainThemeColor}"
+                        Click="{x:Bind SignUpButtonOnClick}"
+                        Content="Sign up"
+                        CornerRadius="4"
+                        FontSize="20"
+                        FontWeight="SemiBold"
+                        Foreground="White"
+                        />
+
+
+            </StackPanel>
+        </RelativePanel>
+        <StackPanel Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    >
+            <Border Height="30"
+                    Margin="40,0,40,0"
+                    Background="DarkGoldenrod"
+                    CornerRadius="8"
+                    Visibility="{x:Bind _viewModel.LoginInformation, Mode=OneWay}"
+                    >
+                <TextBlock HorizontalAlignment="Left"
                            FontSize="22"
-                           TextWrapping="WrapWholeWords"
                            Foreground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                           Text="    Whoops! We couldn't find an account for that email address and password. Maybe you've forgotten your password?"/>
+                           Text="   You Must be login To Continue"
+                           TextWrapping="Wrap"
+                           />
+            </Border>
+            <Border Height="30"
+                    Margin="40,0,40,0"
+                    Background="Red"
+                    CornerRadius="8"
+                    Visibility="{x:Bind _viewModel.WrongUserCredentialVisibility, Mode=OneWay}"
+                    >
+                <TextBlock HorizontalAlignment="Left"
+                           FontSize="22"
+                           Foreground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                           Text="    Whoops! We couldn't find an account for that email address and password. Maybe you've forgotten your password?"
+                           TextWrapping="WrapWholeWords"
+                           />
             </Border>
 
         </StackPanel>
-        <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Style="{ThemeResource ThemedBackgroundGrid}">
+        <Grid Grid.Row="2"
+              Grid.Column="0"
+              Grid.ColumnSpan="2"
+              Style="{ThemeResource ThemedBackgroundGrid}"
+              >
 
-             <Grid.ColumnDefinitions>
-                 <ColumnDefinition Width="*"/>
-                 <ColumnDefinition Width="Auto"/>
-             </Grid.ColumnDefinitions>
-             <Grid Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="3*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="*" />
 
                 </Grid.RowDefinitions>
-                 <FlipView Grid.Row="1"
-                           Name="LoginPageSplitView"
-                           Width="auto"
-                           HorizontalAlignment="Left"
-                           CornerRadius="4"
-                           SelectedIndex="{x:Bind _viewModel.SelectedItem,Mode=OneWay}"
-                           Background="Transparent" IsEnabled="False">
-                     <FlipView.Resources>
-                         <Style TargetType="Border">
-                             <Setter Property="CornerRadius" Value="8" />
-                             <Setter Property="VerticalAlignment" Value="Stretch"/>
-                             <Setter Property="Width" Value="auto"/>
-                         </Style>
-                     </FlipView.Resources>
-                     <Border Background="{StaticResource FlipViewImage3}"  />
-                     <Border Background="{StaticResource FlipViewImage2}"  ></Border>
-                     <Border Background="{StaticResource FlipViewImage1}"></Border>
-                     <Border Background="{StaticResource FlipViewImage4}"  ></Border>
-                 </FlipView>
+                <FlipView Name="LoginPageSplitView"
+                          Grid.Row="1"
+                          Width="auto"
+                          HorizontalAlignment="Left"
+                          Background="Transparent"
+                          CornerRadius="4"
+                          IsEnabled="False"
+                          SelectedIndex="{x:Bind _viewModel.SelectedItem, Mode=OneWay}"
+                          >
+                    <FlipView.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="8" />
+                            <Setter Property="VerticalAlignment" Value="Stretch" />
+                            <Setter Property="Width" Value="auto" />
+                        </Style>
+                    </FlipView.Resources>
+                    <Border Background="{StaticResource FlipViewImage3}" />
+                    <Border Background="{StaticResource FlipViewImage2}" />
+                    <Border Background="{StaticResource FlipViewImage1}" />
+                    <Border Background="{StaticResource FlipViewImage4}" />
+                </FlipView>
             </Grid>
-           
-             <ScrollViewer Grid.Column="1">
 
-                <RelativePanel  Width="500">
+            <ScrollViewer Grid.Column="1">
+
+                <RelativePanel Width="500">
                     <Border Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                        CornerRadius="8" 
-                        BorderBrush="Transparent"
-                        RelativePanel.AlignRightWithPanel="True"
-                        RelativePanel.AlignLeftWithPanel="True"
-                        RelativePanel.AlignVerticalCenterWithPanel="True">
+                            BorderBrush="Transparent"
+                            CornerRadius="8"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.AlignVerticalCenterWithPanel="True"
+                            >
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="25"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="25"/>
+                                <RowDefinition Height="25" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="25" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition  Width="5*"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="5*" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="1" Grid.Row="1">
-                                <TextBlock Text="Log in" FontSize="36"/>
-                                <TextBlock Text="Email address"
-                                       FontSize="20"
-                                       Margin="0 20 0 0"
-                                       HorizontalAlignment="Stretch"
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="1"
+                                        >
+                                <TextBlock FontSize="36"
+                                           Text="Log in"
+                                           />
+                                <TextBlock Margin="0,20,0,0"
+                                           HorizontalAlignment="Stretch"
+                                           FontSize="20"
+                                           Text="Email address"
+                                           />
+                                <TextBox HorizontalAlignment="Stretch"
+                                         BorderThickness="1"
+                                         FontSize="24"
+                                         IsSpellCheckEnabled="False"
+                                         Text="{x:Bind _viewModel.LoginUserEmail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         />
+                                <TextBlock Margin="0,20,0,0"
+                                           HorizontalAlignment="Stretch"
+                                           FontSize="20"
+                                           Text="Password"
+                                           />
+                                <PasswordBox HorizontalAlignment="Stretch"
+                                             BorderThickness="1"
+                                             FontSize="24"
+                                             PasswordRevealMode="Peek"
+                                             />
+                                <Button Margin="0,30,0,0"
+                                        HorizontalAlignment="Stretch"
+                                        AccessKey="Enter"
+                                        Background="{ThemeResource ApplicationMainThemeColor}"
+                                        Click="{x:Bind _viewModel.LoginButtonPressed}"
+                                        Content="Log in"
+                                        CornerRadius="4"
+                                        FontFamily="Segoe UI Variable"
+                                        FontWeight="Bold"
+                                        Foreground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                                        ToolTipService.ToolTip="Log In"
                                         />
-                                <TextBox FontSize="24"
-                                     HorizontalAlignment="Stretch"
-                                     BorderThickness="1"
-                                     IsSpellCheckEnabled="False"
-                                     Text="{x:Bind _viewModel.LoginUserEmail,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                                <TextBlock Text="Password"
-                                       FontSize="20"
-                                       Margin="0 20 0 0"
-                                       HorizontalAlignment="Stretch"/>
-                                <PasswordBox FontSize="24" 
-                                     HorizontalAlignment="Stretch"
-                                     BorderThickness="1" PasswordRevealMode="Peek"
-                                      />
-                                <Button Background="{ThemeResource ApplicationMainThemeColor}"
-                                    HorizontalAlignment="Stretch"
-                                    Margin="0 30 0 0"
-                                    Content="Log in"
-                                    AccessKey="Enter"
-                                    ToolTipService.ToolTip="Log In"
-                                    FontFamily="Segoe UI Variable"
-                                    FontWeight="Bold"
-                                    Foreground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                                    CornerRadius="4"
-                                    Click="{x:Bind _viewModel.LoginButtonPressed}"></Button>
 
-                                <HyperlinkButton FontSize="18" 
-                                             HorizontalAlignment="Center"
-                                             Content="Forgot your Password ?"
-                                             ToolTipService.ToolTip="Coming Soon"
-                                             Foreground="{ThemeResource ApplicationMainThemeColor }"
-                            ></HyperlinkButton>
-                                <TextBlock Text="-- OR --" HorizontalAlignment="Center"
-                                       Foreground="Gray" Opacity=".5"></TextBlock>
+                                <HyperlinkButton HorizontalAlignment="Center"
+                                                 Content="Forgot your Password ?"
+                                                 FontSize="18"
+                                                 Foreground="{ThemeResource ApplicationMainThemeColor}"
+                                                 ToolTipService.ToolTip="Coming Soon"
+                                                 />
+                                <TextBlock HorizontalAlignment="Center"
+                                           Foreground="Gray"
+                                           Opacity=".5"
+                                           Text="-- OR --"
+                                           />
                                 <Button HorizontalAlignment="Stretch"
-                                    CornerRadius="4"
-                                    Background="Transparent"
-                                    BorderBrush="Gray"
-                                    ToolTipService.ToolTip="Coming Soon"
-                                    BorderThickness=".5">
+                                        Background="Transparent"
+                                        BorderBrush="Gray"
+                                        BorderThickness=".5"
+                                        CornerRadius="4"
+                                        ToolTipService.ToolTip="Coming Soon"
+                                        >
                                     <Button.Content>
-                                        <StackPanel Orientation="Horizontal"
-                                                Height="20">
-                                            <Image Source="/Assets/icons/google-logo-9826-16x16.ico" Stretch="Uniform" Margin="0 0 10 0"></Image>
-                                            <TextBlock Text="Sign in With Google" FontSize="18"></TextBlock>
+                                        <StackPanel Height="20"
+                                                    Orientation="Horizontal"
+                                                    >
+                                            <Image Margin="0,0,10,0"
+                                                   Source="/Assets/icons/google-logo-9826-16x16.ico"
+                                                   Stretch="Uniform"
+                                                   />
+                                            <TextBlock FontSize="18"
+                                                       Text="Sign in With Google"
+                                                       />
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
@@ -220,10 +278,10 @@
                     </Border>
                 </RelativePanel>
             </ScrollViewer>
-            
-            
-             
 
-</Grid>
+
+
+
+        </Grid>
     </Grid>
 </Page>

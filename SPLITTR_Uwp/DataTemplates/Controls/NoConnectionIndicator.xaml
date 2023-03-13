@@ -1,27 +1,32 @@
-﻿<UserControl
-    x:Class="SPLITTR_Uwp.DataTemplates.Controls.NoConnectionIndicator"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SPLITTR_Uwp.DataTemplates.Controls"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Foreground="{ThemeResource ApplicationForegroundThemeBrush}"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
+﻿<UserControl x:Class="SPLITTR_Uwp.DataTemplates.Controls.NoConnectionIndicator"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="using:SPLITTR_Uwp.DataTemplates.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="300"
+             d:DesignWidth="400"
+             Foreground="{ThemeResource ApplicationForegroundThemeBrush}"
+             mc:Ignorable="d"
+             >
 
-    <Border BorderBrush="{ThemeResource TextBoxForegroundThemeBrush}" CornerRadius="4"
+    <Border Padding="4"
+            BorderBrush="{ThemeResource TextBoxForegroundThemeBrush}"
             BorderThickness="1"
-            Padding="4">
+            CornerRadius="4"
+            >
         <StackPanel Orientation="Horizontal">
-            <FontIcon FontFamily="Segoe Fluent Icons" 
+            <FontIcon FontFamily="Segoe Fluent Icons"
+                      FontSize="14"
                       Glyph="&#xF384;"
-                      FontSize="14"/>
-            <TextBlock VerticalAlignment="Center" 
+                      />
+            <TextBlock Margin="3,0,0,0"
+                       VerticalAlignment="Center"
                        FontSize="12"
-                       Margin="3 0 0 0"
                        FontWeight="SemiBold"
-                       >Offline</TextBlock>
+                       >
+                Offline
+            </TextBlock>
         </StackPanel>
     </Border>
 </UserControl>

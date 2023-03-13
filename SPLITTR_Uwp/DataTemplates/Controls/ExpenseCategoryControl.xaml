@@ -1,94 +1,133 @@
-﻿<UserControl
-    x:Class="SPLITTR_Uwp.DataTemplates.Controls.ExpenseCategoryControl"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SPLITTR_Uwp.DataTemplates.Controls"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:modelBobj="using:SPLITTR_Uwp.Core.ModelBobj"
-    xmlns:control="using:Microsoft.UI.Xaml.Controls"
-    xmlns:model="using:SPLITTR_Uwp.Core.Models"
-    xmlns:system="using:System"
-    mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400"
-    ToolTipService.ToolTip="{x:Bind ToolTipText,Mode=OneWay}"> 
+﻿<UserControl x:Class="SPLITTR_Uwp.DataTemplates.Controls.ExpenseCategoryControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:control="using:Microsoft.UI.Xaml.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="using:SPLITTR_Uwp.DataTemplates.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:model="using:SPLITTR_Uwp.Core.Models"
+             xmlns:modelBobj="using:SPLITTR_Uwp.Core.ModelBobj"
+             xmlns:system="using:System"
+             d:DesignHeight="300"
+             d:DesignWidth="400"
+             ToolTipService.ToolTip="{x:Bind ToolTipText, Mode=OneWay}"
+             mc:Ignorable="d"
+             >
     <UserControl.Resources>
-        <Style x:Key="CategoryControlButton" TargetType="Button">
-            <Setter Property="Background" Value="{ThemeResource ButtonBackground}"/>
-            <Setter Property="BackgroundSizing" Value="OuterBorderEdge"/>
-            <Setter Property="Foreground" Value="{ThemeResource ButtonForeground}"/>
-            <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}"/>
-            <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
-            <Setter Property="FontWeight" Value="Normal"/>
-            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
-            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}"/>
-            <Setter Property="FocusVisualMargin" Value="-3"/>
+        <Style x:Key="CategoryControlButton"
+               TargetType="Button"
+               >
+            <Setter Property="Background" Value="{ThemeResource ButtonBackground}" />
+            <Setter Property="BackgroundSizing" Value="OuterBorderEdge" />
+            <Setter Property="Foreground" Value="{ThemeResource ButtonForeground}" />
+            <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}" />
+            <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}" />
+            <Setter Property="FocusVisualMargin" Value="-3" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <ContentPresenter x:Name="ContentPresenter" 
+                        <ContentPresenter x:Name="ContentPresenter"
+                                          Padding="{TemplateBinding Padding}"
+                                          HorizontalContentAlignment="Stretch"
+                                          VerticalContentAlignment="Stretch"
                                           AutomationProperties.AccessibilityView="Raw"
                                           Background="{TemplateBinding Background}"
                                           BackgroundSizing="{TemplateBinding BackgroundSizing}"
-                                          BorderBrush="{TemplateBinding BorderBrush}" 
+                                          BorderBrush="{TemplateBinding BorderBrush}"
                                           BorderThickness="{TemplateBinding BorderThickness}"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}" 
-                                          CornerRadius="{TemplateBinding CornerRadius}" 
                                           Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
                                           ContentTransitions="{TemplateBinding ContentTransitions}"
-                                          HorizontalContentAlignment="Stretch" 
-                                          Padding="{TemplateBinding Padding}"
-                                          VerticalContentAlignment="Stretch">
+                                          CornerRadius="{TemplateBinding CornerRadius}"
+                                          >
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
                                     <VisualState x:Name="Normal">
                                         <Storyboard>
-                                            <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState x:Name="PointerOver">
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPointerOver}"/>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                           Storyboard.TargetProperty="Background"
+                                                                           >
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="{ThemeResource ButtonBackgroundPointerOver}"
+                                                                        />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPointerOver}"/>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                           Storyboard.TargetProperty="BorderBrush"
+                                                                           >
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="{ThemeResource ButtonBorderBrushPointerOver}"
+                                                                        />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPointerOver}"/>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                           Storyboard.TargetProperty="Foreground"
+                                                                           >
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="{ThemeResource ButtonForegroundPointerOver}"
+                                                                        />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState x:Name="Pressed">
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPressed}"/>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                           Storyboard.TargetProperty="Background"
+                                                                           >
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="{ThemeResource ButtonBackgroundPressed}"
+                                                                        />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPressed}"/>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                           Storyboard.TargetProperty="BorderBrush"
+                                                                           >
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="{ThemeResource ButtonBorderBrushPressed}"
+                                                                        />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPressed}"/>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                           Storyboard.TargetProperty="Foreground"
+                                                                           >
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="{ThemeResource ButtonForegroundPressed}"
+                                                                        />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <PointerDownThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                            <PointerDownThemeAnimation Storyboard.TargetName="ContentPresenter" />
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState x:Name="Disabled">
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundDisabled}"/>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                           Storyboard.TargetProperty="Background"
+                                                                           >
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="{ThemeResource ButtonBackgroundDisabled}"
+                                                                        />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushDisabled}"/>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                           Storyboard.TargetProperty="BorderBrush"
+                                                                           >
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="{ThemeResource ButtonBorderBrushDisabled}"
+                                                                        />
                                             </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundDisabled}"/>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                           Storyboard.TargetProperty="Foreground"
+                                                                           >
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="{ThemeResource ButtonForegroundDisabled}"
+                                                                        />
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
@@ -99,138 +138,162 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="NoMarginFlyoutPresenterStyle" TargetType="FlyoutPresenter">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-            <Setter Property="IsTabStop" Value="False"/>
-            <Setter Property="Background" Value="{ThemeResource FlyoutPresenterBackground}"/>
-            <Setter Property="BorderBrush" Value="{ThemeResource FlyoutBorderThemeBrush}"/>
-            <Setter Property="BorderThickness" Value="{ThemeResource FlyoutBorderThemeThickness}"/>
-            <Setter Property="Padding" Value="{ThemeResource FlyoutContentThemePadding}"/>
-            <Setter Property="MinWidth" Value="{ThemeResource FlyoutThemeMinWidth}"/>
-            <Setter Property="MaxWidth" Value="{ThemeResource FlyoutThemeMaxWidth}"/>
-            <Setter Property="MinHeight" Value="{ThemeResource FlyoutThemeMinHeight}"/>
-            <Setter Property="MaxHeight" Value="{ThemeResource FlyoutThemeMaxHeight}"/>
-            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Auto"/>
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
-            <Setter Property="ScrollViewer.VerticalScrollMode" Value="Auto"/>
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-            <Setter Property="ScrollViewer.ZoomMode" Value="Disabled"/>
+        <Style x:Key="NoMarginFlyoutPresenterStyle"
+               TargetType="FlyoutPresenter"
+               >
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="Background" Value="{ThemeResource FlyoutPresenterBackground}" />
+            <Setter Property="BorderBrush" Value="{ThemeResource FlyoutBorderThemeBrush}" />
+            <Setter Property="BorderThickness" Value="{ThemeResource FlyoutBorderThemeThickness}" />
+            <Setter Property="Padding" Value="{ThemeResource FlyoutContentThemePadding}" />
+            <Setter Property="MinWidth" Value="{ThemeResource FlyoutThemeMinWidth}" />
+            <Setter Property="MaxWidth" Value="{ThemeResource FlyoutThemeMaxWidth}" />
+            <Setter Property="MinHeight" Value="{ThemeResource FlyoutThemeMinHeight}" />
+            <Setter Property="MaxHeight" Value="{ThemeResource FlyoutThemeMaxHeight}" />
+            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Auto" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.VerticalScrollMode" Value="Auto" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.ZoomMode" Value="Disabled" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="FlyoutPresenter">
-                        <Border Background="Transparent" BackgroundSizing="OuterBorderEdge" BorderBrush="Transparent" BorderThickness="0" CornerRadius="{TemplateBinding CornerRadius}" Padding="0">
-                            <ScrollViewer x:Name="ScrollViewer" AutomationProperties.AccessibilityView="Raw" HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}" VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}" VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}" ZoomMode="{TemplateBinding ScrollViewer.ZoomMode}">
-                                <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentTransitions="{TemplateBinding ContentTransitions}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        <Border Padding="0"
+                                Background="Transparent"
+                                BackgroundSizing="OuterBorderEdge"
+                                BorderBrush="Transparent"
+                                BorderThickness="0"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                >
+                            <ScrollViewer x:Name="ScrollViewer"
+                                          AutomationProperties.AccessibilityView="Raw"
+                                          HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                          HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}"
+                                          VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                          VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}"
+                                          ZoomMode="{TemplateBinding ScrollViewer.ZoomMode}"
+                                          >
+                                <ContentPresenter Margin="0"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  Content="{TemplateBinding Content}"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                  />
                             </ScrollViewer>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="NoPaddingListViewItemContainer" TargetType="ListViewItem">
-            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
-            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
-            <Setter Property="Background" Value="{ThemeResource ListViewItemBackground}"/>
-            <Setter Property="Foreground" Value="{ThemeResource ListViewItemForeground}"/>
-            <Setter Property="TabNavigation" Value="Local"/>
-            <Setter Property="IsHoldingEnabled" Value="True"/>
-            <Setter Property="Padding" Value="1"/>
-            <Setter Property="Width" Value="auto"></Setter>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Top"/>
-            <Setter Property="MinWidth" Value="0"/>
-            <Setter Property="Margin" Value="2 0 2 0"></Setter>
-            <Setter Property="MinHeight" Value="0"/>
-            <Setter Property="AllowDrop" Value="False"/>
-            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}"/>
-            <Setter Property="FocusVisualMargin" Value="0"/>
+        <Style x:Key="NoPaddingListViewItemContainer"
+               TargetType="ListViewItem"
+               >
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+            <Setter Property="Background" Value="{ThemeResource ListViewItemBackground}" />
+            <Setter Property="Foreground" Value="{ThemeResource ListViewItemForeground}" />
+            <Setter Property="TabNavigation" Value="Local" />
+            <Setter Property="IsHoldingEnabled" Value="True" />
+            <Setter Property="Padding" Value="1" />
+            <Setter Property="Width" Value="auto" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Top" />
+            <Setter Property="MinWidth" Value="0" />
+            <Setter Property="Margin" Value="2,0,2,0" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="AllowDrop" Value="False" />
+            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}" />
+            <Setter Property="FocusVisualMargin" Value="0" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListViewItem">
-                        <ListViewItemPresenter x:Name="Root" 
-                                               CheckMode="{ThemeResource ListViewItemCheckMode}" 
+                        <ListViewItemPresenter x:Name="Root"
+                                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                                CheckBoxBrush="{ThemeResource ListViewItemCheckBoxBrush}"
-                                               CheckBrush="{ThemeResource ListViewItemCheckBrush}" 
+                                               CheckBrush="{ThemeResource ListViewItemCheckBrush}"
+                                               CheckMode="{ThemeResource ListViewItemCheckMode}"
                                                ContentMargin="1"
                                                ContentTransitions="{TemplateBinding ContentTransitions}"
-                                               DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}" 
-                                               DragBackground="{ThemeResource ListViewItemDragBackground}"
+                                               Control.IsTemplateFocusTarget="True"
                                                DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}"
-                                               DragForeground="{ThemeResource ListViewItemDragForeground}" 
+                                               DragBackground="{ThemeResource ListViewItemDragBackground}"
+                                               DragForeground="{ThemeResource ListViewItemDragForeground}"
+                                               DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}"
+                                               FocusBorderBrush="{ThemeResource ListViewItemFocusBorderBrush}"
+                                               FocusSecondaryBorderBrush="{ThemeResource ListViewItemFocusSecondaryBorderBrush}"
                                                FocusVisualMargin="{TemplateBinding FocusVisualMargin}"
-                                               FocusBorderBrush="{ThemeResource ListViewItemFocusBorderBrush}" 
-                                               FocusSecondaryBorderBrush="{ThemeResource ListViewItemFocusSecondaryBorderBrush}" 
-                                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                               Control.IsTemplateFocusTarget="True" 
-                                               PlaceholderBackground="{ThemeResource ListViewItemPlaceholderBackground}" 
-                                               PointerOverBackground="{ThemeResource ListViewItemBackgroundPointerOver}" 
-                                               PointerOverForeground="{ThemeResource ListViewItemForegroundPointerOver}" 
-                                               PressedBackground="{ThemeResource ListViewItemBackgroundPressed}" 
-                                               RevealBorderThickness="{ThemeResource ListViewItemRevealBorderThemeThickness}" 
-                                               RevealBackground="{ThemeResource ListViewItemRevealBackground}" 
-                                               RevealBorderBrush="{ThemeResource ListViewItemRevealBorderBrush}"
+                                               PlaceholderBackground="{ThemeResource ListViewItemPlaceholderBackground}"
+                                               PointerOverBackground="{ThemeResource ListViewItemBackgroundPointerOver}"
+                                               PointerOverForeground="{ThemeResource ListViewItemForegroundPointerOver}"
+                                               PressedBackground="{ThemeResource ListViewItemBackgroundPressed}"
                                                ReorderHintOffset="{ThemeResource ListViewItemReorderHintThemeOffset}"
-                                               SelectedForeground="{ThemeResource ListViewItemForegroundSelected}"
-                                               SelectedPointerOverBackground="{ThemeResource ListViewItemBackgroundSelectedPointerOver}" 
-                                               SelectionCheckMarkVisualEnabled="True" 
+                                               RevealBackground="{ThemeResource ListViewItemRevealBackground}"
+                                               RevealBorderBrush="{ThemeResource ListViewItemRevealBorderBrush}"
+                                               RevealBorderThickness="{ThemeResource ListViewItemRevealBorderThemeThickness}"
                                                SelectedBackground="{ThemeResource ListViewItemBackgroundSelected}"
-                                               SelectedPressedBackground="{ThemeResource ListViewItemBackgroundSelectedPressed}" 
-                                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                                               SelectedForeground="{ThemeResource ListViewItemForegroundSelected}"
+                                               SelectedPointerOverBackground="{ThemeResource ListViewItemBackgroundSelectedPointerOver}"
+                                               SelectedPressedBackground="{ThemeResource ListViewItemBackgroundSelectedPressed}"
+                                               SelectionCheckMarkVisualEnabled="True"
+                                               >
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
                                     <VisualState x:Name="Normal">
                                         <VisualState.Setters>
-                                            <Setter Target="Root.Opacity" Value="0.5"></Setter>
+                                            <Setter Target="Root.Opacity" Value="0.5" />
                                         </VisualState.Setters>
                                     </VisualState>
                                     <VisualState x:Name="Selected">
                                         <VisualState.Setters>
-                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource TextFillColorPrimaryBrush}"></Setter>
-                                            <Setter Target="Root.RevealBorderThickness" Value="1.5"></Setter>
-                                            <Setter Target="Root.Opacity" Value="1"></Setter>
+                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource TextFillColorPrimaryBrush}" />
+                                            <Setter Target="Root.RevealBorderThickness" Value="1.5" />
+                                            <Setter Target="Root.Opacity" Value="1" />
                                         </VisualState.Setters>
                                     </VisualState>
                                     <VisualState x:Name="PointerOver">
                                         <VisualState.Setters>
-                                            <Setter Target="Root.Opacity" Value="1"></Setter>
-                                            <Setter Target="Root.(RevealBrush.State)" Value="PointerOver"/>
-                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPointerOver}"/>
+                                            <Setter Target="Root.Opacity" Value="1" />
+                                            <Setter Target="Root.(RevealBrush.State)" Value="PointerOver" />
+                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPointerOver}" />
                                         </VisualState.Setters>
                                     </VisualState>
                                     <VisualState x:Name="PointerOverSelected">
                                         <VisualState.Setters>
-                                            <Setter Target="Root.(RevealBrush.State)" Value="PointerOver"/>
-                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPointerOver}"/>
+                                            <Setter Target="Root.(RevealBrush.State)" Value="PointerOver" />
+                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPointerOver}" />
                                         </VisualState.Setters>
                                     </VisualState>
                                     <VisualState x:Name="PointerOverPressed">
                                         <VisualState.Setters>
-                                            <Setter Target="Root.Opacity" Value="1"></Setter>
-                                            <Setter Target="Root.(RevealBrush.State)" Value="Pressed"/>
-                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPressed}"/>
+                                            <Setter Target="Root.Opacity" Value="1" />
+                                            <Setter Target="Root.(RevealBrush.State)" Value="Pressed" />
+                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPressed}" />
                                         </VisualState.Setters>
                                     </VisualState>
                                     <VisualState x:Name="Pressed">
                                         <VisualState.Setters>
-                                            <Setter Target="Root.Opacity" Value="1"></Setter>
-                                            <Setter Target="Root.(RevealBrush.State)" Value="Pressed"/>
-                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPressed}"/>
+                                            <Setter Target="Root.Opacity" Value="1" />
+                                            <Setter Target="Root.(RevealBrush.State)" Value="Pressed" />
+                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPressed}" />
                                         </VisualState.Setters>
                                     </VisualState>
                                     <VisualState x:Name="PressedSelected">
                                         <VisualState.Setters>
-                                            <Setter Target="Root.Opacity" Value="1"></Setter>
-                                            <Setter Target="Root.(RevealBrush.State)" Value="Pressed"/>
-                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPressed}"/>
+                                            <Setter Target="Root.Opacity" Value="1" />
+                                            <Setter Target="Root.(RevealBrush.State)" Value="Pressed" />
+                                            <Setter Target="Root.RevealBorderBrush" Value="{ThemeResource ListViewItemRevealBorderBrushPressed}" />
                                         </VisualState.Setters>
                                     </VisualState>
                                 </VisualStateGroup>
                                 <VisualStateGroup x:Name="DisabledStates">
-                                    <VisualState x:Name="Enabled"/>
+                                    <VisualState x:Name="Enabled" />
                                     <VisualState x:Name="Disabled">
                                         <VisualState.Setters>
-                                            <Setter Target="Root.RevealBorderThickness" Value="0"/>
+                                            <Setter Target="Root.RevealBorderThickness" Value="0" />
                                         </VisualState.Setters>
                                     </VisualState>
                                 </VisualStateGroup>
@@ -241,67 +304,84 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <Button Style="{StaticResource CategoryControlButton}" BorderBrush="Transparent"
-            BorderThickness="0" Click="CategoryButton_OnClick" >
+    <Button BorderBrush="Transparent"
+            BorderThickness="0"
+            Click="CategoryButton_OnClick"
+            Style="{StaticResource CategoryControlButton}"
+            >
         <Button.Content>
-            <Image Source="../../Assets/icons/BillImage.png"
-                   x:Name="CategoryImage"
-                   Stretch="Uniform"/>
+            <Image x:Name="CategoryImage"
+                   Source="../../Assets/icons/BillImage.png"
+                   Stretch="Uniform"
+                   />
         </Button.Content>
         <FlyoutBase.AttachedFlyout>
-            <Flyout FlyoutPresenterStyle="{StaticResource NoMarginFlyoutPresenterStyle}" AreOpenCloseAnimationsEnabled="True"
-                    ShouldConstrainToRootBounds="True"  
-                    Opening="CatogoriesFlyOut_Opening" 
-                    x:Name="CategoryFlyout"
-                    Placement="BottomEdgeAlignedLeft">
+            <Flyout x:Name="CategoryFlyout"
+                    AreOpenCloseAnimationsEnabled="True"
+                    FlyoutPresenterStyle="{StaticResource NoMarginFlyoutPresenterStyle}"
+                    Opening="CatogoriesFlyOut_Opening"
+                    Placement="BottomEdgeAlignedLeft"
+                    ShouldConstrainToRootBounds="True"
+                    >
                 <Grid>
-                    <ProgressRing IsActive="{x:Bind _viewModel.IsCategoryLoading,Mode=OneWay}" Canvas.ZIndex="100"></ProgressRing>
-                    <ListView ItemsSource="{x:Bind _viewModel.Categories,Mode=OneWay}"
-                              SelectionMode="None"
+                    <ProgressRing Canvas.ZIndex="100"
+                                  IsActive="{x:Bind _viewModel.IsCategoryLoading, Mode=OneWay}"
+                                  />
+                    <ListView Background="{ThemeResource ApplicationMainThemeAcrylicBrush}"
                               CornerRadius="4"
-                              Background="{ThemeResource ApplicationMainThemeAcrylicBrush}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="modelBobj:ExpenseCategoryBobj">
-                            <ListView ItemsSource="{x:Bind SubExpenseCategories}"
-                                      SelectionMode="Single"
-                                      SelectionChanged="SubCategory_ListOnSelectionChanged"
-                                      VerticalContentAlignment="Top" ItemContainerStyle="{StaticResource NoPaddingListViewItemContainer}"
-                                      Margin="0 0 4 0">
-                                <ListView.Header>
-                                        <StackPanel Orientation="Horizontal"
+                              ItemsSource="{x:Bind _viewModel.Categories, Mode=OneWay}"
+                              SelectionMode="None"
+                              >
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="modelBobj:ExpenseCategoryBobj">
+                                <ListView Margin="0,0,4,0"
+                                          VerticalContentAlignment="Top"
+                                          ItemContainerStyle="{StaticResource NoPaddingListViewItemContainer}"
+                                          ItemsSource="{x:Bind SubExpenseCategories}"
+                                          SelectionChanged="SubCategory_ListOnSelectionChanged"
+                                          SelectionMode="Single"
+                                          >
+                                    <ListView.Header>
+                                        <StackPanel Width="120"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Top"
-                                                    Width="120">
+                                                    Orientation="Horizontal"
+                                                    >
                                             <TextBlock VerticalAlignment="Top"
-                                                       Text="{x:Bind Name}"/>
+                                                       Text="{x:Bind Name}"
+                                                       />
                                             <TextBlock VerticalAlignment="Top"
-                                                       Text=":"/>
+                                                       Text=":"
+                                                       />
                                         </StackPanel>
                                     </ListView.Header>
                                     <ListView.ItemsPanel>
                                         <ItemsPanelTemplate>
-                                            <ItemsStackPanel Orientation="Horizontal" GroupHeaderPlacement="Left"/>
+                                            <ItemsStackPanel GroupHeaderPlacement="Left"
+                                                             Orientation="Horizontal"
+                                                             />
                                         </ItemsPanelTemplate>
                                     </ListView.ItemsPanel>
                                     <ListView.ItemTemplate>
-                                         <DataTemplate x:DataType="model:ExpenseCategory">
-                                              <Image Height="28" 
-                                               Width="28"
-                                               Stretch="Uniform" 
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Top"
-                                               x:Name="IconImage"
-                                               Source="{x:Bind Icon}">
-                                                 <ToolTipService.ToolTip>
-                                                      <ToolTip Content="{x:Bind Name}" />
-                                                 </ToolTipService.ToolTip>
-                                        </Image>
-                                    </DataTemplate>
+                                        <DataTemplate x:DataType="model:ExpenseCategory">
+                                            <Image x:Name="IconImage"
+                                                   Width="28"
+                                                   Height="28"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Top"
+                                                   Source="{x:Bind Icon}"
+                                                   Stretch="Uniform"
+                                                   >
+                                                <ToolTipService.ToolTip>
+                                                    <ToolTip Content="{x:Bind Name}" />
+                                                </ToolTipService.ToolTip>
+                                            </Image>
+                                        </DataTemplate>
                                     </ListView.ItemTemplate>
-                            </ListView>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                                </ListView>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
 
                 </Grid>
             </Flyout>

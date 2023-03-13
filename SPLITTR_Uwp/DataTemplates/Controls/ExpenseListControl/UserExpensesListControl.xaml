@@ -1,78 +1,114 @@
-﻿<UserControl
-    x:Class="SPLITTR_Uwp.DataTemplates.Controls.ExpenseListControl.UserExpensesListControl"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SPLITTR_Uwp.DataTemplates"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:template="using:SPLITTR_Uwp.DataTemplates"
-    xmlns:vobj="using:SPLITTR_Uwp.ViewModel.Vobj"
-    xmlns:control="using:Microsoft.UI.Xaml.Controls"
-    xmlns:listCntrlModel="using:SPLITTR_Uwp.DataTemplates.Controls.ExpenseListControl"
-    xmlns:expenseListObject="using:SPLITTR_Uwp.ViewModel.Vobj.ExpenseListObject"
-    mc:Ignorable="d"
-    d:DesignHeight="300" Background="Transparent"
-    d:DesignWidth="400"
-    xmlns:animatedvisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals">
+﻿<UserControl x:Class="SPLITTR_Uwp.DataTemplates.Controls.ExpenseListControl.UserExpensesListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:animatedvisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals"
+             xmlns:control="using:Microsoft.UI.Xaml.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:expenseListObject="using:SPLITTR_Uwp.ViewModel.Vobj.ExpenseListObject"
+             xmlns:listCntrlModel="using:SPLITTR_Uwp.DataTemplates.Controls.ExpenseListControl"
+             xmlns:local="using:SPLITTR_Uwp.DataTemplates"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:template="using:SPLITTR_Uwp.DataTemplates"
+             xmlns:vobj="using:SPLITTR_Uwp.ViewModel.Vobj"
+             d:DesignHeight="300"
+             d:DesignWidth="400"
+             Background="Transparent"
+             mc:Ignorable="d"
+             >
     <UserControl.Resources>
-        <Style x:Key="NoPoniterOverDropDownButtonStyle" TargetType="control:DropDownButton">
-            <Setter Property="Background" Value="{ThemeResource ButtonBackground}"/>
-            <Setter Property="Foreground" Value="{ThemeResource ButtonForeground}"/>
-            <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}"/>
-            <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
-            <Setter Property="Padding" Value="{StaticResource ButtonPadding}"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
-            <Setter Property="FontWeight" Value="Normal"/>
-            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
-            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}"/>
-            <Setter Property="FocusVisualMargin" Value="-3"/>
+        <Style x:Key="NoPoniterOverDropDownButtonStyle"
+               TargetType="control:DropDownButton"
+               >
+            <Setter Property="Background" Value="{ThemeResource ButtonBackground}" />
+            <Setter Property="Foreground" Value="{ThemeResource ButtonForeground}" />
+            <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}" />
+            <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}" />
+            <Setter Property="Padding" Value="{StaticResource ButtonPadding}" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}" />
+            <Setter Property="FocusVisualMargin" Value="-3" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="control:DropDownButton">
-                        <Grid x:Name="RootGrid" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{ThemeResource ControlCornerRadius}" Padding="{TemplateBinding Padding}">
+                        <Grid x:Name="RootGrid"
+                              Padding="{TemplateBinding Padding}"
+                              Background="{TemplateBinding Background}"
+                              BorderBrush="{TemplateBinding BorderBrush}"
+                              BorderThickness="{TemplateBinding BorderThickness}"
+                              CornerRadius="{ThemeResource ControlCornerRadius}"
+                              >
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
+                            <ContentPresenter x:Name="ContentPresenter"
+                                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              AutomationProperties.AccessibilityView="Raw"
+                                              Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              ContentTransitions="{TemplateBinding ContentTransitions}"
+                                              />
+                            <control:AnimatedIcon x:Name="ChevronIcon"
+                                                  Grid.Column="1"
+                                                  Width="12"
+                                                  Height="12"
+                                                  Margin="8,0,0,0"
+                                                  control:AnimatedIcon.State="Normal"
+                                                  AutomationProperties.AccessibilityView="Raw"
+                                                  Foreground="{ThemeResource DropDownButtonForegroundSecondary}"
+                                                  >
+                                <control:AnimatedIcon.FallbackIconSource>
+                                    <control:FontIconSource FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                                            FontSize="8"
+                                                            Glyph="&#xE96E;"
+                                                            IsTextScaleFactorEnabled="False"
+                                                            />
+                                </control:AnimatedIcon.FallbackIconSource>
+                                <animatedvisuals:AnimatedChevronDownSmallVisualSource />
+                            </control:AnimatedIcon>
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
-                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="Normal" />
                                     <VisualState x:Name="PointerOver">
                                         <VisualState.Setters>
-                                            <Setter Target="ChevronIcon.(controls:AnimatedIcon.State)" Value="PointerOver"/>
+                                            <Setter Target="ChevronIcon.(controls:AnimatedIcon.State)" Value="PointerOver" />
                                         </VisualState.Setters>
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ChevronIcon" Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource DropDownButtonForegroundSecondaryPointerOver}"/>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ChevronIcon"
+                                                                           Storyboard.TargetProperty="Foreground"
+                                                                           >
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="{ThemeResource DropDownButtonForegroundSecondaryPointerOver}"
+                                                                        />
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState x:Name="Pressed">
                                         <VisualState.Setters>
-                                            <Setter Target="ChevronIcon.(controls:AnimatedIcon.State)" Value="Pressed"/>
+                                            <Setter Target="ChevronIcon.(controls:AnimatedIcon.State)" Value="Pressed" />
                                         </VisualState.Setters>
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ChevronIcon" Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource DropDownButtonForegroundSecondaryPressed}"/>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ChevronIcon"
+                                                                           Storyboard.TargetProperty="Foreground"
+                                                                           >
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                                        Value="{ThemeResource DropDownButtonForegroundSecondaryPressed}"
+                                                                        />
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState x:Name="Disabled">
                                         <VisualState.Setters>
-                                            <Setter Target="ChevronIcon.(controls:AnimatedIcon.State)" Value="Normal"/>
+                                            <Setter Target="ChevronIcon.(controls:AnimatedIcon.State)" Value="Normal" />
                                         </VisualState.Setters>
                                     </VisualState>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
-                            <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentTransitions="{TemplateBinding ContentTransitions}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                            <control:AnimatedIcon x:Name="ChevronIcon" AutomationProperties.AccessibilityView="Raw" Grid.Column="1" Foreground="{ThemeResource DropDownButtonForegroundSecondary}" Height="12" Margin="8,0,0,0" control:AnimatedIcon.State="Normal" Width="12">
-                                <control:AnimatedIcon.FallbackIconSource>
-                                    <control:FontIconSource FontFamily="{ThemeResource SymbolThemeFontFamily}" FontSize="8" Glyph="&#xE96E;" IsTextScaleFactorEnabled="False"/>
-                                </control:AnimatedIcon.FallbackIconSource>
-                                <animatedvisuals:AnimatedChevronDownSmallVisualSource/>
-                            </control:AnimatedIcon>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -80,49 +116,16 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="PaneButtonStateGroup" >
-                <VisualState x:Name="ClosePaneState" >
-                    <VisualState.Setters>
-                        <Setter Target="NavigationPaneControlButton.Content">
-                            <Setter.Value>
-                                <Path Fill="{ThemeResource TextFillColorPrimaryBrush}"  StrokeThickness="5" Data="M12,2.99872 C13.0543909,2.99872 13.9181678,3.81459733 13.9945144,4.84945759 L14,4.99872 L14,11.0011 C14,12.0554909 13.18415,12.9192678 12.1492661,12.9956144 L12,13.0011 L4,13.0011 C2.94563773,13.0011 2.08183483,12.18525 2.00548573,11.1503661 L2,11.0011 L2,4.99872 C2,3.94435773 2.81587733,3.08055483 3.85073759,3.00420573 L4,2.99872 L12,2.99872 Z M6.00153,3.99872 L4,3.99872 C3.48716857,3.99872 3.06449347,4.38475566 3.0067278,4.8820979 L3,4.99872 L3,11.0011 C3,11.51395 3.38604429,11.9366092 3.88337975,11.9943725 L4,12.0011 L6.00153,12.0011 L6.00153,3.99872 Z M12,3.99872 L7.00152,3.99872 L7.00152,12.0011 L12,12.0011 C12.5523,12.0011 13,11.5534 13,11.0011 L13,4.99872 C13,4.44643 12.5523,3.99872 12,3.99872 Z M10.3536,6.14639 C10.5488,6.34165 10.5488,6.65823 10.3536,6.85349 L9.70711,7.4999375 L11.4983,7.4999375 C11.7744,7.4999375 11.9983,7.7238 11.9983,7.9999375 C11.9983,8.27608 11.7744,8.4999375 11.4983,8.4999375 L9.70711,8.4999375 L10.3536,9.14639 C10.5488,9.34165 10.5488,9.65823 10.3536,9.85349 C10.1583,10.0488 9.84171,10.0488 9.64645,9.85349 L8.14645,8.35349 C7.95118,8.15823 7.95118,7.84165 8.14645,7.64639 L9.64645,6.14639 C9.84171,5.95112 10.1583,5.95112 10.3536,6.14639 Z"
-                                      Height="16" Stretch="Fill" UseLayoutRounding="False" Width="16"/>
-                            </Setter.Value>
-                        </Setter>
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState x:Name="OpenPaneState">
-                    <VisualState.Setters>
-                        <Setter Target="NavigationPaneControlButton.Content">
-                            <Setter.Value>
-                                <Path Fill="{ThemeResource TextFillColorPrimaryBrush}" Data="M12,2.99887 C13.0543909,2.99887 13.9181678,3.81474733 13.9945144,4.84960759 L14,4.99887 L14,11.0013 C14,12.0555955 13.18415,12.9194591 12.1492661,12.9958139 L12,13.0013 L4,13.0013 C2.94563773,13.0013 2.08183483,12.1853589 2.00548573,11.1505537 L2,11.0013 L2,4.99887 C2,3.94450773 2.81587733,3.08070483 3.85073759,3.00435573 L4,2.99887 L12,2.99887 Z M12,3.99887 L9.99847,3.99887 L9.99847,12.0013 L12,12.0013 C12.51285,12.0013 12.9355092,11.6151867 12.9932725,11.1179055 L13,11.0013 L13,4.99887 C13,4.48602929 12.613973,4.06336214 12.1166239,4.00559766 L12,3.99887 Z M8.99848,3.99887 L4,3.99887 C3.48716857,3.99887 3.06449347,4.38490566 3.0067278,4.8822479 L3,4.99887 L3,11.0013 C3,11.5140571 3.38603566,11.9367959 3.8833779,11.9945711 L4,12.0013 L8.99848,12.0013 L8.99848,3.99887 Z M6.28430284,6.08859222 L6.35355,6.14645 L7.85355,7.64645 C8.02712333,7.82001444 8.04640926,8.08943667 7.91140778,8.28430284 L7.85355,8.35355 L6.35355,9.85355 C6.15829,10.0488 5.84171,10.0488 5.64645,9.85355 C5.47287667,9.67998556 5.45359074,9.41056333 5.58859222,9.21569716 L5.64645,9.14645 L6.29289,8.4999975 L4.50185,8.4999975 C4.2257,8.4999975 4.00185,8.27614 4.00185,7.9999975 C4.00185,7.75454194 4.17871914,7.55039009 4.41197236,7.50805333 L4.50185,7.4999975 L6.29289,7.4999975 L5.64645,6.85355 C5.45118,6.65829 5.45118,6.34171 5.64645,6.14645 C5.82001444,5.97287667 6.08943667,5.95359074 6.28430284,6.08859222 Z" 
-                                      Height="16" Stretch="Fill" UseLayoutRounding="False" Width="16"/>
-                            </Setter.Value>
-                        </Setter>
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-            <VisualStateGroup x:Name="GropingSortingStates">
-                 <VisualState x:Name="GroupingState">
-                     <VisualState.Setters>
-                        <Setter Target="GroupByChoiceButton.Visibility" Value="Visible"/>
-                        <Setter Target="ExpensesLIstView.Visibility"  Value="Visible"/>
-                        <Setter Target="DateSortedList.Visibility" Value="Collapsed"/>
-                     </VisualState.Setters>
-                 </VisualState>
-                <VisualState x:Name="SortingState">
-                    <VisualState.Setters>
-                        <Setter Target="GroupByChoiceButton.Visibility" Value="Collapsed"/>
-                        <Setter Target="ExpensesLIstView.Visibility"  Value="Collapsed"/>
-                        <Setter Target="DateSortedList.Visibility" Value="Visible"/>
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
         <Grid.Resources>
-            <CollectionViewSource  x:Name="CollectionViewSource" x:Key="GroupedSource" IsSourceGrouped="True"/>
-            <Style x:Key="HideExpensesButtonStyle" x:FieldModifier="public" x:Name="HideExpenseButtonStyle" TargetType="Button">
+            <CollectionViewSource x:Key="GroupedSource"
+                                  x:Name="CollectionViewSource"
+                                  IsSourceGrouped="True"
+                                  />
+            <Style x:Key="HideExpensesButtonStyle"
+                   x:Name="HideExpenseButtonStyle"
+                   x:FieldModifier="public"
+                   TargetType="Button"
+                   >
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="BorderBrush" Value="Transparent" />
                 <Setter Property="VerticalAlignment" Value="Center" />
@@ -130,12 +133,21 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <FontIcon Margin="0 2 0 0" FontFamily="Segoe Fluent Icons" Glyph="&#xEDD6;" VerticalAlignment="{TemplateBinding VerticalAlignment}" FontSize="15" />
+                            <FontIcon Margin="0 2 0 0"
+                                      VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                      FontFamily="Segoe Fluent Icons"
+                                      FontSize="15"
+                                      Glyph="&#xEDD6;"
+                                      />
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Style>
-            <Style x:Key="ShowExpensesButtonStyle" x:Name="ShowExpenseButtonStyle" x:FieldModifier="public" TargetType="Button">
+            <Style x:Key="ShowExpensesButtonStyle"
+                   x:Name="ShowExpenseButtonStyle"
+                   x:FieldModifier="public"
+                   TargetType="Button"
+                   >
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="BorderBrush" Value="Transparent" />
                 <Setter Property="VerticalAlignment" Value="Center" />
@@ -143,128 +155,172 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <FontIcon FontFamily="Segoe Fluent Icons" Margin="0 2 0 0" FontSize="15" Glyph="&#xEDD8;" VerticalAlignment="{TemplateBinding VerticalAlignment}"/>
+                            <FontIcon Margin="0 2 0 0"
+                                      VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                      FontFamily="Segoe Fluent Icons"
+                                      FontSize="15"
+                                      Glyph="&#xEDD8;"
+                                      />
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Style>
-            <Style TargetType="ListViewItem" >
-                <Setter Property="MinHeight" Value="0"></Setter>
-                <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                <Setter Property="CornerRadius" Value="10"></Setter>
-                <Setter Property="Margin" Value="0 2 0 0"></Setter>
+            <Style TargetType="ListViewItem">
+                <Setter Property="MinHeight" Value="0" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="Margin" Value="0 2 0 0" />
             </Style>
         </Grid.Resources>
-        <Grid Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" CornerRadius="5" Padding="3"  >
+        <Grid Grid.Column="0"
+              Padding="3"
+              Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+              CornerRadius="5"
+              >
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.Row="0" Orientation="Vertical">
+            <StackPanel Grid.Row="0"
+                        Orientation="Vertical"
+                        >
                 <RelativePanel>
-                     <Button  x:Name="NavigationPaneControlButton"
-                         Click="NavigationPaneName_OnClick" 
-                         CornerRadius="4"
-                         Margin="5" ToolTipService.ToolTip="Pane Flip"
-                         BorderBrush="Transparent" Background="Transparent" Style="{ThemeResource NoPointerAnimation}">
+                    <Button x:Name="NavigationPaneControlButton"
+                            Margin="5"
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            Click="NavigationPaneName_OnClick"
+                            CornerRadius="4"
+                            Style="{ThemeResource NoPointerAnimation}"
+                            ToolTipService.ToolTip="Pane Flip"
+                            >
 
                         <Button.Content>
-                            <Path Fill="{ThemeResource TextFillColorPrimaryBrush}"  StrokeThickness="5" Data="M12,2.99872 C13.0543909,2.99872 13.9181678,3.81459733 13.9945144,4.84945759 L14,4.99872 L14,11.0011 C14,12.0554909 13.18415,12.9192678 12.1492661,12.9956144 L12,13.0011 L4,13.0011 C2.94563773,13.0011 2.08183483,12.18525 2.00548573,11.1503661 L2,11.0011 L2,4.99872 C2,3.94435773 2.81587733,3.08055483 3.85073759,3.00420573 L4,2.99872 L12,2.99872 Z M6.00153,3.99872 L4,3.99872 C3.48716857,3.99872 3.06449347,4.38475566 3.0067278,4.8820979 L3,4.99872 L3,11.0011 C3,11.51395 3.38604429,11.9366092 3.88337975,11.9943725 L4,12.0011 L6.00153,12.0011 L6.00153,3.99872 Z M12,3.99872 L7.00152,3.99872 L7.00152,12.0011 L12,12.0011 C12.5523,12.0011 13,11.5534 13,11.0011 L13,4.99872 C13,4.44643 12.5523,3.99872 12,3.99872 Z M10.3536,6.14639 C10.5488,6.34165 10.5488,6.65823 10.3536,6.85349 L9.70711,7.4999375 L11.4983,7.4999375 C11.7744,7.4999375 11.9983,7.7238 11.9983,7.9999375 C11.9983,8.27608 11.7744,8.4999375 11.4983,8.4999375 L9.70711,8.4999375 L10.3536,9.14639 C10.5488,9.34165 10.5488,9.65823 10.3536,9.85349 C10.1583,10.0488 9.84171,10.0488 9.64645,9.85349 L8.14645,8.35349 C7.95118,8.15823 7.95118,7.84165 8.14645,7.64639 L9.64645,6.14639 C9.84171,5.95112 10.1583,5.95112 10.3536,6.14639 Z"
-                                  Height="16" Stretch="Fill" UseLayoutRounding="False" Width="16"/>
+                            <Path Width="16"
+                                  Height="16"
+                                  Data="M12,2.99872 C13.0543909,2.99872 13.9181678,3.81459733 13.9945144,4.84945759 L14,4.99872 L14,11.0011 C14,12.0554909 13.18415,12.9192678 12.1492661,12.9956144 L12,13.0011 L4,13.0011 C2.94563773,13.0011 2.08183483,12.18525 2.00548573,11.1503661 L2,11.0011 L2,4.99872 C2,3.94435773 2.81587733,3.08055483 3.85073759,3.00420573 L4,2.99872 L12,2.99872 Z M6.00153,3.99872 L4,3.99872 C3.48716857,3.99872 3.06449347,4.38475566 3.0067278,4.8820979 L3,4.99872 L3,11.0011 C3,11.51395 3.38604429,11.9366092 3.88337975,11.9943725 L4,12.0011 L6.00153,12.0011 L6.00153,3.99872 Z M12,3.99872 L7.00152,3.99872 L7.00152,12.0011 L12,12.0011 C12.5523,12.0011 13,11.5534 13,11.0011 L13,4.99872 C13,4.44643 12.5523,3.99872 12,3.99872 Z M10.3536,6.14639 C10.5488,6.34165 10.5488,6.65823 10.3536,6.85349 L9.70711,7.4999375 L11.4983,7.4999375 C11.7744,7.4999375 11.9983,7.7238 11.9983,7.9999375 C11.9983,8.27608 11.7744,8.4999375 11.4983,8.4999375 L9.70711,8.4999375 L10.3536,9.14639 C10.5488,9.34165 10.5488,9.65823 10.3536,9.85349 C10.1583,10.0488 9.84171,10.0488 9.64645,9.85349 L8.14645,8.35349 C7.95118,8.15823 7.95118,7.84165 8.14645,7.64639 L9.64645,6.14639 C9.84171,5.95112 10.1583,5.95112 10.3536,6.14639 Z"
+                                  Fill="{ThemeResource TextFillColorPrimaryBrush}"
+                                  Stretch="Fill"
+                                  StrokeThickness="5"
+                                  UseLayoutRounding="False"
+                                  />
                         </Button.Content>
                     </Button>
-                     <TextBlock Text="{x:Bind _viewModel.TitleText,Mode=OneWay}"
-                           TextTrimming="CharacterEllipsis"
-                           Grid.Row="1"
-                           RelativePanel.RightOf="NavigationPaneControlButton"
-                           VerticalAlignment="Center"
-                           RelativePanel.AlignVerticalCenterWithPanel="True"
-                           FontWeight="SemiBold" 
-                           Margin="0 2 0 0" 
-                           FontSize="18"></TextBlock>
-                 </RelativePanel>
-                    <control:DropDownButton Style="{StaticResource NoPoniterOverDropDownButtonStyle}" BorderBrush="Transparent"
-                                            BorderThickness="0"
-                                            Background="Transparent"
-                                            x:Name="GroupByChoiceButton"
-                                            Padding="0"
-                                            Margin="4 -2 0 0">
-                        <control:DropDownButton.Flyout >
-                            <Flyout Placement="Bottom">
-                                <ListView SelectionMode="Single" 
-                                          ItemsSource="{x:Bind _groupingObjects}"
-                                          SelectedIndex="0"
-                                          Margin="0"
-                                          SelectionChanged="GroupingList_ONSelectionChanged">
+                    <TextBlock Grid.Row="1"
+                               Margin="0 2 0 0"
+                               VerticalAlignment="Center"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               RelativePanel.AlignVerticalCenterWithPanel="True"
+                               RelativePanel.RightOf="NavigationPaneControlButton"
+                               Text="{x:Bind _viewModel.TitleText, Mode=OneWay}"
+                               TextTrimming="CharacterEllipsis"
+                               />
+                </RelativePanel>
+                <control:DropDownButton x:Name="GroupByChoiceButton"
+                                        Margin="4 -2 0 0"
+                                        Padding="0"
+                                        Background="Transparent"
+                                        BorderBrush="Transparent"
+                                        BorderThickness="0"
+                                        Style="{StaticResource NoPoniterOverDropDownButtonStyle}"
+                                        >
+                    <control:DropDownButton.Flyout>
+                        <Flyout Placement="Bottom">
+                            <ListView Margin="0"
+                                      ItemsSource="{x:Bind _groupingObjects}"
+                                      SelectedIndex="0"
+                                      SelectionChanged="GroupingList_ONSelectionChanged"
+                                      SelectionMode="Single"
+                                      >
                                 <ListView.ItemTemplate>
-                                     <DataTemplate x:DataType="listCntrlModel:ExpenseListGroupingObj">
-                                         <TextBlock 
-                                             Text="{x:Bind GroupByName}" 
-                                             FontSize="14"
-                                             HorizontalAlignment="Center"
-                                                  ></TextBlock>
-                                     </DataTemplate>
+                                    <DataTemplate x:DataType="listCntrlModel:ExpenseListGroupingObj">
+                                        <TextBlock HorizontalAlignment="Center"
+                                                   FontSize="14"
+                                                   Text="{x:Bind GroupByName}"
+                                                   />
+                                    </DataTemplate>
                                 </ListView.ItemTemplate>
-                             </ListView>
-                            </Flyout>
-                        </control:DropDownButton.Flyout>
-                        <control:DropDownButton.Content>
-                            <StackPanel Orientation="Horizontal" Margin="15 0 0 0">
-                                <TextBlock Text="Group By :"
-                                           FontSize="15" 
-                                           FontWeight="SemiBold" 
-                                           VerticalAlignment="Center"
-                                           Foreground="{ThemeResource ApplicationForegroundThemeBrush}"/>
-                                <TextBlock x:Name="GroupByNameTextBlock" 
-                                           VerticalAlignment="Center"
-                                           Text="Status"
-                                           FontSize="12"
-                                           Margin="5 1 0 0"></TextBlock>
+                            </ListView>
+                        </Flyout>
+                    </control:DropDownButton.Flyout>
+                    <control:DropDownButton.Content>
+                        <StackPanel Margin="15 0 0 0"
+                                    Orientation="Horizontal"
+                                    >
+                            <TextBlock VerticalAlignment="Center"
+                                       FontSize="15"
+                                       FontWeight="SemiBold"
+                                       Foreground="{ThemeResource ApplicationForegroundThemeBrush}"
+                                       Text="Group By :"
+                                       />
+                            <TextBlock x:Name="GroupByNameTextBlock"
+                                       Margin="5 1 0 0"
+                                       VerticalAlignment="Center"
+                                       FontSize="12"
+                                       Text="Status"
+                                       />
                         </StackPanel>
-                        </control:DropDownButton.Content>
-                        
-                    </control:DropDownButton>
+                    </control:DropDownButton.Content>
+
+                </control:DropDownButton>
             </StackPanel>
-                <DropDownButton  Content="" FontFamily="Segoe MDL2 Assets"
-                                Background="Transparent" Margin="4" 
-                                Grid.Row="0"
-                                Grid.Column="1"
-                                VerticalAlignment="Top"
-                                HorizontalAlignment="Right"
-                                BorderBrush="Transparent">
-                    <DropDownButton.Flyout>
-                        <MenuFlyout Placement="Bottom">
-                            <MenuFlyoutItem Text="Date" x:Name="DateMenuItem" Click="SortingFlyoutButton_OnClick">
-                                <MenuFlyoutItem.Icon>
-                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph=""/>
-                                </MenuFlyoutItem.Icon>
-                            </MenuFlyoutItem>
-                            <MenuFlyoutItem Text="Group By" x:Name="StatusMenuItem" Click="SortingFlyoutButton_OnClick">
-                                <MenuFlyoutItem.Icon>
-                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph=""/>
-                                </MenuFlyoutItem.Icon>
-                            </MenuFlyoutItem>
-                        </MenuFlyout>
-                    </DropDownButton.Flyout>
-                </DropDownButton>
-            <!-- Grouped Expense List View   -->
-            <ListView Grid.Row="1" x:Name="ExpensesLIstView" 
-                      ItemsSource="{x:Bind CollectionViewSource.View , Mode=OneWay}"
-                      SelectionChanged="ExpensesLIstView_OnSelectionChanged"
-                      SelectedIndex="-1"
+            <DropDownButton Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="4"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            Content=""
+                            FontFamily="Segoe MDL2 Assets"
+                            >
+                <DropDownButton.Flyout>
+                    <MenuFlyout Placement="Bottom">
+                        <MenuFlyoutItem x:Name="DateMenuItem"
+                                        Click="SortingFlyoutButton_OnClick"
+                                        Text="Date"
+                                        >
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon FontFamily="Segoe MDL2 Assets"
+                                          Glyph=""
+                                          />
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem x:Name="StatusMenuItem"
+                                        Click="SortingFlyoutButton_OnClick"
+                                        Text="Group By"
+                                        >
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon FontFamily="Segoe MDL2 Assets"
+                                          Glyph=""
+                                          />
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                    </MenuFlyout>
+                </DropDownButton.Flyout>
+            </DropDownButton>
+            <!--  Grouped Expense List View  -->
+            <ListView x:Name="ExpensesLIstView"
+                      Grid.Row="1"
                       Grid.ColumnSpan="2"
-                      SelectedItem="{x:Bind _viewModel.SelectedExpenseObj,Mode=TwoWay}">
+                      ItemsSource="{x:Bind CollectionViewSource.View, Mode=OneWay}"
+                      SelectedIndex="-1"
+                      SelectedItem="{x:Bind _viewModel.SelectedExpenseObj, Mode=TwoWay}"
+                      SelectionChanged="ExpensesLIstView_OnSelectionChanged"
+                      >
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="vobj:ExpenseVobj">
                         <template:ExpenseDataTemplate HorizontalAlignment="Stretch"
-                                                        CornerRadius="5"
-                                                        OnGroupInfoButtonClicked="ExpenseDataTemplate_OnOnGroupInfoButtonClicked"
-                                                        Visibility="{x:Bind Visibility,Mode=OneWay}"></template:ExpenseDataTemplate>
+                                                      CornerRadius="5"
+                                                      OnGroupInfoButtonClicked="ExpenseDataTemplate_OnOnGroupInfoButtonClicked"
+                                                      Visibility="{x:Bind Visibility, Mode=OneWay}"
+                                                      />
                         <!--<template:ExpenseDataTemplate HorizontalAlignment="Stretch" DateOfExpenseTextBlockVisibility="Visible"
                                                       ExpenseStatusVisibility="Collapsed" CornerRadius="5"/>-->
                     </DataTemplate>
@@ -272,32 +328,44 @@
                 <ListView.GroupStyle>
                     <GroupStyle>
                         <GroupStyle.HeaderTemplate>
-                            <DataTemplate x:DataType="expenseListObject:ExpenseGroupingList" >
-                                <Grid HorizontalAlignment="Stretch" Width="{Binding ElementName=ExpensesLIstView,Path=ActualWidth,Mode=OneWay}">
+                            <DataTemplate x:DataType="expenseListObject:ExpenseGroupingList">
+                                <Grid Width="{Binding ElementName=ExpensesLIstView, Path=ActualWidth, Mode=OneWay}"
+                                      HorizontalAlignment="Stretch"
+                                      >
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
-                                    <StackPanel Orientation="Horizontal" Tapped="ExpenseShowButton_OnClick" Grid.Column="0" Margin="10,0">
+                                    <StackPanel Grid.Column="0"
+                                                Margin="10,0"
+                                                Orientation="Horizontal"
+                                                Tapped="ExpenseShowButton_OnClick"
+                                                >
                                         <StackPanel.Resources>
                                             <Style TargetType="TextBlock">
-                                                <Setter Property="Foreground"  Value="{ThemeResource AccentTextColorBrush}"></Setter>
+                                                <Setter Property="Foreground" Value="{ThemeResource AccentTextColorBrush}" />
                                             </Style>
                                         </StackPanel.Resources>
-                                        <Button Click="ExpenseShowButton_OnClick"  Style="{ThemeResource ShowExpensesButtonStyle}">
-                                        </Button>
-                                        <TextBlock Text="{x:Bind GroupHeader.GroupName, Mode=OneWay}"   
-                                                   FontWeight="Bold" Margin="4 0 0 0" 
-                                        />
-                                        <TextBlock Text="(" Margin="5 0 0 0"/>
-                                        <TextBlock Text="{x:Bind GroupHeader.NoOfExpenses,Mode=OneWay}" Margin="0"></TextBlock>
-                                        <TextBlock Text=")"/>
+                                        <Button Click="ExpenseShowButton_OnClick"
+                                                Style="{ThemeResource ShowExpensesButtonStyle}"
+                                                />
+                                        <TextBlock Margin="4 0 0 0"
+                                                   FontWeight="Bold"
+                                                   Text="{x:Bind GroupHeader.GroupName, Mode=OneWay}"
+                                                   />
+                                        <TextBlock Margin="5 0 0 0"
+                                                   Text="("
+                                                   />
+                                        <TextBlock Margin="0"
+                                                   Text="{x:Bind GroupHeader.NoOfExpenses, Mode=OneWay}"
+                                                   />
+                                        <TextBlock Text=")" />
                                     </StackPanel>
                                     <!--<MenuFlyoutSeparator Grid.Row="1" HorizontalAlignment="Stretch" Margin="10 0 30 0"></MenuFlyoutSeparator>-->
 
                                 </Grid>
 
-                                <!---->
+                                <!--    -->
 
                             </DataTemplate>
                         </GroupStyle.HeaderTemplate>
@@ -315,12 +383,13 @@
                                     <Setter.Value>
                                         <ControlTemplate TargetType="ListViewHeaderItem">
                                             <ContentPresenter x:Name="ContentPresenter"
-                                                    Background="{TemplateBinding Background}"
-                                                    Content="{TemplateBinding Content}"
-                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                    ContentTransitions="{TemplateBinding ContentTransitions}"
-                                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                              Background="{TemplateBinding Background}"
+                                                              Content="{TemplateBinding Content}"
+                                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                              ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                              />
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
@@ -329,20 +398,22 @@
                     </GroupStyle>
                 </ListView.GroupStyle>
             </ListView>
-            <ListView Visibility="Collapsed" 
-                      Grid.Row="1" 
-                      x:Name="DateSortedList"
-                      ItemsSource="{x:Bind _viewModel.DateSortedExpenseList,Mode=OneWay}"
-                      SelectionChanged="ExpensesLIstView_OnSelectionChanged"
-                      SelectedIndex="-1"
+            <ListView x:Name="DateSortedList"
+                      Grid.Row="1"
                       Grid.ColumnSpan="2"
-                      SelectedItem="{x:Bind _viewModel.SelectedExpenseObj,Mode=TwoWay}">
+                      ItemsSource="{x:Bind _viewModel.DateSortedExpenseList, Mode=OneWay}"
+                      SelectedIndex="-1"
+                      SelectedItem="{x:Bind _viewModel.SelectedExpenseObj, Mode=TwoWay}"
+                      SelectionChanged="ExpensesLIstView_OnSelectionChanged"
+                      Visibility="Collapsed"
+                      >
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="vobj:ExpenseVobj">
                         <template:ExpenseDataTemplate HorizontalAlignment="Stretch"
-                                                        CornerRadius="5"
-                                                        OnGroupInfoButtonClicked="ExpenseDataTemplate_OnOnGroupInfoButtonClicked"
-                                                        Visibility="Visible"></template:ExpenseDataTemplate>
+                                                      CornerRadius="5"
+                                                      OnGroupInfoButtonClicked="ExpenseDataTemplate_OnOnGroupInfoButtonClicked"
+                                                      Visibility="Visible"
+                                                      />
                         <!--<template:ExpenseDataTemplate HorizontalAlignment="Stretch" DateOfExpenseTextBlockVisibility="Visible"
                                                       ExpenseStatusVisibility="Collapsed" CornerRadius="5"/>-->
                     </DataTemplate>
@@ -350,5 +421,56 @@
             </ListView>
 
         </Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="PaneButtonStateGroup">
+                <VisualState x:Name="ClosePaneState">
+                    <VisualState.Setters>
+                        <Setter Target="NavigationPaneControlButton.Content">
+                            <Setter.Value>
+                                <Path Width="16"
+                                      Height="16"
+                                      Data="M12,2.99872 C13.0543909,2.99872 13.9181678,3.81459733 13.9945144,4.84945759 L14,4.99872 L14,11.0011 C14,12.0554909 13.18415,12.9192678 12.1492661,12.9956144 L12,13.0011 L4,13.0011 C2.94563773,13.0011 2.08183483,12.18525 2.00548573,11.1503661 L2,11.0011 L2,4.99872 C2,3.94435773 2.81587733,3.08055483 3.85073759,3.00420573 L4,2.99872 L12,2.99872 Z M6.00153,3.99872 L4,3.99872 C3.48716857,3.99872 3.06449347,4.38475566 3.0067278,4.8820979 L3,4.99872 L3,11.0011 C3,11.51395 3.38604429,11.9366092 3.88337975,11.9943725 L4,12.0011 L6.00153,12.0011 L6.00153,3.99872 Z M12,3.99872 L7.00152,3.99872 L7.00152,12.0011 L12,12.0011 C12.5523,12.0011 13,11.5534 13,11.0011 L13,4.99872 C13,4.44643 12.5523,3.99872 12,3.99872 Z M10.3536,6.14639 C10.5488,6.34165 10.5488,6.65823 10.3536,6.85349 L9.70711,7.4999375 L11.4983,7.4999375 C11.7744,7.4999375 11.9983,7.7238 11.9983,7.9999375 C11.9983,8.27608 11.7744,8.4999375 11.4983,8.4999375 L9.70711,8.4999375 L10.3536,9.14639 C10.5488,9.34165 10.5488,9.65823 10.3536,9.85349 C10.1583,10.0488 9.84171,10.0488 9.64645,9.85349 L8.14645,8.35349 C7.95118,8.15823 7.95118,7.84165 8.14645,7.64639 L9.64645,6.14639 C9.84171,5.95112 10.1583,5.95112 10.3536,6.14639 Z"
+                                      Fill="{ThemeResource TextFillColorPrimaryBrush}"
+                                      Stretch="Fill"
+                                      StrokeThickness="5"
+                                      UseLayoutRounding="False"
+                                      />
+                            </Setter.Value>
+                        </Setter>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="OpenPaneState">
+                    <VisualState.Setters>
+                        <Setter Target="NavigationPaneControlButton.Content">
+                            <Setter.Value>
+                                <Path Width="16"
+                                      Height="16"
+                                      Data="M12,2.99887 C13.0543909,2.99887 13.9181678,3.81474733 13.9945144,4.84960759 L14,4.99887 L14,11.0013 C14,12.0555955 13.18415,12.9194591 12.1492661,12.9958139 L12,13.0013 L4,13.0013 C2.94563773,13.0013 2.08183483,12.1853589 2.00548573,11.1505537 L2,11.0013 L2,4.99887 C2,3.94450773 2.81587733,3.08070483 3.85073759,3.00435573 L4,2.99887 L12,2.99887 Z M12,3.99887 L9.99847,3.99887 L9.99847,12.0013 L12,12.0013 C12.51285,12.0013 12.9355092,11.6151867 12.9932725,11.1179055 L13,11.0013 L13,4.99887 C13,4.48602929 12.613973,4.06336214 12.1166239,4.00559766 L12,3.99887 Z M8.99848,3.99887 L4,3.99887 C3.48716857,3.99887 3.06449347,4.38490566 3.0067278,4.8822479 L3,4.99887 L3,11.0013 C3,11.5140571 3.38603566,11.9367959 3.8833779,11.9945711 L4,12.0013 L8.99848,12.0013 L8.99848,3.99887 Z M6.28430284,6.08859222 L6.35355,6.14645 L7.85355,7.64645 C8.02712333,7.82001444 8.04640926,8.08943667 7.91140778,8.28430284 L7.85355,8.35355 L6.35355,9.85355 C6.15829,10.0488 5.84171,10.0488 5.64645,9.85355 C5.47287667,9.67998556 5.45359074,9.41056333 5.58859222,9.21569716 L5.64645,9.14645 L6.29289,8.4999975 L4.50185,8.4999975 C4.2257,8.4999975 4.00185,8.27614 4.00185,7.9999975 C4.00185,7.75454194 4.17871914,7.55039009 4.41197236,7.50805333 L4.50185,7.4999975 L6.29289,7.4999975 L5.64645,6.85355 C5.45118,6.65829 5.45118,6.34171 5.64645,6.14645 C5.82001444,5.97287667 6.08943667,5.95359074 6.28430284,6.08859222 Z"
+                                      Fill="{ThemeResource TextFillColorPrimaryBrush}"
+                                      Stretch="Fill"
+                                      UseLayoutRounding="False"
+                                      />
+                            </Setter.Value>
+                        </Setter>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+            <VisualStateGroup x:Name="GropingSortingStates">
+                <VisualState x:Name="GroupingState">
+                    <VisualState.Setters>
+                        <Setter Target="GroupByChoiceButton.Visibility" Value="Visible" />
+                        <Setter Target="ExpensesLIstView.Visibility" Value="Visible" />
+                        <Setter Target="DateSortedList.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="SortingState">
+                    <VisualState.Setters>
+                        <Setter Target="GroupByChoiceButton.Visibility" Value="Collapsed" />
+                        <Setter Target="ExpensesLIstView.Visibility" Value="Collapsed" />
+                        <Setter Target="DateSortedList.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </UserControl>

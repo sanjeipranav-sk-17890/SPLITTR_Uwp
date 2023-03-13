@@ -1,128 +1,151 @@
 ﻿<UserControl x:Class="SPLITTR_Uwp.Views.WalletBalanceUpdatePopUp"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="using:SPLITTR_Uwp.ViewModel"
              xmlns:control="using:Microsoft.UI"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
-             xmlns:converter="using:SPLITTR_Uwp.DataRepository.Converters"
              xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+             xmlns:converter="using:SPLITTR_Uwp.DataRepository.Converters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="using:SPLITTR_Uwp.ViewModel"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:sys="using:System"
-             d:DesignWidth="400"
              d:DesignHeight="400"
-             Background="Transparent">
+             d:DesignWidth="400"
+             Background="Transparent"
+             mc:Ignorable="d"
+             >
     <UserControl.Resources>
         <converter:ExpenseAmountFormatter x:Key="AmountFormatter" />
     </UserControl.Resources>
-    <RelativePanel VerticalAlignment="Stretch"
-                   Name="RelativePanel"
-                   Background="Transparent">
-        <Grid RelativePanel.AlignTopWithPanel="True"
-              RelativePanel.AlignBottomWithPanel="True"
+    <RelativePanel Name="RelativePanel"
+                   VerticalAlignment="Stretch"
+                   Background="Transparent"
+                   >
+        <Grid RelativePanel.AlignBottomWithPanel="True"
               RelativePanel.AlignLeftWithPanel="True"
-              RelativePanel.AlignRightWithPanel="True">
+              RelativePanel.AlignRightWithPanel="True"
+              RelativePanel.AlignTopWithPanel="True"
+              >
             <Grid.RowDefinitions>
-                <RowDefinition  Height="Auto" />
-                <RowDefinition  Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <StackPanel VerticalAlignment="Top"
+            <StackPanel Grid.Row="0"
                         HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
                         Orientation="Horizontal"
-                        Grid.Row="0">
+                        >
                 <StackPanel.Resources>
                     <Style x:Key="TextBlockStyle"
-                           TargetType="TextBlock">
-                        <Setter Property="FontFamily"
-                                Value="Segoe UI Variable" />
-                        <Setter Property="FontSize"
-                                Value="28" />
+                           TargetType="TextBlock"
+                           >
+                        <Setter Property="FontFamily" Value="Segoe UI Variable" />
+                        <Setter Property="FontSize" Value="28" />
                     </Style>
                 </StackPanel.Resources>
-                <TextBlock Text="Hello !!"
-                           Foreground="{StaticResource ApplicationMainThemeColor}"
-                           Style="{StaticResource TextBlockStyle}" />
-                <TextBlock Text="{x:Bind _viewModel.UserVobj.UserName,Mode=OneWay}"
-                           Margin="5 0 0 0"
-                           Style="{StaticResource TextBlockStyle}"></TextBlock>
+                <TextBlock Foreground="{StaticResource ApplicationMainThemeColor}"
+                           Style="{StaticResource TextBlockStyle}"
+                           Text="Hello !!"
+                           />
+                <TextBlock Margin="5,0,0,0"
+                           Style="{StaticResource TextBlockStyle}"
+                           Text="{x:Bind _viewModel.UserVobj.UserName, Mode=OneWay}"
+                           />
             </StackPanel>
-            <StackPanel  Grid.Row="1"
-                         Margin="0 5 0 0"
-                         Orientation="Vertical">
-                <TextBlock Text="WalletBalance"
-                           Foreground="{ThemeResource ResourceKey=ApplicationMainThemeColor}"
+            <StackPanel Grid.Row="1"
+                        Margin="0,5,0,0"
+                        Orientation="Vertical"
+                        >
+                <TextBlock HorizontalAlignment="Center"
                            FontSize="18"
-                           HorizontalAlignment="Center" />
-                <TextBlock Text="{x:Bind _viewModel.UserVobj.StrWalletBalance,Converter={StaticResource AmountFormatter},Mode=OneWay}"
+                           Foreground="{ThemeResource ResourceKey=ApplicationMainThemeColor}"
+                           Text="WalletBalance"
+                           />
+                <TextBlock Margin="0,5,0,0"
                            HorizontalAlignment="Center"
                            FontSize="18"
-                           Margin="0 5 0 0"></TextBlock>
-                <TextBlock Text="Add Money"
-                           Foreground="{ThemeResource ResourceKey=ApplicationMainThemeColor}"
+                           Text="{x:Bind _viewModel.UserVobj.StrWalletBalance, Converter={StaticResource AmountFormatter}, Mode=OneWay}"
+                           />
+                <TextBlock HorizontalAlignment="Center"
                            FontSize="18"
-                           HorizontalAlignment="Center" />
-                <TextBox Text="{x:Bind _viewModel.MoneyTextBoxText,Mode=TwoWay}"
+                           Foreground="{ThemeResource ResourceKey=ApplicationMainThemeColor}"
+                           Text="Add Money"
+                           />
+                <TextBox Margin="0,5,0,0"
                          HorizontalAlignment="Stretch"
-                         PlaceholderText="0.00"
-                         CornerRadius="8"
                          BorderThickness="0.5"
+                         CornerRadius="8"
                          FontSize="18"
-                         Margin="0 5 0 0"></TextBox>
-                <TextBlock Text="Please enter value in correct Format !!"
+                         PlaceholderText="0.00"
+                         Text="{x:Bind _viewModel.MoneyTextBoxText, Mode=TwoWay}"
+                         />
+                <TextBlock FontSize="12"
                            Foreground="DarkRed"
-                           Visibility="{x:Bind _viewModel.InvalidInputTextBlockVisibility,Mode=OneWay}"
-                           FontSize="12"></TextBlock>
-                <TextBlock Text="Payment Methods"
-                           FontSize="18" />
-                <RadioButton HorizontalAlignment="Center"
-                             Name="CardPaymentRadioButton"
+                           Text="Please enter value in correct Format !!"
+                           Visibility="{x:Bind _viewModel.InvalidInputTextBlockVisibility, Mode=OneWay}"
+                           />
+                <TextBlock FontSize="18"
+                           Text="Payment Methods"
+                           />
+                <RadioButton Name="CardPaymentRadioButton"
+                             Margin="-5,0,0,0"
+                             HorizontalAlignment="Center"
                              GroupName="PaymentMethod"
-                             Margin="-5 ,0 0 0">
+                             >
                     <RadioButton.Content>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock>Credit/ Debit Card</TextBlock>
-                            <Image Source="/Assets/icons/credit-cards-payment.png"
+                            <Image Height="20"
+                                   Margin="15,0,0,0"
+                                   Source="/Assets/icons/credit-cards-payment.png"
                                    Stretch="Uniform"
-                                   Height="20"
-                                   Margin="15 0 0 0"></Image>
+                                   />
                         </StackPanel>
                     </RadioButton.Content>
                 </RadioButton>
-                <RadioButton HorizontalAlignment="Center"
+                <RadioButton Margin="-10,0,0,0"
+                             HorizontalAlignment="Center"
                              GroupName="PaymentMethod"
-                             Margin="-10  0 0 0">
+                             >
                     <RadioButton.Content>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="NetBanking  "
-                                       Margin="0 0 0 0" />
-                            <Image Source="/Assets/icons/mobile-banking.png"
+                            <TextBlock Margin="0,0,0,0"
+                                       Text="NetBanking  "
+                                       />
+                            <Image Height="20"
+                                   Margin="50,0,0,0"
+                                   Source="/Assets/icons/mobile-banking.png"
                                    Stretch="Uniform"
-                                   Height="20"
-                                   Margin="50 0 0 0"></Image>
+                                   />
                         </StackPanel>
                     </RadioButton.Content>
                 </RadioButton>
-                <RadioButton HorizontalAlignment="Center"
+                <RadioButton Margin="-3,0,0,0"
+                             HorizontalAlignment="Center"
                              GroupName="PaymentMethod"
-                             Margin="-3 0 0 0">
+                             >
                     <RadioButton.Content>
-                        <StackPanel Orientation="Horizontal"
-                                    Width="150">
-                            <TextBlock Text="UPI"
-                                       Margin="0 0 0 0" />
-                            <Image Source="/Assets/icons/smartphone.png"
+                        <StackPanel Width="150"
+                                    Orientation="Horizontal"
+                                    >
+                            <TextBlock Margin="0,0,0,0"
+                                       Text="UPI"
+                                       />
+                            <Image Height="20"
+                                   Margin="100,0,0,0"
+                                   Source="/Assets/icons/smartphone.png"
                                    Stretch="Uniform"
-                                   Height="20"
-                                   Margin="100 0 0 0"></Image>
+                                   />
                         </StackPanel>
                     </RadioButton.Content>
                 </RadioButton>
-                <Button HorizontalAlignment="Center"
-                        Margin="10"
+                <Button Margin="10"
+                        HorizontalAlignment="Center"
                         Click="ButtonBase_OnClick"
-                        Style="{StaticResource OrangeButtonStyle}">
-                    <TextBlock Text="Make Payment"
-                               FontSize="14"></TextBlock>
+                        Style="{StaticResource OrangeButtonStyle}"
+                        >
+                    <TextBlock FontSize="14"
+                               Text="Make Payment"
+                               />
                 </Button>
             </StackPanel>
         </Grid>

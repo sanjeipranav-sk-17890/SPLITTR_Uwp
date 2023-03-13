@@ -1,55 +1,76 @@
-﻿<UserControl
-    x:Class="SPLITTR_Uwp.DataTemplates.PaymentWindowExpenseView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SPLITTR_Uwp.DataTemplates"
-   
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    xmlns:view="using:SPLITTR_Uwp.Views"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
+﻿<UserControl x:Class="SPLITTR_Uwp.DataTemplates.PaymentWindowExpenseView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="using:SPLITTR_Uwp.DataTemplates"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:view="using:SPLITTR_Uwp.Views"
+             d:DesignHeight="300"
+             d:DesignWidth="400"
+             mc:Ignorable="d"
+             >
 
-    <Grid Margin="30 0 0 0">
-      <Grid.RowDefinitions>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="Auto"/>
-      </Grid.RowDefinitions>
+    <Grid Margin="30,0,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
-            <TextBlock Text="Choose a Payment Method"
+            <TextBlock Margin="0,5,0,0"
                        HorizontalAlignment="Left"
-                       Margin="0 5 0 0"
-                       Foreground="{ThemeResource SystemAccentColorDark1}"/>
-            <StackPanel HorizontalAlignment="Center"
+                       Foreground="{ThemeResource SystemAccentColorDark1}"
+                       Text="Choose a Payment Method"
+                       />
+            <StackPanel Margin="10"
+                        HorizontalAlignment="Center"
                         Orientation="Horizontal"
-                        Margin="10">
-                <StackPanel Orientation="Vertical" Margin="0 0 20 0">
-                <PersonPicture Height="50" x:Name="CurrentUserPersonProfile"
-                               Initials="{x:Bind _viewModel.CurrentUserInitial,Mode=OneWay}" />
-                <TextBlock Text="You"
-                           HorizontalAlignment="Center"></TextBlock>
+                        >
+                <StackPanel Margin="0,0,20,0"
+                            Orientation="Vertical"
+                            >
+                    <PersonPicture x:Name="CurrentUserPersonProfile"
+                                   Height="50"
+                                   Initials="{x:Bind _viewModel.CurrentUserInitial, Mode=OneWay}"
+                                   />
+                    <TextBlock HorizontalAlignment="Center"
+                               Text="You"
+                               />
 
                 </StackPanel>
-                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0 10 0 0">
-                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="" 
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
-                           FontSize="30"
-                           FontWeight="SemiBold"
-                           Foreground="DarkSlateGray"/>
-                   <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
-                      <TextBlock x:Name="CurrencySymbol" Margin="0 0 4 0" Text="{x:Bind _viewModel.CurrencySymbol,Mode=OneWay}" FontWeight="SemiBold"/>
-                      <TextBlock Text="{x:Bind ExpenseObj.StrExpenseAmount,Mode=OneWay}"></TextBlock>
-                   </StackPanel>  
+                <StackPanel Margin="0,10,0,0"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical"
+                            >
+                    <TextBlock HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontFamily="Segoe MDL2 Assets"
+                               FontSize="30"
+                               FontWeight="SemiBold"
+                               Foreground="DarkSlateGray"
+                               Text=""
+                               />
+                    <StackPanel Margin="0,10,0,0"
+                                Orientation="Horizontal"
+                                >
+                        <TextBlock x:Name="CurrencySymbol"
+                                   Margin="0,0,4,0"
+                                   FontWeight="SemiBold"
+                                   Text="{x:Bind _viewModel.CurrencySymbol, Mode=OneWay}"
+                                   />
+                        <TextBlock Text="{x:Bind ExpenseObj.StrExpenseAmount, Mode=OneWay}" />
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" Margin="20 0 0 0">
-                <PersonPicture Height="50" x:Name="OwingUserPersonProfile"
-                               Initials="{x:Bind _viewModel.OwingUserInitial,Mode=OneWay}"/>
-                <TextBlock Text="{x:Bind ExpenseObj.SplitRaisedOwner.UserName,Mode=OneWay}"></TextBlock>
+                <StackPanel Margin="20,0,0,0"
+                            Orientation="Vertical"
+                            >
+                    <PersonPicture x:Name="OwingUserPersonProfile"
+                                   Height="50"
+                                   Initials="{x:Bind _viewModel.OwingUserInitial, Mode=OneWay}"
+                                   />
+                    <TextBlock Text="{x:Bind ExpenseObj.SplitRaisedOwner.UserName, Mode=OneWay}" />
 
                 </StackPanel>
 
@@ -57,26 +78,46 @@
             </StackPanel>
 
         </StackPanel>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" >
-            <RadioButton GroupName="PaymentMethod"  x:Name="WalletPaymentRadioButton" Content="Splittr Wallet" Click="RadioButton_OnClick"/>
-            <Image Source="../../Assets/icons/walletSymbol.png" Stretch="UniformToFill" Height="30" Margin="5 0 5 0"></Image>
-            <TextBox Text="{x:Bind _viewModel.CurrentUser.StrWalletBalance,Mode=OneWay}" VerticalAlignment="Center" Foreground="DarkGreen"
+        <StackPanel Grid.Row="1"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal"
+                    >
+            <RadioButton x:Name="WalletPaymentRadioButton"
+                         Click="RadioButton_OnClick"
+                         Content="Splittr Wallet"
+                         GroupName="PaymentMethod"
+                         />
+            <Image Height="30"
+                   Margin="5,0,5,0"
+                   Source="../../Assets/icons/walletSymbol.png"
+                   Stretch="UniformToFill"
+                   />
+            <TextBox VerticalAlignment="Center"
+                     Foreground="DarkGreen"
                      IsReadOnly="True"
+                     Text="{x:Bind _viewModel.CurrentUser.StrWalletBalance, Mode=OneWay}"
                      />
         </StackPanel>
         <StackPanel Grid.Row="2">
-            <RadioButton GroupName="PaymentMethod"  Content="Net Banking" Click="RadioButton_OnClick" />
+            <RadioButton Click="RadioButton_OnClick"
+                         Content="Net Banking"
+                         GroupName="PaymentMethod"
+                         />
         </StackPanel>
         <StackPanel Grid.Row="3">
-            <RadioButton GroupName="PaymentMethod" Content="Other Upi Apps" Click="RadioButton_OnClick"/>
+            <RadioButton Click="RadioButton_OnClick"
+                         Content="Other Upi Apps"
+                         GroupName="PaymentMethod"
+                         />
         </StackPanel>
-           <Button Grid.Row="4"
-                   HorizontalAlignment="Center"
-                   x:Name="SettlePaymentButton"
-                   IsEnabled="False" 
-                   Background="{ThemeResource SystemAccentColorLight2}"
-                   Content="Settle"
-                   Click="SettlePaymentButton_OnClick"
-                   Margin="10"/>
+        <Button x:Name="SettlePaymentButton"
+                Grid.Row="4"
+                Margin="10"
+                HorizontalAlignment="Center"
+                Background="{ThemeResource SystemAccentColorLight2}"
+                Click="SettlePaymentButton_OnClick"
+                Content="Settle"
+                IsEnabled="False"
+                />
     </Grid>
 </UserControl>

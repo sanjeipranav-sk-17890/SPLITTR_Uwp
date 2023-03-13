@@ -1,19 +1,20 @@
-﻿<Page
-    x:Class="SPLITTR_Uwp.Views.AddExpenseTestPage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SPLITTR_Uwp.Views"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
-    xmlns:controls1="using:SPLITTR_Uwp.DataTemplates.Controls"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationMainThemeAcrylicBrush}">
+﻿<Page x:Class="SPLITTR_Uwp.Views.AddExpenseTestPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+      xmlns:controls1="using:SPLITTR_Uwp.DataTemplates.Controls"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:SPLITTR_Uwp.Views"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      Background="{ThemeResource ApplicationMainThemeAcrylicBrush}"
+      mc:Ignorable="d"
+      >
 
     <Grid>
-            <controls1:SplitExpenseUserControl HorizontalAlignment="Center" CanDrag="True"
-                                           x:Name="SplitExpneseControl"
-                                           DragStarting="SplitExpenseControl_OnDragStarting" 
-            ></controls1:SplitExpenseUserControl>
+        <controls1:SplitExpenseUserControl x:Name="SplitExpneseControl"
+                                           HorizontalAlignment="Center"
+                                           CanDrag="True"
+                                           DragStarting="SplitExpenseControl_OnDragStarting"
+                                           />
     </Grid>
 </Page>

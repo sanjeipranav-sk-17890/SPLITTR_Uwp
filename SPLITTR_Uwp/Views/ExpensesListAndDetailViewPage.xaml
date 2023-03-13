@@ -1,27 +1,38 @@
-﻿<Page
-    x:Class="SPLITTR_Uwp.Views.ExpensesListAndDetailViewPage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SPLITTR_Uwp.Views"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    Background="{ThemeResource ApplicationMainThemeAcrylicBrush}"
-    xmlns:template="using:SPLITTR_Uwp.DataTemplates"
-    xmlns:controls1="using:SPLITTR_Uwp.DataTemplates.Controls"
-    xmlns:expenseListControl="using:SPLITTR_Uwp.DataTemplates.Controls.ExpenseListControl"
-    SizeChanged="ExpensesListAndDetailViewPage_OnSizeChanged">
+﻿<Page x:Class="SPLITTR_Uwp.Views.ExpensesListAndDetailViewPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+      xmlns:controls1="using:SPLITTR_Uwp.DataTemplates.Controls"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:expenseListControl="using:SPLITTR_Uwp.DataTemplates.Controls.ExpenseListControl"
+      xmlns:local="using:SPLITTR_Uwp.Views"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:template="using:SPLITTR_Uwp.DataTemplates"
+      Background="{ThemeResource ApplicationMainThemeAcrylicBrush}"
+      SizeChanged="ExpensesListAndDetailViewPage_OnSizeChanged"
+      mc:Ignorable="d"
+      >
     <Page.Resources>
-        <Style x:Key="CustomGridSplitterStyle" TargetType="controls:GridSplitter">
+        <Style x:Key="CustomGridSplitterStyle"
+               TargetType="controls:GridSplitter"
+               >
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="controls:GridSplitter">
-                        <Grid x:Name="Root" Width="4" >
-                            <!-- Background -->
-                            <Rectangle  Fill="Transparent" StrokeThickness="0"  />
-                            <!-- Focus Visual -->
-                            <Rectangle x:Name="FocusVisual" Stroke="Transparent" StrokeThickness="1" Opacity="0" IsHitTestVisible="false" />
+                        <Grid x:Name="Root"
+                              Width="4"
+                              >
+                            <!--  Background  -->
+                            <Rectangle Fill="Transparent"
+                                       StrokeThickness="0"
+                                       />
+                            <!--  Focus Visual  -->
+                            <Rectangle x:Name="FocusVisual"
+                                       IsHitTestVisible="false"
+                                       Opacity="0"
+                                       Stroke="Transparent"
+                                       StrokeThickness="1"
+                                       />
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -30,94 +41,104 @@
     </Page.Resources>
 
     <Grid>
-
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="ExpenseListColoumn" Width="*"/>
-            <ColumnDefinition  Width="10" />
-            <ColumnDefinition x:Name="ExpenseDetailViewColumn" Width="*"/>
+            <ColumnDefinition x:Name="ExpenseListColoumn"
+                              Width="*"
+                              />
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition x:Name="ExpenseDetailViewColumn"
+                              Width="*"
+                              />
         </Grid.ColumnDefinitions>
+        <expenseListControl:UserExpensesListControl x:Name="ExpensesListControl"
+                                                    Grid.Column="0"
+                                                    MinWidth="400"
+                                                    HorizontalAlignment="Stretch"
+                                                    VerticalAlignment="Stretch"
+                                                    CornerRadius="5"
+                                                    OnExpenseSelectionChanged="ExpensesLIstView_OnSelectionChanged"
+                                                    OnGroupInfoButtonClicked="ExpensesListControl_OnOnGroupInfoButtonClicked"
+                                                    PaneButtonOnClick="UserExpensesListControl_OnPaneButtonOnClick"
+                                                    />
+        <!--  Column Grid Splitter  -->
+        <controls:GridSplitter Grid.Column="1"
+                               MaxWidth="4"
+                               Background="Transparent"
+                               BorderBrush="Transparent"
+                               ResizeBehavior="BasedOnAlignment"
+                               ResizeDirection="Auto"
+                               Style="{StaticResource CustomGridSplitterStyle}"
+                               >
+            <controls:GridSplitter.Element>
+                <Grid Width="4"
+                      Background="Transparent"
+                      />
+            </controls:GridSplitter.Element>
+        </controls:GridSplitter>
+        <!--  =================================  -->
+        <Grid x:Name="ExpenseDetailViewGrid"
+              Grid.Column="2"
+              MinWidth="400"
+              HorizontalAlignment="Stretch"
+              CornerRadius="5"
+              >
+            <ScrollViewer HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                          CornerRadius="5"
+                          >
+                <StackPanel Orientation="Vertical">
+                    <controls1:OwnerExpenseUserControl x:Name="DetailedExpenseTemplate"
+                                                       HorizontalAlignment="Stretch"
+                                                       VerticalAlignment="Stretch"
+                                                       BackButtonClicked="OnBackButtonClicked"
+                                                       DataContext="{x:Bind _viewModel.ControlDataContext, Mode=OneWay}"
+                                                       Visibility="{x:Bind _viewModel.OwnerExpenseUserControlVisibility, Mode=OneWay}"
+                                                       />
+                    <template:OwingMoneyPayemtExpenseTemplate x:Name="PendingPaymentTemplate"
+                                                              HorizontalAlignment="Stretch"
+                                                              VerticalAlignment="Stretch"
+                                                              BackButtonClicked="OnBackButtonClicked"
+                                                              DataContext="{x:Bind _viewModel.ControlDataContext, Mode=OneWay}"
+                                                              Visibility="{x:Bind _viewModel.OwingMoneyPaymentControlVisibility, Mode=OneWay}"
+                                                              />
+                </StackPanel>
+            </ScrollViewer>
+
+        </Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveListAndDetailView">
                 <VisualState x:Name="ExpenseListViewState">
                     <VisualState.Setters>
-                        <Setter Target="ExpensesListControl.Visibility" Value="Visible"/>
-                        <Setter Target="ExpenseDetailViewGrid.Visibility" Value="Collapsed"/>
-                        <Setter Target="ExpenseDetailViewColumn.Width" Value="0"></Setter>
-                        <Setter Target="ExpenseListColoumn.Width" Value="*"></Setter>
+                        <Setter Target="ExpensesListControl.Visibility" Value="Visible" />
+                        <Setter Target="ExpenseDetailViewGrid.Visibility" Value="Collapsed" />
+                        <Setter Target="ExpenseDetailViewColumn.Width" Value="0" />
+                        <Setter Target="ExpenseListColoumn.Width" Value="*" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="DetailExpenseViewState">
                     <VisualState.Setters>
                         <Setter Target="ExpenseDetailViewGrid.Visibility" Value="Visible" />
-                        <Setter Target="ExpensesListControl.Visibility" Value="Collapsed"/>
-                        <Setter Target="ExpenseListColoumn.Width" Value="0"></Setter>
-                        <Setter Target="ExpenseDetailViewColumn.Width" Value="*"></Setter>
+                        <Setter Target="ExpensesListControl.Visibility" Value="Collapsed" />
+                        <Setter Target="ExpenseListColoumn.Width" Value="0" />
+                        <Setter Target="ExpenseDetailViewColumn.Width" Value="*" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="ListAndDetailViewState">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="800"></AdaptiveTrigger>
+                        <AdaptiveTrigger MinWindowWidth="800" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="ExpenseDetailViewGrid.Visibility" Value="Visible" />
-                        <Setter Target="ExpensesListControl.Visibility" Value="Visible"/>
-                        <Setter Target="ExpenseDetailViewColumn.Width" Value="*"></Setter>
-                        <Setter Target="ExpenseDetailViewColumn.MinWidth" Value="400"></Setter>
-                        <Setter Target="ExpenseListColoumn.Width" Value="*"></Setter>
-                        <Setter Target="ExpenseListColoumn.MinWidth" Value="400"></Setter>
+                        <Setter Target="ExpensesListControl.Visibility" Value="Visible" />
+                        <Setter Target="ExpenseDetailViewColumn.Width" Value="*" />
+                        <Setter Target="ExpenseDetailViewColumn.MinWidth" Value="400" />
+                        <Setter Target="ExpenseListColoumn.Width" Value="*" />
+                        <Setter Target="ExpenseListColoumn.MinWidth" Value="400" />
                     </VisualState.Setters>
                 </VisualState>
 
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        <expenseListControl:UserExpensesListControl CornerRadius="5"
-                                          MinWidth="400"
-                                          x:Name="ExpensesListControl" OnGroupInfoButtonClicked="ExpensesListControl_OnOnGroupInfoButtonClicked"
-                                          HorizontalAlignment="Stretch"
-                                          VerticalAlignment="Stretch" Grid.Column="0"
-                                          OnExpenseSelectionChanged="ExpensesLIstView_OnSelectionChanged"
-                                          PaneButtonOnClick="UserExpensesListControl_OnPaneButtonOnClick"
-                                          />
-        <!--Column Grid Splitter-->
-        <controls:GridSplitter MaxWidth="4"
-                               Grid.Column="1" 
-                               ResizeBehavior="BasedOnAlignment"
-                               ResizeDirection="Auto"
-                               Background="Transparent" 
-                               BorderBrush="Transparent" 
-                               Style="{StaticResource CustomGridSplitterStyle}">
-            <controls:GridSplitter.Element>
-                <Grid Width="4" Background="Transparent" >
-
-                </Grid>
-            </controls:GridSplitter.Element>
-        </controls:GridSplitter>
-        <!-- ================================= -->
-        <Grid Grid.Column="2"
-              HorizontalAlignment="Stretch"
-              CornerRadius="5"
-              MinWidth="400"
-              x:Name="ExpenseDetailViewGrid">
-            <ScrollViewer HorizontalAlignment="Stretch" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                          VerticalAlignment="Stretch" CornerRadius="5" >
-                <StackPanel Orientation="Vertical">
-                    <controls1:OwnerExpenseUserControl     HorizontalAlignment="Stretch"
-                                                          VerticalAlignment="Stretch"
-                                                          x:Name="DetailedExpenseTemplate"
-                                                          DataContext="{x:Bind _viewModel.ControlDataContext,Mode=OneWay}"
-                                                          Visibility="{x:Bind _viewModel.OwnerExpenseUserControlVisibility,Mode=OneWay}"
-                                                          BackButtonClicked="OnBackButtonClicked"
-                    />
-                    <template:OwingMoneyPayemtExpenseTemplate HorizontalAlignment="Stretch"
-                                                              VerticalAlignment="Stretch"
-                                                              DataContext="{x:Bind _viewModel.ControlDataContext,Mode=OneWay}"
-                                                              Visibility="{x:Bind _viewModel.OwingMoneyPaymentControlVisibility,Mode=OneWay}"
-                                                              x:Name="PendingPaymentTemplate"
-                                                              BackButtonClicked="OnBackButtonClicked"/>
-                </StackPanel>
-            </ScrollViewer>
-
-        </Grid>
-
     </Grid>
 </Page>
