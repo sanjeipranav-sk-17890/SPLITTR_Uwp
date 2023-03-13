@@ -63,7 +63,7 @@
                                    />
                     </StackPanel>
                 </Border>
-                <TextBlock Margin="0 5 5 0"
+                <TextBlock Margin="0,5,5,0"
                            VerticalAlignment="Center"
                            RelativePanel.AlignRightWithPanel="True"
                            Text="{x:Bind ExpenseObj.CreatedDate, Converter={StaticResource StringFormater}, ConverterParameter='{}{0:dd/MM/yyyy}', Mode=OneWay}"
@@ -84,7 +84,7 @@
                 <ColumnDefinition Width="5*" />
             </Grid.ColumnDefinitions>
             <controls:ExpenseCategoryControl Grid.Row="0"
-                                             Margin="5 10 0 0"
+                                             Margin="5,10,0,0"
                                              HorizontalAlignment="Left"
                                              CategoryIconSource="{x:Bind ExpenseObj.IconSource, Mode=OneWay, Converter={StaticResource StingToBitMapSourceConverter}}"
                                              IsFlyOutOpeningAllowed="{x:Bind _viewModel.IsCategoryChangeAllowed, Mode=OneWay}"
@@ -93,11 +93,11 @@
                                              />
             <StackPanel Grid.Row="0"
                         Grid.Column="1"
-                        Margin="-20 15 0 0"
+                        Margin="-20,15,0,0"
                         HorizontalAlignment="Left"
                         Orientation="Vertical"
                         >
-                <TextBlock Margin="0 4 0 0"
+                <TextBlock Margin="0,4,0,0"
                            FontSize="17"
                            FontWeight="SemiLight"
                            IsTextSelectionEnabled="True"
@@ -105,13 +105,13 @@
                            TextWrapping="Wrap"
                            ToolTipService.ToolTip="Title"
                            />
-                <TextBlock Margin="0 4 0 0"
+                <TextBlock Margin="0,4,0,0"
                            FontSize="20"
                            FontWeight="Bold"
                            Text="{x:Bind _viewModel.TotalExpenditureAmount, Converter={StaticResource ExpenseAmountFormatter}, Mode=OneWay}"
                            ToolTipService.ToolTip="Total Expenditure"
                            />
-                <TextBlock Margin="0 4 0 0"
+                <TextBlock Margin="0,4,0,0"
                            Foreground="Gray"
                            Text="{x:Bind _viewModel.ExpenseOwnerInfo, Mode=OneWay}"
                            TextWrapping="Wrap"
@@ -153,7 +153,7 @@
             </ListView>
             <Grid Grid.Row="4"
                   Grid.Column="0"
-                  Margin="20 20 0 0"
+                  Margin="20,20,0,0"
                   >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -167,7 +167,7 @@
                            ToolTipService.ToolTip="Date Of Expense "
                            />
                 <TextBlock Grid.Column="1"
-                           Margin="5 0 0 0"
+                           Margin="5,0,0,0"
                            TextTrimming="CharacterEllipsis"
                            ToolTipService.ToolTip="Date Of Expense "
                            >
@@ -176,13 +176,13 @@
             </Grid>
             <TextBlock Grid.Row="4"
                        Grid.Column="1"
-                       Margin="20 20 0 0"
+                       Margin="20,20,0,0"
                        VerticalAlignment="Center"
                        Text="{x:Bind ExpenseObj.DateOfExpense, Converter={StaticResource StringFormater}, ConverterParameter='{}{0:dd/MM/yyyy   dddd}', Mode=OneWay}"
                        />
             <StackPanel Grid.Row="5"
                         Grid.Column="0"
-                        Margin="20 20 0 0"
+                        Margin="20,20,0,0"
                         Orientation="Horizontal"
                         >
                 <TextBlock VerticalAlignment="Top"
@@ -191,7 +191,7 @@
                            Text=""
                            ToolTipService.ToolTip="Note"
                            />
-                <TextBlock Margin="5 0 0 0"
+                <TextBlock Margin="5,0,0,0"
                            ToolTipService.ToolTip="Note"
                            >
                     Note :
@@ -199,7 +199,7 @@
             </StackPanel>
             <TextBlock Grid.Row="5"
                        Grid.Column="1"
-                       Margin="20 20 0 0"
+                       Margin="20,20,0,0"
                        VerticalAlignment="Center"
                        Text="{x:Bind ExpenseObj.Note, Mode=OneWay}"
                        TextWrapping="Wrap"
