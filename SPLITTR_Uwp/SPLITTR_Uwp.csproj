@@ -160,12 +160,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dependencies\Configuration.cs" />
-    <Compile Include="DataRepository\Converters\BoolToRowSpanConverter.cs" />
-    <Compile Include="DataRepository\Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="DataRepository\Converters\ExpenseAmountFormatter.cs" />
-    <Compile Include="DataRepository\Converters\StingToBitMapSourceConverter.cs" />
-    <Compile Include="DataRepository\Converters\TimeConverter.cs" />
-    <Compile Include="DataRepository\Converters\UserInitialFormater.cs" />
+    <Compile Include="Converters\BoolToRowSpanConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\ExpenseAmountFormatter.cs" />
+    <Compile Include="Converters\StingToBitMapSourceConverter.cs" />
+    <Compile Include="Converters\TimeConverter.cs" />
+    <Compile Include="Converters\UserInitialFormater.cs" />
     <Compile Include="DataRepository\Store.cs" />
     <Compile Include="DataTemplates\Controls\ExpenseCategoryControl.xaml.cs">
       <DependentUpon>ExpenseCategoryControl.xaml</DependentUpon>

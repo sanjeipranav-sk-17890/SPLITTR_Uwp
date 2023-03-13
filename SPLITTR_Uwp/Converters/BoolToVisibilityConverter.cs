@@ -2,7 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
-namespace SPLITTR_Uwp.DataRepository.Converters;
+namespace SPLITTR_Uwp.Converters;
 
 public class BoolToVisConverter : IValueConverter
 {

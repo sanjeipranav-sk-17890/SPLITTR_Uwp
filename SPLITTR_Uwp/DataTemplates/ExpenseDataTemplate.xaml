@@ -2,21 +2,21 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="using:SPLITTR_Uwp.DataTemplates.Controls"
-             xmlns:converter="using:SPLITTR_Uwp.DataRepository.Converters"
              xmlns:core="using:Microsoft.Xaml.Interactions.Core"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
              xmlns:local="using:SPLITTR_Uwp.DataTemplates"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:splittrUwp="using:SPLITTR_Uwp"
+             xmlns:converters="using:SPLITTR_Uwp.Converters"
              d:DesignHeight="100"
              d:DesignWidth="500"
              mc:Ignorable="d"
              >
     <UserControl.Resources>
-        <converter:StringFormatConverter x:Key="StringFormater" />
-        <converter:BoolToRowSpanConverter x:Key="RowSpanConverter" />
-        <converter:StingToBitMapSourceConverter x:Key="BitMapSourceConverter" />
+        <converters:StringFormatConverter x:Key="StringFormater" />
+        <converters:BoolToRowSpanConverter x:Key="RowSpanConverter" />
+        <converters:StingToBitMapSourceConverter x:Key="BitMapSourceConverter" />
         <!--  Overriding Pointer over animation  -->
         <Style x:Key="NoPointerAnimation"
                TargetType="Button"

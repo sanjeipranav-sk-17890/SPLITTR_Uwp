@@ -2,11 +2,11 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="using:SPLITTR_Uwp.DataTemplates.Controls"
-             xmlns:converter="using:SPLITTR_Uwp.DataRepository.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dataTemplates="using:SPLITTR_Uwp.DataTemplates"
              xmlns:local="using:SPLITTR_Uwp.Views"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="using:SPLITTR_Uwp.Converters"
              d:DesignHeight="700"
              d:DesignWidth="450"
              mc:Ignorable="d"
@@ -16,9 +16,9 @@
                          x:Name="ExpenseStatusBrush"
                          Color="DarkGreen"
                          />
-        <converter:StringFormatConverter x:Key="StringFormater" />
-        <converter:StingToBitMapSourceConverter x:Key="StingToBitMapSourceConverter" />
-        <converter:ExpenseAmountFormatter x:Key="ExpenseAmountFormatter" />
+        <converters:StringFormatConverter x:Key="StringFormater" />
+        <converters:StingToBitMapSourceConverter x:Key="StingToBitMapSourceConverter" />
+        <converters:ExpenseAmountFormatter x:Key="ExpenseAmountFormatter" />
     </UserControl.Resources>
     <Grid Padding="10">
         <Grid.RowDefinitions>

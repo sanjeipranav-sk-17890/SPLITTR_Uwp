@@ -1,19 +1,15 @@
 ﻿using System;
 using Windows.UI.Xaml.Data;
 
-namespace SPLITTR_Uwp.DataRepository.Converters;
+namespace SPLITTR_Uwp.Converters;
 
-public class StringFormatConverter : IValueConverter
+public class BoolToRowSpanConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, string language)
     {
-        if (value == null)
-            return null;
+        var b = (bool)value;
 
-        if (parameter == null)
-            return value;
-
-        return string.Format((string)parameter, value);
+        return b ?  1: 2;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)
