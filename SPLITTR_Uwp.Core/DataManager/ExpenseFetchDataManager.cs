@@ -16,7 +16,7 @@ using SQLite;
 
 namespace SPLITTR_Uwp.Core.DataManager;
 
-public class ExpenseFetchDataManager : IRelatedExpenseDataManager,IExpenseFetchDataManager
+internal class ExpenseFetchDataManager : IRelatedExpenseDataManager,IExpenseFetchDataManager
 {
     private readonly ICurrencyCalcFactory _currencyCalcFactory;
     private readonly IUserDataManager _userDataManager;
@@ -34,15 +34,22 @@ public class ExpenseFetchDataManager : IRelatedExpenseDataManager,IExpenseFetchD
     /// <exception cref="ArgumentNullException"><paramref name="source">source</paramref>
     public async void GetRelatedExpenses(ExpenseBobj referenceExpense, UserBobj currentUser, IUseCaseCallBack<RelatedExpenseResponseObj> callBack)
     {
-        var key = referenceExpense.ParentExpenseId ?? referenceExpense.ExpenseUniqueId;
-
-        var relatedExpenseList = await _dbHandler.SelectRelatedExpenses(key).ConfigureAwait(false);
-
-        var relatedExpenses=  await InitializeExpenseBobjs(relatedExpenseList, currentUser).ConfigureAwait(false);
+        var relatedExpenses = await GetRelatedExpenses(referenceExpense, currentUser).ConfigureAwait(false);
 
         var filteredExpense = relatedExpenses.Where(ex => !ex.ExpenseUniqueId.Equals(referenceExpense.ExpenseUniqueId));
 
         callBack?.OnSuccess(new RelatedExpenseResponseObj(filteredExpense));
+    }
+
+    public async Task<IEnumerable<ExpenseBobj>> GetRelatedExpenses(ExpenseBobj referenceExpense, UserBobj currentUser)
+    {
+
+        var key = referenceExpense.ParentExpenseId ?? referenceExpense.ExpenseUniqueId;
+
+        var relatedExpenseList = await _dbHandler.SelectRelatedExpenses(key).ConfigureAwait(false);
+
+        var relatedExpenses = await InitializeExpenseBobjs(relatedExpenseList, currentUser).ConfigureAwait(false);
+        return relatedExpenses;
     }
 
     private async Task<IEnumerable<ExpenseBobj>> InitializeExpenseBobjs(IEnumerable<Expense> expenses, User currentUser)
