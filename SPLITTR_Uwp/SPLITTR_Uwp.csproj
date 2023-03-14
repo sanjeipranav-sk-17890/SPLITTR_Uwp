@@ -159,6 +159,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\BoolValueInversionConverter.cs" />
     <Compile Include="Dependencies\Configuration.cs" />
     <Compile Include="Converters\BoolToRowSpanConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
