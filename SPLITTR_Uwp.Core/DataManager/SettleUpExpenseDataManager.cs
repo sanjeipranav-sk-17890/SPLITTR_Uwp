@@ -5,6 +5,7 @@ using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.SplittrExceptions;
+using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.SettleUpExpense;
 
@@ -35,7 +36,7 @@ public class SettleUpExpenseDataManager : ISettleUpSplitDataManager
         //current user cannot pay their own Expense 
         if (settleExpenseRef.SplitRaisedOwner.Equals(currentUser))
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException("Not the Owner of the Expense");
         }
     }
 
@@ -77,6 +78,8 @@ public class SettleUpExpenseDataManager : ISettleUpSplitDataManager
             }).ConfigureAwait(false);
 
             callBack?.OnSuccess(new SettleUpExpenseResponseObj(toBeSettledExpenseObj));
+
+            SplittrNotification.InvokeExpenseStatusChanged(new ExpenseStatusChangedEventArgs(ExpenseStatus.Paid,toBeSettledExpenseObj));
         }
         catch (NotSupportedException ex)
         {

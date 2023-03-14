@@ -30,6 +30,8 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager, IMarkExpensePa
             var cancelledExpenseObj = await ChangeExpenseStatus(expenseToBeCancelled, currentUser, ExpenseStatus.Cancelled).ConfigureAwait(false);
 
             callBack?.OnSuccess(new CancelExpenseResponseObj(cancelledExpenseObj));
+
+            SplittrNotification.InvokeExpenseStatusChanged(new ExpenseStatusChangedEventArgs(ExpenseStatus.Cancelled,expenseToBeCancelled));
         }
         catch (SQLiteException ex)
         {
@@ -56,6 +58,9 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager, IMarkExpensePa
             _expenseHistoryManager.RecordExpenseMarkedAsPaid(expenseToBeMarkedAsPaid.ExpenseUniqueId);
 
             callBack?.OnSuccess(new MarkAsPaidResponseObj(paidExpenseObj));
+
+            //raising Status Changed Notification
+            SplittrNotification.InvokeExpenseStatusChanged(new ExpenseStatusChangedEventArgs(ExpenseStatus.Paid,expenseToBeMarkedAsPaid));
         }
         catch (SQLiteException e)
         {

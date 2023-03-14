@@ -20,11 +20,10 @@ public class ExpenseDataManager : IExpenseDataManager
         return _dbHandler.InsertExpenseAsync(expenseBobjs);
     }
         
-    public async Task UpdateExpenseAsync(ExpenseBobj expenseBobj)
+    public Task UpdateExpenseAsync(ExpenseBobj expenseBobj)
     {
-        await _dbHandler.UpdateExpenseAsync(expenseBobj).ConfigureAwait(false);
-
-        SplittrNotification.InvokeExpenseStatusChanged(new ExpenseStatusChangedEventArgs(expenseBobj.ExpenseStatus,expenseBobj));
+        return _dbHandler.UpdateExpenseAsync(expenseBobj);
+        // SplittrNotification.InvokeExpenseStatusChanged(new ExpenseStatusChangedEventArgs(expenseBobj.ExpenseStatus,expenseBobj));
     }
 
 }
