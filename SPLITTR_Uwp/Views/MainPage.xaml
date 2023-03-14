@@ -89,7 +89,7 @@
 
             </Grid.Resources>
             <StackPanel Name="LogoStactPanel"
-                        Margin="0 0 0 0"
+                        Margin="0,0,0,0"
                         HorizontalAlignment="Left"
                         Orientation="Horizontal"
                         >
@@ -98,7 +98,7 @@
                        Source="../Assets/AppLogo/62e914dea1e1b17f781f57f4.png"
                        Stretch="Uniform"
                        />
-                <TextBlock Margin="-20 0 0 0"
+                <TextBlock Margin="-20,0,0,0"
                            VerticalAlignment="Center"
                            FontFamily="Segoe UI Variable"
                            FontSize="20"
@@ -106,7 +106,7 @@
                            Text="SPLITTR"
                            />
                 <controls:SplitButton x:Name="AddToggleFlyOutButton"
-                                      Margin="15 0 0 0"
+                                      Margin="15,0,0,0"
                                       VerticalAlignment="Center"
                                       Background="{ThemeResource ApplicationMainThemeColor}"
                                       Click="AddToggleFlyOutButton_OnClick"
@@ -131,7 +131,7 @@
                                       Glyph="&#xED11;"
                                       />
                             <TextBlock x:Name="ToggleButtonTextBlock"
-                                       Margin="4 0 0 0"
+                                       Margin="4,0,0,0"
                                        VerticalAlignment="Center"
                                        Foreground="White"
                                        Text="New Expense"
@@ -177,7 +177,7 @@
                     </Button.Flyout>
                 </Button>-->
                 <Button Name="TitleBarAddExpenseButton"
-                        Margin="0 0 10 0"
+                        Margin="0,0,10,0"
                         Click="{x:Bind AddWalletBalanceButtonClicked}"
                         RelativePanel.AlignRightWithPanel="True"
                         Style="{StaticResource AddWalletButtonStyle}"
@@ -207,7 +207,7 @@
                    PanePlacement="Right"
                    >
             <SplitView.Pane>
-                <themeButton:SplittrDashBoard Margin="10 0 0 0"
+                <themeButton:SplittrDashBoard Margin="10,0,0,0"
                                               HorizontalAlignment="Stretch"
                                               VerticalAlignment="Stretch"
                                               />
@@ -215,7 +215,7 @@
             <SplitView.Content>
                 <controls:NavigationView x:Name="MainPageNavigationView"
                                          Grid.Row="1"
-                                         Margin="-1 0 0 0"
+                                         Margin="-1,0,0,0"
                                          CompactPaneLength="0"
                                          IsBackButtonVisible="Collapsed"
                                          IsPaneOpen="True"
@@ -252,7 +252,7 @@
                                        Foreground="{ThemeResource AccentTextColorBrush}"
                                        Text="☵"
                                        />
-                            <TextBlock Margin="10 0 0 0"
+                            <TextBlock Margin="10,0,0,0"
                                        VerticalAlignment="Center"
                                        FontSize="15"
                                        Text="All Expenses"
@@ -272,7 +272,7 @@
                                   Stretch="Uniform"
                                   />
 
-                            <TextBlock Margin="5 0 0 0"
+                            <TextBlock Margin="5,0,0,0"
                                        VerticalAlignment="Center"
                                        FontSize="15"
                                        Text="Request By Me"
@@ -287,13 +287,13 @@
                                    Source="../Assets/icons/IncomingArrowV2.png"
                                    Stretch="UniformToFill"
                                    />
-                            <TextBlock Margin="05 0 0 0"
+                            <TextBlock Margin="05,0,0,0"
                                        VerticalAlignment="Center"
                                        FontSize="15"
                                        Text="Request To Me"
                                        />
                         </StackPanel>
-                        <themeButton:MainPageButtonControl Margin="0 0 0 0"
+                        <themeButton:MainPageButtonControl Margin="0,0,0,0"
                                                            HorizontalAlignment="Left"
                                                            ItemsSource="{x:Bind _viewModel.RelatedUsers, Mode=OneWay}"
                                                            SelectionMode="Single"
@@ -341,14 +341,14 @@
                         <StackPanel x:Name="NavigationViewFooter">
                             <StackPanel>
                                 <MenuFlyoutSeparator Width="230"
-                                                     Margin="-20 0 0 5"
+                                                     Margin="-20,0,0,5"
                                                      HorizontalAlignment="left"
                                                      />
                                 <StackPanel Orientation="Horizontal">
 
                                     <Button Width="auto"
                                             Height="auto"
-                                            Margin="-4 0 0 0"
+                                            Margin="-4,0,0,0"
                                             HorizontalAlignment="Stretch"
                                             HorizontalContentAlignment="Stretch"
                                             VerticalContentAlignment="Stretch"
@@ -392,14 +392,14 @@
                                         <StackPanel Grid.Row="1"
                                                     Orientation="Horizontal"
                                                     >
-                                            <FontIcon Margin="3 0 0 0"
+                                            <FontIcon Margin="3,0,0,0"
                                                       FontFamily="Segoe Fluent Icons"
                                                       FontSize="20"
                                                       FontWeight="SemiBold"
                                                       Foreground="{ThemeResource AccentTextColorBrush}"
                                                       Glyph="&#xF3B1;"
                                                       />
-                                            <TextBlock Margin="15 0 0 0"
+                                            <TextBlock Margin="15,0,0,0"
                                                        FontSize="18"
                                                        Text="Logout"
                                                        />
@@ -446,7 +446,7 @@
 
 
                 <Button Name="AddMoneyToWalletButton"
-                        Margin="0 0 10 0"
+                        Margin="0,0,10,0"
                         Click="{x:Bind AddWalletBalanceButtonClicked}"
                         Style="{StaticResource AddWalletButtonStyle}"
                         ToolTipService.ToolTip="Add Money to Wallet"
@@ -469,7 +469,7 @@
                         <!--  MakePaymentClicked="{x:Bind _viewModel.AddMoneyToWalletButtonClicked}"  -->
                     </controls:TeachingTip.Content>
                 </controls:TeachingTip>
-                <Button Margin="0 0 20 0"
+                <Button Margin="0,0,20,0"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Left"
                         Background="Transparent"

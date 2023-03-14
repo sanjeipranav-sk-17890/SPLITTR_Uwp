@@ -5,7 +5,6 @@
       xmlns:controls1="using:SPLITTR_Uwp.DataTemplates.Controls"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:expenseListControl="using:SPLITTR_Uwp.DataTemplates.Controls.ExpenseListControl"
-      xmlns:local="using:SPLITTR_Uwp.Views"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:template="using:SPLITTR_Uwp.DataTemplates"
       Background="{ThemeResource ApplicationMainThemeAcrylicBrush}"

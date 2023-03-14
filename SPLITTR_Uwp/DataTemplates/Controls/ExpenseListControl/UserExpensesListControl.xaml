@@ -6,7 +6,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:expenseListObject="using:SPLITTR_Uwp.ViewModel.Vobj.ExpenseListObject"
              xmlns:listCntrlModel="using:SPLITTR_Uwp.DataTemplates.Controls.ExpenseListControl"
-             xmlns:local="using:SPLITTR_Uwp.DataTemplates"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:template="using:SPLITTR_Uwp.DataTemplates"
              xmlns:vobj="using:SPLITTR_Uwp.ViewModel.Vobj"

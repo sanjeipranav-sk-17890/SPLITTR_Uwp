@@ -39,14 +39,14 @@ internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
     private ExpenseVobj _expense;
 
     private string _expenseOccuredGroupName = string.Empty;
-    private bool _isCategoryChangeAllowed;
+    private bool _hasEditAccess;
     private string _expenseOwnerInfo;
 
 
-    public bool IsCategoryChangeAllowed
+    public bool HasEditAccess
     {
-        get => _isCategoryChangeAllowed;
-        set => SetProperty(ref _isCategoryChangeAllowed, value);
+        get => _hasEditAccess;
+        set => SetProperty(ref _hasEditAccess, value);
     }
 
     public string ExpenseOwnerInfo
@@ -69,7 +69,7 @@ internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
 
         CallRelatedExpenseUseCase();
 
-        IsCategoryChangeAllowed = IsCurrentUserRaisedExpense();
+        HasEditAccess = IsCurrentUserRaisedExpense();
 
         ExpenseOwnerInfo = FormatExpenseOwnerInfo();
     }

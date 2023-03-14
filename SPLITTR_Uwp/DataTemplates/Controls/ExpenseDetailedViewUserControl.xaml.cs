@@ -3,6 +3,7 @@ using System.ComponentModel;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using Microsoft.Extensions.DependencyInjection;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
 using SPLITTR_Uwp.Core.Models;
@@ -28,6 +29,11 @@ public sealed partial class ExpenseDetailedViewUserControl : UserControl
         InitializeComponent();
         DataContextChanged += ExpenseDetailedViewUserControl_DataContextChanged; 
         Unloaded += (sender, args) => _viewModel.ViewDisposed();
+        Loaded += OnLoaded;
+    }
+    private void OnLoaded(object sender, RoutedEventArgs e)
+    {
+        DateOfExpenseDatePicker.MaxYear = new DateTimeOffset(DateTime.Today);
     }
 
     private ExpenseVobj _previousExpenseVobj = default;
@@ -87,4 +93,36 @@ public sealed partial class ExpenseDetailedViewUserControl : UserControl
     {
         _viewModel.CategoryChangeSelected(obj);
     }
+    private void DateOfExpenseDatePicker_OnSelectedDateChanged(DatePicker sender, DatePickerSelectedValueChangedEventArgs args)
+    {
+        if (args.NewDate?.DateTime > DateTime.Now)
+        {
+            DateOfExpenseDatePicker .SelectedDate = ExpenseObj?.DateOfExpense;
+        }
+    }
+
+    #region  VisualStates&Behaviour
+
+    private void DateOfExpenseDatePicker_OnPointerEntered(object sender, PointerRoutedEventArgs e)
+    {
+        VisualStateManager.GoToState(this, nameof(DateInfoFocusReceived), false);
+    }
+    private void DateOfExpenseDatePicker_OnPointerExited(object sender, PointerRoutedEventArgs e)
+    {
+        VisualStateManager.GoToState(this, nameof(DateInfoFocusLost), false);
+    }
+    #endregion
+
+
+ 
+    private void ExpenseNotesTextBox_OnGotFocus(object sender, RoutedEventArgs e)
+    {
+        VisualStateManager.GoToState(this, nameof(ExpenseNoteOnFocusRecieved), false);
+       
+    }
+    private void ExpenseNotesTextBox_OnLostFocus(object sender, RoutedEventArgs e)
+    {
+        VisualStateManager.GoToState(this, nameof(ExpenseNoteOnFocusLost), false);
+    }
+   
 }
