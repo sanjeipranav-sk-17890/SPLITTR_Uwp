@@ -97,10 +97,29 @@ public sealed partial class ExpenseDetailedViewUserControl : UserControl
     {
         if (args.NewDate?.DateTime > DateTime.Now)
         {
-            DateOfExpenseDatePicker .SelectedDate = ExpenseObj?.DateOfExpense;
+            DateOfExpenseDatePicker.SelectedDate = ExpenseObj?.DateOfExpense;
+            return;
         }
+        _viewModel.DateOfExpense = DateOfExpenseDatePicker.SelectedDate ?? ExpenseObj.DateOfExpense;
+        _viewModel.EditExpenseDetails();
     }
 
+    private void ExpenseTitle_FocusLost(object sender, RoutedEventArgs e)
+    {
+        if (!ExpenseTitleTextBox.Text.Equals(ExpenseObj?.Description))
+        {
+            _viewModel.ExpenseTitle = ExpenseTitleTextBox.Text;
+            _viewModel.EditExpenseDetails();
+        }
+    }
+    private void ExpenseNotesTextBox_OnLostFocus(object sender, RoutedEventArgs e)
+    {
+        if (!ExpenseNotesTextBox.Text.Equals(ExpenseObj?.Note))
+        {
+            _viewModel.ExpenseNote = ExpenseNotesTextBox.Text;
+            _viewModel.EditExpenseDetails();
+        }
+    }
     #region  VisualStates&Behaviour
 
     private void DateOfExpenseDatePicker_OnPointerEntered(object sender, PointerRoutedEventArgs e)
@@ -120,9 +139,11 @@ public sealed partial class ExpenseDetailedViewUserControl : UserControl
         VisualStateManager.GoToState(this, nameof(ExpenseNoteOnFocusRecieved), false);
        
     }
-    private void ExpenseNotesTextBox_OnLostFocus(object sender, RoutedEventArgs e)
+    private void ExpenseNotesTextBox_OnPoniterExited(object sender, RoutedEventArgs e)
     {
         VisualStateManager.GoToState(this, nameof(ExpenseNoteOnFocusLost), false);
     }
+
+
    
 }

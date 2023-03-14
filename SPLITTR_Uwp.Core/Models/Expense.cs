@@ -1,5 +1,5 @@
-﻿using System;
-using SQLite;
+﻿using SQLite;
+using System;
 
 namespace SPLITTR_Uwp.Core.Models;
 
@@ -7,7 +7,8 @@ public class Expense
 {
     private double _expenseAmount;
     private string _note;
-    private int _categoryId = 18;
+    private string _description;
+    private DateTime _dateOfExpense;
 
     [PrimaryKey, Unique]
     public string ExpenseUniqueId { get; set; }
@@ -15,7 +16,11 @@ public class Expense
     public int ExpenseStatusIndex { get; set; }
 
 
-    public string Description { get; set; }
+    public virtual string Description
+    {
+        get => _description;
+        set => _description = value;
+    }
 
     /// <summary>
     /// with Backing feild because it should not call Bobjs or ViewModel's Overrided feilds
@@ -28,7 +33,11 @@ public class Expense
 
     public string RequestedOwner { get; set; }
 
-    public DateTime DateOfExpense { get; set; }
+    public virtual DateTime DateOfExpense
+    {
+        get => _dateOfExpense;
+        set => _dateOfExpense = value;
+    }
 
     public DateTime CreatedDate { get; set; }
 
@@ -44,11 +53,7 @@ public class Expense
 
     public string UserEmailId { get; set; }
 
-    public int CategoryId
-    {
-        get => _categoryId;
-        set => _categoryId = value;
-    }
+    public int CategoryId { get; set; } = 18;
 
     public Expense()
     {
@@ -56,17 +61,27 @@ public class Expense
         CreatedDate = DateTime.Now;
     }
 
-
-
-
-    public Expense(string description,double expenseAmount, string requestedOwner, DateTime dateOfExpense,DateTime createdDate,string note, string groupUniqueId, int expenseStatus, string expenseUniqueId, string userEmailId, string parentExpenseId,int categoryId)
+    public override bool Equals(object obj)
     {
-        Description = description;
+        if (obj is Expense expense)
+        {
+            return ExpenseUniqueId.Equals(expense.ExpenseUniqueId);
+        }
+        return false;
+    }
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
+    public Expense(string description, double expenseAmount, string requestedOwner, DateTime dateOfExpense, DateTime createdDate, string note, string groupUniqueId, int expenseStatus, string expenseUniqueId, string userEmailId, string parentExpenseId, int categoryId)
+    {
+        _description = description;
         _expenseAmount = expenseAmount;
         RequestedOwner = requestedOwner;
-        DateOfExpense = dateOfExpense;
+        _dateOfExpense = dateOfExpense;
         _note = note;
-        _categoryId = categoryId;
+        CategoryId = categoryId;
         CreatedDate = createdDate;
         GroupUniqueId = groupUniqueId;
         UserEmailId = userEmailId;

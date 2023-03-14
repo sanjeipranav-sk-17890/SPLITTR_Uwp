@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
@@ -13,6 +14,7 @@ public class ExpenseVobj : ExpenseBobj,INotifyPropertyChanged
     private bool _visibility = true;
     private string _iconSource;
     private string _categoryName;
+   
 
     public string IconSource
     {
@@ -38,18 +40,16 @@ public class ExpenseVobj : ExpenseBobj,INotifyPropertyChanged
         }
     }
 
-    public override  ExpenseStatus ExpenseStatus
+    public override string Note
     {
-        get => base.ExpenseStatus;
+        get => base.Note;
         set
         {
-            if (base.ExpenseStatus == value)
-            {
+            if (value == base.Note)
                 return;
-            }
-            base.ExpenseStatus = value;
+            base.Note = value;
             OnPropertyChanged();
-        } 
+        }
     }
 
     public bool Visibility
@@ -64,6 +64,43 @@ public class ExpenseVobj : ExpenseBobj,INotifyPropertyChanged
         }
     }
 
+    public override  ExpenseStatus ExpenseStatus
+    {
+        get => base.ExpenseStatus;
+        set
+        {
+            if (base.ExpenseStatus == value)
+            {
+                return;
+            }
+            base.ExpenseStatus = value;
+            OnPropertyChanged();
+        } 
+    }
+
+    public override DateTime DateOfExpense
+    {
+        get => base.DateOfExpense;
+        set
+        {
+            if (value.Equals(base.DateOfExpense))
+                return;
+            base.DateOfExpense = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public override string Description
+    {
+        get => base.Description;
+        set
+        {
+            if (value == base.Description)
+                return;
+            base.Description = value;
+            OnPropertyChanged();
+        }
+    }
 
     public ExpenseVobj(ExpenseBobj expense) : base(expense)
     {

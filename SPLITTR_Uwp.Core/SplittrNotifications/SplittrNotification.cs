@@ -20,7 +20,13 @@ public static class SplittrNotification
     public static event Action<ExpenseSplittedEventArgs> ExpensesSplitted;
 
     public static event Action<ExpenseCategoryChangedEventArgs> ExpenseCategoryChanged;
-    
+
+    public static event Action<ExpenseEditedEventArgs> ExpenseEdited;
+
+    internal static void InvokeExpenseObjEditedEvent(ExpenseEditedEventArgs obj)
+    {
+        ExpenseEdited?.Invoke(obj);
+    }
 
     internal static void InvokeUserObjUpdated(UserBobjUpdatedEventArgs obj)
     {
@@ -49,7 +55,15 @@ public static class SplittrNotification
         ExpenseCategoryChanged?.Invoke(obj);
     }
 }
+public class ExpenseEditedEventArgs : SplittrEventArgs
+{
+    public ExpenseEditedEventArgs(ExpenseBobj editedExpenseObj)
+    {
+        EditedExpenseObj = editedExpenseObj;
+    }
 
+    public ExpenseBobj EditedExpenseObj { get;}
+}
 public class ExpenseCategoryChangedEventArgs : SplittrEventArgs
 {
     public ExpenseCategoryChangedEventArgs(ExpenseBobj updatedExpenseBobj, ExpenseCategory changedCategory)

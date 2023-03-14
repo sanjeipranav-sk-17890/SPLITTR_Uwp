@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using SPLITTR_Uwp.Core.DataManager.Contracts;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.SplittrExceptions;
+using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.EditExpense;
 
@@ -42,8 +43,13 @@ public class EditExpenseDataManager : IEditExpenseDataManager
         var updateExpenseTask = relatedExpense.Select(UpdateExpenseDetails);
 
         await UpdateExpenseDetails(expenseToBeEdited).ConfigureAwait(false);
-
+        
         await Task.WhenAll(updateExpenseTask).ConfigureAwait(false);
+
+        foreach (var editedExpense in relatedExpense)
+        {
+            SplittrNotification.InvokeExpenseObjEditedEvent(new ExpenseEditedEventArgs(editedExpense)); 
+        }
 
         Task UpdateExpenseDetails(ExpenseBobj ex)
         {

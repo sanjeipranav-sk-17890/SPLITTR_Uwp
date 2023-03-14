@@ -59,8 +59,28 @@ public class ExpensesListControlViewModel :ObservableObject
         _view = view;
         _expenseGrouper = expenseGrouper;
 
+        SplittrNotification.ExpenseEdited += SplittrNotification_ExpenseEdited;
         SplittrNotification.ExpensesSplitted += SplittrNotification_ExpensesSplitted;
         SplittrNotification.ExpenseStatusChanged += SplittrNotification_ExpenseStatusChanged;
+    }
+
+    private void SplittrNotification_ExpenseEdited(ExpenseEditedEventArgs obj)
+    {
+        if (_userExpensesCache is not null && obj?.EditedExpenseObj is not null)
+        {
+          var oldExpenseObj =  _userExpensesCache.FirstOrDefault(ex => ex?.Equals(obj.EditedExpenseObj) is true);
+          if (oldExpenseObj != null)
+          {
+              CopyNewValues(oldExpenseObj,obj.EditedExpenseObj);
+          }
+        }
+
+        void CopyNewValues(ExpenseBobj oldExpenseObj,ExpenseBobj editedExpenseObj)
+        {
+            oldExpenseObj.Description = editedExpenseObj.Description;
+            oldExpenseObj.Note = editedExpenseObj.Note;
+            oldExpenseObj.DateOfExpense = editedExpenseObj.DateOfExpense;
+        }
     }
 
 

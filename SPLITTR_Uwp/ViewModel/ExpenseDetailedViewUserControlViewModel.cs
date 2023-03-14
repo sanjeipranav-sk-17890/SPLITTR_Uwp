@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.Linq;
@@ -11,8 +12,10 @@ using SPLITTR_Uwp.Core.SplittrExceptions;
 using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Core.UseCase;
 using SPLITTR_Uwp.Core.UseCase.ChangeExpenseCategory;
+using SPLITTR_Uwp.Core.UseCase.EditExpense;
 using SPLITTR_Uwp.Core.UseCase.GetGroupDetails;
 using SPLITTR_Uwp.Core.UseCase.GetRelatedExpense;
+using SPLITTR_Uwp.Core.UseCase.GetUserGroups;
 using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Vobj;
@@ -20,27 +23,28 @@ using static SPLITTR_Uwp.Services.UiService;
 
 namespace SPLITTR_Uwp.ViewModel;
 
-internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
+internal class ExpenseDetailedViewUserControlViewModel : ObservableObject
 {
-        
+
+    #region Bindable_Properties
     private double _totalExpenditureAmount;
-
-
-
-    public ObservableCollection<ExpenseVobj> RelatedExpenses { get; } = new ObservableCollection<ExpenseVobj>();
 
     public double TotalExpenditureAmount
     {
         get => _totalExpenditureAmount;
         set => SetProperty(ref _totalExpenditureAmount, value);
     }
-
-    //Storing Reference Of passed Expense ,utilized to make Ui manupulation
-    private ExpenseVobj _expense;
+    public ObservableCollection<ExpenseVobj> RelatedExpenses { get; } = new ObservableCollection<ExpenseVobj>();
 
     private string _expenseOccuredGroupName = string.Empty;
+
+
     private bool _hasEditAccess;
     private string _expenseOwnerInfo;
+    private string _expenseTitle;
+    private DateTimeOffset _dateOfExpense;
+    private string _expenseNote;
+
 
 
     public bool HasEditAccess
@@ -55,6 +59,67 @@ internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
         set => SetProperty(ref _expenseOwnerInfo, value);
     }
 
+    public string ExpenseTitle
+    {
+        get => _expenseTitle;
+        set => SetProperty(ref _expenseTitle, value);
+    }
+
+    public DateTimeOffset DateOfExpense
+    {
+        get => _dateOfExpense;
+        set => SetProperty(ref _dateOfExpense, value);
+    }
+
+    public string ExpenseNote
+    {
+        get => _expenseNote;
+        set => SetProperty(ref _expenseNote, value);
+    }
+
+    public string ExpenseOccuredGroupName
+    {
+        get => _expenseOccuredGroupName;
+        set => SetProperty(ref _expenseOccuredGroupName, value);
+    }
+
+    #endregion
+
+    //Storing Reference Of passed Expense ,utilized to make Ui manupulation
+    private ExpenseVobj _expense;
+
+
+    private void PopulatePropertyData(ExpenseVobj expense)
+    {
+        HasEditAccess = IsCurrentUserRaisedExpense(expense);
+        ExpenseOwnerInfo = FormatExpenseOwnerInfo(expense);
+
+        //No UseCase Should Be Called While Assigning Initial value to Property
+        _isAssignTimePropertyChange = true;
+
+        ExpenseNote = expense?.Note ?? string.Empty;
+        DateOfExpense = expense?.DateOfExpense ?? default;
+        ExpenseTitle = expense?.Description ?? string.Empty;
+
+        _isAssignTimePropertyChange = false;
+    }
+    private bool _isAssignTimePropertyChange;
+
+    public void EditExpenseDetails()
+    {
+        if (_isAssignTimePropertyChange)
+        {
+            return;
+        }
+    
+        var editExpenseRequestObj = new EditExpenseRequest(CancellationToken.None, new ExpenseDetailedViewPresenterCallBack(this), DateOfExpense.DateTime, ExpenseTitle, ExpenseNote, _expense, Store.CurrentUserBobj);
+
+        var editExpenseUseCase = InstanceBuilder.CreateInstance<EditExpense>(editExpenseRequestObj);
+
+        editExpenseUseCase.Execute();
+    }
+
+
     public void ExpenseObjLoaded(ExpenseVobj expenseObj)
     {
         if (expenseObj is null)
@@ -65,36 +130,49 @@ internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
 
         SplittrNotification.CurrencyPreferenceChanged += SplittrNotification_CurrencyPreferenceChanged;
 
+        SplittrNotification.ExpenseEdited += SplittrNotification_ExpenseEdited;
+
         GetGroupName(expenseObj);
 
         CallRelatedExpenseUseCase();
 
-        HasEditAccess = IsCurrentUserRaisedExpense();
-
-        ExpenseOwnerInfo = FormatExpenseOwnerInfo();
+        PopulatePropertyData(_expense);
     }
-    private string FormatExpenseOwnerInfo()
+
+    private void SplittrNotification_ExpenseEdited(ExpenseEditedEventArgs obj)
     {
-        var ownerName = IsCurrentUserRaisedExpense() ? "You" : _expense.SplitRaisedOwner.UserName;
-        var dateOfExpense = _expense.CreatedDate.ToString("MMMM dd yyyy");
+        if (obj?.EditedExpenseObj?.Equals(_expense) is true)
+        {
+            var editedExpense = obj.EditedExpenseObj;
+            _expense.DateOfExpense = editedExpense.DateOfExpense;
+            _expense.Description = editedExpense.Description;
+            _expense.Note = editedExpense.Note;
+        }
+    }
+
+    private string FormatExpenseOwnerInfo(ExpenseVobj expense)
+    {
+        var ownerName = IsCurrentUserRaisedExpense(expense) ? "You" : expense?.SplitRaisedOwner.UserName;
+        var dateOfExpense = expense?.CreatedDate.ToString("MMMM dd yyyy");
 
         return $"Added By {ownerName} on {dateOfExpense}";
     }
-    private bool IsCurrentUserRaisedExpense()
+    private bool IsCurrentUserRaisedExpense(ExpenseVobj expense)
     {
-        return _expense.SplitRaisedOwner?.Equals(Store.CurrentUserBobj) is true;
+        return expense.SplitRaisedOwner?.Equals(Store.CurrentUserBobj) is true;
     }
 
-    private  void SplittrNotification_CurrencyPreferenceChanged(CurrencyPreferenceChangedEventArgs obj)
+    private void SplittrNotification_CurrencyPreferenceChanged(CurrencyPreferenceChangedEventArgs obj)
     {
-          
         CalculateTotalExpenditureBeforeSplit(RelatedExpenses);
-         
+
     }
 
     public void ViewDisposed()
     {
         SplittrNotification.CurrencyPreferenceChanged -= SplittrNotification_CurrencyPreferenceChanged;
+
+        SplittrNotification.ExpenseEdited -= SplittrNotification_ExpenseEdited;
     }
 
     private void GetGroupName(ExpenseVobj expenseObj)
@@ -113,13 +191,8 @@ internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
         getGroupDetailUseCaseObj.Execute();
     }
 
-    public string ExpenseOccuredGroupName
-    {
-        get => _expenseOccuredGroupName;
-        set => SetProperty(ref _expenseOccuredGroupName, value);
-    }
 
-   
+
 
     private void CallRelatedExpenseUseCase()
     {
@@ -175,7 +248,7 @@ internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
             categoryChangeUseCase.Execute();
         }
     }
-    private class ExpenseDetailedViewPresenterCallBack : IPresenterCallBack<RelatedExpenseResponseObj>,IPresenterCallBack<GroupDetailByIdResponse>,IPresenterCallBack<ChangeExpenseCategoryResponse>
+    private class ExpenseDetailedViewPresenterCallBack : IPresenterCallBack<RelatedExpenseResponseObj>, IPresenterCallBack<GroupDetailByIdResponse>, IPresenterCallBack<ChangeExpenseCategoryResponse>, IPresenterCallBack<EditExpenseResponse>
     {
         private readonly ExpenseDetailedViewUserControlViewModel _viewModel;
         public ExpenseDetailedViewPresenterCallBack(ExpenseDetailedViewUserControlViewModel viewModel)
@@ -195,7 +268,7 @@ internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
         {
             if (result?.RequestedGroup != null)
             {
-                await  RunOnUiThread(() =>
+                await RunOnUiThread(() =>
                 {
                     _viewModel.ExpenseOccuredGroupName = result.RequestedGroup.GroupName;
 
@@ -211,6 +284,30 @@ internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
                 _viewModel._expense.CategoryName = result.ChangedExpenseCategory.Name;
             }
         }
+        void IPresenterCallBack<EditExpenseResponse>.OnSuccess(EditExpenseResponse result)
+        {
+            _ = RunOnUiThread((() =>
+            {
+                if (result?.EditedExpenseObj is ExpenseVobj editedExpense)
+                {
+                    _viewModel.PopulatePropertyData(editedExpense);
+                    return;
+                }
+                if (result?.EditedExpenseObj is not null)
+                {
+                    _viewModel.PopulatePropertyData(new ExpenseVobj(result.EditedExpenseObj));
+                }
+            }));
+        }
+        void IPresenterCallBack<EditExpenseResponse>.OnError(SplittrException ex)
+        {
+            _ = RunOnUiThread((() =>
+            {
+                _viewModel.PopulatePropertyData(_viewModel._expense);
+                
+            }));
+            ExceptionHandlerService.HandleException(ex);
+        }
         public void OnError(SplittrException ex)
         {
             if (ex.InnerException is SqlException)
@@ -219,5 +316,5 @@ internal class ExpenseDetailedViewUserControlViewModel :ObservableObject
             }
         }
     }
- 
+
 }
