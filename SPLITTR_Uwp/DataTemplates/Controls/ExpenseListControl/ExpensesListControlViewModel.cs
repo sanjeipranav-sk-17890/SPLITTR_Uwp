@@ -143,7 +143,7 @@ public class ExpensesListControlViewModel :ObservableObject
 
     #region NotificationListering
 
-    private async void SplittrNotification_ExpensesSplitted(ExpenseSplittedEventArgs obj)
+    private void SplittrNotification_ExpensesSplitted(ExpenseSplittedEventArgs obj)
     {
         if (obj?.NewExpenses is null)
         {
@@ -152,7 +152,7 @@ public class ExpensesListControlViewModel :ObservableObject
         //Populating Existing Cache
         _userExpensesCache?.AddRange(obj.NewExpenses.Select(ex => new ExpenseVobj(ex)));
 
-        await UiService.RunOnUiThread(() =>
+        _ = UiService.RunOnUiThread(() =>
         {
             //grouping and Populating Newly added expenses Groups
             FilterExpensesToBeShown(_preferedFilter);
@@ -160,9 +160,9 @@ public class ExpensesListControlViewModel :ObservableObject
         }).ConfigureAwait(false);
     }
 
-    private async void SplittrNotification_ExpenseStatusChanged(ExpenseStatusChangedEventArgs obj)
+    private void SplittrNotification_ExpenseStatusChanged(ExpenseStatusChangedEventArgs obj)
     {
-        await UiService.RunOnUiThread(() =>
+        _ = UiService.RunOnUiThread(() =>
         {
             //grouping and Populating Newly added expenses Groups
             FilterExpensesToBeShown(_preferedFilter);
@@ -410,14 +410,14 @@ public class ExpensesListControlViewModel :ObservableObject
         {
             _viewModel = viewModel;
         }
-        public async void OnSuccess(GetExpensesByIdResponse result)
+        public void OnSuccess(GetExpensesByIdResponse result)
         {
             if (result == null)
             {
                 return;
             }
             _viewModel._userExpensesCache = result.CurrentUserExpenses.Select(ex => new ExpenseVobj(ex)).ToList();
-            await UiService.RunOnUiThread(() =>
+            _ = UiService.RunOnUiThread(() =>
             {
                 _viewModel.PopuLateExpenses(_viewModel._userExpensesCache);
                 _viewModel.SortExpenseBasedOnDate(_viewModel.GroupedExpenses);

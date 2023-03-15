@@ -80,9 +80,9 @@ internal class RelatedExpenseTemplateViewModel : ObservableObject
         CheckExpenseMarkHistory();
     }
 
-    private async void SplittrNotification_CurrencyPreferenceChanged(CurrencyPreferenceChangedEventArgs obj)
+    private void SplittrNotification_CurrencyPreferenceChanged(CurrencyPreferenceChangedEventArgs obj)
     {
-        await UiService.RunOnUiThread(() =>
+        _ = UiService.RunOnUiThread(() =>
         {
             OnPropertyChanged(nameof(ExpenditureAmount));
             OnPropertyChanged(nameof(CurrencySymbol));
@@ -115,9 +115,9 @@ internal class RelatedExpenseTemplateViewModel : ObservableObject
     {
         CheckExpenseMarkHistory();
     }
-    private async void InvokeOnVerifyPaidExpenseCompleted(VerifyPaidExpenseResponseObj result)
+    private void InvokeOnVerifyPaidExpenseCompleted(VerifyPaidExpenseResponseObj result)
     {
-        await UiService.RunOnUiThread(() =>
+        _ = UiService.RunOnUiThread(() =>
         {
             IsExpenseMarkedAsPaid = result.IsExpenseMarkAsPaid;
             Debug.WriteLine($"{ExpenseObj.ExpenseUniqueId}------,{result.IsExpenseMarkAsPaid}-------------{ExpenseObj.CorrespondingUserObj.UserName}");

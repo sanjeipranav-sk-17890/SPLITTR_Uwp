@@ -95,9 +95,9 @@ public class UserVobj : UserBobj, INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    protected async virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
-        await UiService.RunOnUiThread(
+        _ = UiService.RunOnUiThread(
             () =>
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -66,7 +66,7 @@ public class ExpenseCategoryGrouper : IExpenseGrouper
     {
         SplittrNotification.ExpenseCategoryChanged -= SplittrNotification_ExpenseCategoryChanged;
     }
-    private async void SplittrNotification_ExpenseCategoryChanged(ExpenseCategoryChangedEventArgs obj)
+    private void SplittrNotification_ExpenseCategoryChanged(ExpenseCategoryChangedEventArgs obj)
     {
         if (_previousGroupedExpenses is null || !_previousGroupedExpenses.Any() || obj?.ChangedCategory is null)
         {
@@ -75,7 +75,7 @@ public class ExpenseCategoryGrouper : IExpenseGrouper
         var changedCategory = obj.ChangedCategory;
         var changedExpensObj = obj.UpdatedExpenseBobj;
 
-        await RunOnUiThread(() =>
+        _ = RunOnUiThread(() =>
         {
             var relocatingExpense = RelocatingExpense(changedExpensObj);
 

@@ -108,9 +108,9 @@ public class SplitExpenseViewModel : ObservableObject
         suggestionFetchUseCase.Execute();
 
     }
-    public async void InvokeOnUserSuggestionReceived(UserSuggestionResponseObject result)
+    public void InvokeOnUserSuggestionReceived(UserSuggestionResponseObject result)
     {
-        await UiService.RunOnUiThread(() =>
+        _ = UiService.RunOnUiThread(() =>
         {
             foreach (var user in result.UserSuggestions)
             {
@@ -127,10 +127,10 @@ public class SplitExpenseViewModel : ObservableObject
     }
 
     //if the splitting is successfull showing split completed text box and reset the page 
-    public async void InvokeOnSplitExpenseCompleted(SplitExpenseResponseObj result)
+    public void InvokeOnSplitExpenseCompleted(SplitExpenseResponseObj result)
     {
 
-        await UiService.RunOnUiThread(() =>
+        _ = UiService.RunOnUiThread(() =>
         {
             UiService.ShowContentAsync("Spitting SuccessFull", "Expenses Splitted Successfully",View.VisualRoot,View.Dispatcher);
             ResetPage();
@@ -578,9 +578,9 @@ public class SplitExpenseViewModel : ObservableObject
         {
             _viewModel.InvokeOnSplitExpenseCompleted(result);
         }
-        public async void OnSuccess(GetUserGroupResponse result)
+        public void OnSuccess(GetUserGroupResponse result)
         {
-            await UiService.RunOnUiThread(() =>
+            _ = UiService.RunOnUiThread(() =>
             {
                 _viewModel.UserParticipatingGroup?.AddRange(result.UserParticipatingGroups);
 

@@ -29,9 +29,9 @@ public class UserProfilePageViewModel : ObservableObject
         SplittrNotification.UserObjUpdated += SplittrNotification_UserObjUpdated;
     }
 
-    private async void SplittrNotification_UserObjUpdated(UserBobjUpdatedEventArgs obj)
+    private void SplittrNotification_UserObjUpdated(UserBobjUpdatedEventArgs obj)
     {
-        await UiService.RunOnUiThread(() =>
+        _ = UiService.RunOnUiThread(() =>
         {
            OnPropertyChanged(nameof(UserInitial));
 
@@ -130,7 +130,7 @@ public class UserProfilePageViewModel : ObservableObject
     { 
 
         await UiService.ShowContentAsync("Account Updated SuccessFully", "SuccessFull!!").ConfigureAwait(false);
-        await UiService.RunOnUiThread(() =>
+        _ = UiService.RunOnUiThread(() =>
         {
             //showing Update successFull messageBox
             IsEditUserProfileVisible = false;

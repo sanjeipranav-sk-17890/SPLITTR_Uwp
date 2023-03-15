@@ -44,16 +44,16 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
             ShowNoConnectionIndicator();
         }
 
-        private async void HideNoConnectionIndicator()
+        private void HideNoConnectionIndicator()
         {
-            await RunOnUiThread((() =>
+            _ = RunOnUiThread((() =>
             {
                 Visibility = Visibility.Collapsed;
             })).ConfigureAwait(false);
         }
-        private async void ShowNoConnectionIndicator()
+        private void ShowNoConnectionIndicator()
         {
-            await RunOnUiThread((() =>
+            _ = RunOnUiThread((() =>
             {
                 Visibility = Visibility.Visible;
             })).ConfigureAwait(false);

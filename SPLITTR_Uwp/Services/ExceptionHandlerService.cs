@@ -19,13 +19,13 @@ internal static class ExceptionHandlerService
         }
     }
 
-    public async static void HandleException(Exception exception)
+    public static void HandleException(Exception exception)
     {
         if (exception == null)
         {
             return;
         }
-        await UiService.RunOnUiThread(() =>
+        _ = UiService.RunOnUiThread(() =>
         {
             if (NotificationControl is not null)
             {

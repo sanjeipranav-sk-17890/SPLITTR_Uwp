@@ -205,7 +205,7 @@ internal class ExpenseDetailedViewUserControlViewModel : ObservableObject
         relatedExpenseUseCase.Execute();
     }
 
-    private async void CalculateTotalExpenditureBeforeSplit(IEnumerable<ExpenseBobj> relatedExpenses)
+    private void CalculateTotalExpenditureBeforeSplit(IEnumerable<ExpenseBobj> relatedExpenses)
     {
         if (!relatedExpenses.Any()) // Total Expense Calculation if No Related Expenses 
         {
@@ -215,7 +215,7 @@ internal class ExpenseDetailedViewUserControlViewModel : ObservableObject
         //Total Amount Before Split
         var expenditureAmountBeforeSplit = relatedExpenses.Where(relatedExpense => !relatedExpense.ExpenseUniqueId.Equals(_expense.ExpenseUniqueId)).Sum(relatedExpense => relatedExpense.StrExpenseAmount) + _expense.StrExpenseAmount;
 
-        await RunOnUiThread(() =>
+        _ = RunOnUiThread(() =>
         {
             TotalExpenditureAmount = expenditureAmountBeforeSplit;
 
@@ -256,19 +256,19 @@ internal class ExpenseDetailedViewUserControlViewModel : ObservableObject
             _viewModel = viewModel;
 
         }
-        public async void OnSuccess(RelatedExpenseResponseObj result)
+        public void OnSuccess(RelatedExpenseResponseObj result)
         {
-            await RunOnUiThread(() =>
+            _ = RunOnUiThread(() =>
             {
                 _viewModel.PopulateRelatedExpenses(result.RelatedExpenses);
 
             }).ConfigureAwait(false);
         }
-        public async void OnSuccess(GroupDetailByIdResponse result)
+        public void OnSuccess(GroupDetailByIdResponse result)
         {
             if (result?.RequestedGroup != null)
             {
-                await RunOnUiThread(() =>
+                _ = RunOnUiThread(() =>
                 {
                     _viewModel.ExpenseOccuredGroupName = result.RequestedGroup.GroupName;
 

@@ -151,18 +151,18 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager, IMarkExpensePa
         //verify description
         if (string.IsNullOrEmpty(expenseDescription))
         {
-            throw new ArgumentException("Expense Description Cannot be Empty");
+            throw new ArgumentException("Expense Title Cannot be Empty");
         }
         ExpenseBobj parentExpenseBobj = null;
         foreach (var expense in expenses)
         {
 
             //expenditureSplitType is equal split if expenditureSplitType is <=0 for equal split , expenditure amount cannot be negative 
-            if (expenseAmount <= 0.1 && expenditureSplitType <= 0)
+            if (expenseAmount <= 0 && expenditureSplitType <= 0)
             {
                 throw new ArgumentException("Equal Split Money must be greater than zero");
             }
-            if (expense.StrExpenseAmount <= 0)
+            if (expense.StrExpenseAmount <= 0 && expenditureSplitType > 0)
             {
                 throw new ArgumentException("Minimum Split Amount is 0.1 ");
             }

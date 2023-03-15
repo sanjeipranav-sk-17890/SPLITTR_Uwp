@@ -201,10 +201,10 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
                     break;
             }
 
-            async void StoreCategoriesLoaded(CategoryLoadedEventArgs obj)
+            void StoreCategoriesLoaded(CategoryLoadedEventArgs obj)
             {
                 Store.CategoriesLoaded -= StoreCategoriesLoaded;
-                await RunOnUiThread((() =>
+                _ = RunOnUiThread((() =>
                 {
                     IsCategoryLoading = false;
                     Categories.AddRange(obj.ExpenseCategories);
@@ -223,9 +223,9 @@ namespace SPLITTR_Uwp.DataTemplates.Controls
                 _viewModel = viewModel;
             }
 
-            public async void OnSuccess(FetchExpenseCategoryResponse result)
+            public void OnSuccess(FetchExpenseCategoryResponse result)
             {
-                await RunOnUiThread(() =>
+                _ = RunOnUiThread(() =>
                 {
                     _viewModel.IsCategoryLoading = false;
                     _viewModel.Categories.ClearAndAdd(result.Categories);

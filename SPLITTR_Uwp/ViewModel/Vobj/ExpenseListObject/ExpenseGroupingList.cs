@@ -89,9 +89,9 @@ public class ExpenseGroupHeader : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    protected async void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
-       await RunOnUiThread(() =>
+        _ = RunOnUiThread(() =>
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 

@@ -62,9 +62,9 @@ public class WalletBalanceUpdateViewModel : ObservableObject
 
     }
 
-    private async void InvokeOnWalletBalanceUpdated(UpdateUserResponseObj result)
+    private void InvokeOnWalletBalanceUpdated(UpdateUserResponseObj result)
     {
-        await UiService.RunOnUiThread(async () =>
+        _ = UiService.RunOnUiThread(async () =>
         {
             await UiService.ShowContentAsync("Amount Added to Wallet SuccessFully", "Payment SuccessFull!!");
             MoneyTextBoxText = string.Empty;

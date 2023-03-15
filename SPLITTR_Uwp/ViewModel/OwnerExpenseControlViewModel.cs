@@ -70,19 +70,13 @@ internal class OwnerExpenseControlViewModel : ObservableObject
     private async void InvokeOnMarkAsPaidCompleted(MarkAsPaidResponseObj result)
     {
         await UiService.ShowContentAsync($"{result.MarkedPaidExpenseBobj.Description} Paid", "Marked as PAid").ConfigureAwait(false);
-        await UiService.RunOnUiThread(() =>
-        {
-            ExpenseCancelButtonVisibility = false;
-        }).ConfigureAwait(false);
+        _ = UiService.RunOnUiThread(() => { ExpenseCancelButtonVisibility = false; }).ConfigureAwait(false);
     }
     private async void InvokeOnExpenseCancellationCompleted(CancelExpenseResponseObj result)
     {
         await UiService.ShowContentAsync($"{result.CancelledExpense.Description} Cancelled", "Split Cancelled").ConfigureAwait(false);
             
-        await UiService.RunOnUiThread(() =>
-        {
-            ExpenseCancelButtonVisibility = false;
-        }).ConfigureAwait(false);
+        _ = UiService.RunOnUiThread(() => { ExpenseCancelButtonVisibility = false; }).ConfigureAwait(false);
 
     }
     private class OwnerExpenseControlVmPresenterCallBack : IPresenterCallBack<MarkAsPaidResponseObj>, IPresenterCallBack<CancelExpenseResponseObj>

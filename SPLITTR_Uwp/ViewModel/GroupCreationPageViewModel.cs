@@ -62,9 +62,9 @@ internal class GroupCreationPageViewModel : ObservableObject
     }
 
     //User Suggestion Call BAck
-    public async void OnSuggestionRecievd(UserSuggestionResponseObject response)
+    public void OnSuggestionRecievd(UserSuggestionResponseObject response)
     {
-        await UiService.RunOnUiThread(() =>
+        _ = UiService.RunOnUiThread(() =>
         {
             foreach (var suggestedUser in response.UserSuggestions)
             {
@@ -103,9 +103,9 @@ internal class GroupCreationPageViewModel : ObservableObject
             _viewModel = viewModel;
 
         }
-        public async void OnSuccess(GroupCreationResponseObj result)
+        public void OnSuccess(GroupCreationResponseObj result)
         {
-            await UiService.RunOnUiThread(async () =>
+            _ = UiService.RunOnUiThread(async () =>
             {
                 await UiService.ShowContentAsync($"{result.CreatedGroup.GroupName} Group Created SuccessFull", "SuccessFully Created !! ");
 

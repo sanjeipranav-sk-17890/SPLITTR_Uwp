@@ -103,9 +103,9 @@ public class LoginPageViewModel : ObservableObject
         //stopping main page animation if the the page is unloaded
         _timer.Stop();
     }
-    private async void OnLoginCompleted(LoginResponseObj result)
+    private void OnLoginCompleted(LoginResponseObj result)
     {
-        await UiService.RunOnUiThread(() =>
+        _ = UiService.RunOnUiThread(() =>
         {
             if (!result.IsUserAlreadyExist)
             {
@@ -134,9 +134,9 @@ public class LoginPageViewModel : ObservableObject
         {
             _viewModel.OnLoginCompleted(result);
         }
-        public async void OnError(SplittrException ex)
+        public void OnError(SplittrException ex)
         {
-            await UiService.RunOnUiThread(() =>
+            _ = UiService.RunOnUiThread(() =>
             {
                 if (ex.InnerException is ArgumentNullException)
                 {

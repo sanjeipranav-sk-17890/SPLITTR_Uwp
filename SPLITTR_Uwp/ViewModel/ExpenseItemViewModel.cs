@@ -272,12 +272,12 @@ internal class ExpenseItemViewModel : ObservableObject
 
     }
 
-    private async void SplittrNotification_CurrencyPreferenceChanged(CurrencyPreferenceChangedEventArgs obj)
+    private void SplittrNotification_CurrencyPreferenceChanged(CurrencyPreferenceChangedEventArgs obj)
     {
         //Recalculating Expense Total Based on new Currency Preference
         CallRelatedExpenseUseCaseCall();
 
-        await RunOnUiThread(() =>
+        _ = RunOnUiThread(() =>
         {
             //Reassign Owing Amount Based On New Index
             OwingSplitAmount = _expenseVObj is null ? string.Empty : FormatExpenseAmountWithSymbol(_expenseVObj.StrExpenseAmount);
@@ -290,14 +290,14 @@ internal class ExpenseItemViewModel : ObservableObject
         SplittrNotification.CurrencyPreferenceChanged -= SplittrNotification_CurrencyPreferenceChanged;
     }
 
-    private async void OnRelatedExpensesRecievedSuccess(RelatedExpenseResponseObj result)
+    private void OnRelatedExpensesRecievedSuccess(RelatedExpenseResponseObj result)
     {
         var totalAmount = result.RelatedExpenses.Sum(expense => expense.StrExpenseAmount);
         totalAmount += _expenseVObj.StrExpenseAmount;
 
         var formatedExpenseAmount = FormatExpenseAmountWithSymbol(totalAmount);
 
-        await RunOnUiThread(() =>
+        _ = RunOnUiThread(() =>
         {
             ExpenseTotalAmount = formatedExpenseAmount;
         }).ConfigureAwait(false);
@@ -315,9 +315,9 @@ internal class ExpenseItemViewModel : ObservableObject
         {
             _viewModel.OnRelatedExpensesRecievedSuccess(result);
         }
-        public async void OnSuccess(GroupDetailByIdResponse result)
+        public void OnSuccess(GroupDetailByIdResponse result)
         {
-            await RunOnUiThread(() =>
+            _ = RunOnUiThread(() =>
             {
 
                 _viewModel.GroupName = result?.RequestedGroup?.GroupName;

@@ -63,11 +63,7 @@ internal class OwingMoneyPaymentExpenseViewModel :ObservableObject
     public async void InvokeOnSettleUPSuccess(SettleUpExpenseResponseObj result)
     {
         await UiService.ShowContentAsync("Splittr Completed SuccessFully", "Payment Complete");
-        await UiService.RunOnUiThread(() =>
-        {
-            SettleButtonVisibility = false;
-            PaymentControlVisibility = false;
-        });
+        _ = UiService.RunOnUiThread(() => { SettleButtonVisibility = false; PaymentControlVisibility = false; });
     }
     private class OwingMoneyPaymentExpenseVmPresenterCallBack : IPresenterCallBack<SettleUpExpenseResponseObj>
     {

@@ -83,10 +83,10 @@ internal class MainPageViewModel : ObservableObject, IMainPageViewModel
         getExpenseUseCase.Execute();
     }
 
-    private async void SplittrNotification_GroupCreated(GroupCreatedEventArgs obj)
-    { 
+    private void SplittrNotification_GroupCreated(GroupCreatedEventArgs obj)
+    {
         //Adding New Ly Created Group To Navigation View
-        await RunOnUiThread(() =>
+        _ = RunOnUiThread(() =>
         {
             if (obj?.CreatedGroup is not null)
             {
@@ -154,21 +154,21 @@ internal class MainPageViewModel : ObservableObject, IMainPageViewModel
             _viewModel = viewModel;
 
         }
-        public async void OnSuccess(GetUserGroupResponse result)
+        public void OnSuccess(GetUserGroupResponse result)
         {
-            await RunOnUiThread(() =>
+            _ = RunOnUiThread(() =>
             {
                 _viewModel.UserGroups.ClearAndAdd(result.UserParticipatingGroups);
 
             }).ConfigureAwait(false);
         }
-        public async void OnSuccess(GetExpensesByIdResponse result)
+        public void OnSuccess(GetExpensesByIdResponse result)
         {
             if (result == null)
             {
                 return;
             }
-            await RunOnUiThread(() =>
+            _ = RunOnUiThread(() =>
             {
                 _viewModel.PopulateIndividualSplitUsers(result.CurrentUserExpenses);
             }).ConfigureAwait(false);

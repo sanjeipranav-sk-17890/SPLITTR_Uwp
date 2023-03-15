@@ -234,7 +234,7 @@
                                 <Setter.Value>
                                     <DataTemplate x:DataType="model:GroupBobj">
                                         <themeButton:MainPageButtonControl HorizontalAlignment="Stretch"
-                                                                           ItemsSource="{x:Bind GroupParticipants, Mode=OneWay}"
+                                                                           ItemsSource="{x:Bind GroupParticipants}"
                                                                            SelectionMode="None"
                                                                            TitleName="{x:Bind GroupName, Mode=OneWay}"
                                                                            />

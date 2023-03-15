@@ -174,20 +174,20 @@ public class SplittrDashBoardVm : ViewModelBase
         {
             _viewModel = viewModel;
         }
-        public async void OnSuccess(UpdateUserResponseObj result)
+        public void OnSuccess(UpdateUserResponseObj result)
         {
-            await UiService.RunOnUiThread(() =>
+            _ = UiService.RunOnUiThread(() =>
             {
                 _viewModel.CurrentUserName = result.UpdatedUserBobj.UserName;
                 _viewModel.UserCurrencyPreference = result.UpdatedUserBobj.CurrencyPreference.ToString();
             }).ConfigureAwait(false);
         }
-        public async void OnError(SplittrException ex)
+        public void OnError(SplittrException ex)
         {
             switch (ex.InnerException)
             {
                 case UserNameInvalidException:
-                    await UiService.RunOnUiThread(() =>
+                    _ = UiService.RunOnUiThread(() =>
                     {
                         _viewModel.PreferredCurrencyIndex = Store.CurrentUserBobj.CurrencyIndex;
                         _viewModel.CurrentUserName = Store.CurrentUserBobj.UserName;

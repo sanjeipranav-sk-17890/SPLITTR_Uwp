@@ -130,12 +130,12 @@ public class StateService : IStateService
 
         }
 
-        public async void OnSuccess(LoginResponseObj result)
+        public void OnSuccess(LoginResponseObj result)
         {
             //Fetching Initial needed Data 
             Store.LoadInitialNecessaryData();
 
-            await RunOnUiThread(() =>
+            _ = RunOnUiThread(() =>
             {
                 Store.CurrentUserBobj = result.LoginUserCred;
                 NavigationService.Navigate(typeof(MainPage));
@@ -143,9 +143,9 @@ public class StateService : IStateService
             _stateManager.InvokeUserLoggingIn(Store.CurrentUserBobj);
 
         }
-        public async void OnError(SplittrException ex)
+        public void OnError(SplittrException ex)
         {
-            await RunOnUiThread(() =>
+            _ = RunOnUiThread(() =>
             {
                 _stateManager.RevokeSessionLogIn();
 

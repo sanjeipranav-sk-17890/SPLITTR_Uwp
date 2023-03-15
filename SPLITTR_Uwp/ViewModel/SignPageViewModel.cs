@@ -108,20 +108,15 @@ public class SignPageViewModel : ObservableObject
     }
     private async void InvokeOnSignUpSuccessFull(SignUpUserResponseObj result)
     {
-        await UiService.RunOnUiThread(() =>
-        {
-            UserAlreadyExistTextBlockVisibility = false;
-            IsValidEmailIdTextBlockVisibility = false;
-
-        });
+        _ = UiService.RunOnUiThread(() => { UserAlreadyExistTextBlockVisibility = false; IsValidEmailIdTextBlockVisibility = false; });
         await ShowSignUpSuccessFullMessageBoxAsync().ConfigureAwait(false);
 
     }
-    private async void InvokeOnSignUpFailed(SplittrException ex)
+    private void InvokeOnSignUpFailed(SplittrException ex)
     {
         if (ex.InnerException is UserAlreadyExistException)
         {
-            await  UiService.RunOnUiThread(() =>
+            _ = UiService.RunOnUiThread(() =>
             {
                 UserAlreadyExistTextBlockVisibility = true;
             });
