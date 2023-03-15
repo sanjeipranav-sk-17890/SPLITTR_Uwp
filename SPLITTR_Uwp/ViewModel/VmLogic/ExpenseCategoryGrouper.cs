@@ -7,6 +7,7 @@ using SPLITTR_Uwp.ViewModel.Vobj;
 using SPLITTR_Uwp.ViewModel.Vobj.ExpenseListObject;
 using System.Collections.Generic;
 using System.Linq;
+using SPLITTR_Uwp.Core.SplittrEventArgs;
 using static SPLITTR_Uwp.Services.UiService;
 
 namespace SPLITTR_Uwp.ViewModel.VmLogic;

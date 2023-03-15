@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using SPLITTR_Uwp.Core.ModelBobj;
 using SPLITTR_Uwp.Core.ModelBobj.Enum;
+using SPLITTR_Uwp.Core.SplittrEventArgs;
 using SPLITTR_Uwp.Core.SplittrNotifications;
 using SPLITTR_Uwp.Services;
 

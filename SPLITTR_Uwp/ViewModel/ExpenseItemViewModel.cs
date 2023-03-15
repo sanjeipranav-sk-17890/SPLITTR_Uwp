@@ -20,6 +20,7 @@ using SPLITTR_Uwp.DataRepository;
 using SPLITTR_Uwp.Services;
 using SPLITTR_Uwp.ViewModel.Vobj;
 using static SPLITTR_Uwp.Services.UiService;
+using SPLITTR_Uwp.Core.SplittrEventArgs;
 
 namespace SPLITTR_Uwp.ViewModel;
 
