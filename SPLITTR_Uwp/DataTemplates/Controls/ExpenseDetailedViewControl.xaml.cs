@@ -14,7 +14,7 @@ using SPLITTR_Uwp.ViewModel.Vobj;
 
 namespace SPLITTR_Uwp.DataTemplates.Controls;
 
-public sealed partial class ExpenseDetailedViewUserControl : UserControl
+public sealed partial class ExpenseDetailedViewControl : UserControl
 {
     public ExpenseVobj ExpenseObj
     {
@@ -23,7 +23,7 @@ public sealed partial class ExpenseDetailedViewUserControl : UserControl
 
     private readonly ExpenseDetailedViewUserControlViewModel _viewModel;
 
-    public ExpenseDetailedViewUserControl()
+    public ExpenseDetailedViewControl()
     {
         _viewModel = ActivatorUtilities.GetServiceOrCreateInstance<ExpenseDetailedViewUserControlViewModel>(App.Container);
         InitializeComponent();

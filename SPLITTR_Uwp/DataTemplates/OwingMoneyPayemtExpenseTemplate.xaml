@@ -23,7 +23,7 @@
             <RowDefinition Height="*" />
 
         </Grid.RowDefinitions>
-        <controls:ExpenseDetailedViewUserControl Grid.Row="0"
+        <controls:ExpenseDetailedViewControl Grid.Row="0"
                                                  HorizontalAlignment="Stretch"
                                                  BackButtonClicked="ExpenseDetailedViewUserControl_OnBackButtonClicked"
                                                  DataContext="{x:Bind DataContext, Mode=OneWay}"

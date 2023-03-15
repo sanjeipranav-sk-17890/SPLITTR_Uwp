@@ -465,7 +465,7 @@
                                       PreferredPlacement="RightTop"
                                       >
                     <controls:TeachingTip.Content>
-                        <view:WalletBalanceUpdatePopUp CloseButtonClicked="{x:Bind AddWalletBalanceButtonClicked}" />
+                        <view:WalletBalanceUpdateControl CloseButtonClicked="{x:Bind AddWalletBalanceButtonClicked}" />
                         <!--  MakePaymentClicked="{x:Bind _viewModel.AddMoneyToWalletButtonClicked}"  -->
                     </controls:TeachingTip.Content>
                 </controls:TeachingTip>

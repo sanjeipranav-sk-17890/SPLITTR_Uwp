@@ -11,10 +11,10 @@ using SPLITTR_Uwp.ViewModel;
 
 namespace SPLITTR_Uwp.DataTemplates.Controls;
 
-public sealed partial class SplitExpenseUserControl : UserControl,ISplitExpenseView
+public sealed partial class SplitExpenseControl : UserControl,ISplitExpenseView
 {
     private readonly SplitExpenseViewModel _viewModel;
-    public SplitExpenseUserControl()
+    public SplitExpenseControl()
     {
         _viewModel = ActivatorUtilities.CreateInstance<SplitExpenseViewModel>(App.Container,this);
         InitializeComponent();

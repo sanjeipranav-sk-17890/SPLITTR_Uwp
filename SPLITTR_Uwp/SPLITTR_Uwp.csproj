@@ -203,8 +203,8 @@
     <Compile Include="Services\StateService.cs" />
     <Compile Include="Services\ThemeHelperService.cs" />
     <Compile Include="ViewModel\OwingMoneyPaymentExpenseViewModel.cs" />
-    <Compile Include="DataTemplates\Controls\OwnerExpenseUserControl.xaml.cs">
-      <DependentUpon>OwnerExpenseUserControl.xaml</DependentUpon>
+    <Compile Include="DataTemplates\Controls\OwnerExpenseControl.xaml.cs">
+      <DependentUpon>OwnerExpenseControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataTemplates\RelatedExpenseTemplate.xaml.cs">
       <DependentUpon>RelatedExpenseTemplate.xaml</DependentUpon>
@@ -220,8 +220,8 @@
     <Compile Include="ViewModel\RelatedExpenseTemplateViewModel.cs" />
     <Compile Include="ViewModel\VmLogic\ExpenseCategoryGrouper.cs" />
     <Compile Include="ViewModel\VmLogic\ViewModelBase.cs" />
-    <Compile Include="DataTemplates\Controls\ExpenseDetailedViewUserControl.xaml.cs">
-      <DependentUpon>ExpenseDetailedViewUserControl.xaml</DependentUpon>
+    <Compile Include="DataTemplates\Controls\ExpenseDetailedViewControl.xaml.cs">
+      <DependentUpon>ExpenseDetailedViewControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\ExpenseItemViewModel.cs" />
     <Compile Include="ViewModel\GroupCreationPageViewModel.cs" />
@@ -253,11 +253,11 @@
     <Compile Include="DataTemplates\Controls\MainPagePanelButton.xaml.cs">
       <DependentUpon>MainPagePanelButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataTemplates\Controls\SplitExpenseUserControl.xaml.cs">
-      <DependentUpon>SplitExpenseUserControl.xaml</DependentUpon>
+    <Compile Include="DataTemplates\Controls\SplitExpenseControl.xaml.cs">
+      <DependentUpon>SplitExpenseControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\WalletBalanceUpdatePopUp.xaml.cs">
-      <DependentUpon>WalletBalanceUpdatePopUp.xaml</DependentUpon>
+    <Compile Include="Views\WalletBalanceUpdateControl.xaml.cs">
+      <DependentUpon>WalletBalanceUpdateControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
@@ -307,7 +307,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataTemplates\Controls\OwnerExpenseUserControl.xaml">
+    <Page Include="DataTemplates\Controls\OwnerExpenseControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -343,7 +343,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataTemplates\Controls\ExpenseDetailedViewUserControl.xaml">
+    <Page Include="DataTemplates\Controls\ExpenseDetailedViewControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -367,11 +367,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataTemplates\Controls\SplitExpenseUserControl.xaml">
+    <Page Include="DataTemplates\Controls\SplitExpenseControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\WalletBalanceUpdatePopUp.xaml">
+    <Page Include="Views\WalletBalanceUpdateControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

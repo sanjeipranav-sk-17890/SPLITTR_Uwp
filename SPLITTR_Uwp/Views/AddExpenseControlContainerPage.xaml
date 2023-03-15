@@ -9,7 +9,7 @@
       >
 
     <Grid>
-        <controls1:SplitExpenseUserControl x:Name="SplitExpneseControl"
+        <controls1:SplitExpenseControl x:Name="SplitExpneseControl"
                                            HorizontalAlignment="Center"
                                            CanDrag="True"
                                            DragStarting="SplitExpenseControl_OnDragStarting"

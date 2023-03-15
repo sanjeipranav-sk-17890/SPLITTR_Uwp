@@ -9,7 +9,7 @@ using SPLITTR_Uwp.ViewModel.Vobj;
 
 namespace SPLITTR_Uwp.DataTemplates.Controls;
 
-public sealed partial class OwnerExpenseUserControl : UserControl
+public sealed partial class OwnerExpenseControl : UserControl
 {
 
 
@@ -20,7 +20,7 @@ public sealed partial class OwnerExpenseUserControl : UserControl
 
     private readonly OwnerExpenseControlViewModel _viewModel;
 
-    public OwnerExpenseUserControl()
+    public OwnerExpenseControl()
     {
         InitializeComponent();
         DataContextChanged += OwnerExpenseUserControl_DataContextChanged;

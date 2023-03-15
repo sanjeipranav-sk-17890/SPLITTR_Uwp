@@ -7,14 +7,14 @@ using SPLITTR_Uwp.ViewModel;
 
 namespace SPLITTR_Uwp.Views;
 
-public sealed partial class WalletBalanceUpdatePopUp : UserControl
+public sealed partial class WalletBalanceUpdateControl : UserControl
 {
         
     private WalletBalanceUpdateViewModel _viewModel;
 
     public event Action CloseButtonClicked;
         
-    public WalletBalanceUpdatePopUp()
+    public WalletBalanceUpdateControl()
     {
         InitializeComponent();
         _viewModel =  App.Container.GetService(typeof(WalletBalanceUpdateViewModel)) as WalletBalanceUpdateViewModel;

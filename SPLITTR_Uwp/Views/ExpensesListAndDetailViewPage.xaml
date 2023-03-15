@@ -87,7 +87,7 @@
                           CornerRadius="5"
                           >
                 <StackPanel Orientation="Vertical">
-                    <controls1:OwnerExpenseUserControl x:Name="DetailedExpenseTemplate"
+                    <controls1:OwnerExpenseControl x:Name="DetailedExpenseTemplate"
                                                        HorizontalAlignment="Stretch"
                                                        VerticalAlignment="Stretch"
                                                        BackButtonClicked="OnBackButtonClicked"

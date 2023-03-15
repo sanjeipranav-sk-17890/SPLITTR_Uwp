@@ -56,7 +56,7 @@ public sealed partial class AddExpenseTestPage : Page
         {
             //Assign separated ctrl to New Window root Element
             _rootGrid = new Grid();
-            var splitCntrl = new SplitExpenseUserControl();
+            var splitCntrl = new SplitExpenseControl();
             _rootGrid.Children.Add(splitCntrl);
 
             //Registering Root Xaml Element To ThemeHelper onLoaded 
