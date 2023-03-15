@@ -158,13 +158,13 @@ public class ExpenseStatusDataManager : ISplitExpenseDataManager, IMarkExpensePa
         {
 
             //expenditureSplitType is equal split if expenditureSplitType is <=0 for equal split , expenditure amount cannot be negative 
-            if (expenseAmount <= 0 && expenditureSplitType <= 0)
+            if (expenseAmount <= 0.1 && expenditureSplitType <= 0)
             {
                 throw new ArgumentException("Equal Split Money must be greater than zero");
             }
-            if (expense.StrExpenseAmount <= -1)
+            if (expense.StrExpenseAmount <= 0)
             {
-                throw new ArgumentException("Money cannot be  negative");
+                throw new ArgumentException("Minimum Split Amount is 0.1 ");
             }
 
             expense.Note = expenseNote;

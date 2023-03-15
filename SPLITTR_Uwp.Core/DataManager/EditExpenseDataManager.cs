@@ -67,7 +67,7 @@ public class EditExpenseDataManager : IEditExpenseDataManager
         }
         if (string.IsNullOrEmpty(newExpenseTitle))
         {
-            throw new ArgumentNullException(nameof(newExpenseTitle) + " Expense Title Cannot Be Empty");
+            throw new InvalidExpenseUpdationException("Expense Title Cannot be Empty");
         }
 
     }

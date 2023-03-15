@@ -10,7 +10,7 @@
   <Identity
     Name="5C2D2225-B482-474C-BF23-48F189ABADA9"
     Publisher="CN=SanjeiPT-5665"
-    Version="2.5.4.0" />
+    Version="2.8.6.0" />
 
   <mp:PhoneIdentity PhoneProductId="5C2D2225-B482-474C-BF23-48F189ABADA9" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

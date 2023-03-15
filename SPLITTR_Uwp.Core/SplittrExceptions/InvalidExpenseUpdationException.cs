@@ -11,5 +11,8 @@ namespace SPLITTR_Uwp.Core.SplittrExceptions
         {
            
         }
+        public InvalidExpenseUpdationException(string message) : base(default,message) 
+        {
+        }
     }
 }
